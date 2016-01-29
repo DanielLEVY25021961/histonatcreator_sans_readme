@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<BugCollection version="2.0.2" sequence="18" timestamp="1369130642569" analysisTimestamp="1369130622272" release="">
+  <Project projectName="hibernate_outil_dan">
+    <Jar>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\bin\levy\daniel\application\Application$1.class</Jar>
+    <Jar>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\bin\levy\daniel\application\Application.class</Jar>
+    <AuxClasspathEntry>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\bin</AuxClasspathEntry>
+    <AuxClasspathEntry>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\lib\antlr-2.7.6.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\lib\asm-attrs.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\lib\asm.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\lib\cglib-2.1.3.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\lib\com.ibm.icu_3.6.1.v20070417.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\lib\commons-beanutils-1.8.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\lib\commons-collections-3.2.1.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\lib\commons-digester-1.7.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\lib\commons-io-2.0.1.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\lib\commons-lang-2.5.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\lib\commons-logging-1.1.1.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\lib\displaytag-1.2.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\lib\displaytag-export-poi-1.2.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\lib\displaytag-portlet-1.2.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\lib\dom4j-1.6.1.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\lib\ehcache-1.3.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\lib\hibernate-cglib-repack-2.1_3.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\lib\hibernate3.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\lib\hsqldb.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\lib\itextpdf-5.2.1.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\lib\javassist-3.9.0.GA.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\lib\jdom-1.1.2.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\lib\jstl-1.1.2.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\lib\jta-1.1.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\lib\junit-4.7.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\lib\log4j-1.2.16.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\lib\mysql-connector-java-5.1.8-bin.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\lib\mysqljdbs.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\lib\ojdbc14.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\lib\postgresql-8.4-701.jdbc4.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\lib\resolver.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\lib\xml-apis.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\lib\serializer.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\lib\servlet.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\lib\slf4j-api-1.7.5.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\lib\slf4j-log4j12-1.7.5.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\lib\spring-2.5.6.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\lib\spring-test.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\lib\spring-webmvc-struts.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\lib\standard-1.1.2.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\lib\struts-1.2.9.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\lib\struts-el-1.2.9.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\lib\versioncheck.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\lib\xercesImpl.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\lib\xercesSamples.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\libtomcat\jsp-api.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\libtomcat\servlet-api.jar</AuxClasspathEntry>
+    <SrcDir>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\src-commun</SrcDir>
+    <SrcDir>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\src</SrcDir>
+    <SrcDir>D:\DONNEES\EclipseWorkspace\hibernate_outil_dan\test</SrcDir>
+    <Cloud id="edu.umd.cs.findbugs.cloud.doNothingCloud" online="false"></Cloud>
+  </Project>
+  <BugInstance type="UUF_UNUSED_FIELD" priority="2" abbrev="UuF" category="PERFORMANCE" first="15" last="15" removedByChange="true">
+    <Class classname="levy.daniel.application.Application">
+      <SourceLine classname="levy.daniel.application.Application" sourcefile="Application.java" sourcepath="levy/daniel/application/Application.java"/>
+    </Class>
+    <Field classname="levy.daniel.application.Application" name="LOG" signature="LLog;" isStatic="true">
+      <SourceLine classname="levy.daniel.application.Application" start="32" end="32" startBytecode="0" endBytecode="0" sourcefile="Application.java" sourcepath="levy/daniel/application/Application.java"/>
+    </Field>
+  </BugInstance>
+  <BugInstance type="UUF_UNUSED_FIELD" priority="2" abbrev="UuF" category="PERFORMANCE" first="2" last="2" removedByChange="true">
+    <Class classname="levy.daniel.application.presentation.desktop.MyFrame">
+      <SourceLine classname="levy.daniel.application.presentation.desktop.MyFrame" sourcefile="MyFrame.java" sourcepath="levy/daniel/application/presentation/desktop/MyFrame.java"/>
+    </Class>
+    <Field classname="levy.daniel.application.presentation.desktop.MyFrame" name="LOG" signature="LLog;" isStatic="true">
+      <SourceLine classname="levy.daniel.application.presentation.desktop.MyFrame" start="34" end="34" startBytecode="0" endBytecode="0" sourcefile="MyFrame.java" sourcepath="levy/daniel/application/presentation/desktop/MyFrame.java"/>
+    </Field>
+  </BugInstance>
+  <BugInstance type="EI_EXPOSE_REP" priority="2" abbrev="EI" category="MALICIOUS_CODE" first="1">
+    <Class classname="levy.daniel.application.valueobject.AbstractValueObject">
+      <SourceLine classname="levy.daniel.application.valueobject.AbstractValueObject" sourcefile="AbstractValueObject.java" sourcepath="levy/daniel/application/valueobject/AbstractValueObject.java"/>
+    </Class>
+    <Method classname="levy.daniel.application.valueobject.AbstractValueObject" name="getDateCreation" signature="()Ljava/util/Date;" isStatic="false">
+      <SourceLine classname="levy.daniel.application.valueobject.AbstractValueObject" start="702" end="702" startBytecode="0" endBytecode="46" sourcefile="AbstractValueObject.java" sourcepath="levy/daniel/application/valueobject/AbstractValueObject.java"/>
+    </Method>
+    <Field classname="levy.daniel.application.valueobject.AbstractValueObject" name="dateCreation" signature="Ljava/util/Date;" isStatic="false">
+      <SourceLine classname="levy.daniel.application.valueobject.AbstractValueObject" sourcefile="AbstractValueObject.java" sourcepath="levy/daniel/application/valueobject/AbstractValueObject.java"/>
+    </Field>
+    <SourceLine classname="levy.daniel.application.valueobject.AbstractValueObject" start="702" end="702" startBytecode="4" endBytecode="4" sourcefile="AbstractValueObject.java" sourcepath="levy/daniel/application/valueobject/AbstractValueObject.java"/>
+  </BugInstance>
+  <BugInstance type="EI_EXPOSE_REP" priority="2" abbrev="EI" category="MALICIOUS_CODE" first="1">
+    <Class classname="levy.daniel.application.valueobject.AbstractValueObject">
+      <SourceLine classname="levy.daniel.application.valueobject.AbstractValueObject" sourcefile="AbstractValueObject.java" sourcepath="levy/daniel/application/valueobject/AbstractValueObject.java"/>
+    </Class>
+    <Method classname="levy.daniel.application.valueobject.AbstractValueObject" name="getDateModification" signature="()Ljava/util/Date;" isStatic="false">
+      <SourceLine classname="levy.daniel.application.valueobject.AbstractValueObject" start="768" end="768" startBytecode="0" endBytecode="46" sourcefile="AbstractValueObject.java" sourcepath="levy/daniel/application/valueobject/AbstractValueObject.java"/>
+    </Method>
+    <Field classname="levy.daniel.application.valueobject.AbstractValueObject" name="dateModification" signature="Ljava/util/Date;" isStatic="false">
+      <SourceLine classname="levy.daniel.application.valueobject.AbstractValueObject" sourcefile="AbstractValueObject.java" sourcepath="levy/daniel/application/valueobject/AbstractValueObject.java"/>
+    </Field>
+    <SourceLine classname="levy.daniel.application.valueobject.AbstractValueObject" start="768" end="768" startBytecode="4" endBytecode="4" sourcefile="AbstractValueObject.java" sourcepath="levy/daniel/application/valueobject/AbstractValueObject.java"/>
+  </BugInstance>
+  <BugInstance type="EI_EXPOSE_REP" priority="2" abbrev="EI" category="MALICIOUS_CODE" first="1">
+    <Class classname="levy.daniel.application.valueobject.AbstractValueObject">
+      <SourceLine classname="levy.daniel.application.valueobject.AbstractValueObject" sourcefile="AbstractValueObject.java" sourcepath="levy/daniel/application/valueobject/AbstractValueObject.java"/>
+    </Class>
+    <Method classname="levy.daniel.application.valueobject.AbstractValueObject" name="getDateSuppression" signature="()Ljava/util/Date;" isStatic="false">
+      <SourceLine classname="levy.daniel.application.valueobject.AbstractValueObject" start="834" end="834" startBytecode="0" endBytecode="46" sourcefile="AbstractValueObject.java" sourcepath="levy/daniel/application/valueobject/AbstractValueObject.java"/>
+    </Method>
+    <Field classname="levy.daniel.application.valueobject.AbstractValueObject" name="dateSuppression" signature="Ljava/util/Date;" isStatic="false">
+      <SourceLine classname="levy.daniel.application.valueobject.AbstractValueObject" sourcefile="AbstractValueObject.java" sourcepath="levy/daniel/application/valueobject/AbstractValueObject.java"/>
+    </Field>
+    <SourceLine classname="levy.daniel.application.valueobject.AbstractValueObject" start="834" end="834" startBytecode="4" endBytecode="4" sourcefile="AbstractValueObject.java" sourcepath="levy/daniel/application/valueobject/AbstractValueObject.java"/>
+  </BugInstance>
+  <BugInstance type="EI_EXPOSE_REP2" priority="2" abbrev="EI2" category="MALICIOUS_CODE" first="1">
+    <Class classname="levy.daniel.application.valueobject.AbstractValueObject">
+      <SourceLine classname="levy.daniel.application.valueobject.AbstractValueObject" sourcefile="AbstractValueObject.java" sourcepath="levy/daniel/application/valueobject/AbstractValueObject.java"/>
+    </Class>
+    <Method classname="levy.daniel.application.valueobject.AbstractValueObject" name="&lt;init&gt;" signature="(Ljava/lang/Long;Ljava/lang/String;Ljava/util/Date;Llevy/daniel/application/valueobject/impl/User;Ljava/util/Date;Llevy/daniel/application/valueobject/impl/User;Ljava/util/Date;Llevy/daniel/application/valueobject/impl/User;Ljava/lang/Boolean;Ljava/lang/String;)V" isStatic="false">
+      <SourceLine classname="levy.daniel.application.valueobject.AbstractValueObject" start="386" end="414" startBytecode="0" endBytecode="381" sourcefile="AbstractValueObject.java" sourcepath="levy/daniel/application/valueobject/AbstractValueObject.java"/>
+    </Method>
+    <Field classname="levy.daniel.application.valueobject.AbstractValueObject" name="dateCreation" signature="Ljava/util/Date;" isStatic="false">
+      <SourceLine classname="levy.daniel.application.valueobject.AbstractValueObject" sourcefile="AbstractValueObject.java" sourcepath="levy/daniel/application/valueobject/AbstractValueObject.java"/>
+    </Field>
+    <LocalVariable name="pDateCreation" register="3" pc="90" role="LOCAL_VARIABLE_NAMED"/>
+    <SourceLine classname="levy.daniel.application.valueobject.AbstractValueObject" start="400" end="400" startBytecode="90" endBytecode="90" sourcefile="AbstractValueObject.java" sourcepath="levy/daniel/application/valueobject/AbstractValueObject.java"/>
+  </BugInstance>
+  <BugInstance type="EI_EXPOSE_REP2" priority="2" abbrev="EI2" category="MALICIOUS_CODE" first="1">
+    <Class classname="levy.daniel.application.valueobject.AbstractValueObject">
+      <SourceLine classname="levy.daniel.application.valueobject.AbstractValueObject" sourcefile="AbstractValueObject.java" sourcepath="levy/daniel/application/valueobject/AbstractValueObject.java"/>
+    </Class>
+    <Method classname="levy.daniel.application.valueobject.AbstractValueObject" name="&lt;init&gt;" signature="(Ljava/lang/Long;Ljava/lang/String;Ljava/util/Date;Llevy/daniel/application/valueobject/impl/User;Ljava/util/Date;Llevy/daniel/application/valueobject/impl/User;Ljava/util/Date;Llevy/daniel/application/valueobject/impl/User;Ljava/lang/Boolean;Ljava/lang/String;)V" isStatic="false">
+      <SourceLine classname="levy.daniel.application.valueobject.AbstractValueObject" start="386" end="414" startBytecode="0" endBytecode="381" sourcefile="AbstractValueObject.java" sourcepath="levy/daniel/application/valueobject/AbstractValueObject.java"/>
+    </Method>
+    <Field classname="levy.daniel.application.valueobject.AbstractValueObject" name="dateModification" signature="Ljava/util/Date;" isStatic="false">
+      <SourceLine classname="levy.daniel.application.valueobject.AbstractValueObject" sourcefile="AbstractValueObject.java" sourcepath="levy/daniel/application/valueobject/AbstractValueObject.java"/>
+    </Field>
+    <LocalVariable name="pDateModification" register="5" pc="102" role="LOCAL_VARIABLE_NAMED"/>
+    <SourceLine classname="levy.daniel.application.valueobject.AbstractValueObject" start="402" end="402" startBytecode="102" endBytecode="102" sourcefile="AbstractValueObject.java" sourcepath="levy/daniel/application/valueobject/AbstractValueObject.java"/>
+  </BugInstance>
+  <BugInstance type="EI_EXPOSE_REP2" priority="2" abbrev="EI2" category="MALICIOUS_CODE" first="1">
+    <Class classname="levy.daniel.application.valueobject.AbstractValueObject">
+      <SourceLine classname="levy.daniel.application.valueobject.AbstractValueObject" sourcefile="AbstractValueObject.java" sourcepath="levy/daniel/application/valueobject/AbstractValueObject.java"/>
+    </Class>
+    <Method classname="levy.daniel.application.valueobject.AbstractValueObject" name="&lt;init&gt;" signature="(Ljava/lang/Long;Ljava/lang/String;Ljava/util/Date;Llevy/daniel/application/valueobject/impl/User;Ljava/util/Date;Llevy/daniel/application/valueobject/impl/User;Ljava/util/Date;Llevy/daniel/application/valueobject/impl/User;Ljava/lang/Boolean;Ljava/lang/String;)V" isStatic="false">
+      <SourceLine classname="levy.daniel.application.valueobject.AbstractValueObject" start="386" end="414" startBytecode="0" endBytecode="381" sourcefile="AbstractValueObject.java" sourcepath="levy/daniel/application/valueobject/AbstractValueObject.java"/>
+    </Method>
+    <Field classname="levy.daniel.application.valueobject.AbstractValueObject" name="dateSuppression" signature="Ljava/util/Date;" isStatic="false">
+      <SourceLine classname="levy.daniel.application.valueobject.AbstractValueObject" sourcefile="AbstractValueObject.java" sourcepath="levy/daniel/application/valueobject/AbstractValueObject.java"/>
+    </Field>
+    <LocalVariable name="pDateSuppression" register="7" pc="114" role="LOCAL_VARIABLE_NAMED"/>
+    <SourceLine classname="levy.daniel.application.valueobject.AbstractValueObject" start="404" end="404" startBytecode="114" endBytecode="114" sourcefile="AbstractValueObject.java" sourcepath="levy/daniel/application/valueobject/AbstractValueObject.java"/>
+  </BugInstance>
+  <BugInstance type="EI_EXPOSE_REP2" priority="2" abbrev="EI2" category="MALICIOUS_CODE" first="1">
+    <Class classname="levy.daniel.application.valueobject.AbstractValueObject">
+      <SourceLine classname="levy.daniel.application.valueobject.AbstractValueObject" sourcefile="AbstractValueObject.java" sourcepath="levy/daniel/application/valueobject/AbstractValueObject.java"/>
+    </Class>
+    <Method classname="levy.daniel.application.valueobject.AbstractValueObject" name="setDateCreation" signature="(Ljava/util/Date;)V" isStatic="false">
+      <SourceLine classname="levy.daniel.application.valueobject.AbstractValueObject" start="719" end="720" startBytecode="0" endBytecode="61" sourcefile="AbstractValueObject.java" sourcepath="levy/daniel/application/valueobject/AbstractValueObject.java"/>
+    </Method>
+    <Field classname="levy.daniel.application.valueobject.AbstractValueObject" name="dateCreation" signature="Ljava/util/Date;" isStatic="false">
+      <SourceLine classname="levy.daniel.application.valueobject.AbstractValueObject" sourcefile="AbstractValueObject.java" sourcepath="levy/daniel/application/valueobject/AbstractValueObject.java"/>
+    </Field>
+    <LocalVariable name="pDateCreation" register="1" pc="2" role="LOCAL_VARIABLE_NAMED"/>
+    <SourceLine classname="levy.daniel.application.valueobject.AbstractValueObject" start="719" end="719" startBytecode="2" endBytecode="2" sourcefile="AbstractValueObject.java" sourcepath="levy/daniel/application/valueobject/AbstractValueObject.java"/>
+  </BugInstance>
+  <BugInstance type="EI_EXPOSE_REP2" priority="2" abbrev="EI2" category="MALICIOUS_CODE" first="1">
+    <Class classname="levy.daniel.application.valueobject.AbstractValueObject">
+      <SourceLine classname="levy.daniel.application.valueobject.AbstractValueObject" sourcefile="AbstractValueObject.java" sourcepath="levy/daniel/application/valueobject/AbstractValueObject.java"/>
+    </Class>
+    <Method classname="levy.daniel.application.valueobject.AbstractValueObject" name="setDateModification" signature="(Ljava/util/Date;)V" isStatic="false">
+      <SourceLine classname="levy.daniel.application.valueobject.AbstractValueObject" start="785" end="786" startBytecode="0" endBytecode="61" sourcefile="AbstractValueObject.java" sourcepath="levy/daniel/application/valueobject/AbstractValueObject.java"/>
+    </Method>
+    <Field classname="levy.daniel.application.valueobject.AbstractValueObject" name="dateModification" signature="Ljava/util/Date;" isStatic="false">
+      <SourceLine classname="levy.daniel.application.valueobject.AbstractValueObject" sourcefile="AbstractValueObject.java" sourcepath="levy/daniel/application/valueobject/AbstractValueObject.java"/>
+    </Field>
+    <LocalVariable name="pDateModification" register="1" pc="2" role="LOCAL_VARIABLE_NAMED"/>
+    <SourceLine classname="levy.daniel.application.valueobject.AbstractValueObject" start="785" end="785" startBytecode="2" endBytecode="2" sourcefile="AbstractValueObject.java" sourcepath="levy/daniel/application/valueobject/AbstractValueObject.java"/>
+  </BugInstance>
+  <BugInstance type="EI_EXPOSE_REP2" priority="2" abbrev="EI2" category="MALICIOUS_CODE" first="1">
+    <Class classname="levy.daniel.application.valueobject.AbstractValueObject">
+      <SourceLine classname="levy.daniel.application.valueobject.AbstractValueObject" sourcefile="AbstractValueObject.java" sourcepath="levy/daniel/application/valueobject/AbstractValueObject.java"/>
+    </Class>
+    <Method classname="levy.daniel.application.valueobject.AbstractValueObject" name="setDateSuppression" signature="(Ljava/util/Date;)V" isStatic="false">
+      <SourceLine classname="levy.daniel.application.valueobject.AbstractValueObject" start="851" end="852" startBytecode="0" endBytecode="61" sourcefile="AbstractValueObject.java" sourcepath="levy/daniel/application/valueobject/AbstractValueObject.java"/>
+    </Method>
+    <Field classname="levy.daniel.application.valueobject.AbstractValueObject" name="dateSuppression" signature="Ljava/util/Date;" isStatic="false">
+      <SourceLine classname="levy.daniel.application.valueobject.AbstractValueObject" sourcefile="AbstractValueObject.java" sourcepath="levy/daniel/application/valueobject/AbstractValueObject.java"/>
+    </Field>
+    <LocalVariable name="pDateSuppression" register="1" pc="2" role="LOCAL_VARIABLE_NAMED"/>
+    <SourceLine classname="levy.daniel.application.valueobject.AbstractValueObject" start="851" end="851" startBytecode="2" endBytecode="2" sourcefile="AbstractValueObject.java" sourcepath="levy/daniel/application/valueobject/AbstractValueObject.java"/>
+  </BugInstance>
+  <BugInstance type="EI_EXPOSE_REP" priority="2" abbrev="EI" category="MALICIOUS_CODE" first="1">
+    <Class classname="levy.daniel.application.valueobject.impl.Personne">
+      <SourceLine classname="levy.daniel.application.valueobject.impl.Personne" sourcefile="Personne.java" sourcepath="levy/daniel/application/valueobject/impl/Personne.java"/>
+    </Class>
+    <Method classname="levy.daniel.application.valueobject.impl.Personne" name="getDateNaissance" signature="()Ljava/util/Date;" isStatic="false">
+      <SourceLine classname="levy.daniel.application.valueobject.impl.Personne" start="885" end="885" startBytecode="0" endBytecode="46" sourcefile="Personne.java" sourcepath="levy/daniel/application/valueobject/impl/Personne.java"/>
+    </Method>
+    <Field classname="levy.daniel.application.valueobject.impl.Personne" name="dateNaissance" signature="Ljava/util/Date;" isStatic="false">
+      <SourceLine classname="levy.daniel.application.valueobject.impl.Personne" sourcefile="Personne.java" sourcepath="levy/daniel/application/valueobject/impl/Personne.java"/>
+    </Field>
+    <SourceLine classname="levy.daniel.application.valueobject.impl.Personne" start="885" end="885" startBytecode="4" endBytecode="4" sourcefile="Personne.java" sourcepath="levy/daniel/application/valueobject/impl/Personne.java"/>
+  </BugInstance>
+  <BugInstance type="EI_EXPOSE_REP2" priority="2" abbrev="EI2" category="MALICIOUS_CODE" first="1">
+    <Class classname="levy.daniel.application.valueobject.impl.Personne">
+      <SourceLine classname="levy.daniel.application.valueobject.impl.Personne" sourcefile="Personne.java" sourcepath="levy/daniel/application/valueobject/impl/Personne.java"/>
+    </Class>
+    <Method classname="levy.daniel.application.valueobject.impl.Personne" name="&lt;init&gt;" signature="(Ljava/lang/Long;Ljava/lang/String;Ljava/util/Date;Llevy/daniel/application/valueobject/impl/User;Ljava/util/Date;Llevy/daniel/application/valueobject/impl/User;Ljava/util/Date;Llevy/daniel/application/valueobject/impl/User;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/Date;Llevy/daniel/application/valueobject/impl/User;)V" isStatic="false">
+      <SourceLine classname="levy.daniel.application.valueobject.impl.Personne" start="515" end="535" startBytecode="0" endBytecode="343" sourcefile="Personne.java" sourcepath="levy/daniel/application/valueobject/impl/Personne.java"/>
+    </Method>
+    <Field classname="levy.daniel.application.valueobject.impl.Personne" name="dateNaissance" signature="Ljava/util/Date;" isStatic="false">
+      <SourceLine classname="levy.daniel.application.valueobject.impl.Personne" sourcefile="Personne.java" sourcepath="levy/daniel/application/valueobject/impl/Personne.java"/>
+    </Field>
+    <LocalVariable name="pDateNaissance" register="13" pc="61" role="LOCAL_VARIABLE_NAMED"/>
+    <SourceLine classname="levy.daniel.application.valueobject.impl.Personne" start="529" end="529" startBytecode="61" endBytecode="61" sourcefile="Personne.java" sourcepath="levy/daniel/application/valueobject/impl/Personne.java"/>
+  </BugInstance>
+  <BugInstance type="EI_EXPOSE_REP2" priority="2" abbrev="EI2" category="MALICIOUS_CODE" first="1">
+    <Class classname="levy.daniel.application.valueobject.impl.Personne">
+      <SourceLine classname="levy.daniel.application.valueobject.impl.Personne" sourcefile="Personne.java" sourcepath="levy/daniel/application/valueobject/impl/Personne.java"/>
+    </Class>
+    <Method classname="levy.daniel.application.valueobject.impl.Personne" name="setDateNaissance" signature="(Ljava/util/Date;)V" isStatic="false">
+      <SourceLine classname="levy.daniel.application.valueobject.impl.Personne" start="900" end="901" startBytecode="0" endBytecode="61" sourcefile="Personne.java" sourcepath="levy/daniel/application/valueobject/impl/Personne.java"/>
+    </Method>
+    <Field classname="levy.daniel.application.valueobject.impl.Personne" name="dateNaissance" signature="Ljava/util/Date;" isStatic="false">
+      <SourceLine classname="levy.daniel.application.valueobject.impl.Personne" sourcefile="Personne.java" sourcepath="levy/daniel/application/valueobject/impl/Personne.java"/>
+    </Field>
+    <LocalVariable name="pDateNaissance" register="1" pc="2" role="LOCAL_VARIABLE_NAMED"/>
+    <SourceLine classname="levy.daniel.application.valueobject.impl.Personne" start="900" end="900" startBytecode="2" endBytecode="2" sourcefile="Personne.java" sourcepath="levy/daniel/application/valueobject/impl/Personne.java"/>
+  </BugInstance>
+  <BugInstance type="EI_EXPOSE_REP" priority="2" abbrev="EI" category="MALICIOUS_CODE" first="1">
+    <Class classname="levy.daniel.application.valueobject.operation.Operation">
+      <SourceLine classname="levy.daniel.application.valueobject.operation.Operation" sourcefile="Operation.java" sourcepath="levy/daniel/application/valueobject/operation/Operation.java"/>
+    </Class>
+    <Method classname="levy.daniel.application.valueobject.operation.Operation" name="getDateOperation" signature="()Ljava/util/Date;" isStatic="false">
+      <SourceLine classname="levy.daniel.application.valueobject.operation.Operation" start="668" end="668" startBytecode="0" endBytecode="46" sourcefile="Operation.java" sourcepath="levy/daniel/application/valueobject/operation/Operation.java"/>
+    </Method>
+    <Field classname="levy.daniel.application.valueobject.operation.Operation" name="dateOperation" signature="Ljava/util/Date;" isStatic="false">
+      <SourceLine classname="levy.daniel.application.valueobject.operation.Operation" sourcefile="Operation.java" sourcepath="levy/daniel/application/valueobject/operation/Operation.java"/>
+    </Field>
+    <SourceLine classname="levy.daniel.application.valueobject.operation.Operation" start="668" end="668" startBytecode="4" endBytecode="4" sourcefile="Operation.java" sourcepath="levy/daniel/application/valueobject/operation/Operation.java"/>
+  </BugInstance>
+  <BugInstance type="EI_EXPOSE_REP2" priority="2" abbrev="EI2" category="MALICIOUS_CODE" first="1">
+    <Class classname="levy.daniel.application.valueobject.operation.Operation">
+      <SourceLine classname="levy.daniel.application.valueobject.operation.Operation" sourcefile="Operation.java" sourcepath="levy/daniel/application/valueobject/operation/Operation.java"/>
+    </Class>
+    <Method classname="levy.daniel.application.valueobject.operation.Operation" name="&lt;init&gt;" signature="(Ljava/lang/Long;Llevy/daniel/application/valueobject/operation/TypeOperation;Ljava/util/Date;Llevy/daniel/application/valueobject/AbstractValueObject;Llevy/daniel/application/valueobject/impl/User;)V" isStatic="false">
+      <SourceLine classname="levy.daniel.application.valueobject.operation.Operation" start="302" end="327" startBytecode="0" endBytecode="300" sourcefile="Operation.java" sourcepath="levy/daniel/application/valueobject/operation/Operation.java"/>
+    </Method>
+    <Field classname="levy.daniel.application.valueobject.operation.Operation" name="dateOperation" signature="Ljava/util/Date;" isStatic="false">
+      <SourceLine classname="levy.daniel.application.valueobject.operation.Operation" sourcefile="Operation.java" sourcepath="levy/daniel/application/valueobject/operation/Operation.java"/>
+    </Field>
+    <LocalVariable name="pDateOperation" register="3" pc="54" role="LOCAL_VARIABLE_NAMED"/>
+    <SourceLine classname="levy.daniel.application.valueobject.operation.Operation" start="311" end="311" startBytecode="54" endBytecode="54" sourcefile="Operation.java" sourcepath="levy/daniel/application/valueobject/operation/Operation.java"/>
+  </BugInstance>
+  <BugInstance type="EI_EXPOSE_REP2" priority="2" abbrev="EI2" category="MALICIOUS_CODE" first="1">
+    <Class classname="levy.daniel.application.valueobject.operation.Operation">
+      <SourceLine classname="levy.daniel.application.valueobject.operation.Operation" sourcefile="Operation.java" sourcepath="levy/daniel/application/valueobject/operation/Operation.java"/>
+    </Class>
+    <Method classname="levy.daniel.application.valueobject.operation.Operation" name="&lt;init&gt;" signature="(Ljava/lang/String;Ljava/util/Date;Llevy/daniel/application/valueobject/AbstractValueObject;Llevy/daniel/application/valueobject/impl/User;)V" isStatic="false">
+      <SourceLine classname="levy.daniel.application.valueobject.operation.Operation" start="253" end="269" startBytecode="0" endBytecode="254" sourcefile="Operation.java" sourcepath="levy/daniel/application/valueobject/operation/Operation.java"/>
+    </Method>
+    <Field classname="levy.daniel.application.valueobject.operation.Operation" name="dateOperation" signature="Ljava/util/Date;" isStatic="false">
+      <SourceLine classname="levy.daniel.application.valueobject.operation.Operation" sourcefile="Operation.java" sourcepath="levy/daniel/application/valueobject/operation/Operation.java"/>
+    </Field>
+    <LocalVariable name="pDateOperation" register="2" pc="49" role="LOCAL_VARIABLE_NAMED"/>
+    <SourceLine classname="levy.daniel.application.valueobject.operation.Operation" start="260" end="260" startBytecode="49" endBytecode="49" sourcefile="Operation.java" sourcepath="levy/daniel/application/valueobject/operation/Operation.java"/>
+  </BugInstance>
+  <BugInstance type="EI_EXPOSE_REP2" priority="2" abbrev="EI2" category="MALICIOUS_CODE" first="1">
+    <Class classname="levy.daniel.application.valueobject.operation.Operation">
+      <SourceLine classname="levy.daniel.application.valueobject.operation.Operation" sourcefile="Operation.java" sourcepath="levy/daniel/application/valueobject/operation/Operation.java"/>
+    </Class>
+    <Method classname="levy.daniel.application.valueobject.operation.Operation" name="setDateOperation" signature="(Ljava/util/Date;)V" isStatic="false">
+      <SourceLine classname="levy.daniel.application.valueobject.operation.Operation" start="683" end="684" startBytecode="0" endBytecode="61" sourcefile="Operation.java" sourcepath="levy/daniel/application/valueobject/operation/Operation.java"/>
+    </Method>
+    <Field classname="levy.daniel.application.valueobject.operation.Operation" name="dateOperation" signature="Ljava/util/Date;" isStatic="false">
+      <SourceLine classname="levy.daniel.application.valueobject.operation.Operation" sourcefile="Operation.java" sourcepath="levy/daniel/application/valueobject/operation/Operation.java"/>
+    </Field>
+    <LocalVariable name="pDateOperation" register="1" pc="2" role="LOCAL_VARIABLE_NAMED"/>
+    <SourceLine classname="levy.daniel.application.valueobject.operation.Operation" start="683" end="683" startBytecode="2" endBytecode="2" sourcefile="Operation.java" sourcepath="levy/daniel/application/valueobject/operation/Operation.java"/>
+  </BugInstance>
+  <BugInstance type="MS_PKGPROTECT" priority="2" abbrev="MS" category="MALICIOUS_CODE" first="1">
+    <Class classname="levy.daniel.commun.exception.technical.AbstractRunTimeTechnicalException">
+      <SourceLine classname="levy.daniel.commun.exception.technical.AbstractRunTimeTechnicalException" sourcefile="AbstractRunTimeTechnicalException.java" sourcepath="levy/daniel/commun/exception/technical/AbstractRunTimeTechnicalException.java"/>
+    </Class>
+    <Field classname="levy.daniel.commun.exception.technical.AbstractRunTimeTechnicalException" name="listeExceptions" signature="Ljava/util/List;" isStatic="true">
+      <SourceLine classname="levy.daniel.commun.exception.technical.AbstractRunTimeTechnicalException" start="53" end="53" startBytecode="0" endBytecode="0" sourcefile="AbstractRunTimeTechnicalException.java" sourcepath="levy/daniel/commun/exception/technical/AbstractRunTimeTechnicalException.java"/>
+    </Field>
+  </BugInstance>
+  <BugInstance type="MS_PKGPROTECT" priority="2" abbrev="MS" category="MALICIOUS_CODE" first="1">
+    <Class classname="levy.daniel.commun.exception.technical.AbstractTechnicalException">
+      <SourceLine classname="levy.daniel.commun.exception.technical.AbstractTechnicalException" sourcefile="AbstractTechnicalException.java" sourcepath="levy/daniel/commun/exception/technical/AbstractTechnicalException.java"/>
+    </Class>
+    <Field classname="levy.daniel.commun.exception.technical.AbstractTechnicalException" name="listeExceptions" signature="Ljava/util/List;" isStatic="true">
+      <SourceLine classname="levy.daniel.commun.exception.technical.AbstractTechnicalException" start="49" end="49" startBytecode="0" endBytecode="0" sourcefile="AbstractTechnicalException.java" sourcepath="levy/daniel/commun/exception/technical/AbstractTechnicalException.java"/>
+    </Field>
+  </BugInstance>
+  <BugInstance type="DM_DEFAULT_ENCODING" priority="1" abbrev="Dm" category="I18N" first="1">
+    <Class classname="levy.daniel.commun.util.utilitairesmaps.CreateurMaps">
+      <SourceLine classname="levy.daniel.commun.util.utilitairesmaps.CreateurMaps" sourcefile="CreateurMaps.java" sourcepath="levy/daniel/commun/util/utilitairesmaps/CreateurMaps.java"/>
+    </Class>
+    <Method classname="levy.daniel.commun.util.utilitairesmaps.CreateurMaps" name="creerMapFomFile" signature="(Ljava/io/File;)Ljava/util/Map;" isStatic="true">
+      <SourceLine classname="levy.daniel.commun.util.utilitairesmaps.CreateurMaps" start="108" end="200" startBytecode="0" endBytecode="923" sourcefile="CreateurMaps.java" sourcepath="levy/daniel/commun/util/utilitairesmaps/CreateurMaps.java"/>
+    </Method>
+    <Method classname="java.io.FileReader" name="&lt;init&gt;" signature="(Ljava/io/File;)V" isStatic="false" role="METHOD_CALLED">
+      <SourceLine classname="java.io.FileReader"/>
+    </Method>
+    <SourceLine classname="levy.daniel.commun.util.utilitairesmaps.CreateurMaps" start="126" end="126" startBytecode="43" endBytecode="43" sourcefile="CreateurMaps.java" sourcepath="levy/daniel/commun/util/utilitairesmaps/CreateurMaps.java"/>
+  </BugInstance>
+  <BugInstance type="OBL_UNSATISFIED_OBLIGATION" priority="2" abbrev="OBL" category="EXPERIMENTAL" first="1">
+    <Class classname="levy.daniel.commun.util.utilitairesxml.UtilXML">
+      <SourceLine classname="levy.daniel.commun.util.utilitairesxml.UtilXML" sourcefile="UtilXML.java" sourcepath="levy/daniel/commun/util/utilitairesxml/UtilXML.java"/>
+    </Class>
+    <Method classname="levy.daniel.commun.util.utilitairesxml.UtilXML" name="enregistrerDocument" signature="(Lorg/jdom/Document;Ljava/io/File;)V" isStatic="true">
+      <SourceLine classname="levy.daniel.commun.util.utilitairesxml.UtilXML" start="156" end="164" startBytecode="0" endBytecode="125" sourcefile="UtilXML.java" sourcepath="levy/daniel/commun/util/utilitairesxml/UtilXML.java"/>
+    </Method>
+    <Class classname="java.io.OutputStream" role="CLASS_REFTYPE">
+      <SourceLine classname="java.io.OutputStream"/>
+    </Class>
+    <Int value="1" role="INT_OBLIGATIONS_REMAINING"/>
+    <SourceLine classname="levy.daniel.commun.util.utilitairesxml.UtilXML" start="162" end="162" startBytecode="27" endBytecode="27" sourcefile="UtilXML.java" sourcepath="levy/daniel/commun/util/utilitairesxml/UtilXML.java" role="SOURCE_LINE_OBLIGATION_CREATED"/>
+    <SourceLine classname="levy.daniel.commun.util.utilitairesxml.UtilXML" start="164" end="164" startBytecode="33" endBytecode="33" sourcefile="UtilXML.java" sourcepath="levy/daniel/commun/util/utilitairesxml/UtilXML.java" role="SOURCE_LINE_PATH_CONTINUES"/>
+    <String value="{OutputStream x 1}" role="STRING_REMAINING_OBLIGATIONS"/>
+  </BugInstance>
+  <Errors errors="0" missingClasses="0"></Errors>
+  <FindBugsSummary timestamp="Tue, 21 May 2013 12:02:56 +0200" total_classes="2" referenced_classes="15" total_bugs="20" total_size="18" num_packages="7" vm_version="22.0-b10" cpu_seconds="457.39" clock_seconds="179095.85" peak_mbytes="613.49" alloc_mbytes="494.94" gc_seconds="135.98" priority_2="19" priority_1="1">
+    <PackageStats package="levy.daniel.application" total_bugs="0" total_types="2" total_size="18">
+      <ClassStats class="levy.daniel.application.Application" sourceFile="Application.java" interface="false" size="11" bugs="0"/>
+      <ClassStats class="levy.daniel.application.Application$1" sourceFile="Application.java" interface="false" size="7" bugs="0"/>
+    </PackageStats>
+    <FindBugsProfile>
+      <ClassProfile name="de.tobject.findbugs.builder.FindBugs2Eclipse" totalMilliseconds="4755" invocations="2" avgMicrosecondsPerInvocation="2377637" maxMicrosecondsPerInvocation="3759769" standardDeviationMircosecondsPerInvocation="1382132"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.ClassInfoAnalysisEngine" totalMilliseconds="3761" invocations="398" avgMicrosecondsPerInvocation="9449" maxMicrosecondsPerInvocation="2991333" standardDeviationMircosecondsPerInvocation="149914"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.ClassDataAnalysisEngine" totalMilliseconds="2315" invocations="399" avgMicrosecondsPerInvocation="5803" maxMicrosecondsPerInvocation="64546" standardDeviationMircosecondsPerInvocation="7380"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.impl.ZipCodeBaseFactory" totalMilliseconds="2004" invocations="63" avgMicrosecondsPerInvocation="31821" maxMicrosecondsPerInvocation="1340491" standardDeviationMircosecondsPerInvocation="167929"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.JavaClassAnalysisEngine" totalMilliseconds="1997" invocations="20" avgMicrosecondsPerInvocation="99867" maxMicrosecondsPerInvocation="901471" standardDeviationMircosecondsPerInvocation="207303"/>
+    </FindBugsProfile>
+  </FindBugsSummary>
+  <ClassFeatures></ClassFeatures>
+  <History>
+    <AppVersion sequence="0" timestamp="1368991890531" release="" codeSize="0" numClasses="0"/>
+    <AppVersion sequence="1" timestamp="1368991890546" release="" codeSize="3614" numClasses="73"/>
+    <AppVersion sequence="2" timestamp="1369035506671" release="" codeSize="4" numClasses="1"/>
+    <AppVersion sequence="3" timestamp="1369035628203" release="" codeSize="6" numClasses="1"/>
+    <AppVersion sequence="4" timestamp="1369035862765" release="" codeSize="10" numClasses="1"/>
+    <AppVersion sequence="5" timestamp="1369036003765" release="" codeSize="15" numClasses="1"/>
+    <AppVersion sequence="6" timestamp="1369036274671" release="" codeSize="25" numClasses="1"/>
+    <AppVersion sequence="7" timestamp="1369036536171" release="" codeSize="27" numClasses="1"/>
+    <AppVersion sequence="8" timestamp="1369036633906" release="" codeSize="32" numClasses="1"/>
+    <AppVersion sequence="9" timestamp="1369036674953" release="" codeSize="32" numClasses="1"/>
+    <AppVersion sequence="10" timestamp="1369036679625" release="" codeSize="32" numClasses="1"/>
+    <AppVersion sequence="11" timestamp="1369036721171" release="" codeSize="33" numClasses="1"/>
+    <AppVersion sequence="12" timestamp="1369037035890" release="" codeSize="45" numClasses="1"/>
+    <AppVersion sequence="13" timestamp="1369037451921" release="" codeSize="49" numClasses="1"/>
+    <AppVersion sequence="14" timestamp="1369037778093" release="" codeSize="50" numClasses="1"/>
+    <AppVersion sequence="15" timestamp="1369037802859" release="" codeSize="6" numClasses="1"/>
+    <AppVersion sequence="16" timestamp="1369037963750" release="" codeSize="17" numClasses="2"/>
+    <AppVersion sequence="17" timestamp="1369039678125" release="" codeSize="18" numClasses="2"/>
+  </History>
+</BugCollection>
