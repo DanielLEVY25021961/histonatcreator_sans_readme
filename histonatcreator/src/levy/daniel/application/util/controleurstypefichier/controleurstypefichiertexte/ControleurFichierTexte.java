@@ -58,7 +58,8 @@ public class ControleurFichierTexte {
 	
 	/**
 	 * MESSAGE_FICHIER_NULL : String :<br/>
-	 * Message à retourner si le fichier est null.<br/>
+	 * Message retourné par la méthode getMIMEType(File pFile) 
+	 * si le fichier est null.<br/>
 	 * "Le fichier passé en paramètre est null".<br/>
 	 */
 	public static final String MESSAGE_FICHIER_NULL 
@@ -66,7 +67,8 @@ public class ControleurFichierTexte {
 	
 	/**
 	 * MESSAGE_FICHIER_INEXISTANT : String :<br/>
-	 * Message à retourner si le fichier est inexistant.<br/>
+	 * Message retourné par la méthode getMIMEType(File pFile) 
+	 * si le fichier est inexistant.<br/>
 	 * "Le fichier passé en paramètre est inexistant : "
 	 */
 	public static final String MESSAGE_FICHIER_INEXISTANT 
@@ -74,7 +76,8 @@ public class ControleurFichierTexte {
 	
 	/**
 	 * MESSAGE_FICHIER_REPERTOIRE : String :<br/>
-	 * Message à retourner si le fichier est un répertoire.<br/>
+	 * Message retourné par la méthode getMIMEType(File pFile) 
+	 * si le fichier est un répertoire.<br/>
 	 * "Le fichier passé en paramètre est un répertoire : ".<br/>
 	 */
 	public static final String MESSAGE_FICHIER_REPERTOIRE 
@@ -83,13 +86,69 @@ public class ControleurFichierTexte {
 	
 	/**
 	 * MESSAGE_TYPE_MIME_INCONNU : String :<br/>
-	 * Message retourné par java.net.URLConnection 
+	 * Message retourné par la méthode getMIMEType(File pFile) 
+	 * généré par java.net.URLConnection 
 	 * si le type MIME est inconnu.<br/>
 	 * "content/unknown".<br/>
 	 */
 	public static final String MESSAGE_TYPE_MIME_INCONNU 
 		= "content/unknown";
+
 	
+	/**
+	 * MESSAGE_TYPE_MIME_PNG : String :<br/>
+	 * Message retourné par la méthode getMIMEType(File pFile) 
+	 * généré par java.net.URLConnection 
+	 * si le type MIME est png.<br/>
+	 * "image/png".<br/>
+	 */
+	public static final String MESSAGE_TYPE_MIME_PNG 
+		= "image/png";
+
+	
+	/**
+	 * MESSAGE_TYPE_MIME_JPG : String :<br/>
+	 * Message retourné par la méthode getMIMEType(File pFile) 
+	 * généré par java.net.URLConnection 
+	 * si le type MIME est jpg.<br/>
+	 * "image/jpeg".<br/>
+	 */
+	public static final String MESSAGE_TYPE_MIME_JPG 
+		= "image/jpeg";
+
+	
+	/**
+	 * MESSAGE_TYPE_MIME_GIF : String :<br/>
+	 * Message retourné par la méthode getMIMEType(File pFile) 
+	 * généré par java.net.URLConnection 
+	 * si le type MIME est gif.<br/>
+	 * "image/gif"
+	 */
+	public static final String MESSAGE_TYPE_MIME_GIF 
+		= "image/gif";
+	
+	
+	/**
+	 * MESSAGE_TYPE_MIME_BMP : String :<br/>
+	 * Message retourné par la méthode getMIMEType(File pFile) 
+	 * généré par java.net.URLConnection 
+	 * si le type MIME est bmp.<br/>
+	 * "image/bmp".<br/>
+	 */
+	public static final String MESSAGE_TYPE_MIME_BMP 
+		= "image/bmp";
+
+	
+	/**
+	 * MESSAGE_TYPE_MIME_WAV : String :<br/>
+	 * Message retourné par la méthode getMIMEType(File pFile) 
+	 * généré par java.net.URLConnection 
+	 * si le type MIME est wav.<br/>
+	 * "audio/x-wav".<br/>
+	 */
+	public static final String MESSAGE_TYPE_MIME_WAV 
+		= "audio/x-wav";
+
 	
 	/**
 	 * LOG : Log : 
@@ -119,11 +178,28 @@ public class ControleurFichierTexte {
 	/**
 	 * method getMIMEType(
 	 * File pFile) :<br/>
-	 * Retourne le type MIME d'un fichier.<br/>
+	 * Tente de détecter (en lisant les premiers bits) 
+	 * et retourne le type MIME d'un fichier.<br/>
+	 * <br/>
+	 * - retourne MESSAGE_TYPE_MIME_PNG ('image/png') si le fichier est une image png.<br/>
+	 * - retourne MESSAGE_TYPE_MIME_JPG ('image/jpeg') si le fichier est une image jpg.<br/>
+	 * - retourne MESSAGE_TYPE_MIME_GIF ('image/gif') si le fichier est une image gif.<br/>
+	 * - retourne MESSAGE_TYPE_MIME_BMP ('image/bmp') si le fichier est une image bmp.<br/>
+	 * - retourne MESSAGE_TYPE_MIME_WAV ('audio/x-wav') si le fichier est un son wav.<br/>
 	 * <br/>
 	 * - retourne MESSAGE_FICHIER_NULL si le pFile est null.<br/>
 	 * - retourne MESSAGE_FICHIER_INEXISTANT si le pFile est inexistant.<br/>
 	 * - retourne MESSAGE_FICHIER_REPERTOIRE si le pFile est un répertoire.<br/>
+	 * <br/>
+	 * - retourne MESSAGE_TYPE_MIME_INCONNU ('content/unknown') si le type MIME 
+	 * du fichier passé en paramètre n'est pas détecté.<br/>
+	 * C'est le cas (non-détection) avec les fichiers :<br/>
+	 * - .dwg d'Autocad.<br/>
+	 * - .pptx de PowerPoint.<br/>
+	 * - .mid (fichiers Midi).<br/>
+	 * - .eap d'Enterprise Architect.<br/>
+	 * - .ico (fichiers icône).<br/>
+	 * - .mp3 (fichiers musicaux compressés).<br/>
 	 * <br/>
 	 *
 	 * @param pFile : File : 

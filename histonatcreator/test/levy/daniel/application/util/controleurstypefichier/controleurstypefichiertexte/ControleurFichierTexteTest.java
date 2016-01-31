@@ -35,10 +35,15 @@ public final class ControleurFichierTexteTest {
 
 	// ************************ATTRIBUTS************************************/
 	
+	//*************************************************************/
+	//*********************CHEMINS ********************************/
+	//*************************************************************/
+	
 	/**
 	 * CHEMIN_FICHIERS_TEST : String :<br/>
 	 * Chemin des fichiers de test 
 	 * relativement à la racine du projet actuel.<br/>
+	 * ".\\test\\ressourcesjunit\\differentstypesfichiers\\".<br/>
 	 */
 	public static final String CHEMIN_FICHIERS_TEST 
 		= ".\\test\\ressourcesjunit\\differentstypesfichiers\\";
@@ -92,7 +97,81 @@ public final class ControleurFichierTexteTest {
 		= "divers\\Trafic_Statistiques.eap";
 	
 	
+	/**
+	 * CHEMIN_ICO : String :<br/>
+	 * Chemin du fichier .ico relativement à la racine des fichiers de test.<br/>
+	 * "icones\\itunes_98708-640.ico".<br/>
+	 */
+	public static final String CHEMIN_ICO 
+		= "icones\\itunes_98708-640.ico";
+
 	
+	/**
+	 * CHEMIN_PNG : String :<br/>
+	 * Chemin du fichier .png relativement à la racine des fichiers de test.<br/>
+	 * "images\\iTunes10-300x300.png".<br/>
+	 */
+	public static final String CHEMIN_PNG 
+		= "images\\iTunes10-300x300.png";
+
+	
+	/**
+	 * CHEMIN_JPG : String :<br/>
+	 * Chemin du fichier .jpg relativement à la racine des fichiers de test.<br/>
+	 * "images\\Am I Blue Retour.jpg".<br/>
+	 */
+	public static final String CHEMIN_JPG 
+		= "images\\Am I Blue Retour.jpg";
+	
+	
+	/**
+	 * CHEMIN_GIF : String :<br/>
+	 * Chemin du fichier .gif relativement à la racine des fichiers de test.<br/>
+	 * "images\\c.gif".<br/>
+	 */
+	public static final String CHEMIN_GIF 
+		= "images\\c.gif";
+
+	
+	/**
+	 * CHEMIN_BMP : String :<br/>
+	 * Chemin du fichier .bmp relativement à la racine des fichiers de test.<br/>
+	 * "images\\stickyfix.bmp".<br/>
+	 */
+	public static final String CHEMIN_BMP 
+		= "images\\stickyfix.bmp";
+
+	
+	/**
+	 * CHEMIN_XPS : String :<br/>
+	 * Chemin du fichier .xps relativement à la racine des fichiers de test.<br/>
+	 * "images\\Your feet s too big.xps".<br/>
+	 */
+	public static final String CHEMIN_XPS 
+		= "images\\Your feet s too big.xps";
+
+	
+	/**
+	 * CHEMIN_MP3 : String :<br/>
+	 * Chemin du fichier .mp3 relativement à la racine des fichiers de test.<br/>
+	 */
+	public static final String CHEMIN_MP3 
+		= "musique\\05 Tell It Like It Is.mp3";
+	
+	
+	/**
+	 * CHEMIN_WAV : String :<br/>
+	 * Chemin du fichier .wav relativement à la racine des fichiers de test.<br/>
+	 */
+	public static final String CHEMIN_WAV 
+		= "musique\\Note1.wav";
+	
+	
+	
+	
+	//*****************************************************************/
+	//**************************FICHIERS ******************************/
+	//*****************************************************************/
 	
 	/**
 	 * FILE_INEXISTANT : File :<br/>
@@ -134,7 +213,64 @@ public final class ControleurFichierTexteTest {
 	 * Fichier Enterprise Architect .eap.<br/>
 	 */
 	public static final File FILE_EAP 
-		= new File(CHEMIN_FICHIERS_TEST + CHEMIN_EAP); 
+		= new File(CHEMIN_FICHIERS_TEST + CHEMIN_EAP);
+	
+	/**
+	 * FILE_ICO : File :<br/>
+	 * Fichier icône .ico.<br/>
+	 */
+	public static final File FILE_ICO 
+		= new File(CHEMIN_FICHIERS_TEST + CHEMIN_ICO);
+	
+	/**
+	 * FILE_PNG : File :<br/>
+	 * Fichier image PNG .png.<br/>
+	 */
+	public static final File FILE_PNG 
+		= new File(CHEMIN_FICHIERS_TEST + CHEMIN_PNG);
+
+	/**
+	 * FILE_JPG : File :<br/>
+	 * Fichier image JPG .jpg.<br/>
+	 */
+	public static final File FILE_JPG 
+		= new File(CHEMIN_FICHIERS_TEST + CHEMIN_JPG);
+	
+	/**
+	 * FILE_GIF : File :<br/>
+	 * Fichier image Gif .gif.<br/>
+	 */
+	public static final File FILE_GIF 
+		= new File(CHEMIN_FICHIERS_TEST + CHEMIN_GIF);
+	
+	/**
+	 * FILE_BMP : File :<br/>
+	 * Fichier image Bmp .bmp.<br/>
+	 */
+	public static final File FILE_BMP 
+		= new File(CHEMIN_FICHIERS_TEST + CHEMIN_BMP);
+	
+	/**
+	 * FILE_XPS : File :<br/>
+	 * Fichier image xps .xps.<br/>
+	 */
+	public static final File FILE_XPS 
+		= new File(CHEMIN_FICHIERS_TEST + CHEMIN_XPS);
+	
+	/**
+	 * FILE_MP3 : File :<br/>
+	 * Fichier musical mp3 .mp3.<br/>
+	 */
+	public static final File FILE_MP3 
+		= new File(CHEMIN_FICHIERS_TEST + CHEMIN_MP3);
+	
+	/**
+	 * FILE_WAV : File :<br/>
+	 * Fichier musical Wave .wav.<br/>
+	 */
+	public static final File FILE_WAV 
+	= new File(CHEMIN_FICHIERS_TEST + CHEMIN_WAV);
+	
 	
 	/**
 	 * LOG : Log : 
@@ -160,7 +296,10 @@ public final class ControleurFichierTexteTest {
 	} // Fin de ControleurFichierTexteTest().______________________________
 	
 	
-
+	//*********************************************************************/
+	// TESTS JAVA
+	//*********************************************************************/
+	
 	/**
 	 * method testGetMIMETypeFichierNull() :<br/>
 	 * Garantit que getMIMEType(null) retourne 
@@ -176,7 +315,7 @@ public final class ControleurFichierTexteTest {
 		/* Test avec un fichier null. */
 		final String resultat = control.getMIMEType(null);
 		
-		assertEquals("Retourne MESSAGE_FICHIER_NULL : "
+		assertEquals("Doit retourner ControleurFichierTexte.MESSAGE_FICHIER_NULL : "
 				, ControleurFichierTexte.MESSAGE_FICHIER_NULL, resultat);
 		
 	} // Fin de testGetMIMETypeFichierNull().______________________________
@@ -198,7 +337,7 @@ public final class ControleurFichierTexteTest {
 		/* Test avec un fichier inexistant. */
 		final String resultat = control.getMIMEType(FILE_INEXISTANT);
 		
-		assertEquals("Retourne MESSAGE_FICHIER_INEXISTANT : "
+		assertEquals("Doit retourner ControleurFichierTexte.MESSAGE_FICHIER_INEXISTANT : "
 				, ControleurFichierTexte.MESSAGE_FICHIER_INEXISTANT, resultat);
 		
 	} // Fin de testGetMIMETypeFichierInexistant().________________________
@@ -220,13 +359,17 @@ public final class ControleurFichierTexteTest {
 		/* Test avec un répertoire. */
 		final String resultat = control.getMIMEType(FILE_REPERTOIRE);
 		
-		assertEquals("Retourne MESSAGE_FICHIER_REPERTOIRE : "
+		assertEquals("Doit retourner ControleurFichierTexte.MESSAGE_FICHIER_REPERTOIRE : "
 				, ControleurFichierTexte.MESSAGE_FICHIER_REPERTOIRE, resultat);
 		
 	} // Fin de testGetMIMETypeFichierRepertoire().________________________
 
 	
 	
+	//*********************************************************************/
+	// TESTS FICHIERS DESSIN
+	//*********************************************************************/
+
 	/**
 	 * method testGetMIMETypeDWG() :<br/>
 	 * Garantit que getMIMEType(fichier .dwg) retourne 
@@ -242,13 +385,17 @@ public final class ControleurFichierTexteTest {
 		/* Test avec un .dwg. */
 		final String resultat = control.getMIMEType(FILE_DWG);
 				
-		assertEquals("Retourne MESSAGE_TYPE_MIME_INCONNU : "
+		assertEquals("Doit retourner ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU : "
 				, ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU, resultat);
 		
 	} // Fin de testGetMIMETypeDWG().______________________________________
 
 	
-		
+	
+	//*********************************************************************/
+	// TESTS FICHIERS DIVERS
+	//*********************************************************************/
+	
 	/**
 	 * method testGetMIMETypePPTX() :<br/>
 	 * Garantit que getMIMEType(fichier .pptx) retourne 
@@ -264,7 +411,7 @@ public final class ControleurFichierTexteTest {
 		/* Test avec un .pptx. */
 		final String resultat = control.getMIMEType(FILE_PPTX);
 		
-		assertEquals("Retourne MESSAGE_TYPE_MIME_INCONNU : "
+		assertEquals("Doit retourner ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU : "
 				, ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU, resultat);
 		
 	} // Fin de testGetMIMETypePPTX()._____________________________________
@@ -286,7 +433,7 @@ public final class ControleurFichierTexteTest {
 		/* Test avec un .mid. */
 		final String resultat = control.getMIMEType(FILE_MID);
 		
-		assertEquals("Retourne MESSAGE_TYPE_MIME_INCONNU : "
+		assertEquals("Doit retourner ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU : "
 				, ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU, resultat);
 		
 	} // Fin de testGetMIMETypeMID().______________________________________
@@ -308,10 +455,196 @@ public final class ControleurFichierTexteTest {
 		/* Test avec un .eap. */
 		final String resultat = control.getMIMEType(FILE_EAP);
 		
-		assertEquals("Retourne MESSAGE_TYPE_MIME_INCONNU : "
+		assertEquals("Doit retourner ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU : "
 				, ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU, resultat);
 		
 	} // Fin de testGetMIMETypeEAP().______________________________________
+	
+	
+	
+	//*********************************************************************/
+	// TESTS FICHIERS ICONE
+	//*********************************************************************/
+
+	/**
+	 * method testGetMIMETypeICO() :<br/>
+	 * Garantit que getMIMEType(fichier .ico) retourne 
+	 * ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU.<br/>
+	 * <br/>
+	 */
+	@Test
+	public void testGetMIMETypeICO() {
+		
+		/* Instanciation d'un ControleurFichierTexte. */
+		final ControleurFichierTexte control = new ControleurFichierTexte();
+		
+		/* Test avec un .ico. */
+		final String resultat = control.getMIMEType(FILE_ICO);
+		
+		assertEquals("Doit retourner ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU : "
+				, ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU, resultat);
+		
+	} // Fin de testGetMIMETypeICO().______________________________________
+	
+
+	
+	//*********************************************************************/
+	// TESTS FICHIERS IMAGE
+	//*********************************************************************/
+
+	/**
+	 * method testGetMIMETypePNG() :<br/>
+	 * Garantit que getMIMEType(fichier .png) retourne 
+	 * ControleurFichierTexte.MESSAGE_TYPE_MIME_PNG.<br/>
+	 * <br/>
+	 */
+	@Test
+	public void testGetMIMETypePNG() {
+		
+		/* Instanciation d'un ControleurFichierTexte. */
+		final ControleurFichierTexte control = new ControleurFichierTexte();
+		
+		/* Test avec un .png. */
+		final String resultat = control.getMIMEType(FILE_PNG);
+		
+		assertEquals("Doit retourner ControleurFichierTexte.MESSAGE_TYPE_MIME_PNG : "
+				, ControleurFichierTexte.MESSAGE_TYPE_MIME_PNG, resultat);
+		
+	} // Fin de testGetMIMETypePNG().______________________________________
+	
+	
+	
+	/**
+	 * method testGetMIMETypeJPG() :<br/>
+	 * Garantit que getMIMEType(fichier .jpg) retourne 
+	 * ControleurFichierTexte.MESSAGE_TYPE_MIME_JPG.<br/>
+	 * <br/>
+	 */
+	@Test
+	public void testGetMIMETypeJPG() {
+		
+		/* Instanciation d'un ControleurFichierTexte. */
+		final ControleurFichierTexte control = new ControleurFichierTexte();
+		
+		/* Test avec un .jpg. */
+		final String resultat = control.getMIMEType(FILE_JPG);
+		
+		assertEquals("Doit retourner ControleurFichierTexte.MESSAGE_TYPE_MIME_JPG : "
+				, ControleurFichierTexte.MESSAGE_TYPE_MIME_JPG, resultat);
+		
+	} // Fin de testGetMIMETypeJPG().______________________________________
+	
+
+	
+	/**
+	 * method testGetMIMETypeGIF() :<br/>
+	 * Garantit que getMIMEType(fichier .gif) retourne 
+	 * ControleurFichierTexte.MESSAGE_TYPE_MIME_GIF.<br/>
+	 * <br/>
+	 */
+	@Test
+	public void testGetMIMETypeGIF() {
+		
+		/* Instanciation d'un ControleurFichierTexte. */
+		final ControleurFichierTexte control = new ControleurFichierTexte();
+		
+		/* Test avec un .gif. */
+		final String resultat = control.getMIMEType(FILE_GIF);
+		
+		assertEquals("Doit retourner ControleurFichierTexte.MESSAGE_TYPE_MIME_GIF : "
+				, ControleurFichierTexte.MESSAGE_TYPE_MIME_GIF, resultat);
+		
+	} // Fin de testGetMIMETypeGIF().______________________________________
+	
+	
+	
+	/**
+	 * method testGetMIMETypeBMP() :<br/>
+	 * Garantit que getMIMEType(fichier .bmp) retourne 
+	 * ControleurFichierTexte.MESSAGE_TYPE_MIME_BMP.<br/>
+	 * <br/>
+	 */
+	@Test
+	public void testGetMIMETypeBMP() {
+		
+		/* Instanciation d'un ControleurFichierTexte. */
+		final ControleurFichierTexte control = new ControleurFichierTexte();
+		
+		/* Test avec un .bmp. */
+		final String resultat = control.getMIMEType(FILE_BMP);
+		
+		assertEquals("Doit retourner ControleurFichierTexte.MESSAGE_TYPE_MIME_BMP : "
+				, ControleurFichierTexte.MESSAGE_TYPE_MIME_BMP, resultat);
+		
+	} // Fin de testGetMIMETypeBMP().______________________________________
+	
+
+	
+	/**
+	 * method testGetMIMETypeXPS() :<br/>
+	 * Garantit que getMIMEType(fichier .xps) retourne 
+	 * ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU.<br/>
+	 */
+	@Test
+	public void testGetMIMETypeXPS() {
+		
+		/* Instanciation d'un ControleurFichierTexte. */
+		final ControleurFichierTexte control = new ControleurFichierTexte();
+		
+		/* Test avec un .xps. */
+		final String resultat = control.getMIMEType(FILE_XPS);
+		
+		assertEquals("Doit retourner ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU : "
+				, ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU, resultat);
+		
+	} // Fin de testGetMIMETypeXPS().______________________________________
+	
+	
+	
+	//*********************************************************************/
+	// TESTS MUSIQUE
+	//*********************************************************************/
+
+	/**
+	 * method testGetMIMETypeMP3() :<br/>
+	 * Garantit que getMIMEType(fichier .mp3) retourne 
+	 * ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU.<br/>
+	 */
+	@Test
+	public void testGetMIMETypeMP3() {
+		
+		/* Instanciation d'un ControleurFichierTexte. */
+		final ControleurFichierTexte control = new ControleurFichierTexte();
+		
+		/* Test avec un .mp3. */
+		final String resultat = control.getMIMEType(FILE_MP3);
+		
+		assertEquals("Doit retourner ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU : "
+				, ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU, resultat);
+		
+	} // Fin de testGetMIMETypeMP3().______________________________________
+	
+	
+	
+	/**
+	 * method testGetMIMETypeWAV() :<br/>
+	 * Garantit que getMIMEType(fichier .wav) retourne 
+	 * ControleurFichierTexte.MESSAGE_TYPE_MIME_WAV.<br/>
+	 * <br/>
+	 */
+	@Test
+	public void testGetMIMETypeWAV() {
+		
+		/* Instanciation d'un ControleurFichierTexte. */
+		final ControleurFichierTexte control = new ControleurFichierTexte();
+		
+		/* Test avec un .wav. */
+		final String resultat = control.getMIMEType(FILE_WAV);
+		
+		assertEquals("Doit retourner ControleurFichierTexte.MESSAGE_TYPE_MIME_WAV : String : "
+				, ControleurFichierTexte.MESSAGE_TYPE_MIME_WAV, resultat);
+		
+	} // Fin de testGetMIMETypeWAV().______________________________________
 	
 	
 	
@@ -326,7 +659,8 @@ public final class ControleurFichierTexteTest {
 		/* Instanciation d'un ControleurFichierTexte. */
 		final ControleurFichierTexte control = new ControleurFichierTexte();
 		
-		final String resultat = control.getMIMEType(FILE_MID);
+		/* Test avec un .png. */
+		final String resultat = control.getMIMEType(FILE_WAV);
 		System.out.println(resultat);
 		assertTrue("bidon", 1 == 1);
 	}
