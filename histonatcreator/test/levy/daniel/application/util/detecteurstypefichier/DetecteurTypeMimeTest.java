@@ -1,25 +1,23 @@
-package levy.daniel.application.util.controleurstypefichier.controleurstypefichiertexte;
+package levy.daniel.application.util.detecteurstypefichier;
+
+import static org.junit.Assert.*;
 
 import java.io.File;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 
 /**
- * class ControleurFichierTexteTest :<br/>
- * Tests JUnit de la Classe ControleurFichierTexte.<br/>
+ * class DetecteurTypeMimeTest :<br/>
+ * Test JUNit de la classe DetecteurTypeMime.<br/>
  * <br/>
  *
  * - Exemple d'utilisation :<br/>
  *<br/>
  * 
  * - Mots-clé :<br/>
- * ".", Chemin des fichiers de test relativement 
- * à la racine du projet actuel.<br/>
  * <br/>
  *
  * - Dépendances :<br/>
@@ -28,10 +26,10 @@ import static org.junit.Assert.*;
  *
  * @author dan Lévy
  * @version 1.0
- * @since 29 janv. 2016
+ * @since 1 févr. 2016
  *
  */
-public final class ControleurFichierTexteTest {
+public final class DetecteurTypeMimeTest {
 
 	// ************************ATTRIBUTS************************************/
 	
@@ -529,20 +527,21 @@ public final class ControleurFichierTexteTest {
 	 */
 	@SuppressWarnings("unused")
 	private static final Log LOG = LogFactory
-			.getLog(ControleurFichierTexteTest.class);
+			.getLog(DetecteurTypeMimeTest.class);
+
+
 
 	// *************************METHODES************************************/
 	
-	
 	 /**
-	 * method CONSTRUCTEUR ControleurFichierTexteTest() :<br/>
+	 * method CONSTRUCTEUR DetecteurTypeMimeTest() :<br/>
 	 * CONSTRUCTEUR D'ARITE NULLE.<br/>
 	 * <br/>
 	 */
-	public ControleurFichierTexteTest() {		
+	public DetecteurTypeMimeTest() {		
 		/* Instanciation de la Super-Classe. */
 		super();		
-	} // Fin de ControleurFichierTexteTest().______________________________
+	} // Fin de DetecteurTypeMimeTest().___________________________________
 	
 	
 	//*********************************************************************/
@@ -552,20 +551,17 @@ public final class ControleurFichierTexteTest {
 	/**
 	 * method testGetMIMETypeFichierNull() :<br/>
 	 * Garantit que getMIMEType(null) retourne 
-	 * ControleurFichierTexte.MESSAGE_FICHIER_NULL.<br/>
+	 * DetecteurTypeMime.MESSAGE_FICHIER_NULL.<br/>
 	 * <br/>
 	 */
 	@Test
 	public void testGetMIMETypeFichierNull() {
-		
-		/* Instanciation d'un ControleurFichierTexte. */
-		final ControleurFichierTexte control = new ControleurFichierTexte();
-		
+			
 		/* Test avec un fichier null. */
-		final String resultat = control.getMIMEType(null);
+		final String resultat = DetecteurTypeMime.getMIMEType(null);
 		
-		assertEquals("Doit retourner ControleurFichierTexte.MESSAGE_FICHIER_NULL : "
-				, ControleurFichierTexte.MESSAGE_FICHIER_NULL, resultat);
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_FICHIER_NULL : "
+				, DetecteurTypeMime.MESSAGE_FICHIER_NULL, resultat);
 		
 	} // Fin de testGetMIMETypeFichierNull().______________________________
 	
@@ -574,20 +570,17 @@ public final class ControleurFichierTexteTest {
 	/**
 	 * method testGetMIMETypeFichierInexistant() :<br/>
 	 * Garantit que getMIMEType(fichier inexistant) retourne 
-	 * ControleurFichierTexte.MESSAGE_FICHIER_INEXISTANT.<br/>
+	 * DetecteurTypeMime.MESSAGE_FICHIER_INEXISTANT.<br/>
 	 * <br/>
 	 */
 	@Test
 	public void testGetMIMETypeFichierInexistant() {
 		
-		/* Instanciation d'un ControleurFichierTexte. */
-		final ControleurFichierTexte control = new ControleurFichierTexte();
-		
 		/* Test avec un fichier inexistant. */
-		final String resultat = control.getMIMEType(FILE_INEXISTANT);
+		final String resultat = DetecteurTypeMime.getMIMEType(FILE_INEXISTANT);
 		
-		assertEquals("Doit retourner ControleurFichierTexte.MESSAGE_FICHIER_INEXISTANT : "
-				, ControleurFichierTexte.MESSAGE_FICHIER_INEXISTANT, resultat);
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_FICHIER_INEXISTANT : "
+				, DetecteurTypeMime.MESSAGE_FICHIER_INEXISTANT, resultat);
 		
 	} // Fin de testGetMIMETypeFichierInexistant().________________________
 	
@@ -596,20 +589,17 @@ public final class ControleurFichierTexteTest {
 	/**
 	 * method testGetMIMETypeFichierRepertoire() :<br/>
 	 * Garantit que getMIMEType(fichier repertoire) retourne 
-	 * ControleurFichierTexte.MESSAGE_FICHIER_REPERTOIRE.<br/>
+	 * DetecteurTypeMime.MESSAGE_FICHIER_REPERTOIRE.<br/>
 	 * <br/>
 	 */
 	@Test
 	public void testGetMIMETypeFichierRepertoire() {
-		
-		/* Instanciation d'un ControleurFichierTexte. */
-		final ControleurFichierTexte control = new ControleurFichierTexte();
-		
+
 		/* Test avec un répertoire. */
-		final String resultat = control.getMIMEType(FILE_REPERTOIRE);
+		final String resultat = DetecteurTypeMime.getMIMEType(FILE_REPERTOIRE);
 		
-		assertEquals("Doit retourner ControleurFichierTexte.MESSAGE_FICHIER_REPERTOIRE : "
-				, ControleurFichierTexte.MESSAGE_FICHIER_REPERTOIRE, resultat);
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_FICHIER_REPERTOIRE : "
+				, DetecteurTypeMime.MESSAGE_FICHIER_REPERTOIRE, resultat);
 		
 	} // Fin de testGetMIMETypeFichierRepertoire().________________________
 
@@ -622,20 +612,17 @@ public final class ControleurFichierTexteTest {
 	/**
 	 * method testGetMIMETypeDWG() :<br/>
 	 * Garantit que getMIMEType(fichier .dwg) retourne 
-	 * ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU.<br/>
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU.<br/>
 	 * <br/>
 	 */
 	@Test
 	public void testGetMIMETypeDWG() {
 		
-		/* Instanciation d'un ControleurFichierTexte. */
-		final ControleurFichierTexte control = new ControleurFichierTexte();
-		
 		/* Test avec un .dwg. */
-		final String resultat = control.getMIMEType(FILE_DWG);
+		final String resultat = DetecteurTypeMime.getMIMEType(FILE_DWG);
 				
-		assertEquals("Doit retourner ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU : "
-				, ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU, resultat);
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU, resultat);
 		
 	} // Fin de testGetMIMETypeDWG().______________________________________
 
@@ -648,20 +635,17 @@ public final class ControleurFichierTexteTest {
 	/**
 	 * method testGetMIMETypePPTX() :<br/>
 	 * Garantit que getMIMEType(fichier .pptx) retourne 
-	 * ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU.<br/>
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU.<br/>
 	 * <br/>
 	 */
 	@Test
 	public void testGetMIMETypePPTX() {
 		
-		/* Instanciation d'un ControleurFichierTexte. */
-		final ControleurFichierTexte control = new ControleurFichierTexte();
-		
 		/* Test avec un .pptx. */
-		final String resultat = control.getMIMEType(FILE_PPTX);
+		final String resultat = DetecteurTypeMime.getMIMEType(FILE_PPTX);
 		
-		assertEquals("Doit retourner ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU : "
-				, ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU, resultat);
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU, resultat);
 		
 	} // Fin de testGetMIMETypePPTX()._____________________________________
 	
@@ -670,20 +654,17 @@ public final class ControleurFichierTexteTest {
 	/**
 	 * method testGetMIMETypeMID() :<br/>
 	 * Garantit que getMIMEType(fichier .mid) retourne 
-	 * ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU.<br/>
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU.<br/>
 	 * <br/>
 	 */
 	@Test
 	public void testGetMIMETypeMID() {
 		
-		/* Instanciation d'un ControleurFichierTexte. */
-		final ControleurFichierTexte control = new ControleurFichierTexte();
-		
 		/* Test avec un .mid. */
-		final String resultat = control.getMIMEType(FILE_MID);
+		final String resultat = DetecteurTypeMime.getMIMEType(FILE_MID);
 		
-		assertEquals("Doit retourner ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU : "
-				, ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU, resultat);
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU, resultat);
 		
 	} // Fin de testGetMIMETypeMID().______________________________________
 	
@@ -692,20 +673,17 @@ public final class ControleurFichierTexteTest {
 	/**
 	 * method testGetMIMETypeEAP() :<br/>
 	 * Garantit que getMIMEType(fichier .eap) retourne 
-	 * ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU.<br/>
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU.<br/>
 	 * <br/>
 	 */
 	@Test
 	public void testGetMIMETypeEAP() {
 		
-		/* Instanciation d'un ControleurFichierTexte. */
-		final ControleurFichierTexte control = new ControleurFichierTexte();
-		
 		/* Test avec un .eap. */
-		final String resultat = control.getMIMEType(FILE_EAP);
+		final String resultat = DetecteurTypeMime.getMIMEType(FILE_EAP);
 		
-		assertEquals("Doit retourner ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU : "
-				, ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU, resultat);
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU, resultat);
 		
 	} // Fin de testGetMIMETypeEAP().______________________________________
 	
@@ -718,20 +696,17 @@ public final class ControleurFichierTexteTest {
 	/**
 	 * method testGetMIMETypeICO() :<br/>
 	 * Garantit que getMIMEType(fichier .ico) retourne 
-	 * ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU.<br/>
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU.<br/>
 	 * <br/>
 	 */
 	@Test
 	public void testGetMIMETypeICO() {
 		
-		/* Instanciation d'un ControleurFichierTexte. */
-		final ControleurFichierTexte control = new ControleurFichierTexte();
-		
 		/* Test avec un .ico. */
-		final String resultat = control.getMIMEType(FILE_ICO);
+		final String resultat = DetecteurTypeMime.getMIMEType(FILE_ICO);
 		
-		assertEquals("Doit retourner ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU : "
-				, ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU, resultat);
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU, resultat);
 		
 	} // Fin de testGetMIMETypeICO().______________________________________
 	
@@ -744,20 +719,17 @@ public final class ControleurFichierTexteTest {
 	/**
 	 * method testGetMIMETypePNG() :<br/>
 	 * Garantit que getMIMEType(fichier .png) retourne 
-	 * ControleurFichierTexte.MESSAGE_TYPE_MIME_PNG.<br/>
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_PNG.<br/>
 	 * <br/>
 	 */
 	@Test
 	public void testGetMIMETypePNG() {
 		
-		/* Instanciation d'un ControleurFichierTexte. */
-		final ControleurFichierTexte control = new ControleurFichierTexte();
-		
 		/* Test avec un .png. */
-		final String resultat = control.getMIMEType(FILE_PNG);
+		final String resultat = DetecteurTypeMime.getMIMEType(FILE_PNG);
 		
-		assertEquals("Doit retourner ControleurFichierTexte.MESSAGE_TYPE_MIME_PNG : "
-				, ControleurFichierTexte.MESSAGE_TYPE_MIME_PNG, resultat);
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_PNG : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_PNG, resultat);
 		
 	} // Fin de testGetMIMETypePNG().______________________________________
 	
@@ -766,20 +738,17 @@ public final class ControleurFichierTexteTest {
 	/**
 	 * method testGetMIMETypeJPG() :<br/>
 	 * Garantit que getMIMEType(fichier .jpg) retourne 
-	 * ControleurFichierTexte.MESSAGE_TYPE_MIME_JPG.<br/>
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_JPG.<br/>
 	 * <br/>
 	 */
 	@Test
 	public void testGetMIMETypeJPG() {
 		
-		/* Instanciation d'un ControleurFichierTexte. */
-		final ControleurFichierTexte control = new ControleurFichierTexte();
-		
 		/* Test avec un .jpg. */
-		final String resultat = control.getMIMEType(FILE_JPG);
+		final String resultat = DetecteurTypeMime.getMIMEType(FILE_JPG);
 		
-		assertEquals("Doit retourner ControleurFichierTexte.MESSAGE_TYPE_MIME_JPG : "
-				, ControleurFichierTexte.MESSAGE_TYPE_MIME_JPG, resultat);
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_JPG : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_JPG, resultat);
 		
 	} // Fin de testGetMIMETypeJPG().______________________________________
 	
@@ -788,19 +757,16 @@ public final class ControleurFichierTexteTest {
 	/**
 	 * method testGetMIMETypeGIF() :<br/>
 	 * Garantit que getMIMEType(fichier .gif) retourne 
-	 * ControleurFichierTexte.MESSAGE_TYPE_MIME_GIF.<br/>
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_GIF.<br/>
 	 */
 	@Test
 	public void testGetMIMETypeGIF() {
 		
-		/* Instanciation d'un ControleurFichierTexte. */
-		final ControleurFichierTexte control = new ControleurFichierTexte();
-		
 		/* Test avec un .gif. */
-		final String resultat = control.getMIMEType(FILE_GIF);
+		final String resultat = DetecteurTypeMime.getMIMEType(FILE_GIF);
 		
-		assertEquals("Doit retourner ControleurFichierTexte.MESSAGE_TYPE_MIME_GIF : "
-				, ControleurFichierTexte.MESSAGE_TYPE_MIME_GIF, resultat);
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_GIF : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_GIF, resultat);
 		
 	} // Fin de testGetMIMETypeGIF().______________________________________
 	
@@ -809,19 +775,16 @@ public final class ControleurFichierTexteTest {
 	/**
 	 * method testGetMIMETypeBMP() :<br/>
 	 * Garantit que getMIMEType(fichier .bmp) retourne 
-	 * ControleurFichierTexte.MESSAGE_TYPE_MIME_BMP.<br/>
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_BMP.<br/>
 	 */
 	@Test
 	public void testGetMIMETypeBMP() {
 		
-		/* Instanciation d'un ControleurFichierTexte. */
-		final ControleurFichierTexte control = new ControleurFichierTexte();
-		
 		/* Test avec un .bmp. */
-		final String resultat = control.getMIMEType(FILE_BMP);
+		final String resultat = DetecteurTypeMime.getMIMEType(FILE_BMP);
 		
-		assertEquals("Doit retourner ControleurFichierTexte.MESSAGE_TYPE_MIME_BMP : "
-				, ControleurFichierTexte.MESSAGE_TYPE_MIME_BMP, resultat);
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_BMP : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_BMP, resultat);
 		
 	} // Fin de testGetMIMETypeBMP().______________________________________
 	
@@ -830,19 +793,16 @@ public final class ControleurFichierTexteTest {
 	/**
 	 * method testGetMIMETypeXPS() :<br/>
 	 * Garantit que getMIMEType(fichier .xps) retourne 
-	 * ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU.<br/>
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU.<br/>
 	 */
 	@Test
 	public void testGetMIMETypeXPS() {
 		
-		/* Instanciation d'un ControleurFichierTexte. */
-		final ControleurFichierTexte control = new ControleurFichierTexte();
-		
 		/* Test avec un .xps. */
-		final String resultat = control.getMIMEType(FILE_XPS);
+		final String resultat = DetecteurTypeMime.getMIMEType(FILE_XPS);
 		
-		assertEquals("Doit retourner ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU : "
-				, ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU, resultat);
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU, resultat);
 		
 	} // Fin de testGetMIMETypeXPS().______________________________________
 	
@@ -855,19 +815,16 @@ public final class ControleurFichierTexteTest {
 	/**
 	 * method testGetMIMETypeMP3() :<br/>
 	 * Garantit que getMIMEType(fichier .mp3) retourne 
-	 * ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU.<br/>
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU.<br/>
 	 */
 	@Test
 	public void testGetMIMETypeMP3() {
 		
-		/* Instanciation d'un ControleurFichierTexte. */
-		final ControleurFichierTexte control = new ControleurFichierTexte();
-		
 		/* Test avec un .mp3. */
-		final String resultat = control.getMIMEType(FILE_MP3);
+		final String resultat = DetecteurTypeMime.getMIMEType(FILE_MP3);
 		
-		assertEquals("Doit retourner ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU : "
-				, ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU, resultat);
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU, resultat);
 		
 	} // Fin de testGetMIMETypeMP3().______________________________________
 	
@@ -876,20 +833,17 @@ public final class ControleurFichierTexteTest {
 	/**
 	 * method testGetMIMETypeWAV() :<br/>
 	 * Garantit que getMIMEType(fichier .wav) retourne 
-	 * ControleurFichierTexte.MESSAGE_TYPE_MIME_WAV.<br/>
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_WAV.<br/>
 	 * <br/>
 	 */
 	@Test
 	public void testGetMIMETypeWAV() {
 		
-		/* Instanciation d'un ControleurFichierTexte. */
-		final ControleurFichierTexte control = new ControleurFichierTexte();
-		
 		/* Test avec un .wav. */
-		final String resultat = control.getMIMEType(FILE_WAV);
+		final String resultat = DetecteurTypeMime.getMIMEType(FILE_WAV);
 		
-		assertEquals("Doit retourner ControleurFichierTexte.MESSAGE_TYPE_MIME_WAV : "
-				, ControleurFichierTexte.MESSAGE_TYPE_MIME_WAV, resultat);
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_WAV : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_WAV, resultat);
 		
 	} // Fin de testGetMIMETypeWAV().______________________________________
 	
@@ -902,20 +856,17 @@ public final class ControleurFichierTexteTest {
 	/**
 	 * method testGetMIMETypeTXTISO885915() :<br/>
 	 * Garantit que getMIMEType(fichier .txt) encodé en ISO-8859-15 retourne 
-	 * ControleurFichierTexte.MESSAGE_TYPE_MIME_TEXT_PLAIN.<br/>
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_TEXT_PLAIN.<br/>
 	 * <br/>
 	 */
 	@Test
 	public void testGetMIMETypeTXTISO885915() {
 		
-		/* Instanciation d'un ControleurFichierTexte. */
-		final ControleurFichierTexte control = new ControleurFichierTexte();
-		
 		/* Test avec un .txt encodé en ISO-8859-15. */
-		final String resultat = control.getMIMEType(FILE_TXT_ISO_8859_15);
+		final String resultat = DetecteurTypeMime.getMIMEType(FILE_TXT_ISO_8859_15);
 		
-		assertEquals("Doit retourner ControleurFichierTexte.MESSAGE_TYPE_MIME_TEXT_PLAIN : "
-				, ControleurFichierTexte.MESSAGE_TYPE_MIME_TEXT_PLAIN, resultat);
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_TEXT_PLAIN : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_TEXT_PLAIN, resultat);
 		
 	} // Fin de testGetMIMETypeTXTISO885915()._____________________________
 	
@@ -924,20 +875,17 @@ public final class ControleurFichierTexteTest {
 	/**
 	 * method testGetMIMETypeCSVUTF8() :<br/>
 	 * Garantit que getMIMEType(fichier .csv) encodé en UTF-8 retourne 
-	 * ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU.<br/>
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU.<br/>
 	 * <br/>
 	 */
 	@Test
 	public void testGetMIMETypeCSVUTF8() {
 		
-		/* Instanciation d'un ControleurFichierTexte. */
-		final ControleurFichierTexte control = new ControleurFichierTexte();
-		
 		/* Test avec un .csv encodé en UTF-8. */
-		final String resultat = control.getMIMEType(FILE_CSV_UTF_8);
+		final String resultat = DetecteurTypeMime.getMIMEType(FILE_CSV_UTF_8);
 		
-		assertEquals("Doit retourner ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU : "
-				, ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU, resultat);
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU, resultat);
 		
 	} // Fin de testGetMIMETypeCSVUTF8().__________________________________
 	
@@ -946,19 +894,16 @@ public final class ControleurFichierTexteTest {
 	/**
 	 * method testGetMIMETypeTXTUTF8() :<br/>
 	 * Garantit que getMIMEType(fichier .txt) encodé en UTF-8 retourne 
-	 * ControleurFichierTexte.MESSAGE_TYPE_MIME_TEXT_PLAIN.<br/>
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_TEXT_PLAIN.<br/>
 	 */
 	@Test
 	public void testGetMIMETypeTXTUTF8() {
 		
-		/* Instanciation d'un ControleurFichierTexte. */
-		final ControleurFichierTexte control = new ControleurFichierTexte();
-		
 		/* Test avec un .txt encodé en UTF-8. */
-		final String resultat = control.getMIMEType(FILE_TXT_UTF_8);
+		final String resultat = DetecteurTypeMime.getMIMEType(FILE_TXT_UTF_8);
 		
-		assertEquals("Doit retourner ControleurFichierTexte.MESSAGE_TYPE_MIME_TEXT_PLAIN : "
-				, ControleurFichierTexte.MESSAGE_TYPE_MIME_TEXT_PLAIN, resultat);
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_TEXT_PLAIN : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_TEXT_PLAIN, resultat);
 		
 	} // Fin de testGetMIMETypeTXTUTF8().__________________________________
 	
@@ -967,19 +912,16 @@ public final class ControleurFichierTexteTest {
 	/**
 	 * method testGetMIMETypePDF() :<br/>
 	 * Garantit que getMIMEType(fichier .pdf) retourne 
-	 * ControleurFichierTexte.MESSAGE_TYPE_MIME_PDF.<br/>
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_PDF.<br/>
 	 */
 	@Test
 	public void testGetMIMETypePDF() {
 		
-		/* Instanciation d'un ControleurFichierTexte. */
-		final ControleurFichierTexte control = new ControleurFichierTexte();
-		
 		/* Test avec un .pdf. */
-		final String resultat = control.getMIMEType(FILE_PDF);
+		final String resultat = DetecteurTypeMime.getMIMEType(FILE_PDF);
 		
-		assertEquals("Doit retourner ControleurFichierTexte.MESSAGE_TYPE_MIME_PDF : "
-				, ControleurFichierTexte.MESSAGE_TYPE_MIME_PDF, resultat);
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_PDF : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_PDF, resultat);
 		
 	} // Fin de testGetMIMETypePDF().______________________________________
 	
@@ -988,19 +930,16 @@ public final class ControleurFichierTexteTest {
 	/**
 	 * method testGetMIMETypeXSD() :<br/>
 	 * Garantit que getMIMEType(fichier .xsd) retourne 
-	 * ControleurFichierTexte.MESSAGE_TYPE_MIME_XML.<br/>
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_XML.<br/>
 	 */
 	@Test
 	public void testGetMIMETypeXSD() {
 		
-		/* Instanciation d'un ControleurFichierTexte. */
-		final ControleurFichierTexte control = new ControleurFichierTexte();
-		
 		/* Test avec un .xsd. */
-		final String resultat = control.getMIMEType(FILE_XSD);
+		final String resultat = DetecteurTypeMime.getMIMEType(FILE_XSD);
 		
-		assertEquals("Doit retourner ControleurFichierTexte.MESSAGE_TYPE_MIME_XML : "
-				, ControleurFichierTexte.MESSAGE_TYPE_MIME_XML, resultat);
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_XML : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_XML, resultat);
 		
 	} // Fin de testGetMIMETypeXSD().______________________________________
 	
@@ -1009,19 +948,16 @@ public final class ControleurFichierTexteTest {
 	/**
 	 * method testGetMIMETypeXML() :<br/>
 	 * Garantit que getMIMEType(fichier .xml) retourne 
-	 * ControleurFichierTexte.MESSAGE_TYPE_MIME_XML.<br/>
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_XML.<br/>
 	 */
 	@Test
 	public void testGetMIMETypeXML() {
 		
-		/* Instanciation d'un ControleurFichierTexte. */
-		final ControleurFichierTexte control = new ControleurFichierTexte();
-		
 		/* Test avec un .xml. */
-		final String resultat = control.getMIMEType(FILE_XML);
+		final String resultat = DetecteurTypeMime.getMIMEType(FILE_XML);
 		
-		assertEquals("Doit retourner ControleurFichierTexte.MESSAGE_TYPE_MIME_XML : "
-				, ControleurFichierTexte.MESSAGE_TYPE_MIME_XML, resultat);
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_XML : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_XML, resultat);
 		
 	} // Fin de testGetMIMETypeXML().______________________________________
 	
@@ -1030,19 +966,16 @@ public final class ControleurFichierTexteTest {
 	/**
 	 * method testGetMIMETypeINI() :<br/>
 	 * Garantit que getMIMEType(fichier .ini) retourne 
-	 * ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU.<br/>
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU.<br/>
 	 */
 	@Test
 	public void testGetMIMETypeINI() {
 		
-		/* Instanciation d'un ControleurFichierTexte. */
-		final ControleurFichierTexte control = new ControleurFichierTexte();
-		
 		/* Test avec un .ini. */
-		final String resultat = control.getMIMEType(FILE_INI);
+		final String resultat = DetecteurTypeMime.getMIMEType(FILE_INI);
 		
-		assertEquals("Doit retourner ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU : "
-				, ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU, resultat);
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU, resultat);
 		
 	} // Fin de testGetMIMETypeINI().______________________________________
 	
@@ -1051,19 +984,16 @@ public final class ControleurFichierTexteTest {
 	/**
 	 * method testGetMIMETypePROPERTIES() :<br/>
 	 * Garantit que getMIMEType(fichier .properties) retourne 
-	 * ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU.<br/>
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU.<br/>
 	 */
 	@Test
 	public void testGetMIMETypePROPERTIES() {
 		
-		/* Instanciation d'un ControleurFichierTexte. */
-		final ControleurFichierTexte control = new ControleurFichierTexte();
-		
 		/* Test avec un .properties. */
-		final String resultat = control.getMIMEType(FILE_PROPERTIES);
+		final String resultat = DetecteurTypeMime.getMIMEType(FILE_PROPERTIES);
 		
-		assertEquals("Doit retourner ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU : "
-				, ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU, resultat);
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU, resultat);
 		
 	} // Fin de testGetMIMETypePROPERTIES()._______________________________
 	
@@ -1072,19 +1002,16 @@ public final class ControleurFichierTexteTest {
 	/**
 	 * method testGetMIMETypeDOCX() :<br/>
 	 * Garantit que getMIMEType(fichier .docX) retourne 
-	 * ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU.<br/>
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU.<br/>
 	 */
 	@Test
 	public void testGetMIMETypeDOCX() {
 		
-		/* Instanciation d'un ControleurFichierTexte. */
-		final ControleurFichierTexte control = new ControleurFichierTexte();
-		
 		/* Test avec un .docX. */
-		final String resultat = control.getMIMEType(FILE_DOCX);
+		final String resultat = DetecteurTypeMime.getMIMEType(FILE_DOCX);
 		
-		assertEquals("Doit retourner ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU : "
-				, ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU, resultat);
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU, resultat);
 		
 	} // Fin de testGetMIMETypeDOCX()._____________________________________
 
@@ -1093,19 +1020,16 @@ public final class ControleurFichierTexteTest {
 	/**
 	 * method testGetMIMETypeHTML() :<br/>
 	 * Garantit que getMIMEType(fichier .html) retourne 
-	 * ControleurFichierTexte.MESSAGE_TYPE_MIME_HTML.<br/>
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_HTML.<br/>
 	 */
 	@Test
 	public void testGetMIMETypeHTML() {
 		
-		/* Instanciation d'un ControleurFichierTexte. */
-		final ControleurFichierTexte control = new ControleurFichierTexte();
-		
 		/* Test avec un .html. */
-		final String resultat = control.getMIMEType(FILE_HTML);
+		final String resultat = DetecteurTypeMime.getMIMEType(FILE_HTML);
 		
-		assertEquals("Doit retourner ControleurFichierTexte.MESSAGE_TYPE_MIME_HTML : "
-				, ControleurFichierTexte.MESSAGE_TYPE_MIME_HTML, resultat);
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_HTML : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_HTML, resultat);
 		
 	} // Fin de testGetMIMETypeHTML()._____________________________________
 	
@@ -1117,19 +1041,16 @@ public final class ControleurFichierTexteTest {
 	/**
 	 * method testGetMIMETypeMP4() :<br/>
 	 * Garantit que getMIMEType(fichier .mp4) retourne 
-	 * ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU.<br/>
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU.<br/>
 	 */
 	@Test
 	public void testGetMIMETypeMP4() {
 		
-		/* Instanciation d'un ControleurFichierTexte. */
-		final ControleurFichierTexte control = new ControleurFichierTexte();
-		
 		/* Test avec un .mp4. */
-		final String resultat = control.getMIMEType(FILE_MP4);
+		final String resultat = DetecteurTypeMime.getMIMEType(FILE_MP4);
 		
-		assertEquals("Doit retourner ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU : "
-				, ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU, resultat);
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU, resultat);
 		
 	} // Fin de testGetMIMETypeMP4().______________________________________
 	
@@ -1138,19 +1059,16 @@ public final class ControleurFichierTexteTest {
 	/**
 	 * method testGetMIMETypeFLV() :<br/>
 	 * Garantit que getMIMEType(fichier .flv) retourne 
-	 * ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU.<br/>
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU.<br/>
 	 */
 	@Test
 	public void testGetMIMETypeFLV() {
 		
-		/* Instanciation d'un ControleurFichierTexte. */
-		final ControleurFichierTexte control = new ControleurFichierTexte();
-		
 		/* Test avec un .flv. */
-		final String resultat = control.getMIMEType(FILE_FLV);
+		final String resultat = DetecteurTypeMime.getMIMEType(FILE_FLV);
 		
-		assertEquals("Doit retourner ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU : "
-				, ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU, resultat);
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU, resultat);
 		
 	} // Fin de testGetMIMETypeFLV().______________________________________
 	
@@ -1159,19 +1077,16 @@ public final class ControleurFichierTexteTest {
 	/**
 	 * method testGetMIMETypeASF() :<br/>
 	 * Garantit que getMIMEType(fichier .asf) retourne 
-	 * ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU.<br/>
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU.<br/>
 	 */
 	@Test
 	public void testGetMIMETypeASF() {
 		
-		/* Instanciation d'un ControleurFichierTexte. */
-		final ControleurFichierTexte control = new ControleurFichierTexte();
-		
 		/* Test avec un .asf. */
-		final String resultat = control.getMIMEType(FILE_ASF);
+		final String resultat = DetecteurTypeMime.getMIMEType(FILE_ASF);
 		
-		assertEquals("Doit retourner ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU : "
-				, ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU, resultat);
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU, resultat);
 		
 	} // Fin de testGetMIMETypeASF().______________________________________
 	
@@ -1184,19 +1099,16 @@ public final class ControleurFichierTexteTest {
 	/**
 	 * method testGetMIMETypeGIFEnBMP() :<br/>
 	 * Garantit que getMIMEType(fichier .gif renommé en .bmp) retourne 
-	 * ControleurFichierTexte.MESSAGE_TYPE_MIME_BMP.<br/>
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_BMP.<br/>
 	 */
 	@Test
 	public void testGetMIMETypeGIFEnBMP() {
 		
-		/* Instanciation d'un ControleurFichierTexte. */
-		final ControleurFichierTexte control = new ControleurFichierTexte();
-		
 		/* Test avec un .gif renommé en .bmp. */
-		final String resultat = control.getMIMEType(FILE_GIF_EN_BMP);
+		final String resultat = DetecteurTypeMime.getMIMEType(FILE_GIF_EN_BMP);
 		
-		assertEquals("Doit retourner ControleurFichierTexte.MESSAGE_TYPE_MIME_BMP : "
-				, ControleurFichierTexte.MESSAGE_TYPE_MIME_BMP, resultat);
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_BMP : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_BMP, resultat);
 		
 	} // Fin de testGetMIMETypeGIFEnBMP()._________________________________
 	
@@ -1205,19 +1117,16 @@ public final class ControleurFichierTexteTest {
 	/**
 	 * method testGetMIMETypeGIFSansEXTENSION() :<br/>
 	 * Garantit que getMIMEType(fichier .gif) retourne 
-	 * ControleurFichierTexte.MESSAGE_TYPE_MIME_GIF.<br/>
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_GIF.<br/>
 	 */
 	@Test
 	public void testGetMIMETypeGIFSansEXTENSION() {
 		
-		/* Instanciation d'un ControleurFichierTexte. */
-		final ControleurFichierTexte control = new ControleurFichierTexte();
-		
 		/* Test avec un .gif sans extension. */
-		final String resultat = control.getMIMEType(FILE_GIF_SANS_EXTENSION);
+		final String resultat = DetecteurTypeMime.getMIMEType(FILE_GIF_SANS_EXTENSION);
 		
-		assertEquals("Doit retourner ControleurFichierTexte.MESSAGE_TYPE_MIME_GIF : "
-				, ControleurFichierTexte.MESSAGE_TYPE_MIME_GIF, resultat);
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_GIF : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_GIF, resultat);
 		
 	} // Fin de testGetMIMETypeGIFSansEXTENSION()._________________________
 	
@@ -1226,19 +1135,16 @@ public final class ControleurFichierTexteTest {
 	/**
 	 * method testGetMIMETypeTXTSansExtension() :<br/>
 	 * Garantit que getMIMEType(fichier .txt sans extension) retourne 
-	 * ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU.<br/>
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU.<br/>
 	 */
 	@Test
 	public void testGetMIMETypeTXTSansExtension() {
 		
-		/* Instanciation d'un ControleurFichierTexte. */
-		final ControleurFichierTexte control = new ControleurFichierTexte();
-		
 		/* Test avec un .txt sans extension. */
-		final String resultat = control.getMIMEType(FILE_TXT_SANS_EXTENSION);
+		final String resultat = DetecteurTypeMime.getMIMEType(FILE_TXT_SANS_EXTENSION);
 		
-		assertEquals("Doit retourner ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU : "
-				, ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU, resultat);
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU, resultat);
 		
 	} // Fin de testGetMIMETypeTXTSansExtension()._________________________
 	
@@ -1247,19 +1153,16 @@ public final class ControleurFichierTexteTest {
 	/**
 	 * method testGetMIMETypeTXTFausseExtension() :<br/>
 	 * Garantit que getMIMEType(fichier .txt avec une fausse extension) retourne 
-	 * ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU.<br/>
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU.<br/>
 	 */
 	@Test
 	public void testGetMIMETypeTXTFausseExtension() {
 		
-		/* Instanciation d'un ControleurFichierTexte. */
-		final ControleurFichierTexte control = new ControleurFichierTexte();
-		
 		/* Test avec un .txt renommé en .csv. */
-		final String resultat = control.getMIMEType(FILE_TXT_FAUSSE_EXTENSION);
+		final String resultat = DetecteurTypeMime.getMIMEType(FILE_TXT_FAUSSE_EXTENSION);
 		
-		assertEquals("Doit retourner ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU : "
-				, ControleurFichierTexte.MESSAGE_TYPE_MIME_INCONNU, resultat);
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU, resultat);
 		
 	} // Fin de testGetMIMETypeTXTFausseExtension()._______________________
 	
@@ -1273,14 +1176,12 @@ public final class ControleurFichierTexteTest {
 	@Test
 	public void testGetMIMEType() {
 		
-		/* Instanciation d'un ControleurFichierTexte. */
-		final ControleurFichierTexte control = new ControleurFichierTexte();
-		
-		/* Test avec un .png. */
-		final String resultat = control.getMIMEType(FILE_TXT_FAUSSE_EXTENSION);
+		/* Test avec un . . */
+		final String resultat = DetecteurTypeMime.getMIMEType(FILE_TXT_FAUSSE_EXTENSION);
 		System.out.println(resultat);
 		assertTrue("bidon", 1 == 1);
-	}
+	} // Fin de testGetMIMEType()._________________________________________
 
-
-} // FIN DE LA CLASSE ControleurFichierTexteTest.----------------------------
+	
+	
+} // FIN DE LA CLASSE DetecteurTypeMimeTest.---------------------------------

@@ -1,4 +1,4 @@
-package levy.daniel.application.util.controleurstypefichier.controleurstypefichiertexte;
+package levy.daniel.application.util.detecteurstypefichier;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,7 +13,7 @@ import org.apache.commons.logging.LogFactory;
 
 
 /**
- * class ControleurFichierTexte :<br/>
+ * class DetecteurTypeMime :<br/>
  * .<br/>
  * <br/>
  *
@@ -29,12 +29,13 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author dan Lévy
  * @version 1.0
- * @since 29 janv. 2016
+ * @since 1 févr. 2016
  *
  */
-public class ControleurFichierTexte {
+public final class DetecteurTypeMime {
 
 	// ************************ATTRIBUTS************************************/
+
 	
 	/**
 	 * serialVersionUID : long :<br/>
@@ -43,11 +44,11 @@ public class ControleurFichierTexte {
 
 	
 	/**
-	 * CLASSE_CONTROLEURFICHIERTEXTE : String :<br/>
-	 * "Classe ControleurFichierTexte".<br/>
+	 * CLASSE_DETECTEURTYPEMIME : String :<br/>
+	 * "Classe DetecteurTypeMime".<br/>
 	 */
-	public static final String CLASSE_CONTROLEURFICHIERTEXTE 
-		= "Classe ControleurFichierTexte";
+	public static final String CLASSE_DETECTEURTYPEMIME 
+		= "Classe DetecteurTypeMime";
 	
 	/**
 	 * METHODE_GETMIMETYPE : String :<br/>
@@ -193,29 +194,23 @@ public class ControleurFichierTexte {
 	public static final String MESSAGE_TYPE_MIME_HTML 
 		= "text/html";
 	
-	
 	/**
 	 * LOG : Log : 
 	 * Logger pour Log4j (utilisant commons-logging).
 	 */
 	@SuppressWarnings("unused")
-	private static final Log LOG = LogFactory
-			.getLog(ControleurFichierTexte.class);
+	private static final Log LOG = LogFactory.getLog(DetecteurTypeMime.class);
 
 	// *************************METHODES************************************/
 	
-	
-	 /**
-	 * method CONSTRUCTEUR ControleurFichierTexte() :<br/>
-	 * CONSTRUCTEUR D'ARITE NULLE.<br/>
-	 * <br/>
+	/**
+	 * method CONSTRUCTEUR DetecteurTypeMime() :
+	 * Constructeur private pour empêcher l'instanciation.
+	 *
 	 */
-	public ControleurFichierTexte() {
-		
-		/* Instanciation de la Super-Classe. */
+	private DetecteurTypeMime() {
 		super();
-		
-	} // Fin de CONSTRUCTEUR D'ARITE NULLE.________________________________
+	} // Fin de CONSTRUCTEUR DetecteurTypeMime().__________________________
 	
 	
 	
@@ -274,121 +269,128 @@ public class ControleurFichierTexte {
 	 * le fichier dont on veut connaitre le type MIME.<br/>
 	 * @return : String : le type MIME.<br/>
 	 */
-	public String getMIMEType(
+	public static String getMIMEType(
 			final File pFile) {
 		
-		/* retourne MESSAGE_FICHIER_NULL si le pFile est null. */
-		if (pFile == null) {
+		/* block static synchronized. */
+		synchronized (DetecteurTypeMime.class) {
 			
-			/* LOG de niveau INFO. */			
-			if (LOG.isInfoEnabled()) {
+			/* retourne MESSAGE_FICHIER_NULL si le pFile est null. */
+			if (pFile == null) {
 				
-				final String message 
-				= CLASSE_CONTROLEURFICHIERTEXTE 
-				+ IConstantesMessage.SEP_MOINS
-				+ METHODE_GETMIMETYPE
-				+ IConstantesMessage.SEP_MOINS
-				+ MESSAGE_FICHIER_NULL;
+				/* LOG de niveau INFO. */			
+				if (LOG.isInfoEnabled()) {
+					
+					final String message 
+					= CLASSE_DETECTEURTYPEMIME 
+					+ IConstantesMessage.SEP_MOINS
+					+ METHODE_GETMIMETYPE
+					+ IConstantesMessage.SEP_MOINS
+					+ MESSAGE_FICHIER_NULL;
+					
+					LOG.info(message);
+				}
 				
-				LOG.info(message);
+				return MESSAGE_FICHIER_NULL;
 			}
 			
-			return MESSAGE_FICHIER_NULL;
-		}
-		
-		/* retourne MESSAGE_FICHIER_INEXISTANT si le pFile est inexistant. */
-		if (!pFile.exists()) {
-			
-			
-			/* LOG de niveau INFO. */
-			if (LOG.isInfoEnabled()) {
-								
-				final String message 
-				= CLASSE_CONTROLEURFICHIERTEXTE 
-				+ IConstantesMessage.SEP_MOINS
-				+ METHODE_GETMIMETYPE
-				+ IConstantesMessage.SEP_MOINS
-				+ MESSAGE_FICHIER_INEXISTANT 
-				+ pFile.getAbsolutePath();
+			/* retourne MESSAGE_FICHIER_INEXISTANT si le pFile est inexistant. */
+			if (!pFile.exists()) {
 				
-				LOG.info(message);
+				
+				/* LOG de niveau INFO. */
+				if (LOG.isInfoEnabled()) {
+									
+					final String message 
+					= CLASSE_DETECTEURTYPEMIME 
+					+ IConstantesMessage.SEP_MOINS
+					+ METHODE_GETMIMETYPE
+					+ IConstantesMessage.SEP_MOINS
+					+ MESSAGE_FICHIER_INEXISTANT 
+					+ pFile.getAbsolutePath();
+					
+					LOG.info(message);
+				}
+				
+				return MESSAGE_FICHIER_INEXISTANT;
 			}
 			
-			return MESSAGE_FICHIER_INEXISTANT;
-		}
-		
-		
-		/* retourne MESSAGE_FICHIER_REPERTOIRE si le pFile est un répertoire. */
-		if (pFile.isDirectory()) {
 			
-			/* LOG de niveau INFO. */			
-			if (LOG.isInfoEnabled()) {
+			/* retourne MESSAGE_FICHIER_REPERTOIRE si le pFile est un répertoire. */
+			if (pFile.isDirectory()) {
 				
-				final String message 
-				= CLASSE_CONTROLEURFICHIERTEXTE 
-				+ IConstantesMessage.SEP_MOINS
-				+ METHODE_GETMIMETYPE
-				+ IConstantesMessage.SEP_MOINS
-				+ MESSAGE_FICHIER_REPERTOIRE 
-				+ pFile.getAbsolutePath();
+				/* LOG de niveau INFO. */			
+				if (LOG.isInfoEnabled()) {
+					
+					final String message 
+					= CLASSE_DETECTEURTYPEMIME 
+					+ IConstantesMessage.SEP_MOINS
+					+ METHODE_GETMIMETYPE
+					+ IConstantesMessage.SEP_MOINS
+					+ MESSAGE_FICHIER_REPERTOIRE 
+					+ pFile.getAbsolutePath();
+					
+					LOG.info(message);
+				}
 				
-				LOG.info(message);
+				return MESSAGE_FICHIER_REPERTOIRE;
 			}
-			
-			return MESSAGE_FICHIER_REPERTOIRE;
-		}
 
-		
-		try {
 			
-			/* Création d'une URL vers pFile. */
-			final URL url = pFile.toURI().toURL();
-			
-			/* Création d'une connexion vers l'URL. */
-			final URLConnection connection = url.openConnection();
-			
-			/* Returns the value of the content-type header field. */
-			return connection.getContentType();
-			
-		} catch (MalformedURLException malformedURLExc) {
-			
-			/* LOG de niveau ERROR. */
-			if (LOG.isErrorEnabled()) {
+			try {
 				
-				final String message 
-				= CLASSE_CONTROLEURFICHIERTEXTE 
-				+ IConstantesMessage.SEP_MOINS
-				+ METHODE_GETMIMETYPE
-				+ IConstantesMessage.SEP_MOINS 
-				+ malformedURLExc.getMessage();
+				/* Création d'une URL vers pFile. */
+				final URL url = pFile.toURI().toURL();
 				
-				LOG.error(message, malformedURLExc);
+				/* Création d'une connexion vers l'URL. */
+				final URLConnection connection = url.openConnection();
 				
+				/* Returns the value of the content-type header field. */
+				return connection.getContentType();
+				
+			} catch (MalformedURLException malformedURLExc) {
+				
+				/* LOG de niveau ERROR. */
+				if (LOG.isErrorEnabled()) {
+					
+					final String message 
+					= CLASSE_DETECTEURTYPEMIME 
+					+ IConstantesMessage.SEP_MOINS
+					+ METHODE_GETMIMETYPE
+					+ IConstantesMessage.SEP_MOINS 
+					+ malformedURLExc.getMessage();
+					
+					LOG.error(message, malformedURLExc);
+					
+				}
+				
+				return malformedURLExc.getMessage();
+				
+			} catch (IOException ioe) {
+				
+				/* LOG de niveau ERROR. */
+				if (LOG.isErrorEnabled()) {
+					
+					final String message 
+					= CLASSE_DETECTEURTYPEMIME 
+					+ IConstantesMessage.SEP_MOINS
+					+ METHODE_GETMIMETYPE
+					+ IConstantesMessage.SEP_MOINS 
+					+ ioe.getMessage();
+					
+					LOG.error(message, ioe);
+					
+				}
+				
+				return ioe.getMessage();
 			}
 			
-			return malformedURLExc.getMessage();
 			
-		} catch (IOException ioe) {
-			
-			/* LOG de niveau ERROR. */
-			if (LOG.isErrorEnabled()) {
+		} // Fin du bloc static synchronized.________________________
 				
-				final String message 
-				= CLASSE_CONTROLEURFICHIERTEXTE 
-				+ IConstantesMessage.SEP_MOINS
-				+ METHODE_GETMIMETYPE
-				+ IConstantesMessage.SEP_MOINS 
-				+ ioe.getMessage();
-				
-				LOG.error(message, ioe);
-				
-			}
-			
-			return ioe.getMessage();
-		}
-		
 	} // Fin de getMIMEType(
 	 // File pFile)._______________________________________________________
 	
 
-} // FIN DE LA CLASSE ControleurFichierTexte.--------------------------------
+	
+} // FIN DE LA CLASSE DetecteurTypeMime.-------------------------------------
