@@ -1,26 +1,48 @@
 package levy.daniel.application.util.detecteurstypefichier;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.List;
+import java.util.Map;
+
+import javax.swing.JFileChooser;
 
 import levy.daniel.application.IConstantesMessage;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 
 /**
  * class DetecteurTypeMime :<br/>
- * .<br/>
+ * Classe utilitaire contenant 2 méthodes statiques 
+ * pour tenter de deviner le type MIME d'un fichier.<br/>
+ * <br/>
+ * - getMIMEType(File pFile) utilisant la méthode 
+ * getContentType() de java.net.URLConnection.<br/>
+ * - devineMIMEType(File pFile) utilisant la méthode 
+ * guessContentTypeFromStream(fileInputStream) de java.net.URLConnection 
+ * et getMIMEType(File pFile).<br/>
  * <br/>
  *
  * - Exemple d'utilisation :<br/>
+ * <code>
+ * // passe une image png au File FILE_PNG.<br/>
+ * final File FILE_PNG = new File(".\\images\\fleur.png");<br/>
+ * // Invocation de la méthode devineMIMEType(File pFile).<br/>
+ * final String typeMIME = DetecteurTypeMime.devineMIMEType(FILE_PNG);<br/>
+ * // typeMIME contient 'image/png'.<br/>
+ * </code>
  *<br/>
  * 
  * - Mots-clé :<br/>
+ * Type MIME.<br/>
  * <br/>
  *
  * - Dépendances :<br/>
@@ -56,6 +78,13 @@ public final class DetecteurTypeMime {
 	 */
 	public static final String METHODE_GETMIMETYPE 
 		= "Méthode getMIMEType(File pFile)";
+	
+	/**
+	 * METHODE_DEVINEMIMETYPE : String :<br/>
+	 * "Méthode devineMIMEType(File pFile)".<br/>
+	 */
+	public static final String METHODE_DEVINEMIMETYPE 
+		= "Méthode devineMIMEType(File pFile)";
 	
 	/**
 	 * MESSAGE_FICHIER_NULL : String :<br/>
@@ -392,5 +421,301 @@ public final class DetecteurTypeMime {
 	 // File pFile)._______________________________________________________
 	
 
+	
+	/**
+	 * method devineMIMEType(
+	 * File pFile) :<br/>
+	 * Tente de détecter (en lisant les premiers bits) 
+	 * et retourne le type MIME d'un fichier 
+	 * en utilisant la méthode guessContentTypeFromStream(fileInputStream)
+	 *  de java.net.URLConnection.<br/>
+	 *  Utilise également la méthode getMIMEType(File) 
+	 *  si guessContentTypeFromStream(fileInputStream) 
+	 *  n'a pas deviné le type MIME.<br/>
+	 * <br/>
+	 * ATTENTION : Il est facile de "leurrer" cette méthode 
+	 * en retirant l'extension de fichier 
+	 * ou en indiquant une fausse extension.<br/> 
+	 * Par exemple, si on renomme artificiellement une image .gif en .bmp, 
+	 * la méthode retourne MESSAGE_TYPE_MIME_BMP.<br/>
+	 * En revanche, la méthode retourne bien MESSAGE_TYPE_MIME_GIF 
+	 * si on lui soumet une image .gif sans extension.<br/>
+	 * Autre exemple, un fichier .txt sans extension 
+	 * ou avec une fausse extension comme .csv 
+	 * retournera MESSAGE_TYPE_MIME_INCONNU.<br/>
+	 * <br/>
+	 * - retourne MESSAGE_TYPE_MIME_PNG ('image/png') si le fichier est une image png.<br/>
+	 * - retourne MESSAGE_TYPE_MIME_JPG ('image/jpeg') si le fichier est une image jpg.<br/>
+	 * - retourne MESSAGE_TYPE_MIME_GIF ('image/gif') si le fichier est une image gif.<br/>
+	 * - retourne MESSAGE_TYPE_MIME_BMP ('image/bmp') si le fichier est une image bmp.<br/>
+	 * - retourne MESSAGE_TYPE_MIME_WAV ('audio/x-wav') si le fichier est un son wav.<br/>
+	 * - retourne MESSAGE_TYPE_MIME_TEXT_PLAIN ('text/plain') si le fichier est un texte txt.<br/>
+	 * - retourne MESSAGE_TYPE_MIME_PDF ('application/pdf') si le fichier est un pdf.<br/>
+	 * - retourne MESSAGE_TYPE_MIME_XML ('application/xml') si le fichier est un xsd.<br/>
+	 * - retourne MESSAGE_TYPE_MIME_XML ('application/xml') si le fichier est un xml.<br/>
+	 * - retourne MESSAGE_TYPE_MIME_HTML ('text/html') si le fichier est un html.<br/>
+	 * <br/>
+	 * - retourne MESSAGE_FICHIER_NULL si le pFile est null.<br/>
+	 * - retourne MESSAGE_FICHIER_INEXISTANT si le pFile est inexistant.<br/>
+	 * - retourne MESSAGE_FICHIER_REPERTOIRE si le pFile est un répertoire.<br/>
+	 * <br/>
+	 * - retourne MESSAGE_TYPE_MIME_INCONNU ('content/unknown') si le type MIME 
+	 * du fichier passé en paramètre n'est pas détecté.<br/>
+	 * C'est le cas (non-détection) avec les fichiers :<br/>
+	 * - .dwg d'Autocad.<br/>
+	 * - .pptx de PowerPoint.<br/>
+	 * - .mid (fichiers Midi).<br/>
+	 * - .eap d'Enterprise Architect.<br/>
+	 * - .ico (fichiers icône).<br/>
+	 * - .mp3 (fichiers musicaux compressés).<br/>
+	 * - .csv.<br/>
+	 * - .ini.<br/>
+	 * - .properties.<br/>
+	 * - .docX (Word).<br/>
+	 * - .mp4 (film).<br/>
+	 * - .flv (film).<br/>
+	 * - .asf (film).<br/>
+	 * <br/>
+	 *
+	 * @param pFile : File : 
+	 * le fichier dont on veut connaitre le type MIME.<br/>
+	 * @return : String : le type MIME.<br/>
+	 */
+	public static String devineMIMEType(
+			final File pFile) {
+		
+		/* block static synchronized. */
+		synchronized (DetecteurTypeMime.class) {
+			
+			/* retourne MESSAGE_FICHIER_NULL 
+			 * si le pFile est null. */
+			if (pFile == null) {
+				
+				/* LOG de niveau INFO. */			
+				if (LOG.isInfoEnabled()) {
+					
+					final String message 
+					= CLASSE_DETECTEURTYPEMIME 
+					+ IConstantesMessage.SEP_MOINS
+					+ METHODE_DEVINEMIMETYPE
+					+ IConstantesMessage.SEP_MOINS
+					+ MESSAGE_FICHIER_NULL;
+					
+					LOG.info(message);
+				}
+				
+				return MESSAGE_FICHIER_NULL;
+			}
+			
+			/* retourne MESSAGE_FICHIER_INEXISTANT 
+			 * si le pFile est inexistant. */
+			if (!pFile.exists()) {
+				
+				
+				/* LOG de niveau INFO. */
+				if (LOG.isInfoEnabled()) {
+									
+					final String message 
+					= CLASSE_DETECTEURTYPEMIME 
+					+ IConstantesMessage.SEP_MOINS
+					+ METHODE_DEVINEMIMETYPE
+					+ IConstantesMessage.SEP_MOINS
+					+ MESSAGE_FICHIER_INEXISTANT 
+					+ pFile.getAbsolutePath();
+					
+					LOG.info(message);
+				}
+				
+				return MESSAGE_FICHIER_INEXISTANT;
+			}
+			
+			
+			/* retourne MESSAGE_FICHIER_REPERTOIRE 
+			 * si le pFile est un répertoire. */
+			if (pFile.isDirectory()) {
+				
+				/* LOG de niveau INFO. */			
+				if (LOG.isInfoEnabled()) {
+					
+					final String message 
+					= CLASSE_DETECTEURTYPEMIME 
+					+ IConstantesMessage.SEP_MOINS
+					+ METHODE_DEVINEMIMETYPE
+					+ IConstantesMessage.SEP_MOINS
+					+ MESSAGE_FICHIER_REPERTOIRE 
+					+ pFile.getAbsolutePath();
+					
+					LOG.info(message);
+				}
+				
+				return MESSAGE_FICHIER_REPERTOIRE;
+			}
+			
+			FileInputStream fileInputStream = null;
+			
+			try {
+				
+				/* Instanciation du flux en lui passant le fichier. */
+				fileInputStream = new FileInputStream(pFile);
+				
+				/* Interprétation du type MIME après lecture du flux. */
+				final String resultat 
+					= URLConnection.guessContentTypeFromStream(fileInputStream);
+				
+				/* Retour du type MIME deviné. */
+				if (resultat == null) {
+					
+					/* Tente de calculer le type MIME 
+					 * par la méthode getMIMEType(File). */
+					final String resultatGetMIMEType = getMIMEType(pFile);
+					
+					/* Si getMIMEType(File) a matché, retourne le resultat. */
+					if (!StringUtils.equals(
+							resultatGetMIMEType, MESSAGE_TYPE_MIME_INCONNU)) {
+						return resultatGetMIMEType;
+					}
+					
+					/* Sinon, retourne 'content/unknown'. */
+					return MESSAGE_TYPE_MIME_INCONNU;
+				}
+				
+				return resultat;
+				
+			} catch (FileNotFoundException fnfe) {
+				
+				/* LOG de niveau ERROR. */
+				if (LOG.isErrorEnabled()) {
+					
+					final String message 
+					= CLASSE_DETECTEURTYPEMIME 
+					+ IConstantesMessage.SEP_MOINS
+					+ METHODE_DEVINEMIMETYPE
+					+ IConstantesMessage.SEP_MOINS 
+					+ fnfe.getMessage();
+					
+					LOG.error(message, fnfe);
+					
+				}
+				
+				return fnfe.getMessage();
+				
+			} catch (IOException ioe) {
+				
+				/* LOG de niveau ERROR. */
+				if (LOG.isErrorEnabled()) {
+					
+					final String message 
+					= CLASSE_DETECTEURTYPEMIME 
+					+ IConstantesMessage.SEP_MOINS
+					+ METHODE_DEVINEMIMETYPE
+					+ IConstantesMessage.SEP_MOINS 
+					+ ioe.getMessage();
+					
+					LOG.error(message, ioe);
+					
+				}
+				
+				return ioe.getMessage();
+			}
+			
+			finally {
+				
+				if (fileInputStream != null) {
+					
+						try {
+							
+							/* Fermeture du flux. */
+							fileInputStream.close();
+							
+						} catch (IOException ioe2) {
+							
+							/* LOG de niveau ERROR. */
+							if (LOG.isErrorEnabled()) {
+								
+								final String message 
+								= CLASSE_DETECTEURTYPEMIME 
+								+ IConstantesMessage.SEP_MOINS
+								+ METHODE_DEVINEMIMETYPE
+								+ IConstantesMessage.SEP_MOINS 
+								+ ioe2.getMessage();
+								
+								LOG.error(message, ioe2);
+								
+							}
+												
+						}
+					
+				} // Fin de if (fileInputStream != null).__________
+				
+			} // Fin du finally.___________________________________
+			
+		} // Fin du bloc static synchronized.________________________		
+				
+	} // Fin de devineMIMEType(
+	 // File pFile)._______________________________________________________
+	
+	
+		
+	/**
+	 * method getDescriptionExtension(
+	 * File pFile) :<br/>
+	 * Retourne la description du type MIME fournie par Windows.<br/>
+	 * <br/>
+	 * ATTENTION : cette méthode se base uniquement 
+	 * sur l'extension du fichier qui doit donc être juste.<br/>
+	 * <br/>
+	 * - retourne 'Document texte' pour un .txt.<br/>
+	 * - retourne 'Paramètres de configuration' pour un .ini.<br/>
+	 * - retourne 'Fichier DWG' pour un .dwg d'Autocad.<br/>
+	 * - retourne 'MS Office PowerPoint OpenXML' pour un .pptx.<br/>
+	 * - retourne 'Séquence MIDI' pour un .mid.<br/>
+	 * <br/>
+	 * - retourne null si pFile et null.<br/>
+	 * - retourne 'Fichier générique' si pFile est inexistant.<br/>
+	 * - retourne 'Dossier de fichiers' si pFile est un répertoire.<br/>
+	 * <br/>
+	 *
+	 * @param pFile : File : 
+	 * le fichier dont on veut connaitre la description.<br/>
+	 * @return : String : la description du fichier.<br/>
+	 */
+	public static String getDescriptionExtension(
+			final File pFile) {
+		
+		/* block static synchronized. */
+		synchronized (DetecteurTypeMime.class) {
+			
+			final JFileChooser chooser = new JFileChooser();
+	        return chooser.getTypeDescription(pFile);
+	        
+		} // Fin du bloc static synchronized.________________________
+                
+    } // Fin de getDescriptionExtension.___________________________________
+	
+	
+	
+	/**
+	 * method getMapDescriptionsExtensions(
+	 * List<File> pList) :<br/>
+	 * .<br/>
+	 * <br/>
+	 * - retourne null si pList == null.<br/>
+	 * <br/>
+	 *
+	 * @param pList
+	 * @return : Map<String,String> :  .<br/>
+	 */
+	public static Map<String, String> getMapDescriptionsExtensions(
+			final List<File> pList) {
+		
+		/* retourne null si pList == null. */
+		if (pList == null) {
+			return null;
+		}
+		
+		return null;
+		
+	} // Fin de getMapDescriptionsExtensions(
+	 // List<File> pList)._________________________________________________
 	
 } // FIN DE LA CLASSE DetecteurTypeMime.-------------------------------------

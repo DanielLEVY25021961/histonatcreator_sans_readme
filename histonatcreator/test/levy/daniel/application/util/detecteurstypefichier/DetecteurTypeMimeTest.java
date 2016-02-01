@@ -3,6 +3,8 @@ package levy.daniel.application.util.detecteurstypefichier;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -305,6 +307,12 @@ public final class DetecteurTypeMimeTest {
 	//*****************************************************************/
 	
 	/**
+	 * FILE_NULL : File :<br/>
+	 * Fichier null.<br/>
+	 */
+	public static final File FILE_NULL = null;
+	
+	/**
 	 * FILE_INEXISTANT : File :<br/>
 	 * Fichier inexistant.<br/>
 	 */
@@ -520,6 +528,51 @@ public final class DetecteurTypeMimeTest {
 	 */
 	public static final File FILE_TXT_FAUSSE_EXTENSION 
 		= new File(CHEMIN_FICHIERS_TEST + CHEMIN_TXT_FAUSSE_EXTENSION);
+
+	
+	/**
+	 * LISTEFILES : List<File> :<br/>
+	 * Liste contenant tous les File utilisés pour les tests.<br/>
+	 */
+	public static final List<File> LISTEFILES = new ArrayList<File>();
+	
+	/* Bloc statique pour remplir la liste des Files. */
+	static {
+		
+		LISTEFILES.add(FILE_NULL);
+		LISTEFILES.add(FILE_INEXISTANT);
+		LISTEFILES.add(FILE_REPERTOIRE);
+		LISTEFILES.add(FILE_DWG);
+		LISTEFILES.add(FILE_PPTX);
+		LISTEFILES.add(FILE_EAP);
+		LISTEFILES.add(FILE_ICO);
+		LISTEFILES.add(FILE_PNG);
+		LISTEFILES.add(FILE_JPG);
+		LISTEFILES.add(FILE_GIF);
+		LISTEFILES.add(FILE_BMP);
+		LISTEFILES.add(FILE_XPS);
+		LISTEFILES.add(FILE_MP3);
+		LISTEFILES.add(FILE_WAV);
+		LISTEFILES.add(FILE_TXT_ISO_8859_15);
+		LISTEFILES.add(FILE_CSV_UTF_8);
+		LISTEFILES.add(FILE_TXT_UTF_8);
+		LISTEFILES.add(FILE_PDF);
+		LISTEFILES.add(FILE_XSD);
+		LISTEFILES.add(FILE_XML);
+		LISTEFILES.add(FILE_INI);
+		LISTEFILES.add(FILE_PROPERTIES);
+		LISTEFILES.add(FILE_DOCX);
+		LISTEFILES.add(FILE_HTML);
+		LISTEFILES.add(FILE_MP4);
+		LISTEFILES.add(FILE_FLV);
+		LISTEFILES.add(FILE_ASF);
+		LISTEFILES.add(FILE_GIF_EN_BMP);
+		LISTEFILES.add(FILE_GIF_SANS_EXTENSION);
+		LISTEFILES.add(FILE_TXT_SANS_EXTENSION);
+		LISTEFILES.add(FILE_TXT_FAUSSE_EXTENSION);
+		
+	}
+	
 	
 	/**
 	 * LOG : Log : 
@@ -558,7 +611,7 @@ public final class DetecteurTypeMimeTest {
 	public void testGetMIMETypeFichierNull() {
 			
 		/* Test avec un fichier null. */
-		final String resultat = DetecteurTypeMime.getMIMEType(null);
+		final String resultat = DetecteurTypeMime.getMIMEType(FILE_NULL);
 		
 		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_FICHIER_NULL : "
 				, DetecteurTypeMime.MESSAGE_FICHIER_NULL, resultat);
@@ -1182,6 +1235,662 @@ public final class DetecteurTypeMimeTest {
 		assertTrue("bidon", 1 == 1);
 	} // Fin de testGetMIMEType()._________________________________________
 
+	
+	
+	
+	/**
+	 * method testDevineMIMETypeFichierNull() :<br/>
+	 * Garantit que devineMIMEType(null) retourne 
+	 * DetecteurTypeMime.MESSAGE_FICHIER_NULL.<br/>
+	 * <br/>
+	 */
+	@Test
+	public void testDevineMIMETypeFichierNull() {
+			
+		/* Test avec un fichier null. */
+		final String resultat = DetecteurTypeMime.devineMIMEType(FILE_NULL);
+		
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_FICHIER_NULL : "
+				, DetecteurTypeMime.MESSAGE_FICHIER_NULL, resultat);
+		
+	} // Fin de testDevineMIMETypeFichierNull().______________________________
+	
+
+	
+	/**
+	 * method testDevineMIMETypeFichierInexistant() :<br/>
+	 * Garantit que devineMIMEType(fichier inexistant) retourne 
+	 * DetecteurTypeMime.MESSAGE_FICHIER_INEXISTANT.<br/>
+	 * <br/>
+	 */
+	@Test
+	public void testDevineMIMETypeFichierInexistant() {
+		
+		/* Test avec un fichier inexistant. */
+		final String resultat = DetecteurTypeMime.devineMIMEType(FILE_INEXISTANT);
+		
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_FICHIER_INEXISTANT : "
+				, DetecteurTypeMime.MESSAGE_FICHIER_INEXISTANT, resultat);
+		
+	} // Fin de testDevineMIMETypeFichierInexistant().________________________
+	
+	
+	
+	/**
+	 * method testDevineMIMETypeFichierRepertoire() :<br/>
+	 * Garantit que devineMIMEType(fichier repertoire) retourne 
+	 * DetecteurTypeMime.MESSAGE_FICHIER_REPERTOIRE.<br/>
+	 * <br/>
+	 */
+	@Test
+	public void testDevineMIMETypeFichierRepertoire() {
+
+		/* Test avec un répertoire. */
+		final String resultat = DetecteurTypeMime.devineMIMEType(FILE_REPERTOIRE);
+		
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_FICHIER_REPERTOIRE : "
+				, DetecteurTypeMime.MESSAGE_FICHIER_REPERTOIRE, resultat);
+		
+	} // Fin de testDevineMIMETypeFichierRepertoire().________________________
+
+	
+	
+	//*********************************************************************/
+	// TESTS FICHIERS DESSIN
+	//*********************************************************************/
+
+	/**
+	 * method testDevineMIMETypeDWG() :<br/>
+	 * Garantit que devineMIMEType(fichier .dwg) retourne 
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU.<br/>
+	 * <br/>
+	 */
+	@Test
+	public void testDevineMIMETypeDWG() {
+		
+		/* Test avec un .dwg. */
+		final String resultat = DetecteurTypeMime.devineMIMEType(FILE_DWG);
+				
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU, resultat);
+		
+	} // Fin de testDevineMIMETypeDWG().______________________________________
+
+	
+	
+	//*********************************************************************/
+	// TESTS FICHIERS DIVERS
+	//*********************************************************************/
+	
+	/**
+	 * method testDevineMIMETypePPTX() :<br/>
+	 * Garantit que devineMIMEType(fichier .pptx) retourne 
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU.<br/>
+	 * <br/>
+	 */
+	@Test
+	public void testDevineMIMETypePPTX() {
+		
+		/* Test avec un .pptx. */
+		final String resultat = DetecteurTypeMime.devineMIMEType(FILE_PPTX);
+		
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU, resultat);
+		
+	} // Fin de testDevineMIMETypePPTX()._____________________________________
+	
+
+	
+	/**
+	 * method testDevineMIMETypeMID() :<br/>
+	 * Garantit que devineMIMEType(fichier .mid) retourne 
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU.<br/>
+	 * <br/>
+	 */
+	@Test
+	public void testDevineMIMETypeMID() {
+		
+		/* Test avec un .mid. */
+		final String resultat = DetecteurTypeMime.devineMIMEType(FILE_MID);
+		
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU, resultat);
+		
+	} // Fin de testDevineMIMETypeMID().______________________________________
+	
+
+	
+	/**
+	 * method testDevineMIMETypeEAP() :<br/>
+	 * Garantit que devineMIMEType(fichier .eap) retourne 
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU.<br/>
+	 * <br/>
+	 */
+	@Test
+	public void testDevineMIMETypeEAP() {
+		
+		/* Test avec un .eap. */
+		final String resultat = DetecteurTypeMime.devineMIMEType(FILE_EAP);
+		
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU, resultat);
+		
+	} // Fin de testDevineMIMETypeEAP().______________________________________
+	
+	
+	
+	//*********************************************************************/
+	// TESTS FICHIERS ICONE
+	//*********************************************************************/
+
+	/**
+	 * method testDevineMIMETypeICO() :<br/>
+	 * Garantit que devineMIMEType(fichier .ico) retourne 
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU.<br/>
+	 * <br/>
+	 */
+	@Test
+	public void testDevineMIMETypeICO() {
+		
+		/* Test avec un .ico. */
+		final String resultat = DetecteurTypeMime.devineMIMEType(FILE_ICO);
+		
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU, resultat);
+		
+	} // Fin de testDevineMIMETypeICO().______________________________________
+	
+
+	
+	//*********************************************************************/
+	// TESTS FICHIERS IMAGE
+	//*********************************************************************/
+
+	/**
+	 * method testDevineMIMETypePNG() :<br/>
+	 * Garantit que devineMIMEType(fichier .png) retourne 
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU.<br/>
+	 * <br/>
+	 */
+	@Test
+	public void testDevineMIMETypePNG() {
+		
+		/* Test avec un .png. */
+		final String resultat = DetecteurTypeMime.devineMIMEType(FILE_PNG);
+		
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_PNG : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_PNG, resultat);
+		
+	} // Fin de testDevineMIMETypePNG().______________________________________
+	
+	
+	
+	/**
+	 * method testDevineMIMETypeJPG() :<br/>
+	 * Garantit que devineMIMEType(fichier .jpg) retourne 
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_JPG.<br/>
+	 * <br/>
+	 */
+	@Test
+	public void testDevineMIMETypeJPG() {
+		
+		/* Test avec un .jpg. */
+		final String resultat = DetecteurTypeMime.devineMIMEType(FILE_JPG);
+		
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_JPG : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_JPG, resultat);
+		
+	} // Fin de testDevineMIMETypeJPG().______________________________________
+	
+
+	
+	/**
+	 * method testDevineMIMETypeGIF() :<br/>
+	 * Garantit que devineMIMEType(fichier .gif) retourne 
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_GIF.<br/>
+	 */
+	@Test
+	public void testDevineMIMETypeGIF() {
+		
+		/* Test avec un .gif. */
+		final String resultat = DetecteurTypeMime.devineMIMEType(FILE_GIF);
+		
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_GIF : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_GIF, resultat);
+		
+	} // Fin de testDevineMIMETypeGIF().______________________________________
+	
+	
+	
+	/**
+	 * method testDevineMIMETypeBMP() :<br/>
+	 * Garantit que devineMIMEType(fichier .bmp) retourne 
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_BMP.<br/>
+	 */
+	@Test
+	public void testDevineMIMETypeBMP() {
+		
+		/* Test avec un .bmp. */
+		final String resultat = DetecteurTypeMime.devineMIMEType(FILE_BMP);
+		
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_BMP : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_BMP, resultat);
+		
+	} // Fin de testDevineMIMETypeBMP().______________________________________
+	
+
+	
+	/**
+	 * method testDevineMIMETypeXPS() :<br/>
+	 * Garantit que devineMIMEType(fichier .xps) retourne 
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU.<br/>
+	 */
+	@Test
+	public void testDevineMIMETypeXPS() {
+		
+		/* Test avec un .xps. */
+		final String resultat = DetecteurTypeMime.devineMIMEType(FILE_XPS);
+		
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU, resultat);
+		
+	} // Fin de testDevineMIMETypeXPS().______________________________________
+	
+	
+	
+	//*********************************************************************/
+	// TESTS MUSIQUE
+	//*********************************************************************/
+
+	/**
+	 * method testDevineMIMETypeMP3() :<br/>
+	 * Garantit que devineMIMEType(fichier .mp3) retourne 
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU.<br/>
+	 */
+	@Test
+	public void testDevineMIMETypeMP3() {
+		
+		/* Test avec un .mp3. */
+		final String resultat = DetecteurTypeMime.devineMIMEType(FILE_MP3);
+		
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU, resultat);
+		
+	} // Fin de testDevineMIMETypeMP3().______________________________________
+	
+	
+	
+	/**
+	 * method testDevineMIMETypeWAV() :<br/>
+	 * Garantit que devineMIMEType(fichier .wav) retourne 
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_WAV.<br/>
+	 * <br/>
+	 */
+	@Test
+	public void testDevineMIMETypeWAV() {
+		
+		/* Test avec un .wav. */
+		final String resultat = DetecteurTypeMime.devineMIMEType(FILE_WAV);
+		
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_WAV : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_WAV, resultat);
+		
+	} // Fin de testDevineMIMETypeWAV().______________________________________
+	
+
+	
+	//*********************************************************************/
+	// TESTS TEXTE
+	//*********************************************************************/
+
+	/**
+	 * method testDevineMIMETypeTXTISO885915() :<br/>
+	 * Garantit que devineMIMEType(fichier .txt) encodé en ISO-8859-15 retourne 
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_TEXT_PLAIN.<br/>
+	 * <br/>
+	 */
+	@Test
+	public void testDevineMIMETypeTXTISO885915() {
+		
+		/* Test avec un .txt encodé en ISO-8859-15. */
+		final String resultat = DetecteurTypeMime.devineMIMEType(FILE_TXT_ISO_8859_15);
+		
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_TEXT_PLAIN : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_TEXT_PLAIN, resultat);
+		
+	} // Fin de testDevineMIMETypeTXTISO885915()._____________________________
+	
+	
+	
+	/**
+	 * method testDevineMIMETypeCSVUTF8() :<br/>
+	 * Garantit que devineMIMEType(fichier .csv) encodé en UTF-8 retourne 
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU.<br/>
+	 * <br/>
+	 */
+	@Test
+	public void testDevineMIMETypeCSVUTF8() {
+		
+		/* Test avec un .csv encodé en UTF-8. */
+		final String resultat = DetecteurTypeMime.devineMIMEType(FILE_CSV_UTF_8);
+		
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU, resultat);
+		
+	} // Fin de testDevineMIMETypeCSVUTF8().__________________________________
+	
+	
+	
+	/**
+	 * method testDevineMIMETypeTXTUTF8() :<br/>
+	 * Garantit que devineMIMEType(fichier .txt) encodé en UTF-8 retourne 
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_TEXT_PLAIN.<br/>
+	 */
+	@Test
+	public void testDevineMIMETypeTXTUTF8() {
+		
+		/* Test avec un .txt encodé en UTF-8. */
+		final String resultat = DetecteurTypeMime.devineMIMEType(FILE_TXT_UTF_8);
+		
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_TEXT_PLAIN : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_TEXT_PLAIN, resultat);
+		
+	} // Fin de testDevineMIMETypeTXTUTF8().__________________________________
+	
+	
+	
+	/**
+	 * method testDevineMIMETypePDF() :<br/>
+	 * Garantit que devineMIMEType(fichier .pdf) retourne 
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_PDF.<br/>
+	 */
+	@Test
+	public void testDevineMIMETypePDF() {
+		
+		/* Test avec un .pdf. */
+		final String resultat = DetecteurTypeMime.devineMIMEType(FILE_PDF);
+		
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_PDF : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_PDF, resultat);
+		
+	} // Fin de testDevineMIMETypePDF().______________________________________
+	
+
+	
+	/**
+	 * method testDevineMIMETypeXSD() :<br/>
+	 * Garantit que devineMIMEType(fichier .xsd) retourne 
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_XML.<br/>
+	 */
+	@Test
+	public void testDevineMIMETypeXSD() {
+		
+		/* Test avec un .xsd. */
+		final String resultat = DetecteurTypeMime.devineMIMEType(FILE_XSD);
+		
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_XML : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_XML, resultat);
+		
+	} // Fin de testDevineMIMETypeXSD().______________________________________
+	
+	
+	
+	/**
+	 * method testDevineMIMETypeXML() :<br/>
+	 * Garantit que devineMIMEType(fichier .xml) retourne 
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_XML.<br/>
+	 */
+	@Test
+	public void testDevineMIMETypeXML() {
+		
+		/* Test avec un .xml. */
+		final String resultat = DetecteurTypeMime.devineMIMEType(FILE_XML);
+		
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_XML : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_XML, resultat);
+		
+	} // Fin de testDevineMIMETypeXML().______________________________________
+	
+
+	
+	/**
+	 * method testDevineMIMETypeINI() :<br/>
+	 * Garantit que devineMIMEType(fichier .ini) retourne 
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU.<br/>
+	 */
+	@Test
+	public void testDevineMIMETypeINI() {
+		
+		/* Test avec un .ini. */
+		final String resultat = DetecteurTypeMime.devineMIMEType(FILE_INI);
+		
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU, resultat);
+		
+	} // Fin de testDevineMIMETypeINI().______________________________________
+	
+	
+	
+	/**
+	 * method testDevineMIMETypePROPERTIES() :<br/>
+	 * Garantit que devineMIMEType(fichier .properties) retourne 
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU.<br/>
+	 */
+	@Test
+	public void testDevineMIMETypePROPERTIES() {
+		
+		/* Test avec un .properties. */
+		final String resultat = DetecteurTypeMime.devineMIMEType(FILE_PROPERTIES);
+		
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU, resultat);
+		
+	} // Fin de testDevineMIMETypePROPERTIES()._______________________________
+	
+	
+	
+	/**
+	 * method testDevineMIMETypeDOCX() :<br/>
+	 * Garantit que devineMIMEType(fichier .docX) retourne 
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU.<br/>
+	 */
+	@Test
+	public void testDevineMIMETypeDOCX() {
+		
+		/* Test avec un .docX. */
+		final String resultat = DetecteurTypeMime.devineMIMEType(FILE_DOCX);
+		
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU, resultat);
+		
+	} // Fin de testDevineMIMETypeDOCX()._____________________________________
+
+	
+	
+	/**
+	 * method testDevineMIMETypeHTML() :<br/>
+	 * Garantit que devineMIMEType(fichier .html) retourne 
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_HTML.<br/>
+	 */
+	@Test
+	public void testDevineMIMETypeHTML() {
+		
+		/* Test avec un .html. */
+		final String resultat = DetecteurTypeMime.devineMIMEType(FILE_HTML);
+		
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_HTML : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_HTML, resultat);
+		
+	} // Fin de testDevineMIMETypeHTML()._____________________________________
+	
+	
+	//*********************************************************************/
+	// TESTS VIDEO
+	//*********************************************************************/
+	
+	/**
+	 * method testDevineMIMETypeMP4() :<br/>
+	 * Garantit que devineMIMEType(fichier .mp4) retourne 
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU.<br/>
+	 */
+	@Test
+	public void testDevineMIMETypeMP4() {
+		
+		/* Test avec un .mp4. */
+		final String resultat = DetecteurTypeMime.devineMIMEType(FILE_MP4);
+		
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU, resultat);
+		
+	} // Fin de testDevineMIMETypeMP4().______________________________________
+	
+	
+	
+	/**
+	 * method testDevineMIMETypeFLV() :<br/>
+	 * Garantit que devineMIMEType(fichier .flv) retourne 
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU.<br/>
+	 */
+	@Test
+	public void testDevineMIMETypeFLV() {
+		
+		/* Test avec un .flv. */
+		final String resultat = DetecteurTypeMime.devineMIMEType(FILE_FLV);
+		
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU, resultat);
+		
+	} // Fin de testDevineMIMETypeFLV().______________________________________
+	
+
+	
+	/**
+	 * method testDevineMIMETypeASF() :<br/>
+	 * Garantit que devineMIMEType(fichier .asf) retourne 
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU.<br/>
+	 */
+	@Test
+	public void testDevineMIMETypeASF() {
+		
+		/* Test avec un .asf. */
+		final String resultat = DetecteurTypeMime.devineMIMEType(FILE_ASF);
+		
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU, resultat);
+		
+	} // Fin de testDevineMIMETypeASF().______________________________________
+	
+	
+	//*********************************************************************/
+	// TESTS FAUSSES EXTENSIONS
+	//*********************************************************************/
+	
+	
+	/**
+	 * method testDevineMIMETypeGIFEnBMP() :<br/>
+	 * Garantit que devineMIMEType(fichier .gif renommé en .bmp) retourne 
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_BMP.<br/>
+	 */
+	@Test
+	public void testDevineMIMETypeGIFEnBMP() {
+		
+		/* Test avec un .gif renommé en .bmp. */
+		final String resultat = DetecteurTypeMime.devineMIMEType(FILE_GIF_EN_BMP);
+		
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_BMP : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_BMP, resultat);
+		
+	} // Fin de testDevineMIMETypeGIFEnBMP()._________________________________
+	
+	
+	
+	/**
+	 * method testDevineMIMETypeGIFSansEXTENSION() :<br/>
+	 * Garantit que devineMIMEType(fichier .gif) retourne 
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_GIF.<br/>
+	 */
+	@Test
+	public void testDevineMIMETypeGIFSansEXTENSION() {
+		
+		/* Test avec un .gif sans extension. */
+		final String resultat = DetecteurTypeMime.devineMIMEType(FILE_GIF_SANS_EXTENSION);
+		
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_GIF : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_GIF, resultat);
+		
+	} // Fin de testDevineMIMETypeGIFSansEXTENSION()._________________________
+	
+	
+	
+	/**
+	 * method testDevineMIMETypeTXTSansExtension() :<br/>
+	 * Garantit que devineMIMEType(fichier .txt sans extension) retourne 
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU.<br/>
+	 */
+	@Test
+	public void testDevineMIMETypeTXTSansExtension() {
+		
+		/* Test avec un .txt sans extension. */
+		final String resultat = DetecteurTypeMime.devineMIMEType(FILE_TXT_SANS_EXTENSION);
+		
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU, resultat);
+		
+	} // Fin de testDevineMIMETypeTXTSansExtension()._________________________
+	
+	
+	
+	/**
+	 * method testDevineMIMETypeTXTFausseExtension() :<br/>
+	 * Garantit que devineMIMEType(fichier .txt avec une fausse extension) retourne 
+	 * DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU.<br/>
+	 */
+	@Test
+	public void testDevineMIMETypeTXTFausseExtension() {
+		
+		/* Test avec un .txt renommé en .csv. */
+		final String resultat = DetecteurTypeMime.devineMIMEType(FILE_TXT_FAUSSE_EXTENSION);
+		
+		assertEquals("Doit retourner DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU : "
+				, DetecteurTypeMime.MESSAGE_TYPE_MIME_INCONNU, resultat);
+		
+	} // Fin de testDevineMIMETypeTXTFausseExtension()._______________________
+	
+	
+	
+	/**
+	 * method testDevineMIMEType() :<br/>
+	 * .<br/>
+	 * <br/>
+	 */
+	@Test
+	public void testDevineMIMEType() {
+		
+		/* Test avec un . . */
+		final String resultat = DetecteurTypeMime.devineMIMEType(FILE_TXT_UTF_8);
+		System.out.println(resultat);
+		assertTrue("bidon", 1 == 1);
+		
+	} // Fin de testDevineMIMEType()._________________________________________
+
+
+	
+	/**
+	 * method testGetDescriptionExtension() :<br/>
+	 * .<br/>
+	 * <br/>
+	 * : void :  .<br/>
+	 */
+	@Test
+	public void testGetDescriptionExtension() {
+		
+		final String resultat 
+			= DetecteurTypeMime.getDescriptionExtension(FILE_INI);
+		System.out.println(resultat);
+		assertTrue("bidon", 1 == 1);
+		
+	} // Fin de testGetDescriptionExtension()._____________________________
+	
 	
 	
 } // FIN DE LA CLASSE DetecteurTypeMimeTest.---------------------------------
