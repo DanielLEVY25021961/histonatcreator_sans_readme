@@ -7,8 +7,12 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.swing.JFileChooser;
 
@@ -42,7 +46,10 @@ import org.apache.commons.logging.LogFactory;
  *<br/>
  * 
  * - Mots-clé :<br/>
- * Type MIME.<br/>
+ * Type MIME, mapStringStringtoString(), afficherMapStringStringConsole,<br/>
+ * afficher map de String, String.<br/>
+ * Set<Entry<String, String>> entrySet = pMap.entrySet();<br/>
+ * final Iterator<Entry<String, String>> ite = entrySet.iterator();<br/>
  * <br/>
  *
  * - Dépendances :<br/>
@@ -685,37 +692,184 @@ public final class DetecteurTypeMime {
 		/* block static synchronized. */
 		synchronized (DetecteurTypeMime.class) {
 			
+			/* Instanciation d'un JFileChooser. */
 			final JFileChooser chooser = new JFileChooser();
-	        return chooser.getTypeDescription(pFile);
+			
+			String resultat = null;
+			
+			try {
+				
+				/* Récupération de la description 
+				 * du type MIME fournie par Windows.*/
+				resultat = chooser.getTypeDescription(pFile);
+				
+			} catch (Exception e) {
+				
+				/* ne rien faire ici. 
+				 * Exception while removing reference catchée ici car
+				 * sans intérêt. Elle ne laisse aucune trace. */
+				if (LOG.isInfoEnabled()) {
+					LOG.info(e);
+				}
+				
+			}
+			
+			/* Retourne la description du type MIME. */
+	        return resultat;
+	        
 	        
 		} // Fin du bloc static synchronized.________________________
                 
+		
     } // Fin de getDescriptionExtension.___________________________________
 	
 	
 	
 	/**
 	 * method getMapDescriptionsExtensions(
-	 * List<File> pList) :<br/>
-	 * .<br/>
+	 * List&lt;File&gt; pList) :<br/>
+	 * Fournit une Map&lt;String,String&gt; comportant 
+	 * les noms des fichiers compris dans la List&lt;File&gt; pList 
+	 * et leur description Windows de leur type MIME :<br/>
+	 * - key : le nom d'un fichier dans la liste pList.<br/>
+	 * - value : la description du type MIME du fichier fournie par 
+	 * chooser.getTypeDescription(file).<br/>
 	 * <br/>
 	 * - retourne null si pList == null.<br/>
+	 * - retourne null si pList.isEmpty().<br/>
 	 * <br/>
 	 *
-	 * @param pList
-	 * @return : Map<String,String> :  .<br/>
+	 * @param pList : List&lt;File&gt; : Liste des fichiers dont 
+	 * on veut connaitre la description du type MIME.<br/>
+	 * @return : Map&lt;String,String&gt;.<br/>
 	 */
 	public static Map<String, String> getMapDescriptionsExtensions(
 			final List<File> pList) {
 		
-		/* retourne null si pList == null. */
-		if (pList == null) {
-			return null;
-		}
-		
-		return null;
+		/* block static synchronized. */
+		synchronized (DetecteurTypeMime.class) {
+						
+			/* retourne null si pList == null. */
+			if (pList == null) {
+				return null;
+			}
+			
+			/* retourne null si pList.isEmpty(). */
+			if (pList.isEmpty()) {
+				return null;
+			}
+			
+			/* Instanciation d'un JFileChooser. */
+			final JFileChooser chooser = new JFileChooser();
+			
+			/* Instanciation de la Map*/
+			final Map<String, String> resultatMap 
+				= new HashMap<String, String>();
+			
+			/* parcours foreach sur chaque File de pList. */
+			for(final File file : pList) {
+				
+				String nomFichier = null;
+				String descriptionFichier = null;
+				
+				/* Extraction du nom du fichier 
+				 * et de la description du type MIME. */
+				if (file != null) {
+					nomFichier = file.getName();
+					descriptionFichier = chooser.getTypeDescription(file);
+				}
+				else {
+					nomFichier = "null";
+					descriptionFichier = getDescriptionExtension(file);
+				}
+				
+				
+				/* Ajout dans la Map. */
+				resultatMap.put(nomFichier, descriptionFichier);
+			}
+			
+			/* Retourne la Map resultat. */
+			return resultatMap;
+			
+		} // Fin du bloc static synchronized.________________________
+
 		
 	} // Fin de getMapDescriptionsExtensions(
 	 // List<File> pList)._________________________________________________
+
+	
+	
+	/**
+	 * method mapStringStringtoString(
+	 * Map<String, String> pMap) :<br/>
+	 * Retourne une chaîne de caractères pour l'affichage 
+	 * du contenu d'une Map&lt;String,String&gt; à la console.<br/>
+	 * <br/>
+	 * - retourne null si pMap == null.<br/>
+	 * - retourne null si pMap.isEmpty().<br/>
+	 * <br/>
+	 *
+	 * @param pMap : Map&lt;String,String&gt; : la Map à afficher.<br/>
+	 * @return : String : La chaîne de caractères pour l'affichage 
+	 * du contenu de la Map&lt;String,String&gt;.<br/>
+	 */
+	public static String mapStringStringtoString(
+			final Map<String, String> pMap) {
+		
+		/* block static synchronized. */
+		synchronized (DetecteurTypeMime.class) {
+			
+			/* retourne null si pMap == null. */
+			if (pMap == null) {
+				return null;
+			}
+			
+			/* retourne null si pMap.isEmpty(). */
+			if (pMap.isEmpty()) {
+				return null;
+			}
+			
+			final StringBuffer stb = new StringBuffer();
+			
+			/* Récupère un Set<Entry<String, String>> auprès de la Map. */
+			final Set<Entry<String, String>> entrySet = pMap.entrySet();
+			
+			/* Récupère un Iterator<Entry<String, String>> 
+			 * auprès du Set<Entry<String, String>> */
+			final Iterator<Entry<String, String>> ite = entrySet.iterator();
+			
+			/* Parcours de l'Iterator. */
+			while (ite.hasNext()) {
+				
+				/* Récupération de chaque Entry<String, String> 
+				 * auprès de l'Iterator. */
+				final Entry<String, String> entry = ite.next();
+				
+				/* Récupération de la key et de la value dans l'Entry. */
+				final String key = entry.getKey();
+				final String value = entry.getValue();
+				
+				/* Remplissage du StringBuffer. */
+				/* key. */
+				stb.append(key);
+				/* tabulation. */
+				stb.append(IConstantesMessage.SEPTAB);
+				stb.append(IConstantesMessage.SEPTAB);
+				/* value. */
+				stb.append(value);
+				/* Saut de ligne. */
+				stb.append(IConstantesMessage.SAUT_DE_LIGNE);
+				
+			} // Fin du while.___________________
+			
+			/* Retour de la String résultante. */
+			return stb.toString();
+			
+		} // Fin du bloc static synchronized.________________________
+				
+	} // Fin de mapStringStringtoString(
+	 // Map<String, String> pMap)._________________________________________
+	
+	
 	
 } // FIN DE LA CLASSE DetecteurTypeMime.-------------------------------------

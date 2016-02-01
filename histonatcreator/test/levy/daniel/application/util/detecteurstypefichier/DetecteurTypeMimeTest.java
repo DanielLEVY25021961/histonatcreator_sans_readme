@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -1891,6 +1892,28 @@ public final class DetecteurTypeMimeTest {
 		
 	} // Fin de testGetDescriptionExtension()._____________________________
 	
+
 	
+	/**
+	 * method testGetMapDescriptionsExtensions() :<br/>
+	 * .<br/>
+	 * <br/>
+	 * : void :  .<br/>
+	 */
+	@Test
+	public void testGetMapDescriptionsExtensions() {
+		
+		/* Récupération de la Map de description 
+		 * des fichiers compris dans LISTEFILES. */
+		final Map<String, String> resultatMap 
+			= DetecteurTypeMime.getMapDescriptionsExtensions(LISTEFILES);
+		
+		/* Affichage de la Map. */
+		System.out.println(
+				DetecteurTypeMime.mapStringStringtoString(resultatMap));
+		
+		assertTrue("bidon", 1 == 1);
+		
+	} // Fin de testGetMapDescriptionsExtensions().________________________
 	
 } // FIN DE LA CLASSE DetecteurTypeMimeTest.---------------------------------

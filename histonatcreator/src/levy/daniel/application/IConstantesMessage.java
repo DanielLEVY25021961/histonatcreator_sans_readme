@@ -48,5 +48,13 @@ public interface IConstantesMessage {
 	 */
 	String SEP_MOINS = " - ";
 	
+	
+	/**
+	 * SAUT_DE_LIGNE : Character :<br/>
+	 * Saut de ligne Java.<br/>
+	 * '\n'.<br/>
+	 */
+	Character SAUT_DE_LIGNE = '\n';
+	
 
 } // FIN DE L'INTERFACE IConstantesMessage.----------------------------------
