@@ -12,8 +12,8 @@ import org.junit.Test;
 
 
 /**
- * class MonFileReaderDanTest :<br/>
- * Test JUNit de la classe MonFileReaderDan.<br/>
+ * class MonFileInputStreamReaderDanTest :<br/>
+ * Test JUNit de la classe MonFileInputStreamReaderDan.<br/>
  * <br/>
  *
  * - Exemple d'utilisation :<br/>
@@ -31,9 +31,10 @@ import org.junit.Test;
  * @since 3 févr. 2016
  *
  */
-public final class MonFileReaderDanTest {
+public final class MonFileInputStreamReaderDanTest {
 
 	// ************************ATTRIBUTS************************************/
+	
 
 	
 	//*************************************************************/
@@ -631,27 +632,27 @@ public final class MonFileReaderDanTest {
 	}
 
 	
-	
+
 	/**
 	 * LOG : Log : 
 	 * Logger pour Log4j (utilisant commons-logging).
 	 */
 	@SuppressWarnings("unused")
 	private static final Log LOG = LogFactory
-			.getLog(MonFileReaderDanTest.class);
+			.getLog(MonFileInputStreamReaderDanTest.class);
 
-	
 	// *************************METHODES************************************/
 	
+	
 	 /**
-	 * method CONSTRUCTEUR MonFileReaderDanTest() :<br/>
+	 * method CONSTRUCTEUR MonFileInputStreamReaderDanTest() :<br/>
 	 * CONSTRUCTEUR D'ARITE NULLE.<br/>
 	 * <br/>
 	 */
-	public MonFileReaderDanTest() {		
+	public MonFileInputStreamReaderDanTest() {		
 		/* Instanciation de la Super-Classe. */
 		super();		
-	} // Fin de MonFileReaderDanTest().____________________________________
+	} // Fin de MonFileInputStreamReaderDanTest()._________________________
 	
 	
 	//*********************************************************************/
@@ -662,15 +663,15 @@ public final class MonFileReaderDanTest {
 	/**
 	 * method testLireFichierFileNull() :<br/>
 	 * Garantit que lireFichier(null) retourne 
-	 * MonFileReaderDan.MESSAGE_FICHIER_NULL.<br/>
+	 * MonFileInputStreamReaderDan.MESSAGE_FICHIER_NULL.<br/>
 	 */
 	@Test
 	public void testLireFichierFileNull() {
 		
-		final String resultat = MonFileReaderDan.lireFichier(FILE_NULL);
+		final String resultat = MonFileInputStreamReaderDan.lireFichier(FILE_NULL);
 		
-		assertEquals("Doit retourner MonFileReaderDan.MESSAGE_FICHIER_NULL : "
-				, MonFileReaderDan.MESSAGE_FICHIER_NULL, resultat);
+		assertEquals("Doit retourner MonFileInputStreamReaderDan.MESSAGE_FICHIER_NULL : "
+				, MonFileInputStreamReaderDan.MESSAGE_FICHIER_NULL, resultat);
 		
 	} // Fin de testLireFichierFileNull()._________________________________
 
@@ -679,15 +680,15 @@ public final class MonFileReaderDanTest {
 	/**
 	 * method testLireFichierFileInexistant() :<br/>
 	 * Garantit que lireFichier(fichier inexistant) retourne 
-	 * MonFileReaderDan.MESSAGE_FICHIER_INEXISTANT.<br/>
+	 * MonFileInputStreamReaderDan.MESSAGE_FICHIER_INEXISTANT.<br/>
 	 */
 	@Test
 	public void testLireFichierFileInexistant() {
 		
-		final String resultat = MonFileReaderDan.lireFichier(FILE_INEXISTANT);
+		final String resultat = MonFileInputStreamReaderDan.lireFichier(FILE_INEXISTANT);
 		
-		assertEquals("Doit retourner MonFileReaderDan.MESSAGE_FICHIER_INEXISTANT : "
-				, MonFileReaderDan.MESSAGE_FICHIER_INEXISTANT, resultat);
+		assertEquals("Doit retourner MonFileInputStreamReaderDan.MESSAGE_FICHIER_INEXISTANT : "
+				, MonFileInputStreamReaderDan.MESSAGE_FICHIER_INEXISTANT, resultat);
 		
 	} // Fin de testLireFichierFileInexistant().___________________________
 	
@@ -696,68 +697,17 @@ public final class MonFileReaderDanTest {
 	/**
 	 * method testLireFichierFileRepertoire() :<br/>
 	 * Garantit que lireFichier(fichier repertoire) retourne 
-	 * MonFileReaderDan.MESSAGE_FICHIER_REPERTOIRE.<br/>
+	 * MonFileInputStreamReaderDan.MESSAGE_FICHIER_REPERTOIRE.<br/>
 	 */
 	@Test
 	public void testLireFichierFileRepertoire() {
 		
-		final String resultat = MonFileReaderDan.lireFichier(FILE_REPERTOIRE);
+		final String resultat = MonFileInputStreamReaderDan.lireFichier(FILE_REPERTOIRE);
 		
-		assertEquals("Doit retourner MonFileReaderDan.MESSAGE_FICHIER_REPERTOIRE : "
-				, MonFileReaderDan.MESSAGE_FICHIER_REPERTOIRE, resultat);
+		assertEquals("Doit retourner MonFileInputStreamReaderDan.MESSAGE_FICHIER_REPERTOIRE : "
+				, MonFileInputStreamReaderDan.MESSAGE_FICHIER_REPERTOIRE, resultat);
 		
 	} // Fin de testLireFichierFileRepertoire().___________________________
-	
-
-	
-	/**
-	 * method testLireFichierDeCaracteresFileNull() :<br/>
-	 * Garantit que lireFichierDeCaracteres(null) retourne 
-	 * MonFileReaderDan.MESSAGE_FICHIER_NULL.<br/>
-	 */
-	@Test
-	public void testLireFichierDeCaracteresFileNull() {
-		
-		final String resultat = MonFileReaderDan.lireFichierDeCaracteres(FILE_NULL);
-		
-		assertEquals("Doit retourner MonFileReaderDan.MESSAGE_FICHIER_NULL : "
-				, MonFileReaderDan.MESSAGE_FICHIER_NULL, resultat);
-		
-	} // Fin de testLireFichierDeCaracteresFileNull()._____________________
-
-
-	
-	/**
-	 * method testLireFichierDeCaracteresFileInexistant() :<br/>
-	 * Garantit que lireFichierDeCaracteres(fichier inexistant) retourne 
-	 * MonFileReaderDan.MESSAGE_FICHIER_INEXISTANT.<br/>
-	 */
-	@Test
-	public void testLireFichierDeCaracteresFileInexistant() {
-		
-		final String resultat = MonFileReaderDan.lireFichierDeCaracteres(FILE_INEXISTANT);
-		
-		assertEquals("Doit retourner MonFileReaderDan.MESSAGE_FICHIER_INEXISTANT : "
-				, MonFileReaderDan.MESSAGE_FICHIER_INEXISTANT, resultat);
-		
-	} // Fin de testLireFichierDeCaracteresFileInexistant()._______________
-	
-	
-	
-	/**
-	 * method testLireFichierDeCaracteresFileRepertoire() :<br/>
-	 * Garantit que lireFichierDeCaracteres(fichier repertoire) retourne 
-	 * MonFileReaderDan.MESSAGE_FICHIER_REPERTOIRE.<br/>
-	 */
-	@Test
-	public void testLireFichierDeCaracteresFileRepertoire() {
-		
-		final String resultat = MonFileReaderDan.lireFichierDeCaracteres(FILE_REPERTOIRE);
-		
-		assertEquals("Doit retourner MonFileReaderDan.MESSAGE_FICHIER_REPERTOIRE : "
-				, MonFileReaderDan.MESSAGE_FICHIER_REPERTOIRE, resultat);
-		
-	} // Fin de testLireFichierDeCaracteresFileRepertoire()._______________
 	
 
 	
@@ -773,10 +723,10 @@ public final class MonFileReaderDanTest {
 		
 		for(final File file : LISTEFILES_NON_TXT) {
 			
-			resultat = MonFileReaderDan.lireFichierDeCaracteres(file);
+			resultat = MonFileInputStreamReaderDan.lireFichierDeCaracteres(file);
 			
 			assertNotNull("Le rapport doit être rempli : "
-					, MonFileReaderDan.getRapportLecture());
+					, MonFileInputStreamReaderDan.getRapportLecture());
 			
 			assertNull("Doit retourner null : ", resultat);
 		}
@@ -797,10 +747,10 @@ public final class MonFileReaderDanTest {
 		
 		for(final File file : LISTEFILES_TXT) {
 			
-			resultat = MonFileReaderDan.lireFichierDeCaracteres(file);
+			resultat = MonFileInputStreamReaderDan.lireFichierDeCaracteres(file);
 			
 			assertNull("Le rapport doit être null : "
-					, MonFileReaderDan.getRapportLecture());
+					, MonFileInputStreamReaderDan.getRapportLecture());
 			
 			assertNotNull("Ne Doit PAS retourner null : ", resultat);
 		}
@@ -810,29 +760,28 @@ public final class MonFileReaderDanTest {
 
 	
 	/**
-	 * method testLireFichierDeCaracteres() :<br/>
+	 * method testLireFichier() :<br/>
 	 * .<br/>
 	 * <br/>
 	 * : void :  .<br/>
 	 */
 	@Test
-	public void testLireFichierDeCaracteres() {
+	public void testLireFichier() {
 		
-		// Lecture du Fichier et récupération de son contenu sous forme de String.
-		final String resultat = MonFileReaderDan.lireFichierDeCaracteres(FILE_GIF_EN_BMP);
+		final String resultat = MonFileInputStreamReaderDan.lireFichierDeCaracteres(FILE_TXT_SANS_EXTENSION);
 		
 		// Test du résultat.
-		// Si fichier Textuel.
-		if (resultat != null) {
-			// Affichage du résultat.
-			System.out.println(resultat);
-		}
-		// Si pas fichier Textuel, le résultat est null.
-		else {
-			// Affichage du rapport de lecture.
-			System.out.println(MonFileReaderDan.getRapportLecture());
-		}
+				// Si fichier Textuel.
+				if (resultat != null) {
+					// Affichage du résultat.
+					System.out.println(resultat);
+				}
+				// Si pas fichier Textuel, le résultat est null.
+				else {
+					// Affichage du rapport de lecture.
+					System.out.println(MonFileInputStreamReaderDan.getRapportLecture());
+				}
 		
 	}
 
-} // FIN DE LA CLASSE MonFileReaderDanTest.----------------------------------
+} // FIN DE LA CLASSE MonFileInputStreamReaderDanTest.-----------------------

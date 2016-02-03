@@ -2,9 +2,11 @@ package levy.daniel.application.util.lecteursfichiers;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 
 import levy.daniel.application.IConstantesMessage;
 
@@ -13,10 +15,10 @@ import org.apache.commons.logging.LogFactory;
 
 
 /**
- * class MonFileReaderDan :<br/>
+ * class MonFileInputStreamReaderDan :<br/>
  * Classe utilitaire contenant 2 méthodes statiques 
  * chargées de lire un fichier et de l'encapsuler dans une String.<br/>
- * Ces deux méthodes utilisent un FileReader.<br/>
+ * Ces deux méthodes utilisent un FileInputStreamReader.<br/>
  * <br/>
  * - lireFichier(File) lit n'importe quel type de fichier 
  * même si il ne s'agit pas d'un fichier de caractères.<br/>
@@ -25,28 +27,9 @@ import org.apache.commons.logging.LogFactory;
  * <br/>
  *
  * - Exemple d'utilisation :<br/>
- * <code>
- * // Lecture du Fichier et récupération de son contenu sous forme de String.<br/>
- * final String resultat = MonFileReaderDan.lireFichierDeCaracteres(file);<br/>
- * // Test du résultat.<br/>
- * // Si fichier Textuel.<br/>
- * if (resultat != null) {<br/>
- *  &emsp;&emsp;// Affichage du résultat.<br/>
- * 	&emsp;System.out.println(resultat);<br/>
- * }<br/>
- * // Si pas fichier Textuel, le résultat est null.<br/>
- * else {<br/>
- * &emsp;&emsp;// Affichage du rapport de lecture.<br/>
- * &emsp;System.out.println(MonFileReaderDan.getRapportLecture());<br/>
- * }<br/>
- * </code>
  *<br/>
  * 
  * - Mots-clé :<br/>
- * synchronized, bloc static synchronized, <br/>
- * FileReader, BufferedReader, bufferedReader.read(), <br/>
- * Cast entier en Character, LOG, <br/>
- * numéro entier du caractère, Character.getType(pCharacter)<br/>
  * <br/>
  *
  * - Dépendances :<br/>
@@ -55,19 +38,20 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author dan Lévy
  * @version 1.0
- * @since 1 févr. 2016
+ * @since 3 févr. 2016
  *
  */
-public final class MonFileReaderDan {
+public final class MonFileInputStreamReaderDan {
 
 	// ************************ATTRIBUTS************************************/
 	
+	
 	/**
-	 * CLASSE_MONFILEREADERDAN : String :<br/>
-	 * "Classe MonFileReaderDan".<br/>
+	 * CLASSE_MONFILEINPUTSTREAMREADERDAN : String :<br/>
+	 * "Classe MonFileInputStreamReaderDan".<br/>
 	 */
-	public static final String CLASSE_MONFILEREADERDAN 
-		= "Classe MonFileReaderDan";
+	public static final String CLASSE_MONFILEINPUTSTREAMREADERDAN 
+		= "Classe MonFileInputStreamReaderDan";
 	
 	/**
 	 * METHODE_LIREFICHIER : String :<br/>
@@ -118,25 +102,25 @@ public final class MonFileReaderDan {
 	 */
 	private static String rapportLecture;
 	
-	
+
 	/**
 	 * LOG : Log : 
 	 * Logger pour Log4j (utilisant commons-logging).
 	 */
 	@SuppressWarnings("unused")
-	private static final Log LOG = LogFactory.getLog(MonFileReaderDan.class);
+	private static final Log LOG = LogFactory
+			.getLog(MonFileInputStreamReaderDan.class);
 
 	// *************************METHODES************************************/
 	
 	
-	
 	/**
-	 * method CONSTRUCTEUR MonFileReaderDan() :
+	 * method CONSTRUCTEUR MonFileInputStreamReaderDan() :
 	 * Constructeur private pour empêcher l'instanciation.
 	 */
-	private MonFileReaderDan() {
+	private MonFileInputStreamReaderDan() {
 		super();
-	} // Fin de CONSTRUCTEUR MonFileReaderDan().___________________________
+	} // Fin de CONSTRUCTEUR MonFileInputStreamReaderDan().________________
 	
 
 	
@@ -146,7 +130,8 @@ public final class MonFileReaderDan {
 	 * Lit un fichier pFile et 
 	 * retourne son contenu dans une chaîne de caractères.<br/>
 	 * Lit le fichier en utilisant la méthode read() 
-	 * de BufferedReader appliqué à un FileReader.<br/>
+	 * de BufferedReader appliqué à un InputStreamReader 
+	 * avec le Charset de décodage nommé 'UTF-8'.<br/>
 	 * Lit chaque caractère quoi qu'il arrive 
 	 * (même si le fichier n'est pas un fichier texte).<br/>
 	 * <br/>
@@ -161,9 +146,40 @@ public final class MonFileReaderDan {
 	 */
 	public static String lireFichier(
 			final File pFile) {
+		return lireFichier(pFile, "UTF-8");
+	} // Fin de lireFichier(
+	 // File pFile)._______________________________________________________
+	
+	
+	
+	/**
+	 * method lireFichier(
+	 * File pFile
+	 * , String pCharsetName) :<br/>
+	 * Lit un fichier pFile et 
+	 * retourne son contenu dans une chaîne de caractères.<br/>
+	 * Lit le fichier en utilisant la méthode read() 
+	 * de BufferedReader appliqué à un InputStreamReader 
+	 * avec le Charset de décodage nommé pCharsetName.<br/>
+	 * Lit chaque caractère quoi qu'il arrive 
+	 * (même si le fichier n'est pas un fichier texte).<br/>
+	 * <br/>
+	 * - retourne MESSAGE_FICHIER_NULL si le pFile est null.<br/>
+	 * - retourne MESSAGE_FICHIER_INEXISTANT si le pFile est inexistant.<br/>
+	 * - retourne MESSAGE_FICHIER_REPERTOIRE si le pFile est un répertoire.<br/>
+	 * <br/>
+	 *
+	 * @param pFile : File : fichier à lire.<br/>
+	 * @param pCharsetName : String : le nom du Charset utilisé 
+	 * par l'InputStreamReader.<br/>
+	 *  
+	 * @return : String : La chaine de caractères contenant le fichier.<br/>
+	 */
+	public static String lireFichier(
+			final File pFile, final String pCharsetName) {
 		
 		/* block static synchronized. */
-		synchronized (MonFileReaderDan.class) {
+		synchronized (MonFileInputStreamReaderDan.class) {
 			
 			/* retourne MESSAGE_FICHIER_NULL 
 			 * si le pFile est null. */
@@ -171,7 +187,7 @@ public final class MonFileReaderDan {
 				
 				/* LOG de niveau INFO. */
 				loggerInfo(
-						CLASSE_MONFILEREADERDAN
+						CLASSE_MONFILEINPUTSTREAMREADERDAN
 							, METHODE_LIREFICHIER
 								, MESSAGE_FICHIER_NULL);
 				
@@ -185,7 +201,7 @@ public final class MonFileReaderDan {
 								
 				/* LOG de niveau INFO. */
 				loggerInfo(
-						CLASSE_MONFILEREADERDAN
+						CLASSE_MONFILEINPUTSTREAMREADERDAN
 							, METHODE_LIREFICHIER
 								, MESSAGE_FICHIER_INEXISTANT
 									, pFile.getAbsolutePath());
@@ -201,7 +217,7 @@ public final class MonFileReaderDan {
 				
 				/* LOG de niveau INFO. */
 				loggerInfo(
-						CLASSE_MONFILEREADERDAN
+						CLASSE_MONFILEINPUTSTREAMREADERDAN
 							, METHODE_LIREFICHIER
 								, MESSAGE_FICHIER_REPERTOIRE
 									, pFile.getAbsolutePath());
@@ -210,22 +226,26 @@ public final class MonFileReaderDan {
 				return MESSAGE_FICHIER_REPERTOIRE;
 			}
 			
-			FileReader fileReader = null;
+			FileInputStream fileInputStream = null;
+			InputStreamReader inputStreamReader = null;
 			BufferedReader bufferedReader = null;
+			
 			int characterEntier = 0;
 			Character character = null;
 			final StringBuilder stb = new StringBuilder();
 			
 			try {
 				
-				/* Instancie un flux de caractères en lecture FileReader 
+				/* Instancie un flux en lecture fileInputStream 
 				 * en lui passant pFile. */
-				fileReader = new FileReader(pFile);
+				fileInputStream = new FileInputStream(pFile);
+				
+				inputStreamReader = new InputStreamReader(fileInputStream, pCharsetName);
 								
 				/* Instancie un tampon de flux de caractères en lecture 
 				 * en lui passant le flux FileReader. */
 				bufferedReader 
-					= new BufferedReader(fileReader);
+					= new BufferedReader(inputStreamReader);
 				
 				/* Lecture dans le tampon de flux de caractères. */
 				while((characterEntier = bufferedReader.read()) != -1) {
@@ -242,7 +262,7 @@ public final class MonFileReaderDan {
 						
 						/* LOG de niveau ERROR. */
 						loggerError(
-								CLASSE_MONFILEREADERDAN
+								CLASSE_MONFILEINPUTSTREAMREADERDAN
 									, METHODE_LIREFICHIER
 										, exceptionConversion);
 												
@@ -258,17 +278,29 @@ public final class MonFileReaderDan {
 				
 				/* LOG de niveau ERROR. */
 				loggerError(
-						CLASSE_MONFILEREADERDAN
+						CLASSE_MONFILEINPUTSTREAMREADERDAN
 							, METHODE_LIREFICHIER
 								, fnfe);
 				
+				/* retourne le message de l'exception. */
 				return fnfe.getMessage();
 				
+			} catch (UnsupportedEncodingException unsEncodingExc) {
+			
+				/* LOG de niveau ERROR. */
+				loggerError(
+						CLASSE_MONFILEINPUTSTREAMREADERDAN
+							, METHODE_LIREFICHIER
+								, unsEncodingExc);
+				
+				/* retourne le message de l'exception. */
+				return unsEncodingExc.getMessage();
+						
 			} catch (IOException ioe) {
 				
 				/* LOG de niveau ERROR. */
 				loggerError(
-						CLASSE_MONFILEREADERDAN
+						CLASSE_MONFILEINPUTSTREAMREADERDAN
 							, METHODE_LIREFICHIER
 								, ioe);
 				
@@ -288,7 +320,7 @@ public final class MonFileReaderDan {
 						
 						/* LOG de niveau ERROR. */
 						loggerError(
-								CLASSE_MONFILEREADERDAN
+								CLASSE_MONFILEINPUTSTREAMREADERDAN
 									, METHODE_LIREFICHIER
 										, ioe2);
 						
@@ -296,24 +328,42 @@ public final class MonFileReaderDan {
 					
 				} // Fin de if (bufferedReader != null).____
 				
-				/* fermeture du flux fileReader. */
-				if (fileReader != null) {
+				/* fermeture du flux inputStreamReader. */
+				if (inputStreamReader != null) {
 					
 					try {
 						
-						fileReader.close();
+						inputStreamReader.close();
+						
+					} catch (IOException ioe4) {
+						
+						/* LOG de niveau ERROR. */
+						loggerError(
+								CLASSE_MONFILEINPUTSTREAMREADERDAN
+									, METHODE_LIREFICHIER
+										, ioe4);
+					}
+					
+				} // Fin de if (inputStreamReader != null).______
+				
+				/* fermeture du flux fileInputStream. */
+				if (fileInputStream != null) {
+					
+					try {
+						
+						fileInputStream.close();
 						
 					} catch (IOException ioe3) {
 						
 						/* LOG de niveau ERROR. */
 						loggerError(
-								CLASSE_MONFILEREADERDAN
+								CLASSE_MONFILEINPUTSTREAMREADERDAN
 									, METHODE_LIREFICHIER
 										, ioe3);
 						
 					}
 					
-				}
+				} // Fin de if (fileInputStream != null).________
 				
 			} // Fin du finally._____________________________
 			
@@ -321,17 +371,19 @@ public final class MonFileReaderDan {
 		} // Fin du bloc static synchronized.________________________		
 				
 	} // Fin de lireFichier(
-	 // File pFile)._______________________________________________________
+	 // File pFile
+	// String pCharsetName)._______________________________________________
 	
 
-		
+	
 	/**
 	 * method lireFichierDeCaracteres(
 	 * File pFile) :<br/>
 	 * Lit un fichier pFile et 
 	 * retourne son contenu dans une chaîne de caractères.<br/>
 	 * Lit le fichier en utilisant la méthode read() 
-	 * de BufferedReader appliqué à un FileReader.<br/>
+	 * de BufferedReader appliqué à un InputStreamReader 
+	 * avec le Charset de décodage nommé "UTF-8".<br/>
 	 * Lit chaque caractère et tente de détecter si il 
 	 * s'agit d'un caractère humainement utilisable 
 	 * (que l'on peut taper au clavier).<br/>
@@ -350,12 +402,44 @@ public final class MonFileReaderDan {
 	 */
 	public static String lireFichierDeCaracteres(
 			final File pFile) {
+		return lireFichierDeCaracteres(pFile, "UTF-8");
+	} // Fin de lireFichierDeCaracteres(
+	 // File pFile)._______________________________________________________
+	
+	
+	
+	/**
+	 * method lireFichierDeCaracteres(
+	 * File pFile
+	 * , String pCharsetName) :<br/>
+	 * Lit un fichier pFile et 
+	 * retourne son contenu dans une chaîne de caractères.<br/>
+	 * Lit le fichier en utilisant la méthode read() 
+	 * de BufferedReader appliqué à un InputStreamReader 
+	 * avec le Charset de décodage nommé pCharsetName.<br/>
+	 * Lit chaque caractère et tente de détecter si il 
+	 * s'agit d'un caractère humainement utilisable 
+	 * (que l'on peut taper au clavier).<br/>
+	 * <br/>
+	 * - retourne null si un caractère non humain est détecté.<br/>
+	 * <br/>
+	 * - retourne MESSAGE_FICHIER_NULL si le pFile est null.<br/>
+	 * - retourne MESSAGE_FICHIER_INEXISTANT si le pFile est inexistant.<br/>
+	 * - retourne MESSAGE_FICHIER_REPERTOIRE si le pFile est un répertoire.<br/>
+	 * <br/>
+	 *
+	 * @param pFile : File : fichier à lire.<br/>
+	 * @param pCharsetName : String : le nom du Charset utilisé 
+	 * par l'InputStreamReader.<br/>
+	 *  
+	 * @return : String : La chaine de caractères contenant le fichier 
+	 * ou null si un caractère non humain est détecté.<br/>
+	 */
+	public static String lireFichierDeCaracteres(
+			final File pFile, final String pCharsetName) {
 		
 		/* block static synchronized. */
-		synchronized (MonFileReaderDan.class) {
-			
-			/* Réinitialise le rapport au cas où. */
-			rapportLecture = null;
+		synchronized (MonFileInputStreamReaderDan.class) {
 			
 			/* retourne MESSAGE_FICHIER_NULL 
 			 * si le pFile est null. */
@@ -363,7 +447,7 @@ public final class MonFileReaderDan {
 				
 				/* LOG de niveau INFO. */
 				loggerInfo(
-						CLASSE_MONFILEREADERDAN
+						CLASSE_MONFILEINPUTSTREAMREADERDAN
 							, METHODE_LIREFICHIERDECARACTERES
 								, MESSAGE_FICHIER_NULL);
 				
@@ -377,7 +461,7 @@ public final class MonFileReaderDan {
 								
 				/* LOG de niveau INFO. */
 				loggerInfo(
-						CLASSE_MONFILEREADERDAN
+						CLASSE_MONFILEINPUTSTREAMREADERDAN
 							, METHODE_LIREFICHIERDECARACTERES
 								, MESSAGE_FICHIER_INEXISTANT
 									, pFile.getAbsolutePath());
@@ -393,7 +477,7 @@ public final class MonFileReaderDan {
 				
 				/* LOG de niveau INFO. */
 				loggerInfo(
-						CLASSE_MONFILEREADERDAN
+						CLASSE_MONFILEINPUTSTREAMREADERDAN
 							, METHODE_LIREFICHIERDECARACTERES
 								, MESSAGE_FICHIER_REPERTOIRE
 									, pFile.getAbsolutePath());
@@ -402,8 +486,10 @@ public final class MonFileReaderDan {
 				return MESSAGE_FICHIER_REPERTOIRE;
 			}
 			
-			FileReader fileReader = null;
+			FileInputStream fileInputStream = null;
+			InputStreamReader inputStreamReader = null;
 			BufferedReader bufferedReader = null;
+			
 			int characterEntier = 0;
 			Character character = null;
 			final StringBuilder stb = new StringBuilder();
@@ -411,14 +497,17 @@ public final class MonFileReaderDan {
 			
 			try {
 				
-				/* Instancie un flux de caractères en lecture FileReader 
+				/* Instancie un flux en lecture fileInputStream 
 				 * en lui passant pFile. */
-				fileReader = new FileReader(pFile);
+				fileInputStream = new FileInputStream(pFile);
+				
+				inputStreamReader 
+					= new InputStreamReader(fileInputStream, pCharsetName);
 								
 				/* Instancie un tampon de flux de caractères en lecture 
 				 * en lui passant le flux FileReader. */
 				bufferedReader 
-					= new BufferedReader(fileReader);
+					= new BufferedReader(inputStreamReader);
 				
 				/* Lecture dans le tampon de flux de caractères. */
 				while((characterEntier = bufferedReader.read()) != -1) {
@@ -448,7 +537,7 @@ public final class MonFileReaderDan {
 							if (LOG.isInfoEnabled()) {
 								
 								loggerInfo(
-										CLASSE_MONFILEREADERDAN
+										CLASSE_MONFILEINPUTSTREAMREADERDAN
 											, METHODE_LIREFICHIERDECARACTERES
 												, message);
 							}
@@ -467,7 +556,7 @@ public final class MonFileReaderDan {
 						
 						/* LOG de niveau ERROR. */
 						loggerError(
-								CLASSE_MONFILEREADERDAN
+								CLASSE_MONFILEINPUTSTREAMREADERDAN
 									, METHODE_LIREFICHIERDECARACTERES
 										, exceptionConversion);
 												
@@ -483,17 +572,29 @@ public final class MonFileReaderDan {
 				
 				/* LOG de niveau ERROR. */
 				loggerError(
-						CLASSE_MONFILEREADERDAN
+						CLASSE_MONFILEINPUTSTREAMREADERDAN
 							, METHODE_LIREFICHIERDECARACTERES
 								, fnfe);
 				
+				/* retourne le message de l'exception. */
 				return fnfe.getMessage();
 				
+			} catch (UnsupportedEncodingException unsEncodingExc) {
+			
+				/* LOG de niveau ERROR. */
+				loggerError(
+						CLASSE_MONFILEINPUTSTREAMREADERDAN
+							, METHODE_LIREFICHIERDECARACTERES
+								, unsEncodingExc);
+				
+				/* retourne le message de l'exception. */
+				return unsEncodingExc.getMessage();
+						
 			} catch (IOException ioe) {
 				
 				/* LOG de niveau ERROR. */
 				loggerError(
-						CLASSE_MONFILEREADERDAN
+						CLASSE_MONFILEINPUTSTREAMREADERDAN
 							, METHODE_LIREFICHIERDECARACTERES
 								, ioe);
 				
@@ -513,7 +614,7 @@ public final class MonFileReaderDan {
 						
 						/* LOG de niveau ERROR. */
 						loggerError(
-								CLASSE_MONFILEREADERDAN
+								CLASSE_MONFILEINPUTSTREAMREADERDAN
 									, METHODE_LIREFICHIERDECARACTERES
 										, ioe2);
 						
@@ -521,24 +622,42 @@ public final class MonFileReaderDan {
 					
 				} // Fin de if (bufferedReader != null).____
 				
-				/* fermeture du flux fileReader. */
-				if (fileReader != null) {
+				/* fermeture du flux inputStreamReader. */
+				if (inputStreamReader != null) {
 					
 					try {
 						
-						fileReader.close();
+						inputStreamReader.close();
+						
+					} catch (IOException ioe4) {
+						
+						/* LOG de niveau ERROR. */
+						loggerError(
+								CLASSE_MONFILEINPUTSTREAMREADERDAN
+									, METHODE_LIREFICHIERDECARACTERES
+										, ioe4);
+					}
+					
+				} // Fin de if (inputStreamReader != null).______
+				
+				/* fermeture du flux fileInputStream. */
+				if (fileInputStream != null) {
+					
+					try {
+						
+						fileInputStream.close();
 						
 					} catch (IOException ioe3) {
 						
 						/* LOG de niveau ERROR. */
 						loggerError(
-								CLASSE_MONFILEREADERDAN
+								CLASSE_MONFILEINPUTSTREAMREADERDAN
 									, METHODE_LIREFICHIERDECARACTERES
 										, ioe3);
 						
 					}
 					
-				}
+				} // Fin de if (fileInputStream != null).________
 				
 			} // Fin du finally._____________________________
 			
@@ -546,9 +665,11 @@ public final class MonFileReaderDan {
 		} // Fin du bloc static synchronized.________________________		
 				
 	} // Fin de lireFichierDeCaracteres(
-	 // File pFile)._______________________________________________________
+	 // File pFile
+	// String pCharsetName)._______________________________________________
 	
 
+	
 	
 	/**
 	 * method loggerInfo(
@@ -771,4 +892,5 @@ public final class MonFileReaderDan {
 	
 	
 		
-} // FIN DE LA CLASSE MonFileReaderDan.--------------------------------------
+	
+} // FIN DE LA CLASSE MonFileInputStreamReaderDan.---------------------------
