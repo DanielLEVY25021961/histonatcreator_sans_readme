@@ -283,7 +283,7 @@
         </rule>
         <rule>
             <name>UnnecessaryParentheses</name>
-            <ruleset>Controversial</ruleset>
+            <ruleset>Unnecessary</ruleset>
         </rule>
         <rule>
             <name>CouplingBetweenObjects</name>
@@ -311,7 +311,7 @@
         </rule>
         <rule>
             <name>AvoidReassigningParameters</name>
-            <ruleset>Design</ruleset>
+            <ruleset>Basic Velocity</ruleset>
         </rule>
         <rule>
             <name>AvoidSynchronizedAtMethodLevel</name>
@@ -463,7 +463,7 @@
         </rule>
         <rule>
             <name>EmptyIfStmt</name>
-            <ruleset>Empty Code</ruleset>
+            <ruleset>Basic Velocity</ruleset>
         </rule>
         <rule>
             <name>EmptyInitializer</name>

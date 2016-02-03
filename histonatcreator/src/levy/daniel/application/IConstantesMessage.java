@@ -29,10 +29,17 @@ public interface IConstantesMessage {
 	
 
 	/**
-	 * SEP_POINTV : String :<br/>
+	 * SEP_POINTVIRGULE : String :<br/>
 	 * ";".<br/>
 	 */
-	String SEP_POINTV = ";";
+	String SEP_POINTVIRGULE = ";";
+
+	
+	/**
+	 * SEP_2POINTS : String :<br/>
+	 * .<br/>
+	 */
+	String SEP_2POINTS = " : ";
 	
 	
 	/**

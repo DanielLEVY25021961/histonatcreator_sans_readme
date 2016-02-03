@@ -242,7 +242,6 @@ public final class DetecteurTypeMime {
 	/**
 	 * method CONSTRUCTEUR DetecteurTypeMime() :
 	 * Constructeur private pour empêcher l'instanciation.
-	 *
 	 */
 	private DetecteurTypeMime() {
 		super();
@@ -311,64 +310,46 @@ public final class DetecteurTypeMime {
 		/* block static synchronized. */
 		synchronized (DetecteurTypeMime.class) {
 			
-			/* retourne MESSAGE_FICHIER_NULL si le pFile est null. */
+			/* retourne MESSAGE_FICHIER_NULL 
+			 * si le pFile est null. */
 			if (pFile == null) {
 				
-				/* LOG de niveau INFO. */			
-				if (LOG.isInfoEnabled()) {
-					
-					final String message 
-					= CLASSE_DETECTEURTYPEMIME 
-					+ IConstantesMessage.SEP_MOINS
-					+ METHODE_GETMIMETYPE
-					+ IConstantesMessage.SEP_MOINS
-					+ MESSAGE_FICHIER_NULL;
-					
-					LOG.info(message);
-				}
+				/* LOG de niveau INFO. */
+				loggerInfo(
+						CLASSE_DETECTEURTYPEMIME
+							, METHODE_GETMIMETYPE
+								, MESSAGE_FICHIER_NULL);
 				
+				/* retourne MESSAGE_FICHIER_NULL. */
 				return MESSAGE_FICHIER_NULL;
 			}
 			
-			/* retourne MESSAGE_FICHIER_INEXISTANT si le pFile est inexistant. */
+			/* retourne MESSAGE_FICHIER_INEXISTANT 
+			 * si le pFile est inexistant. */
 			if (!pFile.exists()) {
-				
-				
+								
 				/* LOG de niveau INFO. */
-				if (LOG.isInfoEnabled()) {
-									
-					final String message 
-					= CLASSE_DETECTEURTYPEMIME 
-					+ IConstantesMessage.SEP_MOINS
-					+ METHODE_GETMIMETYPE
-					+ IConstantesMessage.SEP_MOINS
-					+ MESSAGE_FICHIER_INEXISTANT 
-					+ pFile.getAbsolutePath();
-					
-					LOG.info(message);
-				}
+				loggerInfo(CLASSE_DETECTEURTYPEMIME
+						, METHODE_GETMIMETYPE
+							, MESSAGE_FICHIER_INEXISTANT
+								, pFile.getAbsolutePath());
 				
+				/* retourne MESSAGE_FICHIER_INEXISTANT. */
 				return MESSAGE_FICHIER_INEXISTANT;
 			}
 			
 			
-			/* retourne MESSAGE_FICHIER_REPERTOIRE si le pFile est un répertoire. */
+			/* retourne MESSAGE_FICHIER_REPERTOIRE 
+			 * si le pFile est un répertoire. */
 			if (pFile.isDirectory()) {
 				
-				/* LOG de niveau INFO. */			
-				if (LOG.isInfoEnabled()) {
-					
-					final String message 
-					= CLASSE_DETECTEURTYPEMIME 
-					+ IConstantesMessage.SEP_MOINS
-					+ METHODE_GETMIMETYPE
-					+ IConstantesMessage.SEP_MOINS
-					+ MESSAGE_FICHIER_REPERTOIRE 
-					+ pFile.getAbsolutePath();
-					
-					LOG.info(message);
-				}
+				/* LOG de niveau INFO. */
+				loggerInfo(CLASSE_DETECTEURTYPEMIME
+						, METHODE_GETMIMETYPE
+							, MESSAGE_FICHIER_REPERTOIRE
+								, pFile.getAbsolutePath());
 				
+				/* retourne MESSAGE_FICHIER_REPERTOIRE. */
 				return MESSAGE_FICHIER_REPERTOIRE;
 			}
 
@@ -387,41 +368,24 @@ public final class DetecteurTypeMime {
 			} catch (MalformedURLException malformedURLExc) {
 				
 				/* LOG de niveau ERROR. */
-				if (LOG.isErrorEnabled()) {
-					
-					final String message 
-					= CLASSE_DETECTEURTYPEMIME 
-					+ IConstantesMessage.SEP_MOINS
-					+ METHODE_GETMIMETYPE
-					+ IConstantesMessage.SEP_MOINS 
-					+ malformedURLExc.getMessage();
-					
-					LOG.error(message, malformedURLExc);
-					
-				}
+				loggerError(CLASSE_DETECTEURTYPEMIME
+						, METHODE_GETMIMETYPE
+							, malformedURLExc);
 				
+				/* retourne le message de l'exception */
 				return malformedURLExc.getMessage();
 				
 			} catch (IOException ioe) {
 				
 				/* LOG de niveau ERROR. */
-				if (LOG.isErrorEnabled()) {
-					
-					final String message 
-					= CLASSE_DETECTEURTYPEMIME 
-					+ IConstantesMessage.SEP_MOINS
-					+ METHODE_GETMIMETYPE
-					+ IConstantesMessage.SEP_MOINS 
-					+ ioe.getMessage();
-					
-					LOG.error(message, ioe);
-					
-				}
+				loggerError(CLASSE_DETECTEURTYPEMIME
+						, METHODE_GETMIMETYPE
+							, ioe);
 				
+				/* retourne le message de l'exception */
 				return ioe.getMessage();
 			}
-			
-			
+						
 		} // Fin du bloc static synchronized.________________________
 				
 	} // Fin de getMIMEType(
@@ -498,63 +462,40 @@ public final class DetecteurTypeMime {
 			 * si le pFile est null. */
 			if (pFile == null) {
 				
-				/* LOG de niveau INFO. */			
-				if (LOG.isInfoEnabled()) {
-					
-					final String message 
-					= CLASSE_DETECTEURTYPEMIME 
-					+ IConstantesMessage.SEP_MOINS
-					+ METHODE_DEVINEMIMETYPE
-					+ IConstantesMessage.SEP_MOINS
-					+ MESSAGE_FICHIER_NULL;
-					
-					LOG.info(message);
-				}
-				
+				/* LOG de niveau INFO. */
+				loggerInfo(CLASSE_DETECTEURTYPEMIME
+						, METHODE_DEVINEMIMETYPE
+							, MESSAGE_FICHIER_NULL);
+
+				/* retourne MESSAGE_FICHIER_NULL. */
 				return MESSAGE_FICHIER_NULL;
 			}
 			
 			/* retourne MESSAGE_FICHIER_INEXISTANT 
 			 * si le pFile est inexistant. */
 			if (!pFile.exists()) {
-				
-				
+								
 				/* LOG de niveau INFO. */
-				if (LOG.isInfoEnabled()) {
-									
-					final String message 
-					= CLASSE_DETECTEURTYPEMIME 
-					+ IConstantesMessage.SEP_MOINS
-					+ METHODE_DEVINEMIMETYPE
-					+ IConstantesMessage.SEP_MOINS
-					+ MESSAGE_FICHIER_INEXISTANT 
-					+ pFile.getAbsolutePath();
-					
-					LOG.info(message);
-				}
+				loggerInfo(CLASSE_DETECTEURTYPEMIME
+						, METHODE_DEVINEMIMETYPE
+							, MESSAGE_FICHIER_INEXISTANT
+								, pFile.getAbsolutePath());
 				
+				/* retourne MESSAGE_FICHIER_INEXISTANT. */
 				return MESSAGE_FICHIER_INEXISTANT;
 			}
-			
-			
+						
 			/* retourne MESSAGE_FICHIER_REPERTOIRE 
 			 * si le pFile est un répertoire. */
 			if (pFile.isDirectory()) {
 				
-				/* LOG de niveau INFO. */			
-				if (LOG.isInfoEnabled()) {
-					
-					final String message 
-					= CLASSE_DETECTEURTYPEMIME 
-					+ IConstantesMessage.SEP_MOINS
-					+ METHODE_DEVINEMIMETYPE
-					+ IConstantesMessage.SEP_MOINS
-					+ MESSAGE_FICHIER_REPERTOIRE 
-					+ pFile.getAbsolutePath();
-					
-					LOG.info(message);
-				}
+				/* LOG de niveau INFO. */
+				loggerInfo(CLASSE_DETECTEURTYPEMIME
+						, METHODE_DEVINEMIMETYPE
+							, MESSAGE_FICHIER_REPERTOIRE
+								, pFile.getAbsolutePath());
 				
+				/* retourne MESSAGE_FICHIER_REPERTOIRE. */
 				return MESSAGE_FICHIER_REPERTOIRE;
 			}
 			
@@ -591,37 +532,21 @@ public final class DetecteurTypeMime {
 			} catch (FileNotFoundException fnfe) {
 				
 				/* LOG de niveau ERROR. */
-				if (LOG.isErrorEnabled()) {
-					
-					final String message 
-					= CLASSE_DETECTEURTYPEMIME 
-					+ IConstantesMessage.SEP_MOINS
-					+ METHODE_DEVINEMIMETYPE
-					+ IConstantesMessage.SEP_MOINS 
-					+ fnfe.getMessage();
-					
-					LOG.error(message, fnfe);
-					
-				}
+				loggerError(CLASSE_DETECTEURTYPEMIME
+						, METHODE_DEVINEMIMETYPE
+							, fnfe);
 				
+				/* retourne le message de l'exception. */
 				return fnfe.getMessage();
 				
 			} catch (IOException ioe) {
 				
 				/* LOG de niveau ERROR. */
-				if (LOG.isErrorEnabled()) {
-					
-					final String message 
-					= CLASSE_DETECTEURTYPEMIME 
-					+ IConstantesMessage.SEP_MOINS
-					+ METHODE_DEVINEMIMETYPE
-					+ IConstantesMessage.SEP_MOINS 
-					+ ioe.getMessage();
-					
-					LOG.error(message, ioe);
-					
-				}
+				loggerError(CLASSE_DETECTEURTYPEMIME
+						, METHODE_DEVINEMIMETYPE
+							, ioe);
 				
+				/* retourne le message de l'exception. */
 				return ioe.getMessage();
 			}
 			
@@ -637,18 +562,9 @@ public final class DetecteurTypeMime {
 						} catch (IOException ioe2) {
 							
 							/* LOG de niveau ERROR. */
-							if (LOG.isErrorEnabled()) {
-								
-								final String message 
-								= CLASSE_DETECTEURTYPEMIME 
-								+ IConstantesMessage.SEP_MOINS
-								+ METHODE_DEVINEMIMETYPE
-								+ IConstantesMessage.SEP_MOINS 
-								+ ioe2.getMessage();
-								
-								LOG.error(message, ioe2);
-								
-							}
+							loggerError(CLASSE_DETECTEURTYPEMIME
+									, METHODE_DEVINEMIMETYPE
+										, ioe2);
 												
 						}
 					
@@ -725,6 +641,146 @@ public final class DetecteurTypeMime {
 	
 	
 	
+	/**
+	 * method loggerInfo(
+	 * String pClasse
+	 * , String pMethode
+	 * , String pMessage) :<br/>
+	 * Créée un message de niveau INFO dans le LOG.<br/>
+	 * <br/>
+	 * - Ne fait rien si un des paramètres est null.<br/>
+	 * <br/>
+	 *
+	 * @param pClasse : String : Classe appelante.<br/>
+	 * @param pMethode : String : Méthode appelante.<br/>
+	 * @param pMessage : String : Message particulier de la méthode.<br/>
+	 */
+	private static void loggerInfo(
+			final String pClasse
+				, final String pMethode
+					, final String pMessage) {
+		
+		/* Ne fait rien si un des paramètres est null. */
+		if (pClasse == null || pMethode == null || pMessage == null) {
+			return;
+		}
+		
+		/* LOG de niveau INFO. */			
+		if (LOG.isInfoEnabled()) {
+			
+			final String message 
+			= pClasse 
+			+ IConstantesMessage.SEP_MOINS
+			+ pMethode
+			+ IConstantesMessage.SEP_MOINS
+			+ pMessage;
+			
+			LOG.info(message);
+		}
+		
+	} // Fin de la classe loggerInfo(
+	 // String pClasse
+	 // , String pMethode
+	 // , String pMessage).________________________________________________
+	
+
+	
+	/**
+	 * method loggerInfo(
+	 * String pClasse
+	 * , String pMethode
+	 * , String pMessage
+	 * , String pComplement) :<br/>
+	 * Créée un message de niveau INFO dans le LOG.<br/>
+	 * <br/>
+	 * - Ne fait rien si un des paramètres est null.<br/>
+	 * <br/>
+	 *
+	 * @param pClasse : String : Classe appelante.<br/>
+	 * @param pMethode : String : Méthode appelante.<br/>
+	 * @param pMessage : String : Message particulier de la méthode.<br/>
+	 * @param pComplement : String : Complément au message de la méthode.<br/>
+	 */
+	private static void loggerInfo(
+			final String pClasse
+				, final String pMethode
+					, final String pMessage
+						, final String pComplement) {
+		
+		/* Ne fait rien si un des paramètres est null. */
+		if (pClasse == null || pMethode == null 
+				|| pMessage == null || pComplement == null) {
+			return;
+		}
+		
+		/* LOG de niveau INFO. */			
+		if (LOG.isInfoEnabled()) {
+			
+			final String message 
+			= pClasse 
+			+ IConstantesMessage.SEP_MOINS
+			+ pMethode
+			+ IConstantesMessage.SEP_MOINS
+			+ pMessage
+			+ pComplement;
+			
+			LOG.info(message);
+		}
+		
+	} // Fin de loggerInfo(
+	 // String pClasse
+	 // , String pMethode
+	 // , String pMessage
+	 // , String pComplement)._____________________________________________
+	
+	
+	
+	/**
+	 * method loggerError(
+	 * String pClasse
+	 * , String pMethode
+	 * , Exception pException) :<br/>
+	 * Créée un message de niveau ERROR dans le LOG.<br/>
+	 * <br/>
+	 * - Ne fait rien si un des paramètres est null.<br/>
+	 * <br/>
+	 *
+	 * @param pClasse : String : Classe appelante.<br/>
+	 * @param pMethode : String : Méthode appelante.<br/>
+	 * @param pException : Exception : Exception transmise 
+	 * par la méthode appelante.<br/>
+	 */
+	private static void loggerError(
+			final String pClasse
+				, final String pMethode
+					, final Exception pException) {
+		
+		/* Ne fait rien si un des paramètres est null. */
+		if (pClasse == null || pMethode == null || pException == null) {
+			return;
+		}
+		
+		/* LOG de niveau ERROR. */			
+		if (LOG.isErrorEnabled()) {
+			
+			final String message 
+			= pClasse 
+			+ IConstantesMessage.SEP_MOINS
+			+ pMethode
+			+ IConstantesMessage.SEP_MOINS 
+			+ pException.getMessage();
+			
+			LOG.error(message, pException);
+			
+		}
+		
+	} // Fin de loggerError(
+	 // String pClasse
+	 // , String pMethode
+	 // , Exception pException).___________________________________________
+	
+	
+
 	/**
 	 * method getMapDescriptionsExtensions(
 	 * List&lt;File&gt; pList) :<br/>
