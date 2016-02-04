@@ -175,11 +175,11 @@
         </rule>
         <rule>
             <name>AvoidReassigningParameters</name>
-            <ruleset>Basic Velocity</ruleset>
+            <ruleset>Design</ruleset>
         </rule>
         <rule>
             <name>EmptyIfStmt</name>
-            <ruleset>Basic Velocity</ruleset>
+            <ruleset>Empty Code</ruleset>
         </rule>
         <rule>
             <name>MistypedCDATASection</name>
@@ -290,10 +290,6 @@
             <ruleset>Coupling</ruleset>
         </rule>
         <rule>
-            <name>ExcessiveImports</name>
-            <ruleset>Coupling</ruleset>
-        </rule>
-        <rule>
             <name>LooseCoupling</name>
             <ruleset>Coupling</ruleset>
         </rule>
@@ -311,7 +307,7 @@
         </rule>
         <rule>
             <name>AvoidReassigningParameters</name>
-            <ruleset>Basic Velocity</ruleset>
+            <ruleset>Design</ruleset>
         </rule>
         <rule>
             <name>AvoidSynchronizedAtMethodLevel</name>
@@ -386,10 +382,6 @@
             <ruleset>Design</ruleset>
         </rule>
         <rule>
-            <name>PreserveStackTrace</name>
-            <ruleset>Design</ruleset>
-        </rule>
-        <rule>
             <name>ReturnEmptyArrayRatherThanNull</name>
             <ruleset>Design</ruleset>
         </rule>
@@ -399,10 +391,6 @@
         </rule>
         <rule>
             <name>SimplifyBooleanExpressions</name>
-            <ruleset>Design</ruleset>
-        </rule>
-        <rule>
-            <name>SimplifyBooleanReturns</name>
             <ruleset>Design</ruleset>
         </rule>
         <rule>
@@ -463,7 +451,7 @@
         </rule>
         <rule>
             <name>EmptyIfStmt</name>
-            <ruleset>Basic Velocity</ruleset>
+            <ruleset>Empty Code</ruleset>
         </rule>
         <rule>
             <name>EmptyInitializer</name>
