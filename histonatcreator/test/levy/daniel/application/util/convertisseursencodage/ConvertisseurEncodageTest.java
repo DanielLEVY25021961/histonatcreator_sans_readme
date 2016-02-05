@@ -314,6 +314,25 @@ public final class ConvertisseurEncodageTest {
 		= "encodages\\chaàâreéèêëtte_ANSI.txt";
 	
 	
+	/**
+	 * CHEMIN_DIACRITIQUES_ISO_8859_2 : String :<br/>
+	 * Chemin du fichier .txt codé en ISO-8859-2 
+	 * relativement à la racine des fichiers de test.<br/>
+	 */
+	public static final String CHEMIN_DIACRITIQUES_ISO_8859_2 
+		= "encodages\\diacritiques_ISO-8859-2.txt";
+	
+	
+	/**
+	 * CHEMIN_DIACRITIQUES_UTF8 : String :<br/>
+	 * Chemin du fichier .txt codé en UTF-8 
+	 * relativement à la racine des fichiers de test.<br/>
+	 */
+	public static final String CHEMIN_DIACRITIQUES_UTF8 
+		= "encodages\\diacritiques_UTF8.txt";
+
+	
+	
 	//*****************************************************************/
 	//**************************FICHIERS ******************************/
 	//*****************************************************************/
@@ -551,6 +570,23 @@ public final class ConvertisseurEncodageTest {
 	public static final File FILE_ANSI 
 		= new File(CHEMIN_FICHIERS_TEST + CHEMIN_ANSI);
 	
+	
+	/**
+	 * FILE_DIACRITIQUES_ISO_8859_2 : File : <br/>
+	 * txt codé en ISO_8859_2.<br/>
+	 */
+	public static final File FILE_DIACRITIQUES_ISO_8859_2 
+		= new File(CHEMIN_FICHIERS_TEST + CHEMIN_DIACRITIQUES_ISO_8859_2);
+	
+	
+	/**
+	 * FILE_DIACRITIQUES_UTF8 : File : <br/>
+	 * txt codé en UTF-8.<br/>
+	 */
+	public static final File FILE_DIACRITIQUES_UTF8 
+	= new File(CHEMIN_FICHIERS_TEST + CHEMIN_DIACRITIQUES_UTF8);
+	
+	
 	/**
 	 * LISTEFILES : List<File> :<br/>
 	 * Liste contenant tous les File utilisés pour les tests.<br/>
@@ -607,6 +643,7 @@ public final class ConvertisseurEncodageTest {
 		LISTEFILES.add(FILE_TXT_SANS_EXTENSION);
 		LISTEFILES.add(FILE_TXT_FAUSSE_EXTENSION);
 		LISTEFILES.add(FILE_ANSI);
+		LISTEFILES.add(FILE_DIACRITIQUES_ISO_8859_2);
 		
 	}
 	
@@ -649,6 +686,7 @@ public final class ConvertisseurEncodageTest {
 		LISTEFILES_TXT.add(FILE_TXT_SANS_EXTENSION);
 		LISTEFILES_TXT.add(FILE_TXT_FAUSSE_EXTENSION);
 		LISTEFILES_TXT.add(FILE_ANSI);
+		LISTEFILES_TXT.add(FILE_DIACRITIQUES_ISO_8859_2);
 		
 	}
 
@@ -823,6 +861,17 @@ public final class ConvertisseurEncodageTest {
 	public static final String STRING_REF_FILE_ANSI 
 		= "chaàâreéèêëtte € encodé en ANSI. 47 caractères.";
 
+	/**
+	 * STRING_REF_DIACRITIQUES_ISO_8859_2 : String : <br/>
+	 */
+	public static final String STRING_REF_DIACRITIQUES_ISO_8859_2 = "ISO-8859-2.Tous français inscrit au rôle, naïf ou râleur, à Nîmes, carbœuf ou même Capharnaüm, aura payé son dû dès avant Noël.ligne de 152 caractères.\nISO-8859-2.Œdipe de Capharnaüm et Éric de Nîmes étaient français, drôles, naïfs et râleurs mais ils ont dû être pris à l’œil dès Noël. ligne de 160 caractères.\nISO-8859-2.Mon châton est évalué à 15 € sur le marché de Noël de Faÿ-lès-Nemours. Où ça ? Là bas. ligne de 123 caractères.\nISO-8859-2. 490 caractères au total dans ce fichier.";
+	
+	
+	/**
+	 * STRING_REF_DIACRITIQUES_UTF8 : String : <br/>
+	 */
+	public static final String STRING_REF_DIACRITIQUES_UTF8 = "UTF-8. Tous français inscrit au rôle, naïf ou râleur, à Nîmes, carbœuf ou même Capharnaüm, aura payé son dû dès avant Noël. ligne de 148 caractères.\nUTF-8. Œdipe de Capharnaüm et Éric de Nîmes étaient français, drôles, naïfs et râleurs mais ils ont dû être pris à l’œil dès Noël. ligne de 155 caractères.\nUTF-8. Mon châton est évalué à 15 € sur le marché de Noël de Faÿ-lès-Nemours. Où ça ? Là bas. ligne de 118 caractères.\nUTF-8. ligne de 074 caractères et 495 caractères au total dans ce fichier.";
+	
 	
 	/**
 	 * LOG : Log : 
@@ -861,18 +910,18 @@ public final class ConvertisseurEncodageTest {
 		
 		 final String resultat 
 		 = ConvertisseurEncodage.lireDepuisFichier(
-				 FILE_ANSI
+				 FILE_DIACRITIQUES_UTF8
 				 	, CHARSET_UTF8);
 		 
 		 final int longueur = resultat.length();
 		 
-		 System.out.println("chaine décodée : " + resultat);
-		 System.out.println("chaine encodée : " + STRING_REF_FILE_ANSI +'\n');
+		 System.out.println("chaine décodée : \n" + resultat);
+		 System.out.println("chaine encodée : \n" + STRING_REF_DIACRITIQUES_UTF8 +'\n');
 		 
 		 System.out.println("nombre de caractères dans la chaine décodée : " + longueur);
-		 System.out.println("nombre de caractères dans la chaine encodée : " + "47\n");
+		 System.out.println("nombre de caractères dans la chaine encodée : " + STRING_REF_DIACRITIQUES_UTF8.length() + "\n");
 		 
-		 System.out.println("BONNE LECTURE : " + StringUtils.equals(resultat, STRING_REF_FILE_ANSI));
+		 System.out.println("BONNE LECTURE : " + StringUtils.equals(resultat, STRING_REF_DIACRITIQUES_UTF8));
 	}
 
 
