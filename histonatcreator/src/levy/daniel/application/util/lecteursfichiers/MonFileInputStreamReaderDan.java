@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 
 import levy.daniel.application.IConstantesMessage;
 
@@ -30,6 +31,9 @@ import org.apache.commons.logging.LogFactory;
  *<br/>
  * 
  * - Mots-clé :<br/>
+ * synchronized, bloc static synchronized, <br/>
+ * FileReader, BufferedReader, bufferedReader.read(), <br/>
+ * Cast entier en Character, LOG, <br/>
  * <br/>
  *
  * - Dépendances :<br/>
@@ -96,6 +100,13 @@ public final class MonFileInputStreamReaderDan {
 
 	
 	/**
+	 * CHARSET_UTF8 : Charset :<br/>
+	 * Charset.forName("UTF-8").<br/>
+	 */
+	public static final Charset CHARSET_UTF8 = Charset.forName("UTF-8");
+
+
+	/**
 	 * rapportLecture : String :<br/>
 	 * rapport de lecture du fichier 
 	 * (alimenté si le fichier n'est pas textuel).<br/>
@@ -142,7 +153,7 @@ public final class MonFileInputStreamReaderDan {
 	 *
 	 * @param pFile : File : fichier à lire.<br/>
 	 * 
-	 * @return : String : La chaine de caractères contenant le fichier.<br/>
+	 * @return : String : Chaine de caractères avec le contenu du fichier.<br/>
 	 */
 	public static String lireFichier(
 			final File pFile) {
@@ -164,6 +175,8 @@ public final class MonFileInputStreamReaderDan {
 	 * Lit chaque caractère quoi qu'il arrive 
 	 * (même si le fichier n'est pas un fichier texte).<br/>
 	 * <br/>
+	 * - Choisit automatiquement le CHARSET_UTF8 si pCharset == null.<br/>
+	 * <br/>
 	 * - retourne MESSAGE_FICHIER_NULL si le pFile est null.<br/>
 	 * - retourne MESSAGE_FICHIER_INEXISTANT si le pFile est inexistant.<br/>
 	 * - retourne MESSAGE_FICHIER_REPERTOIRE si le pFile est un répertoire.<br/>
@@ -173,7 +186,7 @@ public final class MonFileInputStreamReaderDan {
 	 * @param pCharsetName : String : le nom du Charset utilisé 
 	 * par l'InputStreamReader.<br/>
 	 *  
-	 * @return : String : La chaine de caractères contenant le fichier.<br/>
+	 * @return : String : Chaine de caractères avec le contenu du fichier.<br/>
 	 */
 	public static String lireFichier(
 			final File pFile, final String pCharsetName) {
@@ -226,6 +239,7 @@ public final class MonFileInputStreamReaderDan {
 				return MESSAGE_FICHIER_REPERTOIRE;
 			}
 			
+			// LECTURE ***************
 			FileInputStream fileInputStream = null;
 			InputStreamReader inputStreamReader = null;
 			BufferedReader bufferedReader = null;
@@ -234,13 +248,26 @@ public final class MonFileInputStreamReaderDan {
 			Character character = null;
 			final StringBuilder stb = new StringBuilder();
 			
+			Charset charset = null;
+			
+			/* Choisit automatiquement le CHARSET_UTF8 si pCharset == null. */
+			if(pCharsetName == null) {
+				charset = CHARSET_UTF8;
+			}
+			else {
+				charset = Charset.forName(pCharsetName);
+			}
+			
 			try {
 				
 				/* Instancie un flux en lecture fileInputStream 
 				 * en lui passant pFile. */
 				fileInputStream = new FileInputStream(pFile);
 				
-				inputStreamReader = new InputStreamReader(fileInputStream, pCharsetName);
+				/* Instancie un InputStreamReader 
+				 * en lui passant le FileReader et le Charset. */
+				inputStreamReader 
+					= new InputStreamReader(fileInputStream, charset);
 								
 				/* Instancie un tampon de flux de caractères en lecture 
 				 * en lui passant le flux FileReader. */
@@ -397,7 +424,7 @@ public final class MonFileInputStreamReaderDan {
 	 *
 	 * @param pFile : File : fichier à lire.<br/>
 	 * 
-	 * @return : String : La chaine de caractères contenant le fichier 
+	 * @return : String : La chaine de caractères avec le contenu du fichier 
 	 * ou null si un caractère non humain est détecté.<br/>
 	 */
 	public static String lireFichierDeCaracteres(
@@ -423,6 +450,8 @@ public final class MonFileInputStreamReaderDan {
 	 * <br/>
 	 * - retourne null si un caractère non humain est détecté.<br/>
 	 * <br/>
+	 * - Choisit automatiquement le CHARSET_UTF8 si pCharset == null.<br/>
+	 * <br/>
 	 * - retourne MESSAGE_FICHIER_NULL si le pFile est null.<br/>
 	 * - retourne MESSAGE_FICHIER_INEXISTANT si le pFile est inexistant.<br/>
 	 * - retourne MESSAGE_FICHIER_REPERTOIRE si le pFile est un répertoire.<br/>
@@ -432,7 +461,7 @@ public final class MonFileInputStreamReaderDan {
 	 * @param pCharsetName : String : le nom du Charset utilisé 
 	 * par l'InputStreamReader.<br/>
 	 *  
-	 * @return : String : La chaine de caractères contenant le fichier 
+	 * @return : String : La chaine de caractères avec le contenu du fichier 
 	 * ou null si un caractère non humain est détecté.<br/>
 	 */
 	public static String lireFichierDeCaracteres(
@@ -440,6 +469,9 @@ public final class MonFileInputStreamReaderDan {
 		
 		/* block static synchronized. */
 		synchronized (MonFileInputStreamReaderDan.class) {
+			
+			/* Réinitialise le rapport au cas où. */
+			rapportLecture = null;
 			
 			/* retourne MESSAGE_FICHIER_NULL 
 			 * si le pFile est null. */
@@ -486,6 +518,7 @@ public final class MonFileInputStreamReaderDan {
 				return MESSAGE_FICHIER_REPERTOIRE;
 			}
 			
+			// LECTURE ***************
 			FileInputStream fileInputStream = null;
 			InputStreamReader inputStreamReader = null;
 			BufferedReader bufferedReader = null;
@@ -495,17 +528,29 @@ public final class MonFileInputStreamReaderDan {
 			final StringBuilder stb = new StringBuilder();
 			int compteur = 0;
 			
+			Charset charset = null;
+			
+			/* Choisit automatiquement le CHARSET_UTF8 si pCharset == null. */
+			if(pCharsetName == null) {
+				charset = CHARSET_UTF8;
+			}
+			else {
+				charset = Charset.forName(pCharsetName);
+			}
+			
 			try {
 				
 				/* Instancie un flux en lecture fileInputStream 
 				 * en lui passant pFile. */
 				fileInputStream = new FileInputStream(pFile);
 				
+				/* Instancie un InputStreamReader 
+				 * en lui passant le FileReader et le Charset. */
 				inputStreamReader 
-					= new InputStreamReader(fileInputStream, pCharsetName);
+					= new InputStreamReader(fileInputStream, charset);
 								
 				/* Instancie un tampon de flux de caractères en lecture 
-				 * en lui passant le flux FileReader. */
+				 * en lui passant le flux inputStreamReader. */
 				bufferedReader 
 					= new BufferedReader(inputStreamReader);
 				
@@ -598,6 +643,7 @@ public final class MonFileInputStreamReaderDan {
 							, METHODE_LIREFICHIERDECARACTERES
 								, ioe);
 				
+				/* retourne le message de l'exception. */
 				return ioe.getMessage();
 			}
 			
