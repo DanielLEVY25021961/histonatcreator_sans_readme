@@ -7,6 +7,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 import levy.daniel.application.IConstantesMessage;
@@ -119,6 +122,13 @@ public final class DifferentiateurString {
 	public static final String METHODE_ECRIRESTRINGDANSFILE 
 		= "méthode ecrireStringDansFile(File pFile, String pString, Charset pCharset)";
 	
+	/**
+	 * METHODE_FOURNIRFILEPOURRAPPORTTXT : String :<br/>
+	 * "méthode fournirFilePourRapportTextuel()".<br/>
+	 */
+	public static final String METHODE_FOURNIRFILEPOURRAPPORTTXT 
+		= "méthode fournirFilePourRapportTextuel()";
+	
 	
 	/**
 	 * MESSAGE_FICHIER_NULL : String :<br/>
@@ -128,7 +138,7 @@ public final class DifferentiateurString {
 	 */
 	public static final String MESSAGE_FICHIER_NULL 
 		= "Le fichier passé en paramètre est null";
-	
+		
 	/**
 	 * MESSAGE_FICHIER_INEXISTANT : String :<br/>
 	 * Message retourné par la METHODE_ECRIRESTRINGDANSFILE 
@@ -193,6 +203,16 @@ public final class DifferentiateurString {
 	 * new Locale("FR", "fr").<br/>
 	 */
 	public static final Locale LOCALE_FR_FR = new Locale("FR", "fr");
+
+	
+	/**
+	 * DF_DATE_HEURE_MINUTE_SECONDE_UNDERSCORE : DateFormat :<br/>
+	 * Format concentré des dates avec heures et secondes
+	 * comme "2012-01-16_18-09-55" pour le
+	 * 16 Janvier 2012 à 18 heures 9 minutes et 55 secondes.<br/>
+	 */
+	public static final DateFormat DF_DATE_HEURE_MINUTE_SECONDE_UNDERSCORE 
+		= new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", LOCALE_FR_FR);
 	
 	
 	/**
@@ -200,6 +220,7 @@ public final class DifferentiateurString {
 	 * Rapport textuel comparant les deux chaines de caractères.<br/>
 	 */
 	private static String rapportDiff;
+	
 	
 	/**
 	 * rapportDiffCsv : String :<br/>
@@ -246,6 +267,69 @@ public final class DifferentiateurString {
 
 	
 	/**
+	 * method listerChaineCarParCar(
+	 * String pString) :<br/>
+	 * Retourne une String permettant l'affichage 
+	 * caractère par caractère de pString.<br/>
+	 * <br/>
+	 * - retourne null si pString est blank (null ou vide).<br/>
+	 * <br/>
+	 *
+	 * @param pString : String : String à afficher 
+	 * caractère par caractère.<br/>
+	 * 
+	 * @return : String : Affichage caractère par caractère.<br/>
+	 */
+	public static String listerChaineCarParCar(
+			final String pString) {
+		
+		/* bloc static synchronized. */
+		synchronized (DifferentiateurString.class) {
+			
+			/* retourne null si pString est blank (null ou vide). */
+			if (StringUtils.isBlank(pString)) {
+				return null;
+			}
+			
+			/* Détermine la longueur de la chaîne. */
+			final int longueurChaine = pString.length();
+			int position = 0;
+			Character caractereChaine = null;
+			final StringBuilder stb = new StringBuilder();
+			
+			/* Parcours de la chaîne caractère par caractère. */
+			for(int index = 0; index < longueurChaine; index++) {
+				
+				/* L'index est 0-based. */
+				position = index + 1;
+				
+				/* détermination du caractère dans la chaine. */
+				try {
+					caractereChaine = pString.charAt(index);
+				} catch (IndexOutOfBoundsException e1) {
+					caractereChaine = null;
+				}
+				
+				/* Instanciation d'un CaractereDan. */
+				final CaractereDan carDan 
+					= new CaractereDan(position, caractereChaine);
+				
+				stb.append(carDan.toString());
+				stb.append(NEWLINE);
+				
+			} // Fin du parcours de la chaîne._______________
+			
+			/* Retour du résultat. */
+			return stb.toString();
+			
+		} // Fin du bloc static synchronized.________________________
+		
+	} // Fin de listerChaineCarParCar(
+	 // String pString).___________________________________________________
+	
+
+	
+	/**
 	 * method differencier(String pString1
 	 * , String pString2) :<br/>
 	 * .<br/>
@@ -259,7 +343,7 @@ public final class DifferentiateurString {
 	public static String differencier(
 			final String pString1, final String pString2) {
 		
-		/* block static synchronized. */
+		/* bloc static synchronized. */
 		synchronized (DifferentiateurString.class) {
 			
 			/* mise à null des rapports. */
@@ -338,33 +422,41 @@ public final class DifferentiateurString {
 					}					
 				}
 				
-				final String comparaison = c1.toString() + "   DIFFERENCE = " + diff + "     " + c2.toString();
-				final String comparaisonCsv = c1.toCsv() + diff + ";" + c2.toCsv();
+				final String comparaison 
+					= c1.toString() + "   DIFFERENCE = " 
+								+ diff + "     " + c2.toString();
+				
+				final String comparaisonCsv 
+					= c1.toCsv() + diff + ";" + c2.toCsv();
 				
 				/* Ajout dans les StringBuilders pour les rapports. */
+				/* rapport textuel. */
 				stbDiff.append(comparaison);
-				stbDiff.append(SAUTDELIGNE_DOS_WINDOWS);
+				stbDiff.append(NEWLINE);
 				
+				/* rapport csv. */
 				/* Ajout de l'en-tête pour le rapport Csv. */
 				if (position == 1) {
 					stbDiffCsv.append(c1.getEnTeteCsv());
 					stbDiffCsv.append("DIFFERENCE");
 					stbDiffCsv.append(IConstantesMessage.SEP_POINTVIRGULE);
 					stbDiffCsv.append(c1.getEnTeteCsv());
-					stbDiffCsv.append(SAUTDELIGNE_DOS_WINDOWS);
+					stbDiffCsv.append(NEWLINE);
 				}
 				stbDiffCsv.append(comparaisonCsv);
-				stbDiffCsv.append(SAUTDELIGNE_DOS_WINDOWS);
+				stbDiffCsv.append(NEWLINE);
 								
 			} // Fin de la boucle sur les caractères._______________
 			
-			System.out.println(stbDiff.toString());
+//			System.out.println(stbDiff.toString());
 			/* Injection dans le rapport. */
 			rapportDiff = stbDiff.toString();
-			System.out.println();
+			ecrireStringDansFile(rapportDiff);
+			
+//			System.out.println();
 			/* Injection dans le rapport csv. */
 			rapportDiffCsv = stbDiffCsv.toString();
-			System.out.println(stbDiffCsv.toString());
+//			System.out.println(stbDiffCsv.toString());
 			
 			return stbDiff.toString();
 						
@@ -378,31 +470,182 @@ public final class DifferentiateurString {
 	
 	/**
 	 * method ecrireStringDansFile(
-	 * File pFile
-	 * , String pString
-	 * , Charset pCharset) :<br/>
-	 * Ecrit la String pString dans le File pFile avec un encodage pCharset.<br/>
+	 * String pString) :<br/>
+	 * Ecrit la String pString dans le File pFile avec un encodage UTF-8 
+	 * et les sauts de ligne NEWLINE de la plateforme.<br/>
 	 * Utilise FileOutputStream, 
 	 * new OutputStreamWriter(fileOutputStream, charset) 
 	 * et BufferedWriter pour écrire.<br/>
 	 * Ecriture dans un fichier, écriture sur disque.<br/>
 	 * <br/>
-	 * - Met automatiquement le Charset à CHARSET_UTF8 si pCharset est null.<br/>
+	 * - Passe automatiquement le Charset à CHARSET_UTF8.<br/>
+	 * - Passe automatiquement le saut de ligne à NEWLINE 
+	 * (saut de ligne de la plateforme).<br/>
+	 * - Substitue automatiquement NEWLINE (saut de ligne de la plateforme) 
+	 * aux sauts de ligne dans pString si nécessaire.<br/>
+	 * <br/>
+	 * - retourne null en cas d'Exception loggée 
+	 * (FileNotFoundException, IOException).<br/>
+	 * - retourne null si pString est blank.<br/>
+	 * <br/>
+	 *
+	 * @param pString : String : String que l'on copie dans pFile.<br/>
+	 * 
+	 * @return : File : Le fichier dans lequel on a écrit pString.<br/>
+	 */
+	public static File ecrireStringDansFile(final String pString) {
+		
+		final File file = fournirFilePourRapportTextuel();
+		
+		return ecrireStringDansFile(file, pString, CHARSET_UTF8, NEWLINE);
+		
+	} // Fin de ecrireStringDansFile(
+	 // String pString).___________________________________________________
+	
+
+	
+	/**
+	 * method fournirFilePourRapportTextuel() :<br/>
+	 * .<br/>
+	 * <br/>
+	 * - crée un répertoire pour les rapports textuels si il n'existe pas.<br/>
+	 * <br/>
+	 * - retourne null si il est impossible 
+	 * de créer le répertoire des rapports.<br/>
+	 * <br/>
+	 * 
+	 *
+	 * @return : File :  .<br/>
+	 */
+	private static File fournirFilePourRapportTextuel() {
+		
+		/* bloc static synchronized. */
+		synchronized (DifferentiateurString.class) {
+			
+			final String cheminRepRapports 
+				= ".\\data\\temp\\rapports";
+			
+			String cheminFichier = null;
+
+			/* Tentative de lecture du chemin des rapports. */
+			final File repertoireRapports 
+				= new File(cheminRepRapports);
+			
+			/* crée un répertoire pour les rapports textuels si il n'existe pas. */
+			if (!repertoireRapports.exists()) {
+				
+				boolean repertoireCree = false;
+				
+				try {
+					
+					/* Création du répertoire. */
+					repertoireCree = repertoireRapports.mkdir();
+					
+				} catch (Exception mkdirExc) {
+					
+					/* LOG de niveau ERROR. */
+					loggerError(
+							CLASSE_DIFFERENTIATEURSTRING
+								, METHODE_FOURNIRFILEPOURRAPPORTTXT
+									, mkdirExc);
+					
+					/* retourne null. */
+					return null;
+				}
+				
+				if (!repertoireCree) {
+					
+					/* LOG de niveau ERROR. */
+					if (LOG.isErrorEnabled()) {
+						
+						final String message 
+						= CLASSE_DIFFERENTIATEURSTRING 
+						+ IConstantesMessage.SEP_MOINS 
+						+ METHODE_FOURNIRFILEPOURRAPPORTTXT
+						+ IConstantesMessage.SEP_MOINS 
+						+ "Impossible de créer le répertoire : " 
+						+ cheminRepRapports;
+						
+						LOG.error(message);
+						
+					}
+					
+					/* retourne null. */
+					return null;
+				}
+			} // Fin de if (!repertoireRapports.exists())._____________
+			
+			/* Récupère la date courante dans le système. */
+			final Date maintenantDate = new Date();
+			
+			/* Récupère la date formattée sous forme 2012-01-16_18-09-55. */
+			final String dateFormatteeString 
+				= DF_DATE_HEURE_MINUTE_SECONDE_UNDERSCORE
+					.format(maintenantDate);
+			
+			cheminFichier = cheminRepRapports + "\\" + dateFormatteeString + "_RapportDIFFERENCES_TXT_UTF8.txt";
+			
+			final File resultatFile = new File(cheminFichier);
+			
+			/* Création du fichier si il n'existe pas. */
+			if (!resultatFile.exists()) {
+				try {
+					resultatFile.createNewFile();
+				} catch (IOException ioe) {
+					ioe.printStackTrace();
+				}
+			}
+			System.out.println(resultatFile.getAbsolutePath());
+			
+			return resultatFile;
+			
+		} // Fin du bloc static synchronized.________________________
+				
+	} // Fin de fournirFilePourRapportTextuel().___________________________
+
+	
+
+	/**
+	 * method ecrireStringDansFile(
+	 * File pFile
+	 * , String pString
+	 * , Charset pCharset
+	 * , String pSautLigne) :<br/>
+	 * Ecrit la String pString dans le File pFile avec un encodage pCharset.<br/>
+	 * Substitue automatiquement pSautLigne aux sauts de ligne 
+	 * dans pString si nécessaire.<br/>
+	 * Utilise FileOutputStream, 
+	 * new OutputStreamWriter(fileOutputStream, charset) 
+	 * et BufferedWriter pour écrire.<br/>
+	 * Ecriture dans un fichier, écriture sur disque.<br/>
+	 * <br/>
+	 * - Passe automatiquement le Charset à CHARSET_UTF8 
+	 * si pCharset est null.<br/>
+	 * - Passe automatiquement le saut de ligne à NEWLINE 
+	 * (saut de ligne de la plateforme) si pSautLigne est blank.<br/>
 	 * <br/>
 	 * - retourne null si le pFile est null.<br/>
 	 * - retourne null si le pFile est inexistant.<br/>
 	 * - retourne null si le pFile est un répertoire.<br/>
-	 * - retourne null en cas d'Exception loggée (FileNotFoundException, IOException, ).<br/>
+	 * - retourne null en cas d'Exception loggée 
+	 * (FileNotFoundException, IOException).<br/>
 	 * - retourne null si pString est blank.<br/>
 	 * <br/>
 	 *
-	 * @param pFile
-	 * @param pString
-	 * @param pCharset
-	 * @return : File :  .<br/>
+	 * @param pFile : File : fichier dans lequel on écrit.<br/>
+	 * @param pString : String : String que l'on copie dans pFile.<br/>
+	 * @param pCharset : Charset : Charset pour encoder le fichier.<br/>
+	 * @param pSautLigne : String : Saut de ligne que l'on veut 
+	 * dans pFile de sortie 
+	 * (\r\n pour DOS/Windows, \r pour Mac, \n pour Unix).<br/>
+	 * 
+	 * @return : File : Le fichier dans lequel on a écrit pString.<br/>
 	 */
 	public static File ecrireStringDansFile(
-			final File pFile, final String pString, final Charset pCharset) {
+			final File pFile
+				, final String pString
+					, final Charset pCharset
+						, final String pSautLigne) {
 		
 		/* bloc static synchronized. */
 		synchronized (DifferentiateurString.class) {
@@ -464,12 +707,22 @@ public final class DifferentiateurString {
 			
 			Charset charset = null;
 			
-			/* Passe le charset à UTF-8 si pCharset est null. */
+			/* Passe automatiquement le charset à UTF-8 si pCharset est null. */
 			if (pCharset == null) {
 				charset = CHARSET_UTF8;
 			}
 			else {
 				charset = pCharset;
+			}
+			
+			String sautLigne = null;
+			
+			/* Passe automatiquement le saut de ligne à NEWLINE 
+			 * (saut de ligne de la plateforme) si pSautLigne est blank. */
+			if (StringUtils.isBlank(pSautLigne)) {
+				sautLigne = NEWLINE;
+			} else {
+				sautLigne = pSautLigne;
 			}
 			
 			// ECRITURE SUR DISQUE ***************
@@ -494,7 +747,9 @@ public final class DifferentiateurString {
 					= new BufferedWriter(outputStreamWriter);
 				
 				// ECRITURE.
-				bufferedWriter.write(pString);
+				/* Substitue automatiquement sautLigne aux sauts de ligne 
+				 * dans pString si nécessaire. */
+				bufferedWriter.write(substituerSautLigne(pString, sautLigne));
 				
 				// Retour du fichier. 
 				return pFile;
@@ -576,6 +831,107 @@ public final class DifferentiateurString {
 	} // Fin de ecrireStringDansFile(...)._________________________________
 	
 
+	
+	/**
+	 * method substituerSautLignePlateforme(
+	 * String pString) :<br/>
+	 * Substitue les sauts de ligne dans pString 
+	 * (\r\n pour DOS/Windows, \r pour Mac, \n pour Unix) 
+	 * par les sauts de ligne de la plate-forme
+	 * sur laquelle le programme s'exécute.<br/>
+	 * <br/>
+	 * - retourne null si pString est blank (null ou vide).<br/>
+	 * <br/>
+	 *
+	 * @param pString : String : String à corriger.<br/>
+	 * 
+	 * @return : String : La String dans laquelle les sauts de ligne 
+	 * (\r\n pour DOS/Windows, \r pour Mac, \n pour Unix) 
+	 * ont été substitués par les sauts de ligne de la plate-forme.<br/>
+	 */
+	public static String substituerSautLignePlateforme(
+			final String pString) {
+		
+		return substituerSautLigne(pString, NEWLINE);
+		
+	} // Fin de method substituerSautLignePlateforme(
+	 // String pString).___________________________________________________
+	
+
+	
+	/**
+	 * method substituerSautLigne(
+	 * String pString
+	 * , String pSautLigne) :<br/>
+	 * Substitue les sauts de ligne dans pString 
+	 * (\r\n pour DOS/Windows, \r pour Mac, \n pour Unix) 
+	 * par les sauts de ligne pSautLigne.<br/>
+	 * <br/>
+	 * - retourne null si pString est blank (null ou vide).<br/>
+	 * - retourne null si pSautLigne est blank (null ou vide).
+	 * <br/>
+	 *
+	 * @param pString : String : String à corriger.<br/>
+	 * @param pSautLigne : String : saut de ligne à substituer.<br/>
+	 * 
+	 * @return : String : La String dans laquelle les sauts de ligne 
+	 * (\r\n pour DOS/Windows, \r pour Mac, \n pour Unix) 
+	 * ont été substitués par les sauts de ligne pSautLigne.<br/>
+	 */
+	public static String substituerSautLigne(
+			final String pString, final String pSautLigne) {
+		
+		/* bloc static synchronized. */
+		synchronized (DifferentiateurString.class) {
+			
+			/* retourne null si pString est blank (null ou vide). */
+			if (StringUtils.isBlank(pString)) {
+				return null;
+			}
+			
+			/* retourne null si pSautLigne est blank (null ou vide). */
+			
+			/* Recherche des sauts de ligne DOS/Windows. */
+			if (StringUtils.contains(pString, SAUTDELIGNE_DOS_WINDOWS)) {
+				
+				final String resultat 
+					= StringUtils.replace(
+							pString, SAUTDELIGNE_DOS_WINDOWS, pSautLigne);
+				
+				return resultat;
+			}
+			
+			/* Recherche des sauts de ligne Mac. */
+			if (StringUtils.contains(pString, SAUTDELIGNE_MAC)) {
+				
+				final String resultat 
+					= StringUtils.replace(
+							pString, SAUTDELIGNE_MAC, pSautLigne);
+				
+				return resultat;
+			}
+			
+			/* Recherche des sauts de ligne Unix. */
+			if (StringUtils.contains(pString, SAUTDELIGNE_UNIX)) {
+				
+				final String resultat 
+					= StringUtils.replace(
+							pString, SAUTDELIGNE_UNIX, pSautLigne);
+				
+				return resultat;
+			}
+			
+			/* Retourne la chaîne inchangée 
+			 * si il n'y avait pas de saut de ligne. */
+			return pString;
+			
+		} // Fin du bloc static synchronized.________________________
+				
+	} // Fin de substituerSautLigne(
+	 // String pString
+	 // , String pSautLigne).______________________________________________
+	
+	
 	
 	/**
 	 * method afficherSautLigne(
