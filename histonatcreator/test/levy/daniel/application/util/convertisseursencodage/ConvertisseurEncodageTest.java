@@ -864,13 +864,13 @@ public final class ConvertisseurEncodageTest {
 	/**
 	 * STRING_REF_DIACRITIQUES_ISO_8859_2 : String : <br/>
 	 */
-	public static final String STRING_REF_DIACRITIQUES_ISO_8859_2 = "ISO-8859-2.Tous français inscrit au rôle, naïf ou râleur, à Nîmes, carbœuf ou même Capharnaüm, aura payé son dû dès avant Noël.ligne de 152 caractères.\nISO-8859-2.Œdipe de Capharnaüm et Éric de Nîmes étaient français, drôles, naïfs et râleurs mais ils ont dû être pris à l’œil dès Noël. ligne de 160 caractères.\nISO-8859-2.Mon châton est évalué à 15 € sur le marché de Noël de Faÿ-lès-Nemours. Où ça ? Là bas. ligne de 123 caractères.\nISO-8859-2. 490 caractères au total dans ce fichier.";
+	public static final String STRING_REF_DIACRITIQUES_ISO_8859_2 = "ISO-8859-2.Tous français inscrit au rôle, naïf ou râleur, à Nîmes, carbœuf ou même Capharnaüm, aura payé son dû dès avant Noël.ligne de 152 caractères.\r\nISO-8859-2.Œdipe de Capharnaüm et Éric de Nîmes étaient français, drôles, naïfs et râleurs mais ils ont dû être pris à l’œil dès Noël. ligne de 160 caractères.\r\nISO-8859-2.Mon châton est évalué à 15 € sur le marché de Noël de Faÿ-lès-Nemours. Où ça ? Là bas. ligne de 123 caractères.\r\nISO-8859-2. 490 caractères au total dans ce fichier.";
 	
 	
 	/**
 	 * STRING_REF_DIACRITIQUES_UTF8 : String : <br/>
 	 */
-	public static final String STRING_REF_DIACRITIQUES_UTF8 = "UTF-8. Tous français inscrit au rôle, naïf ou râleur, à Nîmes, carbœuf ou même Capharnaüm, aura payé son dû dès avant Noël. ligne de 148 caractères.\nUTF-8. Œdipe de Capharnaüm et Éric de Nîmes étaient français, drôles, naïfs et râleurs mais ils ont dû être pris à l’œil dès Noël. ligne de 155 caractères.\nUTF-8. Mon châton est évalué à 15 € sur le marché de Noël de Faÿ-lès-Nemours. Où ça ? Là bas. ligne de 118 caractères.\nUTF-8. ligne de 074 caractères et 495 caractères au total dans ce fichier.";
+	public static final String STRING_REF_DIACRITIQUES_UTF8 = "UTF-8. Tous français inscrit au rôle, naïf ou râleur, à Nîmes, carbœuf ou même Capharnaüm, aura payé son dû dès avant Noël. ligne de 148 caractères.\r\nUTF-8. Œdipe de Capharnaüm et Éric de Nîmes étaient français, drôles, naïfs et râleurs mais ils ont dû être pris à l’œil dès Noël. ligne de 155 caractères.\r\nUTF-8. Mon châton est évalué à 15 € sur le marché de Noël de Faÿ-lès-Nemours. Où ça ? Là bas. ligne de 118 caractères.\r\nUTF-8. ligne de 074 caractères et 495 caractères au total dans ce fichier.";
 	
 	
 	/**
@@ -910,18 +910,18 @@ public final class ConvertisseurEncodageTest {
 		
 		 final String resultat 
 		 = ConvertisseurEncodage.lireDepuisFichier(
-				 FILE_DIACRITIQUES_UTF8
-				 	, CHARSET_UTF8);
+				 FILE_DIACRITIQUES_ISO_8859_2
+				 	, CHARSET_ISO_8859_2);
 		 
 		 final int longueur = resultat.length();
 		 
 		 System.out.println("chaine décodée : \n" + resultat);
-		 System.out.println("chaine encodée : \n" + STRING_REF_DIACRITIQUES_UTF8 +'\n');
+		 System.out.println("chaine encodée : \n" + STRING_REF_DIACRITIQUES_ISO_8859_2 +'\n');
 		 
 		 System.out.println("nombre de caractères dans la chaine décodée : " + longueur);
-		 System.out.println("nombre de caractères dans la chaine encodée : " + STRING_REF_DIACRITIQUES_UTF8.length() + "\n");
+		 System.out.println("nombre de caractères dans la chaine encodée : " + STRING_REF_DIACRITIQUES_ISO_8859_2.length() + "\n");
 		 
-		 System.out.println("BONNE LECTURE : " + StringUtils.equals(resultat, STRING_REF_DIACRITIQUES_UTF8));
+		 System.out.println("BONNE LECTURE : " + StringUtils.equals(resultat, STRING_REF_DIACRITIQUES_ISO_8859_2));
 	}
 
 

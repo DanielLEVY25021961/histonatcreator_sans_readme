@@ -4,6 +4,7 @@ import java.io.File;
 import java.nio.charset.Charset;
 
 import levy.daniel.application.util.convertisseursencodage.ConvertisseurEncodage;
+import levy.daniel.application.util.convertisseursencodage.ConvertisseurEncodageTest;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -72,7 +73,7 @@ public final class DifferentiateurString {
 	/**
 	 * STRING_REF_DIACRITIQUES_UTF8 : String : <br/>
 	 */
-	public static final String STRING_REF_DIACRITIQUES_UTF8 = "UTF-8. Tous français inscrit au rôle, naïf ou râleur, à Nîmes, carbœuf ou même Capharnaüm, aura payé son dû dès avant Noël. ligne de 148 caractères.\nUTF-8. Œdipe de Capharnaüm et Éric de Nîmes étaient français, drôles, naïfs et râleurs mais ils ont dû être pris à l’œil dès Noël. ligne de 155 caractères.\nUTF-8. Mon châton est évalué à 15 € sur le marché de Noël de Faÿ-lès-Nemours. Où ça ? Là bas. ligne de 118 caractères.\nUTF-8. ligne de 074 caractères et 495 caractères au total dans ce fichier.";
+	public static final String STRING_REF_DIACRITIQUES_UTF8 = ConvertisseurEncodageTest.STRING_REF_DIACRITIQUES_UTF8;
 	
 	
 
@@ -148,6 +149,9 @@ public final class DifferentiateurString {
 			int position = 0;
 			Character caractereChaine1 = null;
 			Character caractereChaine2 = null;
+			
+			String sautLigne1 = null;
+			String sautLigne2 = null;
 			String diff = null;
 			
 			/* Détermine la longueur de la plus longue chaîne. */
@@ -169,7 +173,7 @@ public final class DifferentiateurString {
 				
 				/* détermination du caractère dans la chaine 1. */
 				try {
-					caractereChaine1 = pString1.charAt(index);
+					caractereChaine1 = pString1.charAt(index);					
 				} catch (IndexOutOfBoundsException e1) {
 					caractereChaine1 = null;
 				}
@@ -191,7 +195,17 @@ public final class DifferentiateurString {
 					}
 					
 				} else {
+					
+					if(caractereChaine1.equals('\n')) {
+						sautLigne1 = "saut de ligne UNIX";
+					} else if (caractereChaine1.equals('\r')) {
+						sautLigne1 = "saut de ligne MAC";
+					} else {
+						sautLigne1 = "saut de ligne inconnu";
+					}
+					
 					if (caractereChaine2 != null) {
+						
 						if (!caractereChaine1.equals(caractereChaine2)) {
 							diff = "DIFF";
 						}
@@ -205,7 +219,8 @@ public final class DifferentiateurString {
 				}
 				
 				
-				System.out.println("Position : " + position + "\t\tcaractère1 : " + caractereChaine1 + "\t\tcaractère2 : " + caractereChaine2 + "\t\tDIFFERENCE : " + diff);
+				
+				System.out.println("Position : " + position + "\t\tcaractère1 : " + caractereChaine1 + "\t\tsaut de ligne : " + sautLigne1 + "\t\tcaractère2 : " + caractereChaine2 + "\t\tDIFFERENCE : " + diff);
 			}
 			
 			return null;
