@@ -26,6 +26,13 @@ import org.apache.commons.logging.LogFactory;
  * <br/>
  *
  * - Exemple d'utilisation :<br/>
+ * <code>
+ * // Instanciation d'un CaractereDan pour le Character 'é'.<br/>
+ * // Le Constructeur à remplissage automatique calcule les valeurs : <br/>
+ * final CaractereDan caracEAigu = new CaractereDan('é');<br/>
+ * caracEAiguAuto1.toString() retourne "id : 454    Position : 454    Caractère : é     Unicode : \u00e9  NumericValue : -1    TypeCaractere : 2   valeurEntiere : 233   Point de Code décimal : 233   Point de Code Hexa : e9      Nom : LATIN SMALL LETTER E WITH ACUTE         ".<br/>
+ * </code>
+ *<br/>
  *<br/>
  * 
  * - Mots-clé :<br/>
