@@ -16,6 +16,14 @@ import org.apache.commons.logging.LogFactory;
  * Encapsulation permettant de stocker 
  * toutes les grandeurs intéressantes d'un caractère.<br/>
  * <br/>
+ * "id;Position;Caractère;Unicode;numericValue;Type de Caractère;
+ * Valeur Entière;Point de Code Décimal;
+ * Point de Code HexaDécimal;Nom Unicode;".<br/>
+ * <br/>
+ * Possède un constructeur CaractereDan(Character pChar) 
+ * à remplissage automatique qui prend en paramètre 
+ * un Character et déduit toutes ses valeurs (Unicode, Point de code, ...).<br/>
+ * <br/>
  *
  * - Exemple d'utilisation :<br/>
  *<br/>
@@ -156,7 +164,7 @@ public class CaractereDan implements
 	 /**
 	 * method CONSTRUCTEUR CaractereDan(
 	 * Character pChar) :<br/>
-	 * CONSTRUCTEUR MALIN.<br/>
+	 * CONSTRUCTEUR MALIN A REMPLISSAGE AUTOMATIQUE.<br/>
 	 * - SANS id en base.<br/>
 	 * - SANS position.<br/>
 	 * Remplit automatiquement les valeurs du caractère.<br/>
