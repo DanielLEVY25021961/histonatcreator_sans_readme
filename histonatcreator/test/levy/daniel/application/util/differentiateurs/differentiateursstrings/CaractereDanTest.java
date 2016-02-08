@@ -448,8 +448,6 @@ public final class CaractereDanTest {
 				, CARAC_E_AIGU.toString()
 					, caracEAiguAuto1.toString());
 		
-		System.out.println(caracEAiguAuto1.toString());
-		
 		/* Vérifie le toCsv(). */
 		assertEquals("caracEAiguAuto1.toCsv() equals CARAC_E_AIGU.toCsv() : "
 				, CARAC_E_AIGU.toCsv()
