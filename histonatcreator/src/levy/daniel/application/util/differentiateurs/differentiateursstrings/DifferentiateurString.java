@@ -1,12 +1,19 @@
 package levy.daniel.application.util.differentiateurs.differentiateursstrings;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 import java.util.Locale;
 
+import levy.daniel.application.IConstantesMessage;
 import levy.daniel.application.util.convertisseursencodage.ConvertisseurEncodage;
 import levy.daniel.application.util.convertisseursencodage.ConvertisseurEncodageTest;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -25,6 +32,10 @@ import org.apache.commons.logging.LogFactory;
  * SAUTDELIGNE_DOS_WINDOWS = "\r\n",  <br/>
  * Saut de ligne spécifique de la plateforme.<br/>
  * System.getProperty("line.separator").<br/>
+ * rapport textuel, rapport csv, ecrire dans fichier,<br/>
+ * écrire dans fichier, ecrire String dans File, écrire String dans File,<br/>
+ * ecriture sur disque avec encodage, Charset,<br/>
+ * FileOutputStream, 
  * <br/>
  *
  * - Dépendances :<br/>
@@ -92,7 +103,59 @@ public final class DifferentiateurString {
 	public static final String CLASSE_DIFFERENTIATEURSTRING 
 		= "Classe DifferentiateurString";
 
+	/**
+	 * METHODE_DIFFERENCIER : String :<br/>
+	 * "méthode differencier(String pString1, String pString2)".<br/>
+	 */
+	public static final String METHODE_DIFFERENCIER 
+		= "méthode differencier(String pString1, String pString2)";
+	
+	
+	/**
+	 * METHODE_ECRIRESTRINGDANSFILE : String :<br/>
+	 * "méthode ecrireStringDansFile(
+	 * File pFile, String pString, Charset pCharset)".<br/>
+	 */
+	public static final String METHODE_ECRIRESTRINGDANSFILE 
+		= "méthode ecrireStringDansFile(File pFile, String pString, Charset pCharset)";
+	
+	
+	/**
+	 * MESSAGE_FICHIER_NULL : String :<br/>
+	 * Message retourné par la METHODE_ECRIRESTRINGDANSFILE 
+	 * si le fichier est null.<br/>
+	 * "Le fichier passé en paramètre est null".<br/>
+	 */
+	public static final String MESSAGE_FICHIER_NULL 
+		= "Le fichier passé en paramètre est null";
+	
+	/**
+	 * MESSAGE_FICHIER_INEXISTANT : String :<br/>
+	 * Message retourné par la METHODE_ECRIRESTRINGDANSFILE 
+	 * si le fichier est inexistant.<br/>
+	 * "Le fichier passé en paramètre est inexistant : "
+	 */
+	public static final String MESSAGE_FICHIER_INEXISTANT 
+		= "Le fichier passé en paramètre est inexistant : ";
+	
+	/**
+	 * MESSAGE_FICHIER_REPERTOIRE : String :<br/>
+	 * Message retourné par la METHODE_ECRIRESTRINGDANSFILE 
+	 * si le fichier est un répertoire.<br/>
+	 * "Le fichier passé en paramètre est un répertoire : ".<br/>
+	 */
+	public static final String MESSAGE_FICHIER_REPERTOIRE 
+		= "Le fichier passé en paramètre est un répertoire : ";
 
+	/**
+	 * MESSAGE_STRING_BLANK : String :<br/>
+	 * Message retourné par la METHODE_ECRIRESTRINGDANSFILE 
+	 * si la String passée en paramètre est blank.<br/>
+	 * "La chaine de caractères passée en paramètre est blank (null ou vide) : "
+	 */
+	public static final String MESSAGE_STRING_BLANK 
+	= "La chaine de caractères passée en paramètre est blank (null ou vide) : ";
+	
 	/**
 	 * SAUTDELIGNE_UNIX : String :<br/>
 	 * Saut de ligne généré par les éditeurs Unix.<br/>
@@ -134,19 +197,31 @@ public final class DifferentiateurString {
 	
 	/**
 	 * rapportDiff : String :<br/>
-	 * Rapport textuel contenant les différences 
-	 * entre deux chaines de caractères.<br/>
-	 * null si les deux chaines sont equals.<br/>
+	 * Rapport textuel comparant les deux chaines de caractères.<br/>
 	 */
 	private static String rapportDiff;
 	
 	/**
 	 * rapportDiffCsv : String :<br/>
-	 * Rapport au format csv contenant les différences 
-	 * entre deux chaines de caractères.<br/>
-	 * null si les deux chaines sont equals.<br/>
+	 * Rapport au format csv comparant les deux chaines de caractères.<br/>
 	 */
 	private static String rapportDiffCsv;
+
+	
+	/**
+	 * fileRapportDiff : File :<br/>
+	 * File contenant le Rapport textuel 
+	 * comparant les deux chaines de caractères.<br/>
+	 */
+	private static File fileRapportDiff;
+
+	
+	/**
+	 * fileRapportDiffCsv : File :<br/>
+	 * File contenant le Rapport au format csv 
+	 * comparant les deux chaines de caractères.<br/>
+	 */
+	private static File fileRapportDiffCsv;
 	
 	
 	/**
@@ -197,6 +272,9 @@ public final class DifferentiateurString {
 			Character caractereChaine1 = null;
 			Character caractereChaine2 = null;
 			String diff = null;
+			
+			final StringBuilder stbDiff = new StringBuilder();
+			final StringBuilder stbDiffCsv = new StringBuilder();
 			
 			/* Détermine la longueur de la plus longue chaîne. */
 			final int longueurChaine1 = pString1.length();
@@ -261,17 +339,35 @@ public final class DifferentiateurString {
 				}
 				
 				final String comparaison = c1.toString() + "   DIFFERENCE = " + diff + "     " + c2.toString();
+				final String comparaisonCsv = c1.toCsv() + diff + ";" + c2.toCsv();
 				
-				System.out.println(comparaison);
-				//("Position : " + position + "\t\tcaractère1 : " + caractereChaine1 + "\t\tcaractère2 : " + caractereChaine2 + "\t\tDIFFERENCE : " + diff + "\t\tcode Hexadecimal Unicode : " + getCodeUnicodeHexaDecimal(caractereChaine2) + "\t\tNumericValue : " + getNumericValue(caractereChaine2) + "\t\tCode Point Décimal : " + getCodePointDecimal(caractereChaine2) + "\t\tCode Point Hexa : " + getCodePointHexaDecimal(caractereChaine2) + "\t\tNom : " + getNameUnicodeChar(caractereChaine2));
-//				System.out.printf(
-//						LOCALE_FR_FR
-//						, "Pos : %-7d car1 : %-4s  Unicode1 : %-6s    NumericValue1 : %-6d  Type1 : %-3d  intValue1 : %-6d  CodePoint1 : %-6d  CodePointHexa1 : %-8s  Nom1 : %-40s  DELTA : %-8s   car2 : %-4s  Unicode2 : %6s    NumericValue2 : %-6d    CodePoint2 : %-6d    CodePointHexa2 : %-8s    Nom2 : %s.%n" , position, caractereChaine1, getCodeUnicodeHexaDecimal(caractereChaine1), getNumericValue(caractereChaine1), getTypeCharacter(caractereChaine1), getIntValue(caractereChaine1), getCodePointDecimal(caractereChaine1), getCodePointHexaDecimal(caractereChaine1), getNameUnicodeChar(caractereChaine1), diff, caractereChaine2, getCodeUnicodeHexaDecimal(caractereChaine2), getNumericValue(caractereChaine2), getCodePointDecimal(caractereChaine2), getCodePointHexaDecimal(caractereChaine2), getNameUnicodeChar(caractereChaine2));
-			}
+				/* Ajout dans les StringBuilders pour les rapports. */
+				stbDiff.append(comparaison);
+				stbDiff.append(SAUTDELIGNE_DOS_WINDOWS);
+				
+				/* Ajout de l'en-tête pour le rapport Csv. */
+				if (position == 1) {
+					stbDiffCsv.append(c1.getEnTeteCsv());
+					stbDiffCsv.append("DIFFERENCE");
+					stbDiffCsv.append(IConstantesMessage.SEP_POINTVIRGULE);
+					stbDiffCsv.append(c1.getEnTeteCsv());
+					stbDiffCsv.append(SAUTDELIGNE_DOS_WINDOWS);
+				}
+				stbDiffCsv.append(comparaisonCsv);
+				stbDiffCsv.append(SAUTDELIGNE_DOS_WINDOWS);
+								
+			} // Fin de la boucle sur les caractères._______________
 			
-			return null;
+			System.out.println(stbDiff.toString());
+			/* Injection dans le rapport. */
+			rapportDiff = stbDiff.toString();
+			System.out.println();
+			/* Injection dans le rapport csv. */
+			rapportDiffCsv = stbDiffCsv.toString();
+			System.out.println(stbDiffCsv.toString());
 			
-			
+			return stbDiff.toString();
+						
 		} // Fin du bloc static synchronized.________________________
 		
 		
@@ -279,7 +375,208 @@ public final class DifferentiateurString {
 	 // , String pString2).________________________________________________
 
 
+	
+	/**
+	 * method ecrireStringDansFile(
+	 * File pFile
+	 * , String pString
+	 * , Charset pCharset) :<br/>
+	 * Ecrit la String pString dans le File pFile avec un encodage pCharset.<br/>
+	 * Utilise FileOutputStream, 
+	 * new OutputStreamWriter(fileOutputStream, charset) 
+	 * et BufferedWriter pour écrire.<br/>
+	 * Ecriture dans un fichier, écriture sur disque.<br/>
+	 * <br/>
+	 * - Met automatiquement le Charset à CHARSET_UTF8 si pCharset est null.<br/>
+	 * <br/>
+	 * - retourne null si le pFile est null.<br/>
+	 * - retourne null si le pFile est inexistant.<br/>
+	 * - retourne null si le pFile est un répertoire.<br/>
+	 * - retourne null en cas d'Exception loggée (FileNotFoundException, IOException, ).<br/>
+	 * - retourne null si pString est blank.<br/>
+	 * <br/>
+	 *
+	 * @param pFile
+	 * @param pString
+	 * @param pCharset
+	 * @return : File :  .<br/>
+	 */
+	public static File ecrireStringDansFile(
+			final File pFile, final String pString, final Charset pCharset) {
+		
+		/* bloc static synchronized. */
+		synchronized (DifferentiateurString.class) {
+			
+			/* retourne null si le pFile est null. */
+			if (pFile == null) {
+				
+				/* LOG de niveau INFO. */
+				loggerInfo(
+						CLASSE_DIFFERENTIATEURSTRING
+							, METHODE_ECRIRESTRINGDANSFILE
+								, MESSAGE_FICHIER_NULL);
+				
+				/* retour de null. */
+				return null;
+			}
+			
+			/* retourne null si le pFile est inexistant. */
+			if (!pFile.exists()) {
+								
+				/* LOG de niveau INFO. */
+				loggerInfo(
+						CLASSE_DIFFERENTIATEURSTRING
+							, METHODE_ECRIRESTRINGDANSFILE
+								, MESSAGE_FICHIER_INEXISTANT
+									, pFile.getAbsolutePath());
+				
+				/* retour de null. */
+				return null;
+			}
+			
+			/* retourne null si le pFile est un répertoire. */
+			if (pFile.isDirectory()) {
+				
+				/* LOG de niveau INFO. */
+				loggerInfo(
+						CLASSE_DIFFERENTIATEURSTRING
+							, METHODE_ECRIRESTRINGDANSFILE
+								, MESSAGE_FICHIER_REPERTOIRE
+									, pFile.getAbsolutePath());
+				
+				/* retour de null. */
+				return null;
+			}
+			
+			/* retourne null si pString est blank. */
+			if (StringUtils.isBlank(pString)) {
+				
+				/* LOG de niveau INFO. */
+				loggerInfo(
+						CLASSE_DIFFERENTIATEURSTRING
+							, METHODE_ECRIRESTRINGDANSFILE
+								, MESSAGE_STRING_BLANK
+									, pString);
+				
+				return null;
+			}
+			
+			
+			Charset charset = null;
+			
+			/* Passe le charset à UTF-8 si pCharset est null. */
+			if (pCharset == null) {
+				charset = CHARSET_UTF8;
+			}
+			else {
+				charset = pCharset;
+			}
+			
+			// ECRITURE SUR DISQUE ***************
+			FileOutputStream fileOutputStream = null;
+			OutputStreamWriter outputStreamWriter = null;
+			BufferedWriter bufferedWriter = null;
+			
+			try {
+				
+				/* Ouverture d'un FileOutputStream sur le fichier. */
+				fileOutputStream 
+					= new FileOutputStream(pFile);
+				
+				/* Ouverture d'un OutputStreamWriter 
+				 * sur le FileOutputStream en lui passant le Charset. */
+				outputStreamWriter 
+					= new OutputStreamWriter(fileOutputStream, charset);
+				
+				/* Ouverture d'un tampon d'écriture 
+				 * BufferedWriter sur le OutputStreamWriter. */
+				bufferedWriter 
+					= new BufferedWriter(outputStreamWriter);
+				
+				// ECRITURE.
+				bufferedWriter.write(pString);
+				
+				// Retour du fichier. 
+				return pFile;
+				
+			} catch (FileNotFoundException fnfe) {
+				
+				/* LOG de niveau ERROR. */
+				loggerError(
+						CLASSE_DIFFERENTIATEURSTRING
+							, MESSAGE_FICHIER_REPERTOIRE				
+								, fnfe);
+				
+				/* retour de null. */
+				return null;
+				
+			} catch (IOException ioe) {
+				
+				/* LOG de niveau ERROR. */
+				loggerError(
+						CLASSE_DIFFERENTIATEURSTRING
+							, MESSAGE_FICHIER_REPERTOIRE				
+								, ioe);
+				
+				/* retour de null. */
+				return null;
+			}
+			
+			finally {
+				
+				if (bufferedWriter != null) {
+					try {
+						
+						bufferedWriter.close();
+						
+					} catch (IOException ioe1) {
+						
+						/* LOG de niveau ERROR. */
+						loggerError(
+								CLASSE_DIFFERENTIATEURSTRING
+									, MESSAGE_FICHIER_REPERTOIRE				
+										, ioe1);
+					}
+				} // Fin de if (bufferedWriter != null).__________
+				
+				if (outputStreamWriter != null) {
+					try {
+						
+						outputStreamWriter.close();
+						
+					} catch (IOException ioe2) {
+						
+						/* LOG de niveau ERROR. */
+						loggerError(
+								CLASSE_DIFFERENTIATEURSTRING
+									, MESSAGE_FICHIER_REPERTOIRE				
+										, ioe2);
+					}
+				} // Fin de if (outputStreamWriter != null).______
+				
+				if (fileOutputStream != null) {
+					try {
+						
+						fileOutputStream.close();
+						
+					} catch (IOException ioe3) {
+						
+						//* LOG de niveau ERROR. */
+						loggerError(
+								CLASSE_DIFFERENTIATEURSTRING
+									, MESSAGE_FICHIER_REPERTOIRE				
+										, ioe3);
+					}
+				}
+				
+			} // Fin du finally.____________________________
+			
+		} // Fin du bloc static synchronized.________________________
+		
+	} // Fin de ecrireStringDansFile(...)._________________________________
+	
 
+	
 	/**
 	 * method afficherSautLigne(
 	 * String pSautLigne) :<br/>
@@ -335,6 +632,146 @@ public final class DifferentiateurString {
 	
 
 	
+	/**
+	 * method loggerInfo(
+	 * String pClasse
+	 * , String pMethode
+	 * , String pMessage) :<br/>
+	 * Créée un message de niveau INFO dans le LOG.<br/>
+	 * <br/>
+	 * - Ne fait rien si un des paramètres est null.<br/>
+	 * <br/>
+	 *
+	 * @param pClasse : String : Classe appelante.<br/>
+	 * @param pMethode : String : Méthode appelante.<br/>
+	 * @param pMessage : String : Message particulier de la méthode.<br/>
+	 */
+	private static void loggerInfo(
+			final String pClasse
+				, final String pMethode
+					, final String pMessage) {
+		
+		/* Ne fait rien si un des paramètres est null. */
+		if (pClasse == null || pMethode == null || pMessage == null) {
+			return;
+		}
+		
+		/* LOG de niveau INFO. */			
+		if (LOG.isInfoEnabled()) {
+			
+			final String message 
+			= pClasse 
+			+ IConstantesMessage.SEP_MOINS
+			+ pMethode
+			+ IConstantesMessage.SEP_MOINS
+			+ pMessage;
+			
+			LOG.info(message);
+		}
+		
+	} // Fin de la classe loggerInfo(
+	 // String pClasse
+	 // , String pMethode
+	 // , String pMessage).________________________________________________
+	
+
+	
+	/**
+	 * method loggerInfo(
+	 * String pClasse
+	 * , String pMethode
+	 * , String pMessage
+	 * , String pComplement) :<br/>
+	 * Créée un message de niveau INFO dans le LOG.<br/>
+	 * <br/>
+	 * - Ne fait rien si un des paramètres est null.<br/>
+	 * <br/>
+	 *
+	 * @param pClasse : String : Classe appelante.<br/>
+	 * @param pMethode : String : Méthode appelante.<br/>
+	 * @param pMessage : String : Message particulier de la méthode.<br/>
+	 * @param pComplement : String : Complément au message de la méthode.<br/>
+	 */
+	private static void loggerInfo(
+			final String pClasse
+				, final String pMethode
+					, final String pMessage
+						, final String pComplement) {
+		
+		/* Ne fait rien si un des paramètres est null. */
+		if (pClasse == null || pMethode == null 
+				|| pMessage == null || pComplement == null) {
+			return;
+		}
+		
+		/* LOG de niveau INFO. */			
+		if (LOG.isInfoEnabled()) {
+			
+			final String message 
+			= pClasse 
+			+ IConstantesMessage.SEP_MOINS
+			+ pMethode
+			+ IConstantesMessage.SEP_MOINS
+			+ pMessage
+			+ pComplement;
+			
+			LOG.info(message);
+		}
+		
+	} // Fin de loggerInfo(
+	 // String pClasse
+	 // , String pMethode
+	 // , String pMessage
+	 // , String pComplement)._____________________________________________
+	
+	
+	
+	/**
+	 * method loggerError(
+	 * String pClasse
+	 * , String pMethode
+	 * , Exception pException) :<br/>
+	 * Créée un message de niveau ERROR dans le LOG.<br/>
+	 * <br/>
+	 * - Ne fait rien si un des paramètres est null.<br/>
+	 * <br/>
+	 *
+	 * @param pClasse : String : Classe appelante.<br/>
+	 * @param pMethode : String : Méthode appelante.<br/>
+	 * @param pException : Exception : Exception transmise 
+	 * par la méthode appelante.<br/>
+	 */
+	private static void loggerError(
+			final String pClasse
+				, final String pMethode
+					, final Exception pException) {
+		
+		/* Ne fait rien si un des paramètres est null. */
+		if (pClasse == null || pMethode == null || pException == null) {
+			return;
+		}
+		
+		/* LOG de niveau ERROR. */			
+		if (LOG.isErrorEnabled()) {
+			
+			final String message 
+			= pClasse 
+			+ IConstantesMessage.SEP_MOINS
+			+ pMethode
+			+ IConstantesMessage.SEP_MOINS 
+			+ pException.getMessage();
+			
+			LOG.error(message, pException);
+			
+		}
+		
+	} // Fin de loggerError(
+	 // String pClasse
+	 // , String pMethode
+	 // , Exception pException).___________________________________________
+	
+	
+
 	/**
 	 * method getCodePointDecimal(
 	 * Character pChar) :<br/>
@@ -402,6 +839,8 @@ public final class DifferentiateurString {
 	 * - 'à' retourne e0.<br/>
 	 * - 'è' retourne e8.<br/>
 	 * <br/>
+	 * - retourne null si pChar == null.<br/>
+	 * <br/>
 	 * une caractère Unicode = un “codepoint”.<br/>
 	 * un char Java = un “codeunit”.<br/>
 	 * un “codepoint” est consitué de un “codeunit” 
@@ -434,7 +873,14 @@ public final class DifferentiateurString {
 	 */
 	public static String getCodePointHexaDecimal(
 			final Character pChar) {
+		
+		/* retourne null si pChar == null. */
+		if (pChar == null) {
+			return null;
+		}
+		
 		return Integer.toHexString(getCodePointDecimal(pChar));
+		
 	} // Fin de getCodePointHexaDecimal(
 	 // Character pChar).__________________________________________________
 
@@ -678,10 +1124,38 @@ public final class DifferentiateurString {
 	 * @param pArgs : void :  .<br/>
 	 */
 	public static void main(final String[] pArgs) {
-		System.out.println(creerCodePointDecimalfromCodePointHexa(0x49));
+		
 		differencier(ConvertisseurEncodage.lireDepuisFichier(FILE_DIACRITIQUES_UTF8, CHARSET_UTF8), STRING_REF_DIACRITIQUES_UTF8);
 	}
-	
-	
+
+
+
+	/**
+	 * method getRapportDiff() :<br/>
+	 * Getter du Rapport textuel 
+	 * comparant les deux chaines de caractères.<br/>
+	 * <br/>
+	 *
+	 * @return rapportDiff : String.<br/>
+	 */
+	public static String getRapportDiff() {
+		return rapportDiff;
+	} // Fin de getRapportDiff().__________________________________________
+
+
+
+	/**
+	 * method getRapportDiffCsv() :<br/>
+	 * Getter du Rapport au format csv 
+	 * comparant les deux chaines de caractères.<br/>
+	 * <br/>
+	 *
+	 * @return rapportDiffCsv : String.<br/>
+	 */
+	public static String getRapportDiffCsv() {
+		return rapportDiffCsv;
+	} // Fin de getRapportDiffCsv()._______________________________________
+
+
 	
 } // FIN DE LA CLASSE DifferentiateurString.---------------------------------
