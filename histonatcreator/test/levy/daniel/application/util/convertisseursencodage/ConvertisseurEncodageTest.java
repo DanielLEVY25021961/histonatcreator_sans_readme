@@ -1,10 +1,6 @@
 package levy.daniel.application.util.convertisseursencodage;
 
-import static org.junit.Assert.assertEquals;
-
 import java.io.File;
-import java.io.IOException;
-import java.io.StringReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +9,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Test;
+
 
 /**
  * class ConvertisseurEncodageTest :<br/>
@@ -786,7 +783,7 @@ public final class ConvertisseurEncodageTest {
 	/**
 	 * CHARSET_WINDOWS_1252 : Charset :<br/>
 	 * Charset.forName("windows-1252").<br/>
-	 * ANSI, CP1252, Windows Latin 1.<br/>
+	 * ANSI, CP1252.<br/>
 	 * 218 caractères imprimables.<br/>
 	 * extension d’ISO-8859-1, qui rajoute quelques caractères: œ, € (euro), 
 	 * guillemets anglais (« »), points de suspension (...)
@@ -800,7 +797,7 @@ public final class ConvertisseurEncodageTest {
 	/**
 	 * CHARSET_ANSI : Charset :<br/>
 	 * Charset.forName("windows-1252").<br/>
-	 * ANSI, CP1252, Windows Latin 1.<br/>
+	 * ANSI, CP1252.<br/>
 	 * 218 caractères imprimables.<br/>
 	 * extension d’ISO-8859-1, qui rajoute quelques caractères: œ, € (euro), 
 	 * guillemets anglais (« »), points de suspension (...)
@@ -867,46 +864,15 @@ public final class ConvertisseurEncodageTest {
 	/**
 	 * STRING_REF_DIACRITIQUES_ISO_8859_2 : String : <br/>
 	 */
-	public static final String STRING_REF_DIACRITIQUES_ISO_8859_2 = "ISO-8859-2.Tous français inscrit au rôle, naïf ou râleur, à Nîmes, carbœuf ou même Capharnaüm, aura payé son dû dès avant Noël.ligne de 152 caractères.\r\nISO-8859-2.Œdipe de Capharnaüm et Éric de Nîmes étaient français, drôles, naïfs et râleurs mais ils ont dû être pris à l’œil dès Noël. ligne de 160 caractères.\r\nISO-8859-2.Mon châton est évalué à 15 € sur le marché de Noël de Faÿ-lès-Nemours. Où ça ? Là bas. ligne de 123 caractères.\r\nISO-8859-2. 490 caractères au total dans ce fichier.";
+	public static final String STRING_REF_DIACRITIQUES_ISO_8859_2 = "ISO-8859-2.Tous français inscrit au rôle, naïf ou râleur, à Nîmes, carbœuf ou même Capharnaüm, aura payé son dû dès avant Noël.ligne de 152 caractères.\nISO-8859-2.Œdipe de Capharnaüm et Éric de Nîmes étaient français, drôles, naïfs et râleurs mais ils ont dû être pris à l’œil dès Noël. ligne de 160 caractères.\nISO-8859-2.Mon châton est évalué à 15 € sur le marché de Noël de Faÿ-lès-Nemours. Où ça ? Là bas. ligne de 123 caractères.\nISO-8859-2. 490 caractères au total dans ce fichier.";
 	
 	
 	/**
 	 * STRING_REF_DIACRITIQUES_UTF8 : String : <br/>
 	 */
-	public static final String STRING_REF_DIACRITIQUES_UTF8 = "UTF-8. Tous français inscrit au rôle, naïf ou râleur, à Nîmes, carbœuf ou même Capharnaüm, aura payé son dû dès avant Noël. ligne de 148 caractères.\r\nUTF-8. Œdipe de Capharnaüm et Éric de Nîmes étaient français, drôles, naïfs et râleurs mais ils ont dû être pris à l’œil dès Noël. ligne de 155 caractères.\r\nUTF-8. Mon châton est évalué à 15 € sur le marché de Noël de Faÿ-lès-Nemours. Où ça ? Là bas. ligne de 118 caractères.\r\nUTF-8. ligne de 074 caractères et 495 caractères au total dans ce fichier.";
+	public static final String STRING_REF_DIACRITIQUES_UTF8 = "UTF-8. Tous français inscrit au rôle, naïf ou râleur, à Nîmes, carbœuf ou même Capharnaüm, aura payé son dû dès avant Noël. ligne de 148 caractères.\nUTF-8. Œdipe de Capharnaüm et Éric de Nîmes étaient français, drôles, naïfs et râleurs mais ils ont dû être pris à l’œil dès Noël. ligne de 155 caractères.\nUTF-8. Mon châton est évalué à 15 € sur le marché de Noël de Faÿ-lès-Nemours. Où ça ? Là bas. ligne de 118 caractères.\nUTF-8. ligne de 074 caractères et 495 caractères au total dans ce fichier.";
 	
-
-	/**
-	 * SAUTDELIGNE_UNIX : String :<br/>
-	 * Saut de ligne généré par les éditeurs Unix.<br/>
-	 * "\n" (Retour Ligne LF).
-	 */
-	public static final String SAUTDELIGNE_UNIX = "\n";
-
 	
-	/**
-	 * SAUTDELIGNE_MAC : String :<br/>
-	 * Saut de ligne généré par les éditeurs Mac.<br/>
-	 * "\r" (Retour Chariot RC = Carriage Return CR)
-	 */
-	public static final String SAUTDELIGNE_MAC = "\r";
-	
-	/**
-	 * SAUTDELIGNE_DOS_WINDOWS : String :<br/>
-	 * Saut de ligne généré par les éditeurs DOS/Windows.<br/>
-	 * "\r\n" (Retour Chariot RC + Retour Ligne LF).
-	 */
-	public static final String SAUTDELIGNE_DOS_WINDOWS = "\r\n";
-
-
-	/**
-	 * NEWLINE : String :<br/>
-	 * Saut de ligne spécifique de la plateforme.<br/>
-	 * System.getProperty("line.separator").<br/>
-	 */
-	public static final String NEWLINE = System.getProperty("line.separator");
-
-
 	/**
 	 * LOG : Log : 
 	 * Logger pour Log4j (utilisant commons-logging).
@@ -934,100 +900,6 @@ public final class ConvertisseurEncodageTest {
 	//*********************************************************************/
 
 	/**
-	 * method testNewLine() :<br/>
-	 * teste la méthode afficherSautLigne(sautDeLigne).<br/>
-	 * <br/>
-	 */
-	@Test
-	public void testNewLine() {
-		
-		int position = 0;
-		final StringBuilder stb = new StringBuilder();
-		
-		final char[] newLineChars = NEWLINE.toCharArray();
-		
-		for (final char caractere : newLineChars) {
-			
-			position++;
-		
-			if (caractere == '\n') {
-				System.out.println("Position : " + position + "        caractère : \\n");
-				stb.append("\\n");
-			}
-			else if (caractere == '\r') {
-				System.out.println("Position : " + position + "        caractère : \\r");
-				stb.append("\\r");
-			}
-			else {
-				System.out.println("Position : " + position + "        caractère inconnu : " + caractere);
-				stb.append("inconnu");
-			}
-			
-		}
-		
-		System.out.println("Saut de ligne : " + stb.toString());
-		
-		assertEquals("doit donner \\r\\n : "
-				, "\\r\\n"
-				, ConvertisseurEncodage.afficherSautLigne(SAUTDELIGNE_DOS_WINDOWS));
-		
-		assertEquals("doit donner \\r\\n : "
-				, "\\r\\n"
-				, ConvertisseurEncodage.afficherSautLigne(NEWLINE));
-		
-		assertEquals("doit donner \\r : "
-				, "\\r"
-				, ConvertisseurEncodage.afficherSautLigne(SAUTDELIGNE_MAC));
-		
-		assertEquals("doit donner \\n : "
-				, "\\n"
-				, ConvertisseurEncodage.afficherSautLigne(SAUTDELIGNE_UNIX));
-		
-	} // Fin de testNewLine()._____________________________________________
-	
-
-	
-	/**
-	 * method testIntValue() :<br/>
-	 * Vérifie que (int) character == stringReader.read().<br/>
-	 * <br/>
-	 * @throws IOException 
-	 */
-	@Test
-	public void testIntValue() throws IOException {
-		
-		final String maString 
-		= "Tous français inscrit au rôle, naïf ou râleur, à Nîmes, carbœuf ou même Capharnaüm, aura payé son dû dès avant Noël. ligne de 148 caractères.\r\nMon châton est évalué à 15 € sur le marché de Noël de Faÿ-lès-Nemours. Où ça ? Là bas. ligne de 118 caractères.";
-		
-		final StringReader stringReader = new StringReader(maString);
-		
-		int intValueChar = 0;
-		Character character = null;
-		
-		while (true) {
-			
-			intValueChar = stringReader.read();
-			
-			if (intValueChar <0) {
-				break;
-			}
-			
-			/* Conversion de l'entier en caractère. */
-			character = (char) intValueChar;
-			
-			System.out.println("character : " + character +  "    intValueChar : " + intValueChar);
-			System.out.println("character : " + character + "     Cast du character en int : " + (int) character);
-			System.out.println("Character.getType(pointCode) : " + Character.getType(intValueChar));
-			System.out.println();
-			
-			assertEquals("(int) character == stringReader.read() : ", intValueChar,  (int) character);
-		}
-		
-	} // Fin de testIntValue().____________________________________________
-	
-	
-	
-	/**
 	 * method testLireDepuisFichier() :<br/>
 	 * .<br/>
 	 * <br/>
@@ -1038,7 +910,7 @@ public final class ConvertisseurEncodageTest {
 		
 		 final String resultat 
 		 = ConvertisseurEncodage.lireDepuisFichier(
-				 FILE_DIACRITIQUES_ISO_8859_2
+				 FILE_DIACRITIQUES_UTF8
 				 	, CHARSET_UTF8);
 		 
 		 final int longueur = resultat.length();

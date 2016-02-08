@@ -26,13 +26,6 @@ import org.apache.commons.logging.LogFactory;
  * synchronized, bloc static synchronized, <br/>
  * FileReader, BufferedReader, bufferedReader.read(), <br/>
  * Cast entier en Character, LOG, <br/>
- * Retour à la ligne, saut de ligne,<br/>
- * SAUTDELIGNE_UNIX = "\n", SAUTDELIGNE_MAC = "\r",<br/>
- * SAUTDELIGNE_DOS_WINDOWS = "\r\n",  <br/>
- * Saut de ligne spécifique de la plateforme.<br/>
- * System.getProperty("line.separator").<br/>
- * caractères d'échappement : assertEquals("doit donner \\r\\n : "
- * , "\\r\\n", ConvertisseurEncodage.afficherSautLigne(NEWLINE));<br/>
  * <br/>
  *
  * - Dépendances :<br/>
@@ -165,7 +158,7 @@ public final class ConvertisseurEncodage {
 	/**
 	 * CHARSET_WINDOWS_1252 : Charset :<br/>
 	 * Charset.forName("windows-1252").<br/>
-	 * ANSI, CP1252, Windows Latin 1.<br/>
+	 * ANSI, CP1252.<br/>
 	 * 218 caractères imprimables.<br/>
 	 * extension d’ISO-8859-1, qui rajoute quelques caractères: œ, € (euro), 
 	 * guillemets anglais (« »), points de suspension (...)
@@ -179,7 +172,7 @@ public final class ConvertisseurEncodage {
 	/**
 	 * CHARSET_ANSI : Charset :<br/>
 	 * Charset.forName("windows-1252").<br/>
-	 * ANSI, CP1252, Windows Latin 1.<br/>
+	 * ANSI, CP1252.<br/>
 	 * 218 caractères imprimables.<br/>
 	 * extension d’ISO-8859-1, qui rajoute quelques caractères: œ, € (euro), 
 	 * guillemets anglais (« »), points de suspension (...)
@@ -202,39 +195,6 @@ public final class ConvertisseurEncodage {
 	 */
 	public static final Charset CHARSET_CP1252
 		= Charset.forName("windows-1252");
-
-
-
-	/**
-	 * SAUTDELIGNE_UNIX : String :<br/>
-	 * Saut de ligne généré par les éditeurs Unix.<br/>
-	 * "\n" (Retour Ligne = LINE FEED (LF)).
-	 */
-	public static final String SAUTDELIGNE_UNIX = "\n";
-
-	
-	/**
-	 * SAUTDELIGNE_MAC : String :<br/>
-	 * Saut de ligne généré par les éditeurs Mac.<br/>
-	 * "\r" (Retour Chariot RC = CARRIAGE RETURN (CR))
-	 */
-	public static final String SAUTDELIGNE_MAC = "\r";
-
-	
-	/**
-	 * SAUTDELIGNE_DOS_WINDOWS : String :<br/>
-	 * Saut de ligne généré par les éditeurs DOS/Windows.<br/>
-	 * "\r\n" (Retour Chariot RC + Retour Ligne LF).
-	 */
-	public static final String SAUTDELIGNE_DOS_WINDOWS = "\r\n";
-
-	
-	/**
-	 * NEWLINE : String :<br/>
-	 * Saut de ligne spécifique de la plateforme.<br/>
-	 * System.getProperty("line.separator").<br/>
-	 */
-	public static final String NEWLINE = System.getProperty("line.separator");
 
 
 	/**
@@ -621,59 +581,6 @@ public final class ConvertisseurEncodage {
 	 // String pClasse
 	 // , String pMethode
 	 // , Exception pException).___________________________________________
-	
-	
-
-	/**
-	 * method afficherSautLigne(
-	 * String pSautLigne) :<br/>
-	 * Affiche les caractères non imprimables 
-	 * saut de ligne (\n ou \r ou \r\n).<br/>
-	 * <br/>
-	 * <code>Par exemple, 
-	 * ConvertisseurEncodage.afficherSautLigne(NEWLINE) retourne "\r\n"
-	 * </code><br/>
-	 * <br/>
-	 * - retourne null si pSautLigne est null.<br/>
-	 * - retourne null si pSautLigne n'est pas un saut de ligne 
-	 * (\n ou \r ou \r\n).<br/>
-	 * <br/>
-	 *
-	 * @param pSautLigne : String : \n ou \r ou \r\n.<br/>
-	 * 
-	 * @return : String : Affichage des caractères non imprimables 
-	 * saut de ligne (\n ou \r ou \r\n).<br/>
-	 */
-	public static String afficherSautLigne(
-			final String pSautLigne) {
-		
-		/* retourne null si pSautLigne est null. */
-		if (pSautLigne == null) {
-			return null;
-		}
-		final StringBuilder stb = new StringBuilder();
-		
-		final char[] newLineChars = pSautLigne.toCharArray();
-		
-		for (final char caractere : newLineChars) {
-			
-			if (caractere == '\n') {
-				stb.append("\\n");
-			}
-			else if (caractere == '\r') {
-				stb.append("\\r");
-			}
-			/* retourne null si pSautLigne n'est pas un saut de ligne. */
-			else {
-				return null;
-			}
-			
-		}
-		
-		return stb.toString();
-		
-	} // Fin de afficherSautLigne(
-	 // String pSautLigne).________________________________________________
 	
 	
 
