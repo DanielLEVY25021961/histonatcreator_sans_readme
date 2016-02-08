@@ -701,6 +701,10 @@ public class CaractereDan implements
 	 * method toCsv() :<br/>
 	 * Fournit le ValueObject sous forme de ligne Csv.<br/>
 	 * <br/>
+	 * "id;Position;Caractère;Unicode;numericValue;Type de Caractère;
+	 * Valeur Entière;Point de Code Décimal;
+	 * Point de Code HexaDécimal;Nom Unicode;".<br/>
+	 * <br/>
 	 *
 	 * @return : String : Le valueObject sous forme csv 
 	 * avec le séparateur ';'.<br/>
@@ -738,6 +742,11 @@ public class CaractereDan implements
 	
 
 	/**
+	 * "id;Position;Caractère;Unicode;numericValue;Type de Caractère;
+	 * Valeur Entière;Point de Code Décimal;
+	 * Point de Code HexaDécimal;Nom Unicode;".<br/>
+	 * <br/>
+	 * 
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -801,6 +810,10 @@ public class CaractereDan implements
 
 
 	/**
+	 * "id;Position;Caractère;Unicode;numericValue;Type de Caractère;
+	 * Valeur Entière;Point de Code Décimal;
+	 * Point de Code HexaDécimal;Nom Unicode;".<br/>
+	 * <br/>
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -929,6 +942,8 @@ public class CaractereDan implements
 	 * - 'à' retourne e0.<br/>
 	 * - 'è' retourne e8.<br/>
 	 * <br/>
+	 * - retourne null si pChar == null.<br/>
+	 * <br/>
 	 * une caractère Unicode = un “codepoint”.<br/>
 	 * un char Java = un “codeunit”.<br/>
 	 * un “codepoint” est consitué de un “codeunit” 
@@ -961,6 +976,12 @@ public class CaractereDan implements
 	 */
 	private String getCodePointHexaDecimal(
 			final Character pChar) {
+		
+		/* retourne null si pChar == null. */
+		if (pChar == null) {
+			return null;
+		}
+		
 		return Integer.toHexString(this.getCodePointDecimal(pChar));
 	} // Fin de getCodePointHexaDecimal(
 	 // Character pChar).__________________________________________________

@@ -95,6 +95,32 @@ public final class CaractereDanTest {
 	 * "null;null;null;null;0;0;0;0;null;null;".<br/>
 	 */
 	public static final String TOCSV_CARAC_NULL = "null;null;null;null;0;0;0;0;null;null;";
+		
+	/**
+	 * LISTE_COLONNES_CARAC_NULL : List<Object> :<br/>
+	 * Liste des valeurs dans les colonnes de CARAC_NULL.<br/>
+	 */
+	public static final List<Object> LISTE_COLONNES_CARAC_NULL = new ArrayList<Object>();
+
+	
+	/**
+	 * TOSTRING_CARAC_E_AIGU : String :<br/>
+	 * toString() de CARAC_E_AIGU.<br/>
+	 */
+	public static final String TOSTRING_CARAC_E_AIGU = "id : 454    Position : 454    Caractère : é     Unicode : \u00e9  NumericValue : -1    TypeCaractere : 2   valeurEntiere : 233   Point de Code décimal : 233   Point de Code Hexa : e9      Nom : LATIN SMALL LETTER E WITH ACUTE         ";
+	
+	/**
+	 * TOCSV_CARAC_E_AIGU : String :<br/>
+	 * toCsv() de CARAC_E_AIGU.<br/>
+	 * "454;454;é;\u00e9;-1;2;233;233;e9;LATIN SMALL LETTER E WITH ACUTE;".<br/>
+	 */
+	public static final String TOCSV_CARAC_E_AIGU = "454;454;é;\u00e9;-1;2;233;233;e9;LATIN SMALL LETTER E WITH ACUTE;";
+	
+	/**
+	 * LISTE_COLONNES_CARAC_E_AIGU : List<Object> :<br/>
+	 * Liste des valeurs dans les colonnes de CARAC_E_AIGU.<br/>
+	 */
+	public static final List<Object> LISTE_COLONNES_CARAC_E_AIGU = new ArrayList<Object>();
 	
 	
 	/**
@@ -108,12 +134,6 @@ public final class CaractereDanTest {
 				+ "Valeur Entière;Point de Code Décimal;"
 				+ "Point de Code HexaDécimal;Nom Unicode;";
 	
-	/**
-	 * LISTE_COLONNES_CARAC_NULL : List<Object> :<br/>
-	 * Liste des valeurs dans les colonnes de CARAC_NULL.<br/>
-	 */
-	public static final List<Object> LISTE_COLONNES_CARAC_NULL = new ArrayList<Object>();
-	
 	static {
 		
 		LISTE_COLONNES_CARAC_NULL.add(null);
@@ -126,6 +146,17 @@ public final class CaractereDanTest {
 		LISTE_COLONNES_CARAC_NULL.add(0);
 		LISTE_COLONNES_CARAC_NULL.add(null);
 		LISTE_COLONNES_CARAC_NULL.add(null);
+		
+		LISTE_COLONNES_CARAC_E_AIGU.add(454L);
+		LISTE_COLONNES_CARAC_E_AIGU.add(454);
+		LISTE_COLONNES_CARAC_E_AIGU.add('é');
+		LISTE_COLONNES_CARAC_E_AIGU.add("\\u00e9");
+		LISTE_COLONNES_CARAC_E_AIGU.add(-1);
+		LISTE_COLONNES_CARAC_E_AIGU.add(2);
+		LISTE_COLONNES_CARAC_E_AIGU.add(233);
+		LISTE_COLONNES_CARAC_E_AIGU.add(233);
+		LISTE_COLONNES_CARAC_E_AIGU.add("e9");
+		LISTE_COLONNES_CARAC_E_AIGU.add("LATIN SMALL LETTER E WITH ACUTE");
 		
 	}
 	
@@ -162,33 +193,128 @@ public final class CaractereDanTest {
 	 * - Si deux objets ne sont pas equals, alors HashCode différents.<br/>
 	 * <br/>
 	 * - x.equals(y) ---> x.compareTo(y) == 0.<br/>
+	 * 
+	 * @throws CloneNotSupportedException 
 	 */
 	@Test
-	public void testConstructeurAriteNulle() {
+	public void testConstructeurAriteNulle() throws CloneNotSupportedException {
+		
 		
 		final CaractereDan caracAriteNulle1 = new CaractereDan();
 		
+		final CaractereDan caracAutoNull = new CaractereDan(null);
+		
 		final CaractereDan caracNull1 
 		= new CaractereDan(1L, null, null, null, 0, 0, 0, 0, null, null);
+
 		
+		/* Vérifie le toString(). */
 		assertEquals("caracAriteNulle1.toString() equals TOSTRING_CARAC_NULL : "
-				, caracAriteNulle1.toString(), TOSTRING_CARAC_NULL);
+					, TOSTRING_CARAC_NULL, caracAriteNulle1.toString());
 		
+		assertEquals("caracAutoNull.toString() equals TOSTRING_CARAC_NULL : "
+				, TOSTRING_CARAC_NULL, caracAutoNull.toString());
+		
+		assertEquals("CARAC_NULL.toString() equals TOSTRING_CARAC_NULL : "
+				, TOSTRING_CARAC_NULL, CARAC_NULL.toString());
+		
+		assertNotEquals("caracNull1.toString() equals TOSTRING_CARAC_NULL : "
+				, TOSTRING_CARAC_NULL, caracNull1.toString());
+		
+		/* Vérifie le toCsv(). */
 		assertEquals("caracAriteNulle1.toCsv() equals TOCSV_CARAC_NULL : "
-				, caracAriteNulle1.toCsv(), TOCSV_CARAC_NULL);
+				, TOCSV_CARAC_NULL, caracAriteNulle1.toCsv());
 		
+		assertEquals("caracAutoNull.toCsv() equals TOCSV_CARAC_NULL : "
+				, TOCSV_CARAC_NULL, caracAutoNull.toCsv());
+		
+		assertEquals("CARAC_NULL.toCsv() equals TOCSV_CARAC_NULL : "
+				, TOCSV_CARAC_NULL, CARAC_NULL.toCsv());
+		
+		assertNotEquals("caracNull1.toCsv() equals TOCSV_CARAC_NULL : "
+				, TOCSV_CARAC_NULL, caracNull1.toCsv());
+		
+		/* Vérifie le getValeurColonne(). */
 		this.assertionsListeColonne(LISTE_COLONNES_CARAC_NULL, caracAriteNulle1);
 		
+		this.assertionsListeColonne(LISTE_COLONNES_CARAC_NULL, caracAutoNull);
+		
+		this.assertionsListeColonne(LISTE_COLONNES_CARAC_NULL, CARAC_NULL);
+		
+		
+		/* vérifie equals. */
 		assertEquals("caracAriteNulle1 equals caracNull1 : "
 				, caracAriteNulle1, caracNull1);
 		
+		assertEquals("caracAutoNull equals caracNull1 : "
+				, caracAutoNull, caracNull1);
+		
+		assertEquals("caracAriteNulle1 equals caracAutoNull : "
+				, caracAriteNulle1, caracAutoNull);
+		
+		assertEquals("caracAriteNulle1 equals CARAC_NULL : "
+				, caracAriteNulle1, CARAC_NULL);
+		
+		/* vérifie hashcode. */
 		assertEquals("caracAriteNulle1 equals caracNull1, donc caracAriteNulle1.hascode == caracNull1.hascode : "
 				, caracAriteNulle1.hashCode(), caracNull1.hashCode());
 		
+		assertEquals("caracAutoNull equals caracNull1, donc caracAutoNull.hascode == caracNull1.hascode : "
+				, caracAutoNull.hashCode(), caracNull1.hashCode());
+		
+		assertEquals("caracAriteNulle1 equals caracAutoNull, donc caracAriteNulle1.hascode == caracAutoNull.hascode : "
+				, caracAriteNulle1.hashCode(), caracAutoNull.hashCode());
+		
+		assertEquals("caracAriteNulle1 equals CARAC_NULL, donc caracAriteNulle1.hascode == CARAC_NULL.hascode : "
+				, caracAriteNulle1.hashCode(), CARAC_NULL.hashCode());
+		
+		/* vérifie compare. */
 		assertEquals("caracAriteNulle1.compareTo(caracNull1) == 0 : "
 				, 0, caracAriteNulle1.compareTo(caracNull1));
 		
+		assertEquals("caracAutoNull.compareTo(caracNull1) == 0 : "
+				, 0, caracAutoNull.compareTo(caracNull1));
+		
+		assertEquals("caracAriteNulle1.compareTo(caracAutoNull) == 0 : "
+				, 0, caracAriteNulle1.compareTo(caracAutoNull));
+		
+		assertEquals("caracAriteNulle1.compareTo(CARAC_NULL) == 0 : "
+				, 0, caracAriteNulle1.compareTo(CARAC_NULL));
+		
+		/* vérifie clone. */
+		final CaractereDan caracAriteNulle1Clone 
+			= (CaractereDan) caracAriteNulle1.clone();
+		
+		final CaractereDan caracAutoNullClone 
+			= (CaractereDan) caracAutoNull.clone();
+		
+		final CaractereDan caracNull1Clone 
+			= (CaractereDan) caracNull1.clone();
+		
+		assertFalse("caracAriteNulle1 pas == caracAriteNulle1Clone : ", caracAriteNulle1 == caracAriteNulle1Clone);
+		assertEquals("caracAriteNulle1 equals caracAriteNulle1Clone : ", caracAriteNulle1, caracAriteNulle1Clone);
+		
+		assertFalse("caracAutoNull pas == caracAutoNullClone : ", caracAutoNull == caracAutoNullClone);
+		assertEquals("caracAutoNull equals caracAutoNullClone : ", caracAutoNull, caracAutoNullClone);
+		
+		assertFalse("caracNull1 pas == caracNull1Clone : ", caracNull1 == caracNull1Clone);
+		assertEquals("caracNull1 equals caracNull1Clone : ", caracNull1, caracNull1Clone);
+		
 	} // Fin de testConstructeurAriteNulle().______________________________
+	
+
+	
+	/**
+	 * method testConstructeurAutoNul() :<br/>
+	 * Teste le constructeur à remplissage automatique avec un Character null.<br/>
+	 * <br/>
+	 *
+	 * @throws CloneNotSupportedException
+	 */
+	@Test
+	public void testConstructeurAutoNul() throws CloneNotSupportedException {
+		this.testConstructeurAriteNulle();
+	} // Fin de testConstructeurAutoNul()._________________________________
 	
 	
 	
@@ -221,10 +347,79 @@ public final class CaractereDanTest {
 		assertEquals("caracNull1.compareTo(caracNull2) == 0 : "
 				, 0, caracNull1.compareTo(caracNull2));
 		
-		final CaractereDan carNullAuto = new CaractereDan(null);
-		System.out.println(carNullAuto.toString());
 		
 	} // Fin de testConstructeurCompletNull()._____________________________
+
+	
+		
+	/**
+	 * method testConstructeurAriteNulleEtSetters() :<br/>
+	 * Teste le constructeur d'arité nulle et les setters.<br/>
+	 * <br/>
+	 * "id;Position;Caractère;Unicode;numericValue;Type de Caractère;
+	 * Valeur Entière;Point de Code Décimal;
+	 * Point de Code HexaDécimal;Nom Unicode;".<br/>
+	 * <br/>
+	 * Contrats Java :<br/>
+	 * - Si deux objets sont equals, alors même HashCode.<br/>
+	 * - Si deux objets ne sont pas equals, alors HashCode différents.<br/>
+	 * <br/>
+	 * - x.equals(y) ---> x.compareTo(y) == 0.<br/>
+	 */
+	@Test
+	public void testConstructeurAriteNulleEtSetters() {
+		
+		final CaractereDan caracEAiguNull = new CaractereDan();
+		
+		caracEAiguNull.setId(454L);
+		caracEAiguNull.setPosition(454);
+		caracEAiguNull.setCaractere('é');
+		caracEAiguNull.setUnicode("\\u00e9");
+		caracEAiguNull.setNumericValue(-1);
+		caracEAiguNull.setTypeCaractere(2);
+		caracEAiguNull.setValeurEntiere(233);
+		caracEAiguNull.setCodePointDecimal(233);
+		caracEAiguNull.setCodePointHexa("e9");
+		caracEAiguNull.setNom("LATIN SMALL LETTER E WITH ACUTE");
+		
+		/* Vérifie le toString(). */
+		assertEquals("caracEAiguNull.toString() equals CARAC_E_AIGU.toString() : "
+				, CARAC_E_AIGU.toString()
+					, caracEAiguNull.toString());
+		
+		/* Vérifie le toCsv(). */
+		assertEquals("caracEAiguNull.toCsv() equals CARAC_E_AIGU.toCsv() : "
+				, CARAC_E_AIGU.toCsv()
+					, caracEAiguNull.toCsv());
+		
+		/* Vérifie le getValeurColonne(). */
+		this.assertionsListeColonne(LISTE_COLONNES_CARAC_E_AIGU, caracEAiguNull);
+		
+		/* vérifie equals. */
+		assertEquals("caracEAiguNull equals CARAC_E_AIGU : "
+				, CARAC_E_AIGU, caracEAiguNull);
+		
+		assertNotEquals("caracEAiguNull pas equals CARAC_E_GRAVE : "
+				, CARAC_E_GRAVE
+					, caracEAiguNull);
+		
+		/* vérifie hashcode. */
+		assertEquals("caracEAiguNull equals CARAC_E_AIGU, donc caracEAiguNull.hascode == CARAC_E_AIGU.hascode : "
+				, caracEAiguNull.hashCode()
+					, CARAC_E_AIGU.hashCode());
+		
+		assertNotEquals("caracEAiguNull pas equals CARAC_E_GRAVE donc caracEAiguNull.hascode != CARAC_E_GRAVE.hascode : "
+				, caracEAiguNull.hashCode()
+					, CARAC_E_GRAVE.hashCode());
+		
+		/* vérifie compare. */
+		assertEquals("caracEAiguNull.compareTo(CARAC_E_AIGU) == 0 : "
+				, 0, caracEAiguNull.compareTo(CARAC_E_AIGU));
+		
+		assertTrue("CARAC_E_AIGU après CARAC_E_GRAVE : "
+				, CARAC_E_AIGU.compareTo(CARAC_E_GRAVE) > 0);
+		
+	} // Fin de testConstructeurAriteNulleEtSetters()._____________________
 	
 	
 	
@@ -326,48 +521,48 @@ public final class CaractereDanTest {
 				, final CaractereDan pCar) {
 		
 		assertEquals("colonne(0) equals id : "
-				, pCar.getValeurColonne(0)
-					, pList.get(0));
+				, pList.get(0)
+					, pCar.getValeurColonne(0));
 		
 		assertEquals("colonne(1) equals position : "
-				, pCar.getValeurColonne(1)
-					, pList.get(1));
+				, pList.get(1)
+					, pCar.getValeurColonne(1));
 		
 		assertEquals("colonne(2) equals caractère : "
-				, pCar.getValeurColonne(2)
-					, pList.get(2));
+				, pList.get(2)
+					, pCar.getValeurColonne(2));
 		
 		assertEquals("colonne(3) equals unicode : "
-				, pCar.getValeurColonne(3)
-					, pList.get(3));
+				, pList.get(3)
+					, pCar.getValeurColonne(3));
 		
 		assertEquals("colonne(4) equals numericValue : "
-				, pCar.getValeurColonne(4)
-					, pList.get(4));
+				, pList.get(4)
+					, pCar.getValeurColonne(4));
 		
 		assertEquals("colonne(5) equals typeCaractere : "
-				, pCar.getValeurColonne(5)
-					, pList.get(5));
+				, pList.get(5)
+					, pCar.getValeurColonne(5));
 		
 		assertEquals("colonne(6) equals valeurEntiere : "
-				, pCar.getValeurColonne(6)
-					, pList.get(6));
+				, pList.get(6)
+					, pCar.getValeurColonne(6));
 		
 		assertEquals("colonne(7) equals codePointDecimal : "
-				, pCar.getValeurColonne(7)
-					, pList.get(7));
+				, pList.get(7)
+					, pCar.getValeurColonne(7));
 		
 		assertEquals("colonne(8) equals codePointHexa : "
-				, pCar.getValeurColonne(8)
-					, pList.get(8));
+				, pList.get(8)
+					, pCar.getValeurColonne(8));
 		
 		assertEquals("colonne(9) equals nom : "
-				, pCar.getValeurColonne(9)
-					, pList.get(0));
+				, pList.get(9)
+					, pCar.getValeurColonne(9));
 		
 		assertEquals("colonne(> 9) equals invalide : "
-				, pCar.getValeurColonne(12)
-					, "invalide");
+				, "invalide"
+					, pCar.getValeurColonne(12));
 		
 	} // Fin de assertionsListeColonne().__________________________________
 	
