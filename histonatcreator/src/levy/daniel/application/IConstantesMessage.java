@@ -37,9 +37,16 @@ public interface IConstantesMessage {
 	
 	/**
 	 * SEP_2POINTS : String :<br/>
-	 * .<br/>
+	 * ":".<br/>
 	 */
-	String SEP_2POINTS = " : ";
+	String SEP_2POINTS = ":";
+	
+	
+	/**
+	 * SEP_2POINTS_ISOLE : String :<br/>
+	 * " : ".<br/>
+	 */
+	String SEP_2POINTS_ISOLE = " : ";
 	
 	
 	/**
