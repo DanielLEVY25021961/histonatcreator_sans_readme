@@ -62,6 +62,13 @@ public interface IConstantesMessage {
 	 * '\n'.<br/>
 	 */
 	Character SAUT_DE_LIGNE = '\n';
+
+	
+	/**
+	 * SEP_REP : String :<br/>
+	 * Séparateur Java pour les répertoires "\\".<br/>
+	 */
+	String SEP_REP = "\\";
 	
 
 } // FIN DE L'INTERFACE IConstantesMessage.----------------------------------

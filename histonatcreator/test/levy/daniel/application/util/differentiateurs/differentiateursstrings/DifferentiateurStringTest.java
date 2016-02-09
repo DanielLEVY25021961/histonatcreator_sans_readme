@@ -1,6 +1,8 @@
 package levy.daniel.application.util.differentiateurs.differentiateursstrings;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+
+import java.io.File;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -156,4 +158,33 @@ public final class DifferentiateurStringTest {
 	} // Fin de testSubstituerSautLignePlateforme()._______________________
 
 
+	/**
+	 * method test() :<br/>
+	 * .<br/>
+	 * <br/>
+	 */
+	@Test
+	public void test() {
+		
+		final boolean resultatVidage 
+		= DifferentiateurString.viderRepertoireADetruire(new File(".\\data2"));
+		
+		System.out.println("resultatVidage : " + resultatVidage);
+		
+//		final boolean resultDestruction1 = 
+//				DifferentiateurString.detruireArborescence(".\\data2");
+//		
+//		System.out.println("resultDestruction1 : " + resultDestruction1);
+//		
+//		final String cheminRepRapports 
+//		= ".\\data2\\temp\\rapports";
+//		
+//		final boolean resultatCreation 
+//			= DifferentiateurString.creerArborescence(cheminRepRapports);
+//		
+//		System.out.println("resultatCreation : " + resultatCreation);
+				
+	}
+	
+	
 } // FIN DE LA CLASSE DifferentiateurStringTest.-----------------------------
