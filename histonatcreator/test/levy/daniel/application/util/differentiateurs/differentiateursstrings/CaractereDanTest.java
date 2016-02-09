@@ -421,6 +421,70 @@ public final class CaractereDanTest {
 		
 	} // Fin de testConstructeurAriteNulleEtSetters()._____________________
 	
+
+	
+	/**
+	 * method testConstructeurAuto() :<br/>
+	 * Teste le constructeur à remplissage automatique.<br/>
+	 * <br/>
+	 * "id;Position;Caractère;Unicode;numericValue;Type de Caractère;
+	 * Valeur Entière;Point de Code Décimal;
+	 * Point de Code HexaDécimal;Nom Unicode;".<br/>
+	 * <br/>
+	 * Contrats Java :<br/>
+	 * - Si deux objets sont equals, alors même HashCode.<br/>
+	 * - Si deux objets ne sont pas equals, alors HashCode différents.<br/>
+	 * <br/>
+	 * - x.equals(y) ---> x.compareTo(y) == 0.<br/>
+	 */
+	@Test
+	public void testConstructeurAuto() {
+		
+		final CaractereDan caracEAiguAuto1 = new CaractereDan(454L, 454, 'é');
+		final CaractereDan caracEAiguAuto2 = new CaractereDan(455L, 455, 'é');
+		
+		/* Vérifie le toString(). */
+		assertEquals("caracEAiguAuto1.toString() equals CARAC_E_AIGU.toString() : "
+				, CARAC_E_AIGU.toString()
+					, caracEAiguAuto1.toString());
+		
+		/* Vérifie le toCsv(). */
+		assertEquals("caracEAiguAuto1.toCsv() equals CARAC_E_AIGU.toCsv() : "
+				, CARAC_E_AIGU.toCsv()
+					, caracEAiguAuto1.toCsv());
+		
+		/* Vérifie le getValeurColonne(). */
+		this.assertionsListeColonne(LISTE_COLONNES_CARAC_E_AIGU, caracEAiguAuto1);
+		
+		/* vérifie equals. */
+		assertEquals("caracEAiguAuto1 equals CARAC_E_AIGU : "
+				, CARAC_E_AIGU, caracEAiguAuto1);
+		
+		assertNotEquals("caracEAiguAuto1 pas equals CARAC_E_GRAVE : "
+				, CARAC_E_GRAVE
+					, caracEAiguAuto1);
+		
+		/* vérifie hashcode. */
+		assertEquals("caracEAiguAuto1 equals CARAC_E_AIGU, donc caracEAiguAuto1.hascode == CARAC_E_AIGU.hascode : "
+				, caracEAiguAuto1.hashCode()
+					, CARAC_E_AIGU.hashCode());
+		
+		assertNotEquals("caracEAiguAuto1 pas equals CARAC_E_GRAVE donc caracEAiguAuto1.hascode != CARAC_E_GRAVE.hascode : "
+				, caracEAiguAuto1.hashCode()
+					, CARAC_E_GRAVE.hashCode());
+		
+		/* vérifie compare. */
+		assertEquals("caracEAiguAuto1.compareTo(CARAC_E_AIGU) == 0 : "
+				, 0, caracEAiguAuto1.compareTo(CARAC_E_AIGU));
+		
+		assertTrue("caracEAiguAuto1 après CARAC_E_GRAVE : "
+				, caracEAiguAuto1.compareTo(CARAC_E_GRAVE) > 0);
+		
+		assertTrue("caracEAiguAuto2 après caracEAiguAuto1 : "
+				, caracEAiguAuto2.compareTo(caracEAiguAuto1) > 0);
+		
+	} // Fin de testConstructeurAuto().____________________________________
+	
 	
 	
 	/**
