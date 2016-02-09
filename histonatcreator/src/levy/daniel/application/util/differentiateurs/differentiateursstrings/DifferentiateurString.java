@@ -1056,26 +1056,6 @@ public final class DifferentiateurString {
 			/* Récupération des File dans pRep. */
 			final File[] filesContenus = pRep.listFiles();
 			
-			/* Ecrasement de pRep si il est vide.*/
-			if (filesContenus.length == 0) {
-				
-				try {
-					
-					pRep.delete();
-					return true;
-					
-				} catch (Exception e) {
-					
-					/* LOG de niveau INFO. */
-					loggerInfo(
-							CLASSE_DIFFERENTIATEURSTRING
-								, METHODE_VIDER_REPERTOIRE
-									, e.getMessage());
-					return false;
-				}
-								
-			}
-			
 			/* ForEach (boucle) sur les File de pRep. */
 			for(final File file : filesContenus) {
 				
