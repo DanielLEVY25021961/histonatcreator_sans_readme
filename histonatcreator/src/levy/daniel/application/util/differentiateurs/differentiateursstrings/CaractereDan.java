@@ -65,8 +65,7 @@ public class CaractereDan implements
 	
 	/**
 	 * id : Long :<br/>
-	 * Identifiant en base de l'Operation 
-	 * (Création, Modification, ...).<br/>
+	 * Identifiant en base de l'objet métier
 	 */
 	private Long id;
 
