@@ -286,7 +286,17 @@ public final class DifferentiateurString {
 	 * method listerChaineCarParCar(
 	 * String pString) :<br/>
 	 * Retourne une String permettant l'affichage 
-	 * caractère par caractère de pString.<br/>
+	 * caractère par caractère sur des lignes distinctes 
+	 * d'une chaine de caractères pString 
+	 * avec les informations 
+	 * Unicode concernant les caractères.<br/>
+	 * <br/>
+	 * Par exemple : <br/>
+	 * <code>DifferentiateurString.listerChaineCarParCar("à b")</code> 
+	 * retourne : <br/>
+	 * Position : 1      Caractère : à     Unicode : \u00e0  NumericValue : -1    TypeCaractere : 2   valeurEntiere : 224   Point de Code décimal : 224   Point de Code Hexa : e0      Nom : LATIN SMALL LETTER A WITH GRAVE         <br/>
+	 * Position : 2      Caractère :       Unicode : \u0020  NumericValue : -1    TypeCaractere : 12  valeurEntiere : 32    Point de Code décimal : 32    Point de Code Hexa : 20      Nom : SPACE                                   <br/>
+	 * Position : 3      Caractère : b     Unicode : \u0062  NumericValue : 11    TypeCaractere : 2   valeurEntiere : 98    Point de Code décimal : 98    Point de Code Hexa : 62      Nom : LATIN SMALL LETTER B                    <br/>
 	 * <br/>
 	 * - retourne null si pString est blank (null ou vide).<br/>
 	 * <br/>
@@ -294,7 +304,8 @@ public final class DifferentiateurString {
 	 * @param pString : String : String à afficher 
 	 * caractère par caractère.<br/>
 	 * 
-	 * @return : String : Affichage caractère par caractère.<br/>
+	 * @return : String : Affichage caractère 
+	 * par caractère sur des lignes distinctes.<br/>
 	 */
 	public static String listerChaineCarParCar(
 			final String pString) {
