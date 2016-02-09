@@ -37,8 +37,10 @@ import org.apache.commons.logging.LogFactory;
  * System.getProperty("line.separator").<br/>
  * rapport textuel, rapport csv, ecrire dans fichier,<br/>
  * écrire dans fichier, ecrire String dans File, écrire String dans File,<br/>
- * ecriture sur disque avec encodage, Charset,<br/>
- * FileOutputStream, 
+ * ecriture sur disque avec encodage, Charset, ecrireStringDansFile()<br/>
+ * FileOutputStream, outputStreamWriter, <br/>
+ * mkdir(), création répertoire,<br/> vider arborescence,<br/>
+ * APPEL RECURSIF.<br/>
  * <br/>
  *
  * - Dépendances :<br/>
@@ -129,6 +131,20 @@ public final class DifferentiateurString {
 	public static final String METHODE_FOURNIRFILEPOURRAPPORTTXT 
 		= "méthode fournirFilePourRapportTextuel()";
 	
+	
+	/**
+	 * METHODE_DETRUIRE_ARBORESCENCE : String :<br/>
+	 * "méthode detruireArborescence(String pChemin)".<br/>
+	 */
+	public static final String METHODE_DETRUIRE_ARBORESCENCE 
+		= "méthode detruireArborescence(String pChemin)";
+	
+	/**
+	 * METHODE_VIDER_REPERTOIRE : String :<br/>
+	 * "méthode viderRepertoireADetruire(File pFile)".<br/>
+	 */
+	public static final String METHODE_VIDER_REPERTOIRE 
+		= "méthode viderRepertoireADetruire(File pFile)";
 	
 	/**
 	 * MESSAGE_FICHIER_NULL : String :<br/>
@@ -495,7 +511,7 @@ public final class DifferentiateurString {
 	 */
 	public static File ecrireStringDansFile(final String pString) {
 		
-		final File file = fournirFilePourRapportTextuel();
+		final File file = fournirFilePourRapportTextuel(null);
 		
 		return ecrireStringDansFile(file, pString, CHARSET_UTF8, NEWLINE);
 		
@@ -504,107 +520,6 @@ public final class DifferentiateurString {
 	
 
 	
-	/**
-	 * method fournirFilePourRapportTextuel() :<br/>
-	 * .<br/>
-	 * <br/>
-	 * - crée un répertoire pour les rapports textuels si il n'existe pas.<br/>
-	 * <br/>
-	 * - retourne null si il est impossible 
-	 * de créer le répertoire des rapports.<br/>
-	 * <br/>
-	 * 
-	 *
-	 * @return : File :  .<br/>
-	 */
-	private static File fournirFilePourRapportTextuel() {
-		
-		/* bloc static synchronized. */
-		synchronized (DifferentiateurString.class) {
-			
-			final String cheminRepRapports 
-				= ".\\data\\temp\\rapports";
-			
-			String cheminFichier = null;
-
-			/* Tentative de lecture du chemin des rapports. */
-			final File repertoireRapports 
-				= new File(cheminRepRapports);
-			
-			/* crée un répertoire pour les rapports textuels si il n'existe pas. */
-			if (!repertoireRapports.exists()) {
-				
-				boolean repertoireCree = false;
-				
-				try {
-					
-					/* Création du répertoire. */
-					repertoireCree = repertoireRapports.mkdir();
-					
-				} catch (Exception mkdirExc) {
-					
-					/* LOG de niveau ERROR. */
-					loggerError(
-							CLASSE_DIFFERENTIATEURSTRING
-								, METHODE_FOURNIRFILEPOURRAPPORTTXT
-									, mkdirExc);
-					
-					/* retourne null. */
-					return null;
-				}
-				
-				if (!repertoireCree) {
-					
-					/* LOG de niveau ERROR. */
-					if (LOG.isErrorEnabled()) {
-						
-						final String message 
-						= CLASSE_DIFFERENTIATEURSTRING 
-						+ IConstantesMessage.SEP_MOINS 
-						+ METHODE_FOURNIRFILEPOURRAPPORTTXT
-						+ IConstantesMessage.SEP_MOINS 
-						+ "Impossible de créer le répertoire : " 
-						+ cheminRepRapports;
-						
-						LOG.error(message);
-						
-					}
-					
-					/* retourne null. */
-					return null;
-				}
-			} // Fin de if (!repertoireRapports.exists())._____________
-			
-			/* Récupère la date courante dans le système. */
-			final Date maintenantDate = new Date();
-			
-			/* Récupère la date formattée sous forme 2012-01-16_18-09-55. */
-			final String dateFormatteeString 
-				= DF_DATE_HEURE_MINUTE_SECONDE_UNDERSCORE
-					.format(maintenantDate);
-			
-			cheminFichier = cheminRepRapports + "\\" + dateFormatteeString + "_RapportDIFFERENCES_TXT_UTF8.txt";
-			
-			final File resultatFile = new File(cheminFichier);
-			
-			/* Création du fichier si il n'existe pas. */
-			if (!resultatFile.exists()) {
-				try {
-					resultatFile.createNewFile();
-				} catch (IOException ioe) {
-					ioe.printStackTrace();
-				}
-			}
-			System.out.println(resultatFile.getAbsolutePath());
-			
-			return resultatFile;
-			
-		} // Fin du bloc static synchronized.________________________
-				
-	} // Fin de fournirFilePourRapportTextuel().___________________________
-
-	
-
 	/**
 	 * method ecrireStringDansFile(
 	 * File pFile
@@ -829,6 +744,389 @@ public final class DifferentiateurString {
 		} // Fin du bloc static synchronized.________________________
 		
 	} // Fin de ecrireStringDansFile(...)._________________________________
+	
+
+	
+	/**
+	 * method fournirFilePourRapportTextuel() :<br/>
+	 * .<br/>
+	 * <br/>
+	 * - crée un répertoire pour les rapports textuels si il n'existe pas.<br/>
+	 * <br/>
+	 * - retourne null si il est impossible 
+	 * de créer le répertoire des rapports.<br/>
+	 * <br/>
+	 * 
+	 * @param pCheminRapports : String : chemin pour les rapports
+	 * @return : File :  .<br/>
+	 */
+	private static File fournirFilePourRapportTextuel(
+			final String pCheminRapports) {
+		
+		/* bloc static synchronized. */
+		synchronized (DifferentiateurString.class) {
+			
+			final String cheminRepRapports 
+				= ".\\data\\temp\\rapports";
+			
+			String cheminFichier = null;
+
+			/* Tentative de lecture du chemin des rapports. */
+			final File repertoireRapports 
+				= new File(cheminRepRapports);
+			
+			/* crée un répertoire pour les rapports textuels si il n'existe pas. */
+			if (!repertoireRapports.exists()) {
+				
+				boolean repertoireCree = false;
+				
+				try {
+					
+					/* Création du répertoire. */
+					repertoireCree = repertoireRapports.mkdir();
+					
+				} catch (Exception mkdirExc) {
+					
+					/* LOG de niveau ERROR. */
+					loggerError(
+							CLASSE_DIFFERENTIATEURSTRING
+								, METHODE_FOURNIRFILEPOURRAPPORTTXT
+									, mkdirExc);
+					
+					/* retourne null. */
+					return null;
+				}
+				
+				if (!repertoireCree) {
+					
+					/* LOG de niveau ERROR. */
+					if (LOG.isErrorEnabled()) {
+						
+						final String message 
+						= CLASSE_DIFFERENTIATEURSTRING 
+						+ IConstantesMessage.SEP_MOINS 
+						+ METHODE_FOURNIRFILEPOURRAPPORTTXT
+						+ IConstantesMessage.SEP_MOINS 
+						+ "Impossible de créer le répertoire : " 
+						+ cheminRepRapports;
+						
+						LOG.error(message);
+						
+					}
+					
+					/* retourne null. */
+					return null;
+				}
+			} // Fin de if (!repertoireRapports.exists())._____________
+			
+			/* Récupère la date courante dans le système. */
+			final Date maintenantDate = new Date();
+			
+			/* Récupère la date formattée sous forme 2012-01-16_18-09-55. */
+			final String dateFormatteeString 
+				= DF_DATE_HEURE_MINUTE_SECONDE_UNDERSCORE
+					.format(maintenantDate);
+			
+			cheminFichier = cheminRepRapports + "\\" + dateFormatteeString + "_RapportDIFFERENCES_TXT_UTF8.txt";
+			
+			final File resultatFile = new File(cheminFichier);
+			
+			/* Création du fichier si il n'existe pas. */
+			if (!resultatFile.exists()) {
+				try {
+					resultatFile.createNewFile();
+				} catch (IOException ioe) {
+					ioe.printStackTrace();
+				}
+			}
+			System.out.println(resultatFile.getAbsolutePath());
+			
+			return resultatFile;
+			
+		} // Fin du bloc static synchronized.________________________
+				
+	} // Fin de fournirFilePourRapportTextuel().___________________________
+
+	
+
+	/**
+	 * method creerArborescence(
+	 * String pChemin) :<br/>
+	 * Créée en une seule fois toute l'arborescence passée en paramètre.<br/>
+	 * <br/>
+	 * Par exemple :<br/>
+	 * - creerArborescence("C:\\NewRep1\\NewRep2\\NewRep3") 
+	 * va créer toute cette arborescence d'un seul coup.<br/>
+	 * - creerArborescence(".\\data2\\temp\\rapports") 
+	 * va créer cette arborescence à partir 
+	 * du répertoire courant d'un seul coup.<br/>
+	 * <br/>
+	 * - retourne false si pChemin est blank.<br/>
+	 * - retourne false si l'arborescence existe déjà.<br/>
+	 * - retourne false si pChemin ne contient pas '\\'.<br/>
+	 * - retourne false si un des répertoires du chemin est blank.<br/>
+	 * - retourne false si la racine du chemin n'existe pas.<br/>
+	 * - retourne false si la racine du chemin n'est pas un répertoire.<br/>
+	 * - retourne false si un répertoire a créer n'a pas été créé.<br/>
+	 * <br/>
+	 *
+	 * @param pChemin : String : Chemin de l'arborescence à créer.<br/>
+	 * 
+	 * @return boolean : true si l'arborescence a été créée.<br/>
+	 */
+	public static boolean creerArborescence(
+			final String pChemin) {
+		
+		/* bloc static synchronized. */
+		synchronized (DifferentiateurString.class) {
+			
+			/* retourne false si pChemin est blank. */
+			if (StringUtils.isBlank(pChemin)) {
+				return false;
+			}
+			
+			final File cheminFile = new File(pChemin);
+			
+			/* retourne false si l'arborescence existe déjà. */
+			if (cheminFile.exists()) {
+				return false;
+			}
+			
+			/* retourne false si pChemin ne contient pas '\\'. */
+			if (!StringUtils.contains(pChemin, "\\")) {
+				return false;
+			}
+			
+			/* Récupération des répertoires par découpage de la chaine. */
+			final String[] repertoires = StringUtils.split(pChemin, "\\");
+			final int nombreRep = repertoires.length;
+			
+			/* retourne false si un des répertoires du chemin est blank. */
+			for(final String rep : repertoires) {
+				if (StringUtils.isBlank(rep)) {
+					return false;
+				}
+			}
+			
+			/* Extraction de la racine. */
+			final String repRacineString = repertoires[0];
+			
+			final File repRacine = new File(repRacineString);
+			
+			/* retourne false si la racine du chemin n'existe pas. */
+			if (!repRacine.exists()) {
+				return false;
+			}
+			
+			/* retourne false si la racine du chemin n'est pas un répertoire. */
+			if (!repRacine.isDirectory()) {
+				return false;
+			}
+			
+			
+			String cheminCreation = repRacineString;
+			
+			/* Boucle sur les répertoires du chemin. */
+			for (int i = 1; i < nombreRep; i++) {
+				
+				/* Création du chemin du répertoire à créer. */
+				cheminCreation 
+				= cheminCreation + IConstantesMessage.SEP_REP + repertoires[i];
+				
+				final File repertoireFile = new File(cheminCreation);
+				
+				/* Créée le répertoire au chemin de création 
+				 * si il n'existait pas.*/
+				if (!repertoireFile.exists()) {
+					
+					if (!repertoireFile.mkdir()) {
+						/* retourne false si un répertoire 
+						 * a créer n'a pas été créé. */
+						return false;
+					}
+				}
+				
+			} // Fin de boucle.________________________
+			
+			/* retourne true si l'arborescence a été créée. */
+			return true;
+			
+		} // Fin du bloc static synchronized.________________________
+				
+	} // Fin de creerArborescence(
+	 // String pChemin).___________________________________________________
+	
+
+	
+	/**
+	 * method detruireArborescence(
+	 * String pChemin) :<br/>
+	 * Détruit le répertoire situé au chemin pChemin.<br/>
+	 * <br/>
+	 * - retourne false si pChemin est blank.<br/>
+	 * - retourne false si le répertoire à détruire n'existe pas.<br/>
+	 * - retourne false si le File à détruire n'est pas un répertoire.
+	 * <br/>
+	 *
+	 * @param pChemin : String : Chemin du répertoire à détruire.<br/>
+	 * 
+	 * @return : boolean : true si le répertoire a été détruit.<br/>
+	 */
+	public static boolean detruireArborescence(
+			final String pChemin) {
+		
+		/* bloc static synchronized. */
+		synchronized (DifferentiateurString.class) {
+			
+			/* retourne false si pChemin est blank. */
+			if (StringUtils.isBlank(pChemin)) {
+				return false;
+			}
+						
+			final File repADetruire = new File(pChemin);
+			
+			/* retourne false si le répertoire à détruire n'existe pas. */
+			if (!repADetruire.exists()) {
+				return false;
+			}
+			
+			/* retourne false si le File à détruire n'est pas un répertoire. */
+			if (!repADetruire.isDirectory()) {
+				return false;
+			}
+						
+			/* Détruit le répertoire et retourne le boolean. */				
+			try {
+				
+				return repADetruire.delete();
+				
+			} catch (Exception e) {
+				
+				/* LOG de niveau INFO. */
+				loggerInfo(
+						CLASSE_DIFFERENTIATEURSTRING
+							, METHODE_DETRUIRE_ARBORESCENCE
+								, e.getMessage());
+				
+				return false;
+				
+			}
+				
+		} // Fin du bloc static synchronized.________________________
+		
+	} // Fin de detruireArborescence(
+	 // String pChemin).___________________________________________________
+	
+
+	
+	/**
+	 * method viderRepertoireADetruire(
+	 * File pRep) :<br/>
+	 * .<br/>
+	 * <br/>
+	 * - retourne false si pRep == null.<br/>
+	 * - retourne false si pRep n'existe pas.<br/>
+	 * - retourne false si pRep n'est pas un répertoire.<br/>
+	 * <br/>
+	 *
+	 * @param pRep
+	 * @return : boolean :  .<br/>
+	 */
+	public static boolean viderRepertoireADetruire(
+			final File pRep) {
+				
+		/* bloc static synchronized. */
+		synchronized (DifferentiateurString.class) {
+			
+			/* retourne false si pRep == null. */
+			if (pRep == null) {
+				return false;
+			}
+			
+			/* retourne false si pRep n'existe pas. */
+			if (!pRep.exists()) {
+				return false;
+			}
+			
+			/* retourne false si pRep n'est pas un répertoire. */
+			if(!pRep.isDirectory()) {
+				return false;
+			}
+			
+			/* Récupération des File dans pRep. */
+			final File[] filesContenus = pRep.listFiles();
+			
+			/* Sort Si pRep est vide. */
+			if (filesContenus.length == 0) {
+				return true;
+			}
+			
+			/* Si pRep no vide. */
+			/* ForEach (boucle) sur les File de pRep. */
+			for(final File file : filesContenus) {
+				
+				/* Détruit les File si ce sont des fichiers 
+				 * (pas des répertoires). */
+				if (!file.isDirectory()) {
+					
+					try {
+						
+						file.delete();
+						
+					} catch (Exception e) {
+						
+						/* LOG de niveau INFO. */
+						loggerInfo(
+								CLASSE_DIFFERENTIATEURSTRING
+									, METHODE_VIDER_REPERTOIRE
+										, e.getMessage());
+						return false;
+						
+					}
+					
+				} // Fin de if (!file.isDirectory()).___________
+				
+				/* si file est un répertoire. */
+				else {
+					
+					/* si file est un répertoire vide. */
+					final File[] listeFilesFils = file.listFiles();
+					
+					if (listeFilesFils.length == 0) {
+
+						try {
+
+							/* détruit le répertoire. */
+							file.delete();
+
+						} catch (Exception e) {
+
+							/* LOG de niveau INFO. */
+							loggerInfo(CLASSE_DIFFERENTIATEURSTRING,
+									METHODE_VIDER_REPERTOIRE, e.getMessage());
+							return false;
+						}
+
+					}
+					
+					/* Si le File est un répertoire non vide. */
+					else {
+						
+						/* APPEL RECURSIF. */
+						viderRepertoireADetruire(file);
+					}
+					
+				} // Fin de si file est un répertoire.____
+				
+			} // Fin du ForEach (boucle) sur les File de pRep.___
+			
+			return true;
+			
+		} // Fin du bloc static synchronized.________________________
+		
+	} // Fin de viderRepertoireADetruire(
+	 // File pRep).________________________________________________________
+	
 	
 
 	

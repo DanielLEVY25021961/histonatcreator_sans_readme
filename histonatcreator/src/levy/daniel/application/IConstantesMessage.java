@@ -76,6 +76,13 @@ public interface IConstantesMessage {
 	
 	
 	/**
+	 * SEP_REP : String :<br/>
+	 * Séparateur Java pour les répertoires "\\".<br/>
+	 */
+	String SEP_REP = "\\";
+	
+	
+	/**
 	 * DF_DATE_FRANCAISE : DateFormat :<br/>
 	 * Format classique des dates françaises comme
 	 * '25/02/1961'.<br/>
