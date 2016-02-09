@@ -1056,6 +1056,12 @@ public final class DifferentiateurString {
 			/* Récupération des File dans pRep. */
 			final File[] filesContenus = pRep.listFiles();
 			
+			/* Sort Si pRep est vide. */
+			if (filesContenus.length == 0) {
+				return true;
+			}
+			
+			/* Si pRep no vide. */
 			/* ForEach (boucle) sur les File de pRep. */
 			for(final File file : filesContenus) {
 				
@@ -1086,56 +1092,21 @@ public final class DifferentiateurString {
 					/* si file est un répertoire vide. */
 					final File[] listeFilesFils = file.listFiles();
 					
-					if(listeFilesFils.length == 0) {
-						
+					if (listeFilesFils.length == 0) {
+
 						try {
-							
-							try {
-								
-								/* détruit le fils file. */
-								file.delete();
-								
-							} catch (Exception e) {
-								
-								/* LOG de niveau INFO. */
-								loggerInfo(
-										CLASSE_DIFFERENTIATEURSTRING
-											, METHODE_VIDER_REPERTOIRE
-												, e.getMessage());
-								return false;
-							}
-							
-							/* détruit le père de file si possible 
-							 * après la destruction du fils.*/
-							final File[] listeFilesPere = pRep.listFiles();
-							
-							if(listeFilesPere.length == 0) {
-								
-								try {
-									
-									/* detruit le père pRep. */
-									pRep.delete();
-									
-								} catch (Exception e) {
-									
-									/* LOG de niveau INFO. */
-									loggerInfo(
-											CLASSE_DIFFERENTIATEURSTRING
-												, METHODE_VIDER_REPERTOIRE
-													, e.getMessage());
-									return false;
-								}
-							}
-							
+
+							/* détruit le répertoire. */
+							file.delete();
+
 						} catch (Exception e) {
-							
+
 							/* LOG de niveau INFO. */
-							loggerInfo(
-									CLASSE_DIFFERENTIATEURSTRING
-										, METHODE_VIDER_REPERTOIRE
-											, e.getMessage());
+							loggerInfo(CLASSE_DIFFERENTIATEURSTRING,
+									METHODE_VIDER_REPERTOIRE, e.getMessage());
 							return false;
 						}
+
 					}
 					
 					/* Si le File est un répertoire non vide. */
