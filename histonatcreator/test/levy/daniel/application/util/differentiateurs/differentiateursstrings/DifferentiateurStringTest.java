@@ -226,7 +226,7 @@ public final class DifferentiateurStringTest {
 	public void test() {
 		
 		final boolean resultatVidage 
-		= DifferentiateurString.viderRepertoireADetruire(new File(".\\data2"));
+		= DifferentiateurString.viderRepertoireADetruire(new File(".\\rep_0"));
 		
 		System.out.println("resultatVidage : " + resultatVidage);
 		
