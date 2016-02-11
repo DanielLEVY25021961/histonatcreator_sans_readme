@@ -1,6 +1,6 @@
 package levy.daniel.application.util.differentiateurs.differentiateursstrings;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.io.File;
 
@@ -65,7 +65,22 @@ public final class DifferentiateurStringTest {
 	 */
 	public static final String NEWLINE = System.getProperty("line.separator");
 
-
+	/**
+	 * CHAINE_LISTER : String :<br/>
+	 * "à b".<br/>
+	 */
+	public static final String CHAINE_LISTER = "à b";
+		
+	/**
+	 * CHAINE_A_B : String :<br/>
+	 * Résultat attendu de 
+	 * DifferentiateurString.listerChaineCarParCar(CHAINE_LISTER).<br/>
+	 * ATTENTION : il faut échapper les caractères Unicode et rajouter 
+	 * un saut de ligne (\r\n sur une plateforme Windows) dans CHAINE_A_B
+	 * pour obtenir l'équivalent de ce que délivre la méthode.)
+	 */
+	public static final String CHAINE_A_B = "Position : 1      Caractère : à     Unicode : \\u00e0  NumericValue : -1    TypeCaractere : 2   valeurEntiere : 224   Point de Code décimal : 224   Point de Code Hexa : e0      Nom : LATIN SMALL LETTER A WITH GRAVE         \r\nPosition : 2      Caractère :       Unicode : \\u0020  NumericValue : -1    TypeCaractere : 12  valeurEntiere : 32    Point de Code décimal : 32    Point de Code Hexa : 20      Nom : SPACE                                   \r\nPosition : 3      Caractère : b     Unicode : \\u0062  NumericValue : 11    TypeCaractere : 2   valeurEntiere : 98    Point de Code décimal : 98    Point de Code Hexa : 62      Nom : LATIN SMALL LETTER B                    \r\n";
+	
 	/**
 	 * CHAINE_DOS : String :<br/>
 	 * String avec un saut de ligne DOS/Windows (\r\n).<br/>
@@ -122,6 +137,50 @@ public final class DifferentiateurStringTest {
 	} // Fin de DifferentiateurStringTest()._______________________________
 	
 
+	
+	/**
+	 * method testListerChaineCarParCar() :<br/>
+	 * teste la méthode listerChaineCarParCar(String pString).<br/>
+	 * <br/>
+	 * - Vérifie que DifferentiateurString.listerChaineCarParCar(null) 
+	 * retourne null.<br/>
+	 * - Vérifie que DifferentiateurString.listerChaineCarParCar("    ") 
+	 * retourne null.<br/>
+	 * - Vérifie que DifferentiateurString.listerChaineCarParCar(CHAINE_LISTER) 
+	 * retourne CHAINE_A_B.<br/>
+	 */
+	@Test
+	public void testListerChaineCarParCar() {
+		
+		/* Vérifie que DifferentiateurString.listerChaineCarParCar(null) 
+		 * retourne null. */
+		final String stringNull = null;
+		final String resultatNull 
+		= DifferentiateurString.listerChaineCarParCar(stringNull);		
+		assertNull(
+				"DifferentiateurString.listerChaineCarParCar(null) doit retourne null : "
+					, resultatNull);
+		
+		/* Vérifie que DifferentiateurString.listerChaineCarParCar("    ") 
+		 * retourne null. */
+		final String stringBlank = "   ";
+		final String resultatBlank 
+		= DifferentiateurString.listerChaineCarParCar(stringBlank);		
+		assertNull(
+				"DifferentiateurString.listerChaineCarParCar('   ') doit retourne null : "
+					, resultatBlank);
+		
+		/* Vérifie que DifferentiateurString.listerChaineCarParCar(CHAINE_LISTER) 
+		 * retourne CHAINE_A_B. */
+		final String resultat 
+			= DifferentiateurString.listerChaineCarParCar(CHAINE_LISTER);		
+		assertEquals("DifferentiateurString.listerChaineCarParCar(CHAINE_LISTER) doit retourne CHAINE_A_B : "
+				, CHAINE_A_B
+					, resultat);
+		
+	} // Fin de testListerChaineCarParCar()._______________________________
+
+	
 	
 	/**
 	 * method testSubstituerSautLignePlateforme() :<br/>

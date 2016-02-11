@@ -1,5 +1,9 @@
 package levy.daniel.application;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 
 /**
  * class IConstantesMessage :
@@ -21,6 +25,13 @@ package levy.daniel.application;
 public interface IConstantesMessage {
 	
 	
+	/**
+	 * LOCALE_FR : Locale : <br/>
+	 * Locale France avec langage français.<br/>
+	 */
+	Locale LOCALE_FR = new Locale("fr", "FR");
+	
+
 	/**
 	 * SEPTAB : String :<br/>
 	 * "\t".<br/>
@@ -62,13 +73,82 @@ public interface IConstantesMessage {
 	 * '\n'.<br/>
 	 */
 	Character SAUT_DE_LIGNE = '\n';
-
+	
 	
 	/**
 	 * SEP_REP : String :<br/>
 	 * Séparateur Java pour les répertoires "\\".<br/>
 	 */
 	String SEP_REP = "\\";
+	
+	
+	/**
+	 * DF_DATE_FRANCAISE : DateFormat :<br/>
+	 * Format classique des dates françaises comme
+	 * '25/02/1961'.<br/>
+	 */
+	DateFormat DF_DATE_FRANCAISE 
+	= new SimpleDateFormat("dd/MM/yyyy", LOCALE_FR);
+	
+	
+	/**
+	 * DF_DATE_COMPLETE_FRANCAISE : DateFormat :<br/>
+	 * Format complet des dates françaises comme
+	 * 'samedi 25 février 1961'.<br/>
+	 */
+	DateFormat DF_DATE_COMPLETE_FRANCAISE 
+		= new SimpleDateFormat("EEEE' 'dd' 'MMMM' 'yyyy"
+			, LOCALE_FR);
+
+	
+	/**
+	 * DF_MOIS_ANNEE : DateFormat :<br/>
+	 * Format des dates françaises avec mois-année comme
+	 * 'février 1961'.<br/>
+	 */
+	DateFormat DF_MOIS_ANNEE 
+		= new SimpleDateFormat("MMMM' 'yyyy"
+			, LOCALE_FR);
+
+	
+	/**
+	 * DF_MOIS_ANNEE_SIMPLE : DateFormat :<br/>
+	 * Format des dates françaises avec mois simplifié-année comme
+	 * '02/1961'.<br/>
+	 */
+	DateFormat DF_MOIS_ANNEE_SIMPLE 
+	= new SimpleDateFormat("MM/yyyy", LOCALE_FR);
+	
+	
+	/**
+	 * DF_ANNEE : DateFormat :<br/>
+	 * Format des dates avec juste l'année comme "1961".<br/>
+	 */
+	DateFormat DF_ANNEE 
+		= new SimpleDateFormat("yyyy", LOCALE_FR);
+	
+
+	/**
+	 * DF_DATE_AVEC_HEURE_MINUTE_SECONDE : DateFormat :<br/>
+	 * Format classique des dates avec heures et secondes
+	 * comme "2012-01-16 à 18 heures,09 minutes,55 secondes" pour le
+	 * 16 Janvier 2012 à 18 heures 9 minutes et 55 secondes.<br/>
+	 */
+	DateFormat DF_DATE_AVEC_HEURE_MINUTE_SECONDE 
+	= new SimpleDateFormat("yyyy-MM-dd' " 
+	+ "à 'HH' heures,'mm' minutes,'ss' secondes'", LOCALE_FR);
+	
+	 
+	/**
+	 * DF_DATE_HEURE_MINUTE_SECONDE : DateFormat :<br/>
+	 * Format concentré des dates avec heures et secondes
+	 * comme "2012-01-16:18-09-55" pour le
+	 * 16 Janvier 2012 à 18 heures 9 minutes et 55 secondes.<br/>
+	 */
+	DateFormat DF_DATE_HEURE_MINUTE_SECONDE 
+		= new SimpleDateFormat("yyyy-MM-dd:HH-mm-ss", LOCALE_FR);
+
+
 	
 
 } // FIN DE L'INTERFACE IConstantesMessage.----------------------------------
