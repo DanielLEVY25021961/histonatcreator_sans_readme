@@ -1098,16 +1098,19 @@ public final class DifferentiateurString {
 						
 			/* retourne false si pRep == null. */
 			if (pRep == null) {
+				System.out.println("pRep == null - RETURN FALSE");
 				return false;
 			}
 			
 			/* retourne false si pRep n'existe pas. */
 			if (!pRep.exists()) {
+				System.out.println("pRep = " + pRep.getPath() + " INEXISTANT - RETURN FALSE");
 				return false;
 			}
 			
 			/* retourne false si pRep n'est pas un répertoire. */
 			if(!pRep.isDirectory()) {
+				System.out.println("pRep = " + pRep.getPath() + " FICHIER SIMPLE - RETURN FALSE");
 				return false;
 			}
 			
@@ -1121,7 +1124,7 @@ public final class DifferentiateurString {
 			
 			/* Sort Si pRep est vide. */
 			if (filesContenus.length == 0) {
-				System.out.println("if (filesContenus.length == 0) return true pour pRep = " + pRep.getPath());
+				System.out.println("if (filesContenus.length == 0) return true pour pRep = " + pRep.getPath() + " RETURN TRUE");
 				return true;
 			}
 			

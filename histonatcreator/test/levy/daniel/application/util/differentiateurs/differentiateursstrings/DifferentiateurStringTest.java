@@ -225,11 +225,11 @@ public final class DifferentiateurStringTest {
 	@Test
 	public void test() {
 		
-		DifferentiateurString.viderRepertoire(new File(".\\rep_0"));
-//		final boolean resultatVidage 
-//		= DifferentiateurString.viderRepertoireADetruire(new File(".\\rep_0"));
+//		DifferentiateurString.viderRepertoire(new File(".\\rep_0"));
+		final boolean resultatVidage 
+		= DifferentiateurString.viderRepertoireADetruire(new File(".\\rep_0"));
 		
-//		System.out.println("resultatVidage : " + resultatVidage);
+		System.out.println("resultatVidage : " + resultatVidage);
 		
 //		final boolean resultDestruction1 = 
 //				DifferentiateurString.detruireArborescence(".\\data2");
