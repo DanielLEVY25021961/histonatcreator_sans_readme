@@ -867,7 +867,7 @@ public final class DifferentiateurString {
 	 * <br/>
 	 * Par exemple :<br/>
 	 * - creerArborescence("C:\\NewRep1\\NewRep2\\NewRep3") 
-	 * va créer toute cette arborescence d'un seul coup.<br/>
+	 * va créer toute cette arborescence sur le disque d'un seul coup.<br/>
 	 * - creerArborescence(".\\data2\\temp\\rapports") 
 	 * va créer cette arborescence à partir 
 	 * du répertoire courant d'un seul coup.<br/>
@@ -967,7 +967,7 @@ public final class DifferentiateurString {
 	} // Fin de creerArborescence(
 	 // String pChemin).___________________________________________________
 	
-
+	
 	
 	/**
 	 * method detruireArborescence(
@@ -1029,7 +1029,54 @@ public final class DifferentiateurString {
 	 // String pChemin).___________________________________________________
 	
 
+
+	/**
+	 * method viderRepertoire(
+	 * File pRep) :<br/>
+	 * .<br/>
+	 * <br/>
+	 *
+	 * @param pRep : File : Répertoire dont on veut vider 
+	 * tout le contenu le contenu tout en le conservant.<br/>
+	 */
+	public static void viderRepertoire(
+			final File pRep) {
+
+		/* bloc static synchronized. */
+		synchronized (DifferentiateurString.class) {
+			
+			System.out.println();
+			System.out.println("DEBUT METHODE viderRepertoire(File pRep) - pRep = " + pRep.getPath());
+			
+			/* Récupération des File dans pRep. */
+			final File[] filesContenus = pRep.listFiles();
+			System.out.println("filesContenus dans pRep = " + pRep.getPath() + " : " + affichierTableauFiles(pRep.listFiles()));
+			
+			System.out.println();
+			System.out.println("BOUCLE DE NIVEAU pRep = " + pRep.getPath());
+			/* ForEach (boucle) sur les File de pRep. ******/
+			for (final File file : filesContenus) {
+				
+				System.out.println();
+				System.out.println("file dans la boucle : " + file.getPath() + "   alors que pRep = " + pRep.getPath());
+				
+				if (file.isDirectory()) {
+					System.out.println("APPEL RECURSIF emptyDirectory(file) : " + file.getPath());
+					viderRepertoire(file);
+				}
+				
+				System.out.println("*************Destruction de file : " + file.getPath() + "   alors que pRep = " + pRep.getPath());
+				file.delete();
+				
+			} // Fin de ForEach (boucle) sur les File de pRep. ******__
+			
+		} // Fin du bloc static synchronized.________________________
+		
+	} // Fin de viderRepertoire(
+	 // File pRep).________________________________________________________
 	
+	
+
 	/**
 	 * method viderRepertoireADetruire(
 	 * File pRep) :<br/>
@@ -1048,7 +1095,7 @@ public final class DifferentiateurString {
 				
 		/* bloc static synchronized. */
 		synchronized (DifferentiateurString.class) {
-			
+						
 			/* retourne false si pRep == null. */
 			if (pRep == null) {
 				return false;
@@ -1064,24 +1111,34 @@ public final class DifferentiateurString {
 				return false;
 			}
 			
+			System.out.println();
+			System.out.println("pRep = " + pRep.getPath());
+			
 			/* Récupération des File dans pRep. */
 			final File[] filesContenus = pRep.listFiles();
 			
+			System.out.println("filesContenus dans pRep = " + pRep.getPath() + " : " + affichierTableauFiles(pRep.listFiles()));
+			
 			/* Sort Si pRep est vide. */
 			if (filesContenus.length == 0) {
+				System.out.println("if (filesContenus.length == 0) return true pour pRep = " + pRep.getPath());
 				return true;
 			}
 			
-			/* Si pRep no vide. */
-			/* ForEach (boucle) sur les File de pRep. */
+			System.out.println();
+			System.out.println("BOUCLE DE NIVEAU pRep = " + pRep.getPath());
+			/* Si pRep non vide. */
+			/* ForEach (boucle) sur les File de pRep. ******/
 			for(final File file : filesContenus) {
 				
+				System.out.println("file dans la boucle : " + file.getPath() + "   alors que pRep = " + pRep.getPath());
 				/* Détruit les File si ce sont des fichiers 
 				 * (pas des répertoires). */
 				if (!file.isDirectory()) {
 					
 					try {
 						
+						System.out.println("Destruction de file simple : " + file.getPath() + "   alors que pRep = " + pRep.getPath());
 						file.delete();
 						
 					} catch (Exception e) {
@@ -1099,16 +1156,21 @@ public final class DifferentiateurString {
 				
 				/* si file est un répertoire. */
 				else {
+									
+					final File[] listeFilesFils = file.listFiles();
+					System.out.println("listeFileFils de file "+ file.getPath() +  " : " + affichierTableauFiles(file.listFiles()) + "   alors que pRep = " + pRep.getPath());
 					
 					/* si file est un répertoire vide. */
-					final File[] listeFilesFils = file.listFiles();
-					
 					if (listeFilesFils.length == 0) {
 
 						try {
 
 							/* détruit le répertoire. */
 							file.delete();
+
+							System.out.println("Destruction de Répertoire : "
+									+ file.getPath() + "   alors que pRep = "
+									+ pRep.getPath());
 
 						} catch (Exception e) {
 
@@ -1123,6 +1185,7 @@ public final class DifferentiateurString {
 					/* Si le File est un répertoire non vide. */
 					else {
 						
+						System.out.println("APPEL RECURSIF viderRepertoireADetruire(file) : " + file.getPath());
 						/* APPEL RECURSIF. */
 						viderRepertoireADetruire(file);
 					}
@@ -1140,6 +1203,54 @@ public final class DifferentiateurString {
 	
 	
 
+	/**
+	 * method affichierTableauFiles(
+	 * File[] pFiles) :<br/>
+	 * Retourne une String pour l'affichage d'un tableau de Files.<br/>
+	 * Liste les fichiers contenus dans le tableau sous la forme 
+	 * [.\rep_0\file_1_3.txt;.\rep_0\rep_1_1;.\rep_0\rep_1_2].<br/>
+	 * <br/>
+	 * - retourne null si pFile == null.<br/>
+	 * - retourne [] si pFile est vide.<br/>
+	 * <br/>
+	 * 
+	 *
+	 * @param pFiles : File[] : tableau de File à afficher.<br/>
+	 * @return : String : String pour affichage.<br/>
+	 */
+	public static String affichierTableauFiles(
+			final File[] pFiles) {
+		
+		/* bloc static synchronized. */
+		synchronized (DifferentiateurString.class) {
+			
+			/* retourne null si pFile == null. */
+			if(pFiles == null) {
+				return null;
+			}
+			
+			final StringBuilder stb = new StringBuilder();
+			
+			stb.append('[');
+			
+			for(int i = 0; i < pFiles.length; i++) {
+				stb.append(pFiles[i].getPath());
+				
+				if (i < pFiles.length - 1) {
+					stb.append(";");
+				}				
+			}
+			
+			stb.append(']');
+			
+			return stb.toString();
+			
+		} // Fin du bloc static synchronized.________________________
+		
+	} // Fin de affichierTableauFiles(
+	 // File[] pFiles).____________________________________________________
+	
+	
 	
 	/**
 	 * method substituerSautLignePlateforme(
