@@ -9,7 +9,9 @@ import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import levy.daniel.application.IConstantesMessage;
@@ -28,6 +30,8 @@ import org.apache.commons.logging.LogFactory;
  *<br/>
  * 
  * - Mots-clé :<br/>
+ * DateFormat.setLenient(false), Extraire date de Calendar<br/>
+ * fournir date, fournirDate(), <br/>
  * <br/>
  *
  * - Dépendances :<br/>
@@ -186,6 +190,112 @@ public final class GestionnaireFichiers {
 		= new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", LOCALE_FR_FR);
 	
 
+	
+	/**
+	 * DF_DATE_FRANCAISE : DateFormat :<br/>
+	 * Format classique des dates françaises comme
+	 * '25/02/1961'.<br/>
+	 */
+	public static final DateFormat DF_DATE_FRANCAISE 
+	= new SimpleDateFormat("dd/MM/yyyy", LOCALE_FR_FR);
+	
+	
+	/**
+	 * DF_DATE_COMPLETE_FRANCAISE : DateFormat :<br/>
+	 * Format complet des dates françaises comme
+	 * 'samedi 25 février 1961'.<br/>
+	 */
+	public static final DateFormat DF_DATE_COMPLETE_FRANCAISE 
+		= new SimpleDateFormat("EEEE' 'dd' 'MMMM' 'yyyy"
+			, LOCALE_FR_FR);
+
+	
+	/**
+	 * DF_MOIS_ANNEE : DateFormat :<br/>
+	 * Format des dates françaises avec mois-année comme
+	 * 'février 1961'.<br/>
+	 */
+	public static final DateFormat DF_MOIS_ANNEE 
+		= new SimpleDateFormat("MMMM' 'yyyy"
+			, LOCALE_FR_FR);
+
+	
+	/**
+	 * DF_MOIS_ANNEE_SIMPLE : DateFormat :<br/>
+	 * Format des dates françaises avec mois simplifié-année comme
+	 * '02/1961'.<br/>
+	 */
+	public static final DateFormat DF_MOIS_ANNEE_SIMPLE 
+	= new SimpleDateFormat("MM/yyyy", LOCALE_FR_FR);
+	
+	
+	/**
+	 * DF_ANNEE : DateFormat :<br/>
+	 * Format des dates avec juste l'année comme "1961".<br/>
+	 */
+	public static final DateFormat DF_ANNEE 
+		= new SimpleDateFormat("yyyy", LOCALE_FR_FR);
+	
+
+	/**
+	 * DF_DATE_AVEC_HEURE_MINUTE_SECONDE : DateFormat :<br/>
+	 * Format classique des dates avec heures et secondes
+	 * comme "2012-01-16 à 18 heures,09 minutes,55 secondes" pour le
+	 * 16 Janvier 2012 à 18 heures 9 minutes et 55 secondes.<br/>
+	 */
+	public static final DateFormat DF_DATE_AVEC_HEURE_MINUTE_SECONDE 
+	= new SimpleDateFormat("yyyy-MM-dd' " 
+	+ "à 'HH' heures,'mm' minutes,'ss' secondes'", LOCALE_FR_FR);
+	
+	 
+	/**
+	 * DF_DATE_HEURE_MINUTE_SECONDE : DateFormat :<br/>
+	 * Format concentré des dates avec heures et secondes
+	 * comme "2012-01-16:18-09-55" pour le
+	 * 16 Janvier 2012 à 18 heures 9 minutes et 55 secondes.<br/>
+	 */
+	public static final DateFormat DF_DATE_HEURE_MINUTE_SECONDE 
+		= new SimpleDateFormat("yyyy-MM-dd:HH-mm-ss", LOCALE_FR_FR);
+
+	
+	/**
+	 * sSdfyyyyMMdd : SimpleDateFormat : <br/>
+	 * "yyyy-MM-dd" comme "2011-05-26" pour 26 Mai 2011.<br/>
+	 */
+	public static SimpleDateFormat sSdfyyyyMMdd 
+	= new SimpleDateFormat("yyyy-MM-dd", LOCALE_FR_FR);
+
+	
+	/**
+	 * sSdfyyyyMMddHHmmss : SimpleDateFormat : <br/>
+	 * "yyyy-MM-dd HH:mm:ss" comme "2011-05-26 17:41:07"
+	 * pour 26 Mai 2011 à 17h 41mn et7s.<br/>
+	 */
+	public static SimpleDateFormat sSdfyyyyMMddHHmmss 
+	= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", LOCALE_FR_FR);
+
+	
+	/**
+	 * sSdfddMMyyyy : SimpleDateFormat : <br/>
+	 * "ddMMyyyy" comme "26052011" pour 26 Mai 2011.<br/>
+	 */
+	public static SimpleDateFormat sSdfddMMyyyy 
+	= new SimpleDateFormat("ddMMyyyy", LOCALE_FR_FR);
+
+
+static {
+	DF_DATE_HEURE_MINUTE_SECONDE_UNDERSCORE.setLenient(false);
+	DF_DATE_FRANCAISE.setLenient(false);
+	DF_DATE_COMPLETE_FRANCAISE.setLenient(false);
+	DF_MOIS_ANNEE.setLenient(false);
+	DF_MOIS_ANNEE_SIMPLE.setLenient(false);
+	DF_ANNEE.setLenient(false);
+	DF_DATE_AVEC_HEURE_MINUTE_SECONDE.setLenient(false);
+	DF_DATE_HEURE_MINUTE_SECONDE.setLenient(false);
+	sSdfyyyyMMdd.setLenient(false);
+	sSdfddMMyyyy.setLenient(false);
+	sSdfyyyyMMddHHmmss.setLenient(false);
+}
 
 	/**
 	 * LOG : Log : 
@@ -475,7 +585,8 @@ public final class GestionnaireFichiers {
 	/**
 	 * method creerArborescence(
 	 * String pChemin) :<br/>
-	 * Créée en une seule fois toute l'arborescence passée en paramètre.<br/>
+	 * Créée en une seule fois toute l'arborescence 
+	 * de répertoires passée en paramètre.<br/>
 	 * <br/>
 	 * Par exemple :<br/>
 	 * - creerArborescence("C:\\NewRep1\\NewRep2\\NewRep3") 
@@ -585,8 +696,11 @@ public final class GestionnaireFichiers {
 	/**
 	 * method detruireArborescence(
 	 * String pChemin) :<br/>
-	 * Détruit le répertoire situé au chemin pChemin.<br/>
-	 * Vide le contenu du répertoire si nécessaire avant de le supprimer.<br/>
+	 * Détruit le répertoire (et forcément toute son arborescence) 
+	 * situé au chemin pChemin.<br/>
+	 * Vide le contenu du répertoire si nécessaire avant de le supprimer 
+	 * (Rappel : il est impossible de supprimer un répertoire 
+	 * non vide en Java).<br/>
 	 * <br/>
 	 * - retourne false si pChemin est blank.<br/>
 	 * - retourne false si le répertoire à détruire n'existe pas.<br/>
@@ -941,6 +1055,165 @@ public final class GestionnaireFichiers {
 	} // Fin de fournirFilePourRapportTextuel().___________________________
 
 
+	
+	/**
+	 * method fournirDateFormattee(
+	 * Date pDate
+	 * , DateFormat pDateFormat) :<br/>
+	 * Retourne une String représentant la java.util.Date pDate 
+	 * au format pDateFormat.<br/>
+	 * <br/>
+	 * - retourne null si pDate == null.<br/>
+	 * - retourne null si pDateFormat == null.<br/>
+	 * <br/>
+	 *
+	 * @param pDate : java.util.Date.<br/>
+	 * @param pDateFormat : DateFormat.<br/>
+	 * 
+	 * @return : String : String pour affichage formatté de pDate.<br/>
+	 */
+	public static String fournirDateFormattee(
+			final Date pDate, final DateFormat pDateFormat) {
+		
+		/* bloc static synchronized. */
+		synchronized (GestionnaireFichiers.class) {
+			
+			/* retourne null si pDate == null. */
+			if(pDate == null) {
+				return null;
+			}
+			
+			/* retourne null si pDateFormat == null. */
+			if(pDateFormat == null) {
+				return null;
+			}
+			
+			pDateFormat.setLenient(false);
+			
+			return pDateFormat.format(pDate);
+			
+		} // Fin du bloc static synchronized.________________________
+		
+	} // Fin de fournirDateFormattee(
+	 // Date pDate
+	 // DateFormat pDateFormat).___________________________________________
+	
+
+	
+	/**
+	 * method fournirDateFormattee(
+	 * int pJour
+	 * , int pMois
+	 * , int pAnnee
+	 * , int pHeures
+	 * , int pMinutes
+	 * , int pSecondes
+	 * , DateFormat pDateFormat) :<br/>
+	 * .<br/>
+	 * <br/>
+	 * - retourne null si pDateFormat == null.<br/>
+	 * <br/>
+	 *
+	 * @param pJour
+	 * @param pMois
+	 * @param pAnnee
+	 * @param pHeures
+	 * @param pMinutes
+	 * @param pSecondes
+	 * @param pDateFormat : DateFormat.<br/>
+	 * 
+	 * @return : String : String pour affichage formatté de pDate.<br/>
+	 */
+	public static String fournirDateFormattee(
+			final int pJour, final int pMois, final int pAnnee, final int pHeures, final int pMinutes, final int pSecondes, final DateFormat pDateFormat) {
+		
+		/* bloc static synchronized. */
+		synchronized (GestionnaireFichiers.class) {
+			
+			/* retourne null si pDateFormat == null. */
+			if(pDateFormat == null) {
+				return null;
+			}
+			
+			/* Instancie un GregorianCalendar. */
+			final Calendar calendar = new GregorianCalendar(LOCALE_FR_FR);
+			
+			/* Impose au Calendar de ne traiter que des dates compatibles
+			 *  avec le calendrier 
+			 *  (un 29 ou 30 Février ne doit pas être interprété). */
+			calendar.setLenient(false);
+			
+			/* Positionne le Calendar. */
+			calendar.set(pAnnee, pMois, pJour, pHeures, pMinutes, pSecondes);
+			
+			/* Extrait la date du Calendar. */
+			final Date maDate = calendar.getTime();
+			
+			/* Impose au DateFormat de ne traiter que des dates compatibles 
+			 * avec le calendrier 
+			 * (un 29 ou 30 Février ne doit pas être interprété). */
+			pDateFormat.setLenient(false);
+			
+			/* retourne la date formattée. */
+			return pDateFormat.format(maDate);
+			
+		} // Fin du bloc static synchronized.________________________
+				
+	} // Fin de fournirDateFormattee(COMPLET)._____________________________
+	
+
+	
+	/**
+	 * method fournirDate(
+	 * int pJour
+	 * , int pMois
+	 * , int pAnnee
+	 * , int pHeures
+	 * , int pMinutes
+	 * , int pSecondes) :<br/>
+	 * .<br/>
+	 * <br/>
+	 *
+	 * @param pJour
+	 * @param pMois
+	 * @param pAnnee
+	 * @param pHeures
+	 * @param pMinutes
+	 * @param pSecondes
+	 * 
+	 * @return : java.util.Date :  .<br/>
+	 */
+	public static Date fournirDate(
+			final int pJour
+				, final int pMois
+					, final int pAnnee
+						, final int pHeures
+							, final int pMinutes
+								, final int pSecondes) {
+		
+		/* bloc static synchronized. */
+		synchronized (GestionnaireFichiers.class) {
+						
+			/* Instancie un GregorianCalendar. */
+			final Calendar calendar = new GregorianCalendar(LOCALE_FR_FR);
+			
+			/* Impose au Calendar de ne traiter que des dates compatibles
+			 *  avec le calendrier 
+			 *  (un 29 ou 30 Février ne doit pas être interprété). */
+			calendar.setLenient(false);
+			
+			/* Positionne le Calendar. */
+			calendar.set(pAnnee, pMois, pJour, pHeures, pMinutes, pSecondes);
+			
+			/* Extrait et retourne la date du Calendar. */
+			return calendar.getTime();
+						
+		} // Fin du bloc static synchronized.________________________
+				
+	} // Fin de fournirDate(COMPLET)._____________________________
+	
+
+	
 	/**
 	 * method substituerSautLignePlateforme(
 	 * String pString) :<br/>

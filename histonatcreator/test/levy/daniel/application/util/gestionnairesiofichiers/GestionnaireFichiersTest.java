@@ -1,5 +1,12 @@
 package levy.daniel.application.util.gestionnairesiofichiers;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Locale;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Test;
@@ -120,6 +127,130 @@ public class GestionnaireFichiersTest {
 	
 	
 	/**
+	 * LOCALE_FR_FR : Locale :<br/>
+	 * new Locale("FR", "fr").<br/>
+	 */
+	public static final Locale LOCALE_FR_FR = new Locale("FR", "fr");
+
+
+	/**
+	 * DF_DATE_HEURE_MINUTE_SECONDE_UNDERSCORE : DateFormat :<br/>
+	 * Format concentré des dates avec heures et secondes
+	 * comme "2012-01-16_18-09-55" pour le
+	 * 16 Janvier 2012 à 18 heures 9 minutes et 55 secondes.<br/>
+	 */
+	public static final DateFormat DF_DATE_HEURE_MINUTE_SECONDE_UNDERSCORE 
+		= new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", LOCALE_FR_FR);
+
+	
+	/**
+	 * DF_DATE_FRANCAISE : DateFormat :<br/>
+	 * Format classique des dates françaises comme
+	 * '25/02/1961'.<br/>
+	 */
+	public static final DateFormat DF_DATE_FRANCAISE 
+	= new SimpleDateFormat("dd/MM/yyyy", LOCALE_FR_FR);
+	
+	
+	/**
+	 * DF_DATE_COMPLETE_FRANCAISE : DateFormat :<br/>
+	 * Format complet des dates françaises comme
+	 * 'samedi 25 février 1961'.<br/>
+	 */
+	public static final DateFormat DF_DATE_COMPLETE_FRANCAISE 
+		= new SimpleDateFormat("EEEE' 'dd' 'MMMM' 'yyyy"
+			, LOCALE_FR_FR);
+
+	
+	/**
+	 * DF_MOIS_ANNEE : DateFormat :<br/>
+	 * Format des dates françaises avec mois-année comme
+	 * 'février 1961'.<br/>
+	 */
+	public static final DateFormat DF_MOIS_ANNEE 
+		= new SimpleDateFormat("MMMM' 'yyyy"
+			, LOCALE_FR_FR);
+
+	
+	/**
+	 * DF_MOIS_ANNEE_SIMPLE : DateFormat :<br/>
+	 * Format des dates françaises avec mois simplifié-année comme
+	 * '02/1961'.<br/>
+	 */
+	public static final DateFormat DF_MOIS_ANNEE_SIMPLE 
+	= new SimpleDateFormat("MM/yyyy", LOCALE_FR_FR);
+	
+	
+	/**
+	 * DF_ANNEE : DateFormat :<br/>
+	 * Format des dates avec juste l'année comme "1961".<br/>
+	 */
+	public static final DateFormat DF_ANNEE 
+		= new SimpleDateFormat("yyyy", LOCALE_FR_FR);
+	
+
+	/**
+	 * DF_DATE_AVEC_HEURE_MINUTE_SECONDE : DateFormat :<br/>
+	 * Format classique des dates avec heures et secondes
+	 * comme "2012-01-16 à 18 heures,09 minutes,55 secondes" pour le
+	 * 16 Janvier 2012 à 18 heures 9 minutes et 55 secondes.<br/>
+	 */
+	public static final DateFormat DF_DATE_AVEC_HEURE_MINUTE_SECONDE 
+	= new SimpleDateFormat("yyyy-MM-dd' " 
+	+ "à 'HH' heures,'mm' minutes,'ss' secondes'", LOCALE_FR_FR);
+	
+	 
+	/**
+	 * DF_DATE_HEURE_MINUTE_SECONDE : DateFormat :<br/>
+	 * Format concentré des dates avec heures et secondes
+	 * comme "2012-01-16:18-09-55" pour le
+	 * 16 Janvier 2012 à 18 heures 9 minutes et 55 secondes.<br/>
+	 */
+	public static final DateFormat DF_DATE_HEURE_MINUTE_SECONDE 
+		= new SimpleDateFormat("yyyy-MM-dd:HH-mm-ss", LOCALE_FR_FR);
+
+	
+	/**
+	 * sSdfyyyyMMdd : SimpleDateFormat : <br/>
+	 * "yyyy-MM-dd" comme "2011-05-26" pour 26 Mai 2011.<br/>
+	 */
+	public static SimpleDateFormat sSdfyyyyMMdd 
+	= new SimpleDateFormat("yyyy-MM-dd", LOCALE_FR_FR);
+
+	
+	/**
+	 * sSdfyyyyMMddHHmmss : SimpleDateFormat : <br/>
+	 * "yyyy-MM-dd HH:mm:ss" comme "2011-05-26 17:41:07"
+	 * pour 26 Mai 2011 à 17h 41mn et7s.<br/>
+	 */
+	public static SimpleDateFormat sSdfyyyyMMddHHmmss 
+	= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", LOCALE_FR_FR);
+
+	
+	/**
+	 * sSdfddMMyyyy : SimpleDateFormat : <br/>
+	 * "ddMMyyyy" comme "26052011" pour 26 Mai 2011.<br/>
+	 */
+	public static SimpleDateFormat sSdfddMMyyyy 
+	= new SimpleDateFormat("ddMMyyyy", LOCALE_FR_FR);
+	
+
+static {
+	DF_DATE_HEURE_MINUTE_SECONDE_UNDERSCORE.setLenient(false);
+	DF_DATE_FRANCAISE.setLenient(false);
+	DF_DATE_COMPLETE_FRANCAISE.setLenient(false);
+	DF_MOIS_ANNEE.setLenient(false);
+	DF_MOIS_ANNEE_SIMPLE.setLenient(false);
+	DF_ANNEE.setLenient(false);
+	DF_DATE_AVEC_HEURE_MINUTE_SECONDE.setLenient(false);
+	DF_DATE_HEURE_MINUTE_SECONDE.setLenient(false);
+	sSdfyyyyMMdd.setLenient(false);
+	sSdfddMMyyyy.setLenient(false);
+	sSdfyyyyMMddHHmmss.setLenient(false);
+}
+
+
+	/**
 	 * LOG : Log : 
 	 * Logger pour Log4j (utilisant commons-logging).
 	 */
@@ -141,6 +272,29 @@ public class GestionnaireFichiersTest {
 	
 
 	
+	/**
+	 * method testEcrireStringDansFileUtf8() :<br/>
+	 * .<br/>
+	 * <br/>
+	 */
+	@Test
+	public void testEcrireStringDansFileUtf8() {
+		assertTrue("BIDON : ", 1 == 1);
+	} // Fin de testEcrireStringDansFileUtf8().____________________________
+	
+	
+	
+	/**
+	 * method testEcrireStringDansFile() :<br/>
+	 * .<br/>
+	 * <br/>
+	 */
+	@Test
+	public void testEcrireStringDansFile() {
+		assertTrue("BIDON : ", 1 == 1);
+	} // Fin de testEcrireStringDansFile().________________________________
+	
+
 	
 	/**
 	 * method testCreerArborescence() :<br/>
@@ -154,12 +308,15 @@ public class GestionnaireFichiersTest {
 	 * retourne false.<br/>
 	 * - Vérifie que GestionnaireFichiers.creerArborescence 
 	 * avec un des répertoires du chemin blank retourne false.<br/>
+	 * - Vérifie que GestionnaireFichiers.creerArborescence(racine inexistante) 
+	 * retourne false.<br/>
 	 * <br/>
 	 * @throws InterruptedException 
 	 */
 	@Test
 	public void testCreerArborescence() throws InterruptedException {
-				
+		
+		/* DESTRUCTION EVENTUELLE DU REPERTOIRE. */
 		GestionnaireFichiers.detruireArborescence(".\\rep_0");
 		
 		/* Attente. */
@@ -190,14 +347,141 @@ public class GestionnaireFichiersTest {
 		assertFalse("creerArborescence(avec rep blank) doit retourner false : "
 					, GestionnaireFichiers.creerArborescence("data\\ \\temp"));
 		
+		/* Vérifie que GestionnaireFichiers.creerArborescence(racine inexistante) 
+		 * retourne false. */
+		assertFalse("creerArborescence(racine inexistante) doit retourner false : "
+					, GestionnaireFichiers.creerArborescence("totopouetpouet\\trifouilly"));
+		
+		
+		
+		/* CREATION DU REPERTOIRE. */
 		final boolean resultat 
 			= GestionnaireFichiers.creerArborescence(ARBORESCENCE_A_CREER);
 		
-		System.out.println(resultat);
+		assertTrue("GestionnaireFichiers.creerArborescence(ARBORESCENCE_A_CREER) doit retourner true : "
+				, resultat);
+		
+		/* Attente. */
+		Thread.sleep(1000);
+		
+		/* DESTRUCTION EVENTUELLE DU REPERTOIRE. */
+		GestionnaireFichiers.detruireArborescence(".\\rep_0");
 		
 	} // Fin de testCreerArborescence().___________________________________
 
 
+	
+	/**
+	 * method testDetruireArborescence() :<br/>
+	 * .<br/>
+	 * <br/>
+	 */
+	@Test
+	public void testDetruireArborescence() {
+		assertTrue("BIDON : ", 1 == 1);
+	} // Fin de testDetruireArborescence().________________________________
+	
+
+	
+	/**
+	 * method testViderRepertoire() :<br/>
+	 * .<br/>
+	 * <br/>
+	 */
+	@Test
+	public void testViderRepertoire() {
+		assertTrue("BIDON : ", 1 == 1);
+	} // Fin de testViderRepertoire()._____________________________________
+	
+
+	
+	/**
+	 * method testFournirFile() :<br/>
+	 * .<br/>
+	 * <br/>
+	 */
+	@Test
+	public void testFournirFile() {
+		assertTrue("BIDON : ", 1 == 1);
+	} // Fin de testFournirFile()._________________________________________
+	
+
+	
+	/**
+	 * method testFournirDateFormattee() :<br/>
+	 * Teste la méthode fournirDateFormattee(Date, DateFormat).<br/>
+	 * <br/>
+	 * - Vérifie que fournirDateFormattee(null,...) retourne null.<br/>
+	 * - Vérifie que fournirDateFormattee(..., null) retourne null.<br/>
+	 */
+	@Test
+	public void testFournirDateFormattee() {
+		
+		/* Vérifie que fournirDateFormattee(null,...) retourne null. */
+		assertNull("fournirDateFormattee(null,...) doit retourner null : "
+				,  GestionnaireFichiers.fournirDateFormattee(
+						null, DF_DATE_HEURE_MINUTE_SECONDE_UNDERSCORE));
+		
+		/* Vérifie que fournirDateFormattee(..., null) retourne null. */
+		assertNull("fournirDateFormattee(..., null) doit retourner null : "
+				,  GestionnaireFichiers.fournirDateFormattee(
+						new Date(), null));
+		
+		final Calendar calendar = new GregorianCalendar(LOCALE_FR_FR);
+		calendar.setLenient(false);
+		calendar.set(1961, 1, 25);
+		final Date maDate = calendar.getTime();
+		
+		System.out.println(GestionnaireFichiers.fournirDateFormattee(maDate, DF_DATE_FRANCAISE));
+	} // Fin de testFournirDateFormattee().________________________________
+	
+	
+	
+	/**
+	 * method testSubstituerSautLignePlateforme() :<br/>
+	 * .<br/>
+	 * <br/>
+	 */
+	@Test
+	public void testSubstituerSautLignePlateforme() {
+		assertTrue("BIDON : ", 1 == 1);
+	} // Fin de testSubstituerSautLignePlateforme()._______________________
 
 
+	
+	/**
+	 * method testSubstituerSautLigne() :<br/>
+	 * .<br/>
+	 * <br/>
+	 */
+	@Test
+	public void testSubstituerSautLigne() {
+		assertTrue("BIDON : ", 1 == 1);
+	} // Fin de testSubstituerSautLigne()._________________________________
+	
+
+	
+	/**
+	 * method testAfficherSautLigne() :<br/>
+	 * .<br/>
+	 * <br/>
+	 */
+	@Test
+	public void testAfficherSautLigne() {
+		assertTrue("BIDON : ", 1 == 1);
+	} // Fin de testAfficherSautLigne().___________________________________
+	
+
+	
+	/**
+	 * method testAffichierTableauFiles() :<br/>
+	 * .<br/>
+	 * <br/>
+	 */
+	@Test
+	public void testAffichierTableauFiles() {
+		assertTrue("BIDON : ", 1 == 1);
+	} // Fin de testAffichierTableauFiles()._______________________________
+	
+	
 } // FIN DE LA CLASSE GestionnaireFichiersTest.------------------------------
