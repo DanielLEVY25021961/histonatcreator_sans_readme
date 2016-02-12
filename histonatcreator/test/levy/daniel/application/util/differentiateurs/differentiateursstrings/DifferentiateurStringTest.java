@@ -1,8 +1,7 @@
 package levy.daniel.application.util.differentiateurs.differentiateursstrings;
 
-import static org.junit.Assert.*;
-
-import java.io.File;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -215,34 +214,55 @@ public final class DifferentiateurStringTest {
 					, resultatUNIX);
 		
 	} // Fin de testSubstituerSautLignePlateforme()._______________________
+	
+
+	
+	/**
+	 * method testCreerArborescence() :<br/>
+	 * teste la méthode creerArborescence.<br/>
+	 * <br/>
+	 */
+	@Test
+	public void testCreerArborescence() {
+		
+		final boolean resultat 
+			= DifferentiateurString.creerArborescence(".\\rep_0\\rep_1_1\\rep_2_1");
+		
+		System.out.println(resultat);
+		
+	} // Fin de testCreerArborescence().___________________________________
 
 
 	/**
 	 * method test() :<br/>
 	 * .<br/>
 	 * <br/>
+	 * @throws InterruptedException 
 	 */
 	@Test
-	public void test() {
+	public void test() throws InterruptedException {
 		
 //		DifferentiateurString.viderRepertoire(new File(".\\rep_0"));
-		final boolean resultatVidage 
-		= DifferentiateurString.viderRepertoireADetruire(new File(".\\rep_0"));
+//		final boolean resultatVidage 
+//		= DifferentiateurString.viderRepertoireADetruire(new File(".\\data2"));
+//		
+//		System.out.println("resultatVidage : " + resultatVidage);
+//		
+		final boolean resultDestruction1 = 
+				DifferentiateurString.detruireArborescence(".\\data2");
 		
-		System.out.println("resultatVidage : " + resultatVidage);
+		System.out.println("resultDestruction1 : " + resultDestruction1);
 		
-//		final boolean resultDestruction1 = 
-//				DifferentiateurString.detruireArborescence(".\\data2");
-//		
-//		System.out.println("resultDestruction1 : " + resultDestruction1);
-//		
-//		final String cheminRepRapports 
-//		= ".\\data2\\temp\\rapports";
-//		
-//		final boolean resultatCreation 
-//			= DifferentiateurString.creerArborescence(cheminRepRapports);
-//		
-//		System.out.println("resultatCreation : " + resultatCreation);
+		/* Attente. */
+		Thread.sleep(1000);
+		
+		final String cheminRepRapports 
+		= ".\\data2\\temp\\rapports";
+		
+		final boolean resultatCreation 
+			= DifferentiateurString.creerArborescence(cheminRepRapports);
+		
+		System.out.println("resultatCreation : " + resultatCreation);
 				
 	}
 	
