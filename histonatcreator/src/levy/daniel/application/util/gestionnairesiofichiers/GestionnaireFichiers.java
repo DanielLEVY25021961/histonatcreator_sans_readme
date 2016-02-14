@@ -9,9 +9,7 @@ import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import levy.daniel.application.IConstantesMessage;
@@ -1077,7 +1075,7 @@ static {
 	 * 
 	 * @return : String : String pour affichage formatté de pDate.<br/>
 	 */
-	public static String fournirDateFormattee(
+	private static String fournirDateFormattee(
 			final Date pDate, final DateFormat pDateFormat) {
 		
 		/* bloc static synchronized. */
@@ -1102,120 +1100,6 @@ static {
 	} // Fin de fournirDateFormattee(
 	 // Date pDate
 	 // DateFormat pDateFormat).___________________________________________
-	
-
-	
-	/**
-	 * method fournirDateFormattee(
-	 * int pJour
-	 * , int pMois
-	 * , int pAnnee
-	 * , int pHeures
-	 * , int pMinutes
-	 * , int pSecondes
-	 * , DateFormat pDateFormat) :<br/>
-	 * .<br/>
-	 * <br/>
-	 * - retourne null si pDateFormat == null.<br/>
-	 * <br/>
-	 *
-	 * @param pJour
-	 * @param pMois
-	 * @param pAnnee
-	 * @param pHeures
-	 * @param pMinutes
-	 * @param pSecondes
-	 * @param pDateFormat : DateFormat.<br/>
-	 * 
-	 * @return : String : String pour affichage formatté de pDate.<br/>
-	 */
-	public static String fournirDateFormattee(
-			final int pJour, final int pMois, final int pAnnee, final int pHeures, final int pMinutes, final int pSecondes, final DateFormat pDateFormat) {
-		
-		/* bloc static synchronized. */
-		synchronized (GestionnaireFichiers.class) {
-			
-			/* retourne null si pDateFormat == null. */
-			if(pDateFormat == null) {
-				return null;
-			}
-			
-			/* Instancie un GregorianCalendar. */
-			final Calendar calendar = new GregorianCalendar(LOCALE_FR_FR);
-			
-			/* Impose au Calendar de ne traiter que des dates compatibles
-			 *  avec le calendrier 
-			 *  (un 29 ou 30 Février ne doit pas être interprété). */
-			calendar.setLenient(false);
-			
-			/* Positionne le Calendar. */
-			calendar.set(pAnnee, pMois, pJour, pHeures, pMinutes, pSecondes);
-			
-			/* Extrait la date du Calendar. */
-			final Date maDate = calendar.getTime();
-			
-			/* Impose au DateFormat de ne traiter que des dates compatibles 
-			 * avec le calendrier 
-			 * (un 29 ou 30 Février ne doit pas être interprété). */
-			pDateFormat.setLenient(false);
-			
-			/* retourne la date formattée. */
-			return pDateFormat.format(maDate);
-			
-		} // Fin du bloc static synchronized.________________________
-				
-	} // Fin de fournirDateFormattee(COMPLET)._____________________________
-	
-
-	
-	/**
-	 * method fournirDate(
-	 * int pJour
-	 * , int pMois
-	 * , int pAnnee
-	 * , int pHeures
-	 * , int pMinutes
-	 * , int pSecondes) :<br/>
-	 * .<br/>
-	 * <br/>
-	 *
-	 * @param pJour
-	 * @param pMois
-	 * @param pAnnee
-	 * @param pHeures
-	 * @param pMinutes
-	 * @param pSecondes
-	 * 
-	 * @return : java.util.Date :  .<br/>
-	 */
-	public static Date fournirDate(
-			final int pJour
-				, final int pMois
-					, final int pAnnee
-						, final int pHeures
-							, final int pMinutes
-								, final int pSecondes) {
-		
-		/* bloc static synchronized. */
-		synchronized (GestionnaireFichiers.class) {
-						
-			/* Instancie un GregorianCalendar. */
-			final Calendar calendar = new GregorianCalendar(LOCALE_FR_FR);
-			
-			/* Impose au Calendar de ne traiter que des dates compatibles
-			 *  avec le calendrier 
-			 *  (un 29 ou 30 Février ne doit pas être interprété). */
-			calendar.setLenient(false);
-			
-			/* Positionne le Calendar. */
-			calendar.set(pAnnee, pMois, pJour, pHeures, pMinutes, pSecondes);
-			
-			/* Extrait et retourne la date du Calendar. */
-			return calendar.getTime();
-						
-		} // Fin du bloc static synchronized.________________________
-				
-	} // Fin de fournirDate(COMPLET)._____________________________
 	
 
 	

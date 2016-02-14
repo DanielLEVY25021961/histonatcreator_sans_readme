@@ -1,17 +1,15 @@
 package levy.daniel.application.util.gestionnairesiofichiers;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * class GestionnaireFichiersTest :<br/>
@@ -406,36 +404,6 @@ static {
 	} // Fin de testFournirFile()._________________________________________
 	
 
-	
-	/**
-	 * method testFournirDateFormattee() :<br/>
-	 * Teste la méthode fournirDateFormattee(Date, DateFormat).<br/>
-	 * <br/>
-	 * - Vérifie que fournirDateFormattee(null,...) retourne null.<br/>
-	 * - Vérifie que fournirDateFormattee(..., null) retourne null.<br/>
-	 */
-	@Test
-	public void testFournirDateFormattee() {
-		
-		/* Vérifie que fournirDateFormattee(null,...) retourne null. */
-		assertNull("fournirDateFormattee(null,...) doit retourner null : "
-				,  GestionnaireFichiers.fournirDateFormattee(
-						null, DF_DATE_HEURE_MINUTE_SECONDE_UNDERSCORE));
-		
-		/* Vérifie que fournirDateFormattee(..., null) retourne null. */
-		assertNull("fournirDateFormattee(..., null) doit retourner null : "
-				,  GestionnaireFichiers.fournirDateFormattee(
-						new Date(), null));
-		
-		final Calendar calendar = new GregorianCalendar(LOCALE_FR_FR);
-		calendar.setLenient(false);
-		calendar.set(1961, 1, 25);
-		final Date maDate = calendar.getTime();
-		
-		System.out.println(GestionnaireFichiers.fournirDateFormattee(maDate, DF_DATE_FRANCAISE));
-	} // Fin de testFournirDateFormattee().________________________________
-	
-	
 	
 	/**
 	 * method testSubstituerSautLignePlateforme() :<br/>

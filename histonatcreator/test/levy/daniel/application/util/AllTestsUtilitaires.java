@@ -50,6 +50,7 @@ import org.junit.runners.Suite.SuiteClasses;
 	, levy.daniel.application.util.differentiateurs.differentiateursstrings.DifferentiateurStringTest.class
 	, levy.daniel.application.util.lecteursfichiers.MonFileInputStreamReaderDanTest.class
 	, levy.daniel.application.util.lecteursfichiers.MonFileReaderDanTest.class
+	, levy.daniel.application.util.gestionnairesdates.GestionnaireDatesTest.class
 })
 
 public final class AllTestsUtilitaires {

@@ -27,7 +27,7 @@ public interface IConstantesMessage {
 	
 	/**
 	 * LOCALE_FR : Locale : <br/>
-	 * Locale France avec langage français.<br/>
+	 * Locale France avec langage français et Pays FRANCE.<br/>
 	 */
 	Locale LOCALE_FR = new Locale("fr", "FR");
 	
