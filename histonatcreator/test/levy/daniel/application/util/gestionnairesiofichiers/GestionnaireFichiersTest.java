@@ -1,11 +1,17 @@
 package levy.daniel.application.util.gestionnairesiofichiers;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
+
+import levy.daniel.application.util.gestionnairesdates.GestionnaireDates;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -168,6 +174,16 @@ public class GestionnaireFichiersTest {
 	public static final DateFormat DF_MOIS_ANNEE 
 		= new SimpleDateFormat("MMMM' 'yyyy"
 			, LOCALE_FR_FR);
+
+	
+	/**
+	 * DF_DATETIMEMILLI_FRANCAISE : DateFormat :<br/>
+	 * Format des dates-heures françaises avec millisecondes comme
+	 * '25/02/1961-12:27:07.251'.<br/>
+	 * "dd/MM/yyyy-HH:mm:ss.SSS".<br/>
+	 */
+	public static final DateFormat DF_DATETIMEMILLI_FRANCAISE 
+	= new SimpleDateFormat("dd/MM/yyyy-HH:mm:ss.SSS", LOCALE_FR_FR);
 
 	
 	/**
@@ -370,40 +386,122 @@ static {
 
 	
 	/**
-	 * method testDetruireArborescence() :<br/>
-	 * .<br/>
-	 * <br/>
-	 */
-	@Test
-	public void testDetruireArborescence() {
-		assertTrue("BIDON : ", 1 == 1);
-	} // Fin de testDetruireArborescence().________________________________
-	
-
-	
-	/**
-	 * method testViderRepertoire() :<br/>
-	 * .<br/>
-	 * <br/>
-	 */
-	@Test
-	public void testViderRepertoire() {
-		assertTrue("BIDON : ", 1 == 1);
-	} // Fin de testViderRepertoire()._____________________________________
-	
-
-	
-	/**
 	 * method testFournirFile() :<br/>
-	 * .<br/>
+	 * Teste la méthode fournirFile(....) <br/>
 	 * <br/>
+	 * - vérifie que GestionnaireFichiers.fournirFile(null, ..., ..., ..., ...) 
+	 * retourne null.<br/>
+	 * - vérifie que GestionnaireFichiers.fournirFile("   ", ..., ..., ..., ...) 
+	 * retourne null.<br/>
+	 * - vérifie que GestionnaireFichiers.fournirFile(..., ..., null, ..., ...) 
+	 * retourne null.<br/>
+	 * - vérifie que la méthode retourne la bonne valeur.<br/>
+	 * <br/>
+	 * @throws InterruptedException 
 	 */
 	@Test
-	public void testFournirFile() {
-		assertTrue("BIDON : ", 1 == 1);
+	public void testFournirFile() throws InterruptedException {
+		
+		final String chemin1 = ".\\data2\\temp\\rapports";
+		final Date date1 
+		= GestionnaireDates.fournirDateAvecString(
+				"25/02/1961-14:27:07.251", DF_DATETIMEMILLI_FRANCAISE);		
+		final String nom1 = "RAPPORT";		
+		final String encodage1 = "UTF8";
+		final String encodage2 = "LATIN9";
+		final String extension1 = "txt";
+		
+		/* vérifie que GestionnaireFichiers.fournirFile(null, ..., ..., ..., ...) 
+		 * retourne null. */
+		assertNull("fournirFile(null, ..., ..., ..., ...) doit retourner null : "
+				, GestionnaireFichiers.fournirFile(
+					null, date1, nom1, encodage1, extension1));
+		
+		/* vérifie que GestionnaireFichiers.fournirFile("   ", ..., ..., ..., ...) 
+		 * retourne null. */
+		assertNull("fournirFile('   ', ..., ..., ..., ...) doit retourner null : "
+				, GestionnaireFichiers.fournirFile(
+				"   ", date1, nom1, encodage1, extension1));
+		
+		/* vérifie que GestionnaireFichiers.fournirFile(..., ..., null, ..., ...) 
+		 * retourne null. */
+		assertNull("fournirFile(..., ..., null, ..., ...) doit retourner null : "
+				, GestionnaireFichiers.fournirFile(
+						chemin1, date1, null, encodage1, extension1));
+		
+		/* vérifie que GestionnaireFichiers.fournirFile(..., ..., "  ", ..., ...) 
+		 * retourne null. */
+		assertNull("fournirFile(..., ..., '  ', ..., ...) doit retourner null : "
+				, GestionnaireFichiers.fournirFile(
+						chemin1, date1, "  ", encodage1, extension1));
+		
+		/* vérifie que la méthode retourne la bonne valeur. */
+		final File resultat1 
+		= GestionnaireFichiers.fournirFile(
+				chemin1, date1, nom1, encodage1, extension1);		
+		assertTrue(".\\data2\\temp\\rapports\\1961-02-25_14-27-07_RAPPORT_UTF8.txt existe : "
+				, resultat1.exists());
+		
+		final File resultat2 
+		= GestionnaireFichiers.fournirFile(
+				chemin1, date1, nom1, encodage2, extension1);
+		assertTrue(".\\data2\\temp\\rapports\\1961-02-25_14-27-07_RAPPORT_LATIN9.txt existe : "
+				, resultat2.exists());
+		
+		/* Attente. */
+		Thread.sleep(1000);
+		
+		/* DESTRUCTION EVENTUELLE DU REPERTOIRE. */
+		GestionnaireFichiers.detruireArborescence(".\\data2");
+		
 	} // Fin de testFournirFile()._________________________________________
 	
 
+	
+	/**
+	 * method testFournirNomFichier() :<br/>
+	 * Teste la méthode fournirNomFichier(....).<br/>
+	 * <br/>
+	 * - vérifie que GestionnaireFichiers.fournirNomFichier(..., null, ...) 
+	 * retourne null.<br/>
+	 * - vérifie que GestionnaireFichiers.fournirNomFichier(..., "   ", ...) 
+	 * retourne null.<br/>
+	 * - vérifie que la méthode retourne la bonne valeur.<br/>
+	 * <br/>
+	 */
+	@Test
+	public void testFournirNomFichier() {
+		
+		final Date date1 
+		= GestionnaireDates.fournirDateAvecString(
+				"25/02/1961-14:27:07.251", DF_DATETIMEMILLI_FRANCAISE);		
+		final String nom1 = "RAPPORT";		
+		final String encodage1 = "UTF8";		
+		final String extension1 = "txt";
+		
+		/* vérifie que GestionnaireFichiers.fournirNomFichier(..., null, ...) 
+		 * retourne null. */
+		assertNull("fournirNomFichier(..., null, ..., ...) doit retourner null : "
+				, GestionnaireFichiers.fournirNomFichier(
+					date1, null, encodage1, extension1));
+		
+		/* vérifie que GestionnaireFichiers.fournirNomFichier(..., "   ", ...) 
+		 * retourne null. */
+		assertNull("fournirNomFichier(..., '   ', ..., ...) doit retourner null : "
+				, GestionnaireFichiers.fournirNomFichier(
+				date1, "   ", encodage1, extension1));
+		
+		/* vérifie que la méthode retourne la bonne valeur. */
+		final String resultat 
+		= GestionnaireFichiers.fournirNomFichier(
+				date1, nom1, encodage1, extension1);
+	
+		assertEquals("doit retourner 1961-02-25_14-27-07_RAPPORT_UTF8.txt : "
+				, "1961-02-25_14-27-07_RAPPORT_UTF8.txt"
+					, resultat);
+		
+	} // Fin de testFournirNomFichier().___________________________________
+	
 	
 	/**
 	 * method testSubstituerSautLignePlateforme() :<br/>
