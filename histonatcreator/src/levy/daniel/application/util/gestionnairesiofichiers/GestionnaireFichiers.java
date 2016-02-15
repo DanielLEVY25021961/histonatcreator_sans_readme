@@ -9,9 +9,7 @@ import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import levy.daniel.application.IConstantesMessage;
@@ -174,17 +172,69 @@ public final class GestionnaireFichiers {
 
 	
 	/**
-	 * LOCALE_FR_FR : Locale :<br/>
-	 * new Locale("FR", "fr").<br/>
+	 * UNDERSCORE : char :<br/>
+	 * '_'.<br/>
 	 */
-	public static final Locale LOCALE_FR_FR = new Locale("FR", "fr");
+	public static final char UNDERSCORE = '_';
+	
+	
+	/**
+	 * POINT : char :<br/>
+	 * '.'.<br/>
+	 */
+	public static final char POINT = '.';
+	
+	
+	/**
+	 * SEPARATEUR_FILE : String :<br/>
+	 * "\\".<br/>
+	 */
+	public static final String SEPARATEUR_FILE = "\\";
+	
+	
+	/**
+	 * LOCALE_FR_FR : Locale :<br/>
+	 * new Locale("fr", "FR").<br/>
+	 */
+	public static final Locale LOCALE_FR_FR = new Locale("fr", "FR");
 
 	
+	/**
+	 * LOCALE_SYSTEM : Locale :<br/>
+	 * Locale de la plateforme.<br/>
+	 * Locale.getDefault().<br/>
+	 */
+	public static final Locale LOCALE_SYSTEM = Locale.getDefault();
+	
+
+	/**
+	 * DF_DATE_LEXICOGRAPHIQUE : DateFormat :<br/>
+	 * Format lexicographique des dates 
+	 * comme "2012-01-16" pour le
+	 * 16 Janvier 2012.<br/>
+	 * "yyyy-MM-dd".<br/>
+	 */
+	public static final DateFormat DF_DATE_LEXICOGRAPHIQUE 
+		= new SimpleDateFormat("yyyy-MM-dd", LOCALE_FR_FR);
+	
+	
+	/**
+	 * DF_DATETIME_LEXICOGRAPHIQUE : DateFormat :<br/>
+	 * Format lexicographique des dates avec time 
+	 * comme "2012-01-16_18-09-55" pour le
+	 * 16 Janvier 2012 à 18 heures 9 minutes et 55 secondes.<br/>
+	 * "yyyy-MM-dd_HH-mm-ss".<br/>
+	 */
+	public static final DateFormat DF_DATETIME_LEXICOGRAPHIQUE 
+		= new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", LOCALE_FR_FR);
+	
+
 	/**
 	 * DF_DATE_HEURE_MINUTE_SECONDE_UNDERSCORE : DateFormat :<br/>
 	 * Format concentré des dates avec heures et secondes
 	 * comme "2012-01-16_18-09-55" pour le
 	 * 16 Janvier 2012 à 18 heures 9 minutes et 55 secondes.<br/>
+	 * "yyyy-MM-dd_HH-mm-ss".<br/>
 	 */
 	public static final DateFormat DF_DATE_HEURE_MINUTE_SECONDE_UNDERSCORE 
 		= new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", LOCALE_FR_FR);
@@ -195,6 +245,7 @@ public final class GestionnaireFichiers {
 	 * DF_DATE_FRANCAISE : DateFormat :<br/>
 	 * Format classique des dates françaises comme
 	 * '25/02/1961'.<br/>
+	 * "dd/MM/yyyy".<br/>
 	 */
 	public static final DateFormat DF_DATE_FRANCAISE 
 	= new SimpleDateFormat("dd/MM/yyyy", LOCALE_FR_FR);
@@ -204,6 +255,7 @@ public final class GestionnaireFichiers {
 	 * DF_DATE_COMPLETE_FRANCAISE : DateFormat :<br/>
 	 * Format complet des dates françaises comme
 	 * 'samedi 25 février 1961'.<br/>
+	 * "EEEE' 'dd' 'MMMM' 'yyyy".<br/>
 	 */
 	public static final DateFormat DF_DATE_COMPLETE_FRANCAISE 
 		= new SimpleDateFormat("EEEE' 'dd' 'MMMM' 'yyyy"
@@ -211,9 +263,30 @@ public final class GestionnaireFichiers {
 
 	
 	/**
+	 * DF_DATETIME_FRANCAISE : DateFormat :<br/>
+	 * Format classique des dates-heures françaises comme
+	 * '25/02/1961-12:27:07'.<br/>
+	 * "dd/MM/yyyy-HH:mm:ss".<br/>
+	 */
+	public static final DateFormat DF_DATETIME_FRANCAISE 
+	= new SimpleDateFormat("dd/MM/yyyy-HH:mm:ss", LOCALE_FR_FR);
+
+	
+	/**
+	 * DF_DATETIMEMILLI_FRANCAISE : DateFormat :<br/>
+	 * Format des dates-heures françaises avec millisecondes comme
+	 * '25/02/1961-12:27:07.251'.<br/>
+	 * "dd/MM/yyyy-HH:mm:ss.SSS".<br/>
+	 */
+	public static final DateFormat DF_DATETIMEMILLI_FRANCAISE 
+	= new SimpleDateFormat("dd/MM/yyyy-HH:mm:ss.SSS", LOCALE_FR_FR);
+	
+
+	/**
 	 * DF_MOIS_ANNEE : DateFormat :<br/>
 	 * Format des dates françaises avec mois-année comme
 	 * 'février 1961'.<br/>
+	 * "MMMM' 'yyyy".<br/>
 	 */
 	public static final DateFormat DF_MOIS_ANNEE 
 		= new SimpleDateFormat("MMMM' 'yyyy"
@@ -224,6 +297,7 @@ public final class GestionnaireFichiers {
 	 * DF_MOIS_ANNEE_SIMPLE : DateFormat :<br/>
 	 * Format des dates françaises avec mois simplifié-année comme
 	 * '02/1961'.<br/>
+	 * "MM/yyyy".<br/>
 	 */
 	public static final DateFormat DF_MOIS_ANNEE_SIMPLE 
 	= new SimpleDateFormat("MM/yyyy", LOCALE_FR_FR);
@@ -232,6 +306,7 @@ public final class GestionnaireFichiers {
 	/**
 	 * DF_ANNEE : DateFormat :<br/>
 	 * Format des dates avec juste l'année comme "1961".<br/>
+	 * "yyyy".<br/>
 	 */
 	public static final DateFormat DF_ANNEE 
 		= new SimpleDateFormat("yyyy", LOCALE_FR_FR);
@@ -242,6 +317,7 @@ public final class GestionnaireFichiers {
 	 * Format classique des dates avec heures et secondes
 	 * comme "2012-01-16 à 18 heures,09 minutes,55 secondes" pour le
 	 * 16 Janvier 2012 à 18 heures 9 minutes et 55 secondes.<br/>
+	 * "yyyy-MM-dd' à 'HH' heures,'mm' minutes,'ss' secondes'".<br/>
 	 */
 	public static final DateFormat DF_DATE_AVEC_HEURE_MINUTE_SECONDE 
 	= new SimpleDateFormat("yyyy-MM-dd' " 
@@ -253,6 +329,7 @@ public final class GestionnaireFichiers {
 	 * Format concentré des dates avec heures et secondes
 	 * comme "2012-01-16:18-09-55" pour le
 	 * 16 Janvier 2012 à 18 heures 9 minutes et 55 secondes.<br/>
+	 * "yyyy-MM-dd:HH-mm-ss".<br/>
 	 */
 	public static final DateFormat DF_DATE_HEURE_MINUTE_SECONDE 
 		= new SimpleDateFormat("yyyy-MM-dd:HH-mm-ss", LOCALE_FR_FR);
@@ -284,9 +361,13 @@ public final class GestionnaireFichiers {
 
 
 static {
+	DF_DATE_LEXICOGRAPHIQUE.setLenient(false);
+	DF_DATETIME_LEXICOGRAPHIQUE.setLenient(false);
 	DF_DATE_HEURE_MINUTE_SECONDE_UNDERSCORE.setLenient(false);
 	DF_DATE_FRANCAISE.setLenient(false);
 	DF_DATE_COMPLETE_FRANCAISE.setLenient(false);
+	DF_DATETIME_FRANCAISE.setLenient(false);
+	DF_DATETIMEMILLI_FRANCAISE.setLenient(false);
 	DF_MOIS_ANNEE.setLenient(false);
 	DF_MOIS_ANNEE_SIMPLE.setLenient(false);
 	DF_ANNEE.setLenient(false);
@@ -938,25 +1019,110 @@ static {
 	 // File pRep).________________________________________________________
 	
 	
-
 	/**
-	 * method fournirFile(String pChemin, Date pDate, String pNomFichier, String pEncodage, String pExtension) :<br/>
-	 * .<br/>
+	 * method fournirFile(
+	 * String pChemin
+	 * , String pNomFichier
+	 * , String pEncodage
+	 * , String pExtension) :<br/>
+	 * Insère automatiquement la date courante.<br/>
+	 * Fabrique éventuellement l'arborescence pChemin 
+	 * (".\\data\\temp\\rapports" par exemple)<br/>
+	 * , fabrique le nom du fichier sous la forme 
+	 * [dateCourante_nom_encodage.extension] 
+	 * comme "2016-02-25_14-27-07_RAPPORT_UTF8.txt" par exemple<br/>
+	 * , fabrique et retourne le fichier 
+	 * (.\data2\temp\rapports\2016-02-25_14-27-07_RAPPORT_UTF8.txt 
+	 * par exemple).<br/>
 	 * <br/>
-	 * - crée un répertoire pour le fichier si il n'existe pas.<br/>
+	 * - crée un répertoire (ou toute l'arborescence) 
+	 * pour le fichier si il n'existe pas.<br/>
+	 * - Prend automatiquement la date système.<br/>
+	 * <br/>
+	 * Par exemple : <br/>
+	 * <code>
+	 * final String chemin1 = ".\\data2\\temp\\rapports";<br/>
+	 * // Crée le fichier 
+	 * .\data2\temp\rapports\2016-02-25_14-27-07_RAPPORT_UTF8.txt<br/>
+	 * final File resultat = GestionnaireFichiers.fournirFile(
+	 * chemin1,"RAPPORT", "UTF8", "txt");<br/>
+	 * </code>
 	 * <br/>
 	 * - retourne null si pChemin est blank.<br/>
-	 * - retourne null si il est impossible 
-	 * de créer le répertoire pChemin.<br/>
+	 * - retourne null si pNomFichier est blank.<br/>
+	 * - retourne null (et LOG ERROR) si il se produit une Exception 
+	 * lors de la création du fichier.<br/>
 	 * <br/>
-	 * 
-	 * @param pChemin : String : chemin (arborescence) pour le fichier.<br/>
-	 * @param pDate : Date : Date pour préfixer le nom du fichier.<br/>
-	 * @param pNomFichier : String : nom pour suffixer le nom du ficher.<br/>
-	 * @param pEncodage : String : encodage du fichier.<br/>
+	 *
+	 *  @param pChemin : String : chemin (arborescence de répertoires) 
+	 * pour le fichier.<br/>
+	 *  @param pNomFichier : String : nom de base du fichier.<br/>
+	 * @param pEncodage : String : encodage pour suffixer 
+	 * le nom du fichier.<br/>
 	 * @param pExtension : String : extension du fichier.<br/>
 	 * 
-	 * @return : File :  .<br/>
+	 * @return : File : Le File créé.<br/>
+	 */
+	public static File fournirFile(
+			final String pChemin
+				, final String pNomFichier
+					, final String pEncodage
+						, final String pExtension) {
+		
+		return fournirFile(pChemin, null, pNomFichier, pEncodage, pExtension);
+		
+	} // Fin de fournirFile(date courante).________________________________
+	
+	
+	
+	/**
+	 * method fournirFile(
+	 * String pChemin
+	 * , Date pDate
+	 * , String pNomFichier
+	 * , String pEncodage
+	 * , String pExtension) :<br/>
+	 * Fabrique éventuellement l'arborescence pChemin 
+	 * (".\\data\\temp\\rapports" par exemple)<br/>
+	 * , fabrique le nom du fichier sous la forme 
+	 * [date_nom_encodage.extension] 
+	 * comme "1961-02-25_14-27-07_RAPPORT_UTF8.txt" par exemple<br/>
+	 * , fabrique et retourne le fichier 
+	 * (.\data2\temp\rapports\1961-02-25_14-27-07_RAPPORT_UTF8.txt 
+	 * par exemple).<br/>
+	 * <br/>
+	 * - crée un répertoire (ou toute l'arborescence) 
+	 * pour le fichier si il n'existe pas.<br/>
+	 * - Prend automatiquement la date système si pDate est null.<br/>
+	 * <br/>
+	 * Par exemple : <br/>
+	 * <code>
+	 * final String chemin1 = ".\\data2\\temp\\rapports";<br/>
+	 * final Date date1 = GestionnaireDates.fournirDateAvecString(
+	 * "25/02/1961-14:27:07.251", DF_DATETIMEMILLI_FRANCAISE);<br/>
+	 * // Crée le fichier 
+	 * .\data2\temp\rapports\1961-02-25_14-27-07_RAPPORT_UTF8.txt<br/>
+	 * final File resultat = GestionnaireFichiers.fournirFile(
+	 * chemin1, date1, "RAPPORT", "UTF8", "txt");<br/>
+	 * </code>
+	 * <br/>
+	 * - retourne null si pChemin est blank.<br/>
+	 * - retourne null si pNomFichier est blank.<br/>
+	 * - retourne null (et LOG ERROR) si il se produit une Exception 
+	 * lors de la création du fichier.<br/>
+	 * <br/>
+	 * 
+	 * @param pChemin : String : chemin (arborescence de répertoires) 
+	 * pour le fichier.<br/>
+	 * @param pDate : Date : Date pour préfixer le nom du fichier. 
+	 * La Date sera formattée sous la forme "yyyy-MM-dd_HH-mm-ss" 
+	 * de DF_DATETIME_LEXICOGRAPHIQUE comme 2012-01-16_18-09-55 <br/>
+	 * @param pNomFichier : String : nom de base du fichier.<br/>
+	 * @param pEncodage : String : encodage pour suffixer 
+	 * le nom du fichier.<br/>
+	 * @param pExtension : String : extension du fichier.<br/>
+	 * 
+	 * @return : File : Le File créé.<br/>
 	 */
 	public static File fournirFile(
 			final String pChemin
@@ -973,88 +1139,173 @@ static {
 				return null;
 			}
 			
-			
-			/* Tentative de lecture du chemin du fichier. */
-			final File repertoireFichier 
-				= new File(pChemin);
-			
+			/* retourne null si pNomFichier est blank. */
+			if (StringUtils.isBlank(pNomFichier)) {
+				return null;
+			}
+						
 			/* crée un répertoire pour le fichier si il n'existe pas. */
-			if (!repertoireFichier.exists()) {
-				
-				boolean repertoireCree = false;
-				
-				try {
-					
-					/* Création du répertoire. */
-					repertoireCree = repertoireFichier.mkdir();
-					
-				} catch (Exception mkdirExc) {
-					
-					/* LOG de niveau ERROR. */
-					loggerError(
-							CLASSE_GESTIONNAIRE_FICHIERS
-								, METHODE_FOURNIRFILE
-									, mkdirExc);
-					
-					/* retourne null. */
-					return null;
-				}
-				
-				if (!repertoireCree) {
-					
-					/* LOG de niveau ERROR. */
-					if (LOG.isErrorEnabled()) {
-						
-						final String message 
-						= CLASSE_GESTIONNAIRE_FICHIERS 
-						+ IConstantesMessage.SEP_MOINS 
-						+ METHODE_FOURNIRFILE
-						+ IConstantesMessage.SEP_MOINS 
-						+ "Impossible de créer le répertoire : " 
-						+ pChemin;
-						
-						LOG.error(message);
-						
-					}
-					
-					/* retourne null. */
-					return null;
-				}
-			} // Fin de if (!repertoireRapports.exists())._____________
+			creerArborescence(pChemin);
 			
-			
-			
-			/* Récupère la date courante dans le système. */
-			final Date maintenantDate = new Date();
-			
-			/* Récupère la date formattée sous forme 2012-01-16_18-09-55. */
-			final String dateFormatteeString 
-				= DF_DATE_HEURE_MINUTE_SECONDE_UNDERSCORE
-					.format(maintenantDate);
-			
-			String cheminFichier = null;
-			
-			cheminFichier = pChemin + "\\" + dateFormatteeString + "_RapportDIFFERENCES_TXT_UTF8.txt";
+			/* crée le chemin complet du fichier en nommant le fichier. */
+			final String cheminFichier 
+				= pChemin 
+				+ SEPARATEUR_FILE 
+				+ fournirNomFichier(pDate, pNomFichier, pEncodage, pExtension);
 			
 			final File resultatFile = new File(cheminFichier);
 			
 			/* Création du fichier si il n'existe pas. */
 			if (!resultatFile.exists()) {
 				try {
+					
 					resultatFile.createNewFile();
+					
 				} catch (IOException ioe) {
-					ioe.printStackTrace();
+					
+					/* LOG de niveau ERROR. */
+					loggerError(
+							CLASSE_GESTIONNAIRE_FICHIERS
+								, METHODE_FOURNIRFILE
+									, ioe);
+					
+					/* retourne null (et LOG ERROR) si il se produit 
+					 * une Exception lors de la création du fichier. */
+					return null;
+					
 				}
 			}
-			System.out.println(resultatFile.getAbsolutePath());
 			
 			return resultatFile;
 			
 		} // Fin du bloc static synchronized.________________________
 				
-	} // Fin de fournirFilePourRapportTextuel().___________________________
+	} // Fin de fournirFile()._____________________________________________
 
 
+	
+	/**
+	 * method fournirNomFichier(
+	 * String pNom
+	 * , String pEncodage
+	 * , String pExtension) :<br/>
+	 * Fournit un nom pour un fichier 
+	 * de la forme [dateCourante_nom_encodage.extension].<br/>
+	 * Par exemple : <br/>
+	 * <code>GestionnaireFichiers.fournirNomFichier(
+	 * "RAPPORT", "UTF8", "txt");</code> 
+	 * retourne "dateCourante_RAPPORT_UTF8.txt".<br/>
+	 * La Date courante sera formattée sous la forme "yyyy-MM-dd_HH-mm-ss" 
+	 * de DF_DATETIME_LEXICOGRAPHIQUE comme 2012-01-16_18-09-55 <br/>
+	 * <br/>
+	 * - retourne null si pNom est blank.<br/>
+	 * <br/>
+	 *
+	 * @param pNom : String : nom de base du fichier.<br/>
+	 * @param pEncodage : String : encodage pour suffixer 
+	 * le nom du fichier.<br/>
+	 * @param pExtension : String : extension du fichier.<br/>
+	 * 
+	 * @return : String : Nom pour le fichier.<br/>
+	 */
+	public static String fournirNomFichier(
+			final String pNom
+					, final String pEncodage
+						, final String pExtension) {
+		
+		return fournirNomFichier(null, pNom, pEncodage, pExtension);
+		
+	} // Fin de fournirNomFichier(
+	 // String pNom
+	 // , String pEncodage
+	 // , String pExtension).______________________________________________
+	
+	
+	
+	/**
+	 * method fournirNomFichier(
+	 * Date pDate
+	 * , String pNom
+	 * , String pEncodage
+	 * , String pExtension) :<br/>
+	 * Fournit un nom pour un fichier 
+	 * de la forme [date_nom_encodage.extension].<br/>
+	 * Par exemple : <br/>
+	 * <code>final Date date1 = GestionnaireDates.fournirDateAvecString(
+	 * "25/02/1961-14:27:07.251", DF_DATETIMEMILLI_FRANCAISE);</code> 
+	 * instancie une date calée le 25/02/1961 à 14h27'07" 
+	 * et 251 millisecondes.<br/>
+	 * <code>GestionnaireFichiers.fournirNomFichier(
+	 * date1, "RAPPORT", "UTF8", "txt");</code> 
+	 * retourne "1961-02-25_14-27-07_RAPPORT_UTF8.txt".<br/>
+	 * <br/>
+	 * - passe automatiquement la date à la date système si pDate == null.<br/>
+	 * - retourne null si pNom est blank.<br/>
+	 * <br/>
+	 *
+	 * @param pDate : Date : Date pour préfixer le chemin. 
+	 * La Date sera formattée sous la forme "yyyy-MM-dd_HH-mm-ss" 
+	 * de DF_DATETIME_LEXICOGRAPHIQUE comme 2012-01-16_18-09-55 <br/>
+	 * @param pNom : String : nom de base du fichier.<br/>
+	 * @param pEncodage : String : encodage pour suffixer 
+	 * le nom du fichier.<br/>
+	 * @param pExtension : String : extension du fichier.<br/>
+	 * 
+	 * @return : String : Nom pour le fichier.<br/>
+	 */
+	public static String fournirNomFichier(
+			final Date pDate
+				, final String pNom
+					, final String pEncodage
+						, final String pExtension) {
+		
+		/* bloc static synchronized. */
+		synchronized (GestionnaireFichiers.class) {
+			
+			Date date = null;
+			
+			/* passe automatiquement la date 
+			 * à la date système si pDate == null. */
+			if (pDate == null) {
+				date = new Date();
+			}
+			else {
+				date = pDate;
+			}
+			
+			/* retourne null si pNom est blank. */
+			if(StringUtils.isBlank(pNom)) {
+				return null;
+			}
+			
+			/* Récupère la date  
+			 * formattée sous la forme 2012-01-16_18-09-55. */
+			final String dateFormatteeString 
+				= fournirDateFormattee(date, DF_DATETIME_LEXICOGRAPHIQUE);
+			
+			final StringBuilder stb = new StringBuilder();
+			
+			stb.append(dateFormatteeString);
+			stb.append(UNDERSCORE);
+			stb.append(pNom);
+			
+			if (!StringUtils.isBlank(pEncodage)) {
+				stb.append(UNDERSCORE);
+				stb.append(pEncodage);
+			}
+			
+			if (!StringUtils.isBlank(pExtension)) {
+				stb.append(POINT);
+				stb.append(pExtension);
+			}
+			
+			return stb.toString();
+			
+		} // Fin du bloc static synchronized.________________________
+		
+	} // Fin de fournirNomFichier(...).____________________________________
+	
+	
 	
 	/**
 	 * method fournirDateFormattee(
@@ -1062,6 +1313,11 @@ static {
 	 * , DateFormat pDateFormat) :<br/>
 	 * Retourne une String représentant la java.util.Date pDate 
 	 * au format pDateFormat.<br/>
+	 * Par exemple :<br/>
+	 * - Retourne la String "25/02/1961" 
+	 * avec une Date au 25/02/1961 et un DateFormat 
+	 * DF_DATE_FRANCAISE (
+	 * new SimpleDateFormat("dd/MM/yyyy", LOCALE_FR_FR)).<br/>
 	 * <br/>
 	 * - retourne null si pDate == null.<br/>
 	 * - retourne null si pDateFormat == null.<br/>
@@ -1070,10 +1326,12 @@ static {
 	 * @param pDate : java.util.Date.<br/>
 	 * @param pDateFormat : DateFormat.<br/>
 	 * 
-	 * @return : String : String pour affichage formatté de pDate.<br/>
+	 * @return : String : String pour affichage 
+	 * formatté de pDate selon pDateFormat.<br/>
 	 */
-	public static String fournirDateFormattee(
-			final Date pDate, final DateFormat pDateFormat) {
+	private static String fournirDateFormattee(
+			final Date pDate
+				, final DateFormat pDateFormat) {
 		
 		/* bloc static synchronized. */
 		synchronized (GestionnaireFichiers.class) {
@@ -1097,120 +1355,6 @@ static {
 	} // Fin de fournirDateFormattee(
 	 // Date pDate
 	 // DateFormat pDateFormat).___________________________________________
-	
-
-	
-	/**
-	 * method fournirDateFormattee(
-	 * int pJour
-	 * , int pMois
-	 * , int pAnnee
-	 * , int pHeures
-	 * , int pMinutes
-	 * , int pSecondes
-	 * , DateFormat pDateFormat) :<br/>
-	 * .<br/>
-	 * <br/>
-	 * - retourne null si pDateFormat == null.<br/>
-	 * <br/>
-	 *
-	 * @param pJour
-	 * @param pMois
-	 * @param pAnnee
-	 * @param pHeures
-	 * @param pMinutes
-	 * @param pSecondes
-	 * @param pDateFormat : DateFormat.<br/>
-	 * 
-	 * @return : String : String pour affichage formatté de pDate.<br/>
-	 */
-	public static String fournirDateFormattee(
-			final int pJour, final int pMois, final int pAnnee, final int pHeures, final int pMinutes, final int pSecondes, final DateFormat pDateFormat) {
-		
-		/* bloc static synchronized. */
-		synchronized (GestionnaireFichiers.class) {
-			
-			/* retourne null si pDateFormat == null. */
-			if(pDateFormat == null) {
-				return null;
-			}
-			
-			/* Instancie un GregorianCalendar. */
-			final Calendar calendar = new GregorianCalendar(LOCALE_FR_FR);
-			
-			/* Impose au Calendar de ne traiter que des dates compatibles
-			 *  avec le calendrier 
-			 *  (un 29 ou 30 Février ne doit pas être interprété). */
-			calendar.setLenient(false);
-			
-			/* Positionne le Calendar. */
-			calendar.set(pAnnee, pMois, pJour, pHeures, pMinutes, pSecondes);
-			
-			/* Extrait la date du Calendar. */
-			final Date maDate = calendar.getTime();
-			
-			/* Impose au DateFormat de ne traiter que des dates compatibles 
-			 * avec le calendrier 
-			 * (un 29 ou 30 Février ne doit pas être interprété). */
-			pDateFormat.setLenient(false);
-			
-			/* retourne la date formattée. */
-			return pDateFormat.format(maDate);
-			
-		} // Fin du bloc static synchronized.________________________
-				
-	} // Fin de fournirDateFormattee(COMPLET)._____________________________
-	
-
-	
-	/**
-	 * method fournirDate(
-	 * int pJour
-	 * , int pMois
-	 * , int pAnnee
-	 * , int pHeures
-	 * , int pMinutes
-	 * , int pSecondes) :<br/>
-	 * .<br/>
-	 * <br/>
-	 *
-	 * @param pJour
-	 * @param pMois
-	 * @param pAnnee
-	 * @param pHeures
-	 * @param pMinutes
-	 * @param pSecondes
-	 * 
-	 * @return : java.util.Date :  .<br/>
-	 */
-	public static Date fournirDate(
-			final int pJour
-				, final int pMois
-					, final int pAnnee
-						, final int pHeures
-							, final int pMinutes
-								, final int pSecondes) {
-		
-		/* bloc static synchronized. */
-		synchronized (GestionnaireFichiers.class) {
-						
-			/* Instancie un GregorianCalendar. */
-			final Calendar calendar = new GregorianCalendar(LOCALE_FR_FR);
-			
-			/* Impose au Calendar de ne traiter que des dates compatibles
-			 *  avec le calendrier 
-			 *  (un 29 ou 30 Février ne doit pas être interprété). */
-			calendar.setLenient(false);
-			
-			/* Positionne le Calendar. */
-			calendar.set(pAnnee, pMois, pJour, pHeures, pMinutes, pSecondes);
-			
-			/* Extrait et retourne la date du Calendar. */
-			return calendar.getTime();
-						
-		} // Fin du bloc static synchronized.________________________
-				
-	} // Fin de fournirDate(COMPLET)._____________________________
 	
 
 	
