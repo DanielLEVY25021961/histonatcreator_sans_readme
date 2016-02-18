@@ -7,8 +7,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
-
-import levy.daniel.application.IConstantesMessage;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -16,7 +16,26 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * class ConvertisseurEncodage :<br/>
- * .<br/>
+ * Classe utilitaire spécialisée dans la lecture du contenu de fichiers.<br/>
+ * <br/>
+ * - possède une méthode lireDepuisFichier(File pFile, Charset pCharset) qui :
+ * <ul>
+ * <li>lit un fichier pFile et retourne son contenu 
+ * dans une chaîne de caractères.</li><br/>
+ * <li>Lit le fichier en utilisant la méthode read() 
+ * de BufferedReader appliqué à un InputStreamReader 
+ * avec le Charset de décodage pCharset.</li><br/>
+ * <li>Lit chaque caractère quoi qu'il arrive 
+ * (même si le fichier n'est pas un fichier texte).</li><br/>
+ * <li>Ne modifie pas les sauts de ligne.</li><br/>
+ * <li>Alimente l'attribut longueur qui contient 
+ * la longueur en caractères de la chaîne lue.</li><br/>
+ * <li>Passe contientCarRemplacement à true si la chaine lue 
+ * contient un caractère de remplacement.</li><br/>
+ * <li>Passe contientCarIndesirable à true si la chaîne lue contient 
+ * un caractère indésirable stocké dans CARACTERES_INDESIRABLES_SET.</li><br/>
+ * </ul>
+ * <br/>
  * <br/>
  *
  * - Exemple d'utilisation :<br/>
@@ -26,6 +45,7 @@ import org.apache.commons.logging.LogFactory;
  * synchronized, bloc static synchronized, <br/>
  * FileReader, BufferedReader, bufferedReader.read(), <br/>
  * Cast entier en Character, LOG, <br/>
+ * Caractère de remplacement, replacement caracter, "\\ufffd", '�', <br/>
  * <br/>
  *
  * - Dépendances :<br/>
@@ -196,7 +216,137 @@ public final class ConvertisseurEncodage {
 	public static final Charset CHARSET_CP1252
 		= Charset.forName("windows-1252");
 
+	
+	/**
+	 * SEP_MOINS : String :<br/>
+	 * " - ".<br/>
+	 */
+	public static final String SEP_MOINS = " - ";
 
+
+	/**
+	 * SAUTDELIGNE_UNIX : String :<br/>
+	 * Saut de ligne généré par les éditeurs Unix.<br/>
+	 * "\n" (Retour Ligne = LINE FEED (LF)).
+	 */
+	public static final String SAUTDELIGNE_UNIX = "\n";
+
+	
+	/**
+	 * SAUTDELIGNE_MAC : String :<br/>
+	 * Saut de ligne généré par les éditeurs Mac.<br/>
+	 * "\r" (Retour Chariot RC = CARRIAGE RETURN (CR))
+	 */
+	public static final String SAUTDELIGNE_MAC = "\r";
+
+	
+	/**
+	 * SAUTDELIGNE_DOS_WINDOWS : String :<br/>
+	 * Saut de ligne généré par les éditeurs DOS/Windows.<br/>
+	 * "\r\n" (Retour Chariot RC + Retour Ligne Line Feed LF).
+	 */
+	public static final String SAUTDELIGNE_DOS_WINDOWS = "\r\n";
+
+	
+	/**
+	 * NEWLINE : String :<br/>
+	 * Saut de ligne spécifique de la plateforme.<br/>
+	 * System.getProperty("line.separator").<br/>
+	 */
+	public static final String NEWLINE = System.getProperty("line.separator");
+
+
+	/**
+	 * CARACTERE_REMPLACEMENT : char :<br/>
+	 * Caractère de remplacement introduit lors de la lecture en UTF-8 
+	 * d'un fichier texte encodé avec un autre Charset.<br/>
+	 * REPLACEMENT CHARACTER."\\ufffd" '�'.<br/> 
+	 */
+	public static final char CARACTERE_REMPLACEMENT = '\ufffd';
+
+	
+	/**
+	 * CARACTERES_INDESIRABLES_SET : Set&lt;Character&gt; :<br/>
+	 * Set contenant des caractères indésirables 
+	 * (impossibles à écrire simplement au clavier).<br/>
+	 */
+	public static final Set<Character> CARACTERES_INDESIRABLES_SET 
+		= new HashSet<Character>();
+	
+	
+	/**
+	 * longueur : int :<br/>
+	 * longueur en caractères de la chaîne lue par 
+	 * lireDepuisFichier(File pFile, Charset pCharset).<br/>
+	 */
+	private static int longueur;
+
+	
+	/**
+	 * contientCarRemplacement : boolean :<br/>
+	 * boolean qui précise si la chaîne lue par 
+	 * lireDepuisFichier(File pFile, Charset pCharset) 
+	 * contient des caractères de remplacement 
+	 * (REPLACEMENT CHARACTER "\\ufffd").<br/>
+	 */
+	private static boolean contientCarRemplacement;
+
+	
+	/**
+	 * contientCarIndesirable : boolean :<br/>
+	 * boolean qui précise si la chaîne lue par 
+	 * lireDepuisFichier(File pFile, Charset pCharset) 
+	 * contient des caractères indésirables.<br/>
+	 * (impossibles à écrire simplement au clavier).<br/>
+	 */
+	private static boolean contientCarIndesirable;
+	
+	
+	static {
+		
+		/* ACUTE ACCENT '´' */
+		CARACTERES_INDESIRABLES_SET.add('\u00b4');
+		/* BOX DRAWINGS DOUBLE DOWN AND LEFT '╗' */
+		CARACTERES_INDESIRABLES_SET.add('\u2557');
+		/* BOX DRAWINGS LIGHT DOWN AND LEFT '┐' */
+		CARACTERES_INDESIRABLES_SET.add('\u2510');
+		/* LATIN CAPITAL LETTER U WITH ACUTE 'Ú' */
+		CARACTERES_INDESIRABLES_SET.add('\u00da');
+		/* ZERO WIDTH NO-BREAK SPACE ' ' */
+		CARACTERES_INDESIRABLES_SET.add('\ufeff');
+		/* RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK '»' */
+		CARACTERES_INDESIRABLES_SET.add('\u00bb');
+		/* INVERTED QUESTION MARK '¿' */
+		CARACTERES_INDESIRABLES_SET.add('\u00bf');		
+		/* LATIN SMALL LETTER D WITH CARON 'ď' */
+		CARACTERES_INDESIRABLES_SET.add('\u010f');
+		/* LATIN SMALL LETTER T WITH CARON 'ť' */
+		CARACTERES_INDESIRABLES_SET.add('\u0165');
+		/* LATIN SMALL LETTER Z WITH DOT ABOVE 'ż' */
+		CARACTERES_INDESIRABLES_SET.add('\u017c');
+		/* LATIN 1 SUPPLEMENT 80 ' ' */
+		CARACTERES_INDESIRABLES_SET.add('\u0080');		
+		/* LATIN SMALL LETTER R WITH ACUTE 'ŕ' */
+		CARACTERES_INDESIRABLES_SET.add('\u0155');
+		/* LATIN SMALL LETTER C WITH CARON 'č' */
+		CARACTERES_INDESIRABLES_SET.add('\u010d');
+		/* LATIN SMALL LETTER E WITH OGONEK 'ę' */
+		CARACTERES_INDESIRABLES_SET.add('\u0119');		
+		/* LATIN CAPITAL LETTER O WITH ACUTE 'Ó' */
+		CARACTERES_INDESIRABLES_SET.add('\u00d3');
+		/* LATIN CAPITAL LETTER O WITH CIRCUMFLEX 'Ô' */
+		CARACTERES_INDESIRABLES_SET.add('\u00d4');
+		/* LATIN CAPITAL LETTER THORN 'Þ' */
+		CARACTERES_INDESIRABLES_SET.add('\u00de');		
+		/* LATIN CAPITAL LETTER U WITH GRAVE 'Ù' */
+		CARACTERES_INDESIRABLES_SET.add('\u00d9');
+		/* LATIN CAPITAL LETTER C WITH CEDILLA 'Ç' */
+		CARACTERES_INDESIRABLES_SET.add('\u00c7');
+		
+	}
+	
+	
+	
 	/**
 	 * LOG : Log : 
 	 * Logger pour Log4j (utilisant commons-logging).
@@ -219,6 +369,45 @@ public final class ConvertisseurEncodage {
 
 	
 	/**
+	 * method lireDepuisFichierEnUtf8(
+	 * File pFile) :<br/>
+	 * Lit un fichier pFile et 
+	 * retourne son contenu dans une chaîne de caractères.<br/>
+	 * Lit le fichier en utilisant la méthode read() 
+	 * de BufferedReader appliqué à un InputStreamReader 
+	 * avec le Charset de décodage UTF-8.<br/>
+	 * Lit chaque caractère quoi qu'il arrive 
+	 * (même si le fichier n'est pas un fichier texte).<br/>
+	 * Ne modifie pas les sauts de ligne.<br/>
+	 * Alimente l'attribut longueur qui contient 
+	 * la longueur en caractères de la chaîne lue.<br/>
+	 * - Passe contientCarRemplacement à true si la chaine 
+	 * lue contient un caractère de remplacement.<br/>
+	 * - Passe contientCarIndesirable à true si la chaîne lue contient un caractère indésirable stocké dans CARACTERES_INDESIRABLES_SET.<br/>
+	 * <br/>
+	 * - Choisit automatiquement le CHARSET_UTF8 
+	 * pour décoder le contenu du fichier.<br/>
+	 * <br/>
+	 * - retourne MESSAGE_FICHIER_NULL si le pFile est null.<br/>
+	 * - retourne MESSAGE_FICHIER_INEXISTANT si le pFile est inexistant.<br/>
+	 * - retourne MESSAGE_FICHIER_REPERTOIRE si le pFile est un répertoire.<br/>
+	 * <br/>
+	 *
+	 * @param pFile : File : fichier à lire.<br/>
+	 * 
+	 * @return : String : Chaine de caractères avec le contenu du fichier.<br/>
+	 */
+	public static String lireDepuisFichierEnUtf8(
+			final File pFile) {
+		
+		return lireDepuisFichier(pFile, null);
+		
+	} // Fin de lireDepuisFichierEnUtf8(
+	 // File pFile)._______________________________________________________
+	
+
+	
+	/**
 	 * method lireDepuisFichier(
 	 * File pFile
 	 * , Charset pCharset) :<br/>
@@ -229,6 +418,12 @@ public final class ConvertisseurEncodage {
 	 * avec le Charset de décodage pCharset.<br/>
 	 * Lit chaque caractère quoi qu'il arrive 
 	 * (même si le fichier n'est pas un fichier texte).<br/>
+	 * Ne modifie pas les sauts de ligne.<br/>
+	 * Alimente l'attribut longueur qui contient 
+	 * la longueur en caractères de la chaîne lue.<br/>
+	 * - Passe contientCarRemplacement à true si la chaine 
+	 * lue contient un caractère de remplacement.<br/>
+	 * Passe contientCarIndesirable à true si la chaîne lue contient un caractère indésirable stocké dans CARACTERES_INDESIRABLES_SET.<br/>
 	 * <br/>
 	 * - Choisit automatiquement le CHARSET_UTF8 si pCharset == null.<br/>
 	 * <br/>
@@ -249,6 +444,13 @@ public final class ConvertisseurEncodage {
 		
 		/* block static synchronized. */
 		synchronized (ConvertisseurEncodage.class) {
+			
+			/* remise à zéro de la longueur. */
+			longueur = 0;
+			
+			/* remise à false des booléens. */
+			contientCarRemplacement = false;
+			contientCarIndesirable = false;
 			
 			/* retourne MESSAGE_FICHIER_NULL 
 			 * si le pFile est null. */
@@ -345,13 +547,33 @@ public final class ConvertisseurEncodage {
 					/* Conversion de l'entier en caractère. */
 					character = (char) characterEntier;
 					
+					/* Passe contientCarRemplacement à true 
+					 * si la chaine lue contient un caractère 
+					 * de remplacement. */
+					if (character == CARACTERE_REMPLACEMENT) {
+						contientCarRemplacement = true;
+					}
+					
+					/* Passe contientCarIndesirable à true si la chaîne lue contient un caractère indésirable stocké dans CARACTERES_INDESIRABLES_SET. */
+					if (CARACTERES_INDESIRABLES_SET.contains(character)) {
+						contientCarIndesirable = true;
+					}
+					
 					/* Ajout du caractère au StringBuilder. */
 					stb.append(character);
 					
 				} // Fin du parcours du bufferedReader._________
 				
+				
+				final String resultat = stb.toString();
+				
+				/* Alimentation de longueur. */
+				if (resultat != null) {
+					longueur = resultat.length();
+				}
+				
 				/* Retour de la chaine de caractères. ***********/
-				return stb.toString();
+				return resultat;
 				
 			} catch (FileNotFoundException fnfe) {
 				
@@ -473,9 +695,9 @@ public final class ConvertisseurEncodage {
 			
 			final String message 
 			= pClasse 
-			+ IConstantesMessage.SEP_MOINS
+			+ SEP_MOINS
 			+ pMethode
-			+ IConstantesMessage.SEP_MOINS
+			+ SEP_MOINS
 			+ pMessage;
 			
 			LOG.info(message);
@@ -521,9 +743,9 @@ public final class ConvertisseurEncodage {
 			
 			final String message 
 			= pClasse 
-			+ IConstantesMessage.SEP_MOINS
+			+ SEP_MOINS
 			+ pMethode
-			+ IConstantesMessage.SEP_MOINS
+			+ SEP_MOINS
 			+ pMessage
 			+ pComplement;
 			
@@ -568,9 +790,9 @@ public final class ConvertisseurEncodage {
 			
 			final String message 
 			= pClasse 
-			+ IConstantesMessage.SEP_MOINS
+			+ SEP_MOINS
 			+ pMethode
-			+ IConstantesMessage.SEP_MOINS 
+			+ SEP_MOINS 
 			+ pException.getMessage();
 			
 			LOG.error(message, pException);
@@ -581,8 +803,53 @@ public final class ConvertisseurEncodage {
 	 // String pClasse
 	 // , String pMethode
 	 // , Exception pException).___________________________________________
-	
-	
 
+
+
+	/**
+	 * method getLongueur() :<br/>
+	 * Getter de la longueur en caractères de la chaîne lue par 
+	 * lireDepuisFichier(File pFile, Charset pCharset).<br/>
+	 * <br/>
+	 *
+	 * @return longueur : int.<br/>
+	 */
+	public static int getLongueur() {
+		return longueur;
+	} // Fin de getLongueur()._____________________________________________
+
+
+
+	/**
+	 * method isContientCarRemplacement() :<br/>
+	 * Getter du boolean qui précise si la chaîne lue par 
+	 * lireDepuisFichier(File pFile, Charset pCharset) 
+	 * contient des caractères de remplacement 
+	 * (REPLACEMENT CHARACTER "\\ufffd" '�').<br/>
+	 * <br/>
+	 *
+	 * @return contientCarRemplacement : boolean.<br/>
+	 */
+	public static boolean isContientCarRemplacement() {
+		return contientCarRemplacement;
+	} // Fin de isContientCarRemplacement()._______________________________
+
+
+
+	/**
+	 * method isContientCarIndesirable() :<br/>
+	 * Getter du boolean qui précise si la chaîne lue par 
+	 * lireDepuisFichier(File pFile, Charset pCharset) 
+	 * contient des caractères indésirables.<br/>
+	 * (impossibles à écrire simplement au clavier).<br/>
+	 * <br/>
+	 *
+	 * @return contientCarIndesirable : boolean.<br/>
+	 */
+	public static boolean isContientCarIndesirable() {
+		return contientCarIndesirable;
+	} // Fin de isContientCarIndesirable().________________________________
+	
+		
 	
 } // FIN DE LA CLASSE ConvertisseurEncodage.---------------------------------

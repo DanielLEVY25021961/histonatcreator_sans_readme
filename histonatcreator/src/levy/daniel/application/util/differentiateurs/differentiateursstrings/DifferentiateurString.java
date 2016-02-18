@@ -22,10 +22,52 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * class DifferentiateurString :<br/>
- * .<br/>
+ * Classe utilitaire spécialisée 
+ * dans la détection caractère par caractère et 
+ * dans le calcul de la différence entre deux String.<br/>
+ * Fournit les données Unicode concernant les caractères.<br/>
+ * <br/>
+ * - possède une méthode listerChaineCarParCar(String pString) qui liste 
+ * caractère par caractère sur des lignes distinctes 
+ * une chaine de caractères pString avec les informations 
+ * Unicode concernant les caractères.<br/>
+ * <br/>
+ * - possède une méthode differencier(String pString1, String pString2) qui :<br/>
+ * <ul>
+ * <li>Détermine les différences caractère par caractère 
+ * entre 2 chaînes pString1 et pString2.</li><br/>
+ * <li>Génère un rapport des différences 
+ * aux formats textuel (rapportDiff) et csv (rapportDiffCsv).</li><br/>
+ * <li>Ecrit dans des fichiers sur disque les rapports des différences 
+ * aux formats textuel (fileRapportDiff) et csv (fileRapportDiffCsv).</li><br/>
+ * <li>Crée des rapports de création du fichier textuel 
+ * (rapportCreationFichierDiff) et csv (rapportCreationFichierDiffCsv).</li><br/>
+ * <li>Retourne le rapport textuel.</li><br/>
+ * <li>Alimente longueurChaine1 et longueurChaine2.</li><br/>
+ * </ul>
  * <br/>
  *
  * - Exemple d'utilisation :<br/>
+ * <code>// Application de la méthode differencier(...) du DifferentiateurString.<br/>
+ * DifferentiateurString.differencier("mêt", "met", true);<br/>
+ * <br/>
+ * // récupération du rapport des différences textuel (rapportDiff).<br/>
+ * final String rapportTxt1 = DifferentiateurString.getRapportDiff();<br/>
+ * // récupération du rapport des différences csv (rapportDiffCsv).<br/>
+ * final String rapportCsv1 = DifferentiateurString.getRapportDiffCsv();<br/>
+ * // récupération du fichier UTF-8 contenant le rapport des différences textuel (fileRapportDiff).<br/>
+ * final File fileRapportTxt1 = DifferentiateurString.getFileRapportDiff();<br/>
+ * // récupération du fichier UTF-8 contenant le rapport des différences csv (fileRapportDiffCsv).<br/>
+ * final File fileRapportCsv1 = DifferentiateurString.getFileRapportDiffCsv();<br/>
+ * // récupération de la longueur de la chaine 1 (longueurChaine1).<br/>
+ * final int longueurChaine1 = DifferentiateurString.getLongueurChaine1();<br/>
+ * // récupération de la longueur de la chaine 2 (longueurChaine2).<br/>
+ * final int longueurChaine2 = DifferentiateurString.getLongueurChaine2();<br/>
+ * // récupération du rapport de création de fileRapportDiff.<br/>		
+ * final String messageCreationRapportTxt1 = DifferentiateurString.getRapportCreationfichierDiff();<br/>
+ * // récupération du rapport de création de fileRapportDiffCsv.<br/>
+ * final String messageCreationRapportCsv1 = DifferentiateurString.getRapportCreationfichierDiffCsv();<br/>
+ * </code>
  *<br/>
  * 
  * - Mots-clé :<br/>
@@ -274,6 +316,16 @@ public final class DifferentiateurString {
 		= new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", LOCALE_FR_FR);
 	
 
+	/**
+	 * DF_DATETIME_LEXICOGRAPHIQUEMILLI : DateFormat :<br/>
+	 * Format lexicographique des dates avec time 
+	 * comme "2012-01-16_18-09-55-769" pour le
+	 * 16 Janvier 2012 à 18 heures 9 minutes,55 secondes et 769 millisecondes.<br/>
+	 * "yyyy-MM-dd_HH-mm-ss-SSS".<br/>
+	 */
+	public static final DateFormat DF_DATETIME_LEXICOGRAPHIQUEMILLI 
+		= new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss-SSS", LOCALE_FR_FR);
+
 	
 	/**
 	 * DF_DATE_HEURE_MINUTE_SECONDE_UNDERSCORE : DateFormat :<br/>
@@ -305,6 +357,7 @@ public final class DifferentiateurString {
 	/**
 	 * rapportDiff : String :<br/>
 	 * Rapport textuel comparant les deux chaines de caractères.<br/>
+	 * Fourni par la méthode differencier(...).<br/>
 	 */
 	private static String rapportDiff;
 	
@@ -312,6 +365,7 @@ public final class DifferentiateurString {
 	/**
 	 * rapportDiffCsv : String :<br/>
 	 * Rapport au format csv comparant les deux chaines de caractères.<br/>
+	 * Fourni par la méthode differencier(...).<br/>
 	 */
 	private static String rapportDiffCsv;
 
@@ -320,6 +374,7 @@ public final class DifferentiateurString {
 	 * fileRapportDiff : File :<br/>
 	 * File contenant le Rapport textuel 
 	 * comparant les deux chaines de caractères.<br/>
+	 * Fourni par la méthode differencier(...).<br/>
 	 */
 	private static File fileRapportDiff;
 
@@ -328,8 +383,51 @@ public final class DifferentiateurString {
 	 * fileRapportDiffCsv : File :<br/>
 	 * File contenant le Rapport au format csv 
 	 * comparant les deux chaines de caractères.<br/>
+	 * Fourni par la méthode differencier(...).<br/>
 	 */
 	private static File fileRapportDiffCsv;
+
+	
+	/**
+	 * longueurChaine : int :<br/>
+	 * longueur de la chaîne de caractères transmise à la méthode listerChaineCarParCar(...).<br/>
+	 */
+	private static int longueurChaine;
+
+	
+	/**
+	 * longueurChaine1 : int :<br/>
+	 * longueur de la première chaîne passée à 
+	 * la méthode differencier(String pString1, String pString2, ...).<br/>
+	 * Fourni par la méthode differencier(...).<br/>
+	 */
+	private static int longueurChaine1;
+	
+	
+	/**
+	 * longueurChaine2 : int :<br/>
+	 * longueur de la deuxième chaîne passée à 
+	 * la méthode differencier(String pString1, String pString2, ...).<br/>
+	 * Fourni par la méthode differencier(...).<br/>
+	 */
+	private static int longueurChaine2;
+
+	
+	/**
+	 * rapportCreationfichierDiff : String :<br/>
+	 * rapport de création de fileRapportDiff.<br/>
+	 * (le fichier a bien été créé...).<br/>
+	 */
+	private static String rapportCreationfichierDiff;
+
+	
+	/**
+	 * rapportCreationfichierDiffCsv : String :<br/>
+	 * rapport de création de fileRapportDiffCsv.<br/>
+	 * (le fichier a bien été créé...).<br/>
+	 */
+	private static String rapportCreationfichierDiffCsv;
+	
 	
 	
 	/**
@@ -356,11 +454,12 @@ public final class DifferentiateurString {
 	/**
 	 * method listerChaineCarParCar(
 	 * String pString) :<br/>
-	 * Retourne une String permettant l'affichage 
+	 * - Retourne une String permettant l'affichage 
 	 * caractère par caractère sur des lignes distinctes 
 	 * d'une chaine de caractères pString 
 	 * avec les informations 
 	 * Unicode concernant les caractères.<br/>
+	 * - Alimente longueurChaine.<br/>
 	 * <br/>
 	 * Par exemple : <br/>
 	 * <code>DifferentiateurString.listerChaineCarParCar("à b")</code> 
@@ -389,8 +488,11 @@ public final class DifferentiateurString {
 				return null;
 			}
 			
+			/* Remise à zéro de longueurChaine. */
+			longueurChaine = 0;
+			
 			/* Détermine la longueur de la chaîne. */
-			final int longueurChaine = pString.length();
+			longueurChaine = pString.length();
 			int position = 0;
 			Character caractereChaine = null;
 			final StringBuilder stb = new StringBuilder();
@@ -428,28 +530,82 @@ public final class DifferentiateurString {
 
 	
 	/**
-	 * method differencier(String pString1
-	 * , String pString2
-	 * , Boolean pRapportFichier) :<br/>
-	 * .<br/>
+	 * method differencier(
+	 * String pString1
+	 * , String pString2) :<br/>
+	 * - Détermine les différences caractère par caractère 
+	 * entre 2 chaînes pString1 et pString2.<br/>
+	 * - Génère un rapport des différences 
+	 * aux formats textuel (rapportDiff) et csv (rapportDiffCsv).<br/>
+	 * - Ecrit dans des fichiers sur disque les rapports des différences 
+	 * aux formats textuel (fileRapportDiff) et csv (fileRapportDiffCsv).<br/>
+	 * - Crée des rapports de création du fichier textuel 
+	 * (rapportCreationFichierDiff) et csv (rapportCreationFichierDiffCsv).<br/>
+	 * - Retourne le rapport textuel.<br/>
+	 * - Alimente longueurChaine1 et longueurChaine2.<br/>
 	 * <br/>
 	 *
-	 * @param pString1 : String : 
-	 * @param pString2 : String :
-	 * @param pRapportFichier : Boolean : stipule si les rapports textuels et csv doivent être écrits dans des fichiers.<br/>
+	 * @param pString1 : String : 1ère chaîne à comparer.<br/>
+	 * @param pString2 : String : 2ème chaîne à comparer.<br/>
 	 * 
-	 * @return : String :  .<br/>
+	 * @return : String : rapportDiff : Rapport textuel en UTF-8 
+	 * comparant les deux chaines de caractères.<br/>
 	 */
 	public static String differencier(
-			final String pString1, final String pString2, final Boolean pRapportFichier) {
+			final String pString1
+				, final String pString2) {
+		
+		return differencier(pString1, pString2, true);
+		
+	} // Fin de differencier(
+	 // String pString1
+	 // , String pString2).________________________________________________
+	
+	
+	
+	/**
+	 * method differencier(
+	 * String pString1
+	 * , String pString2
+	 * , Boolean pRapportFichier) :<br/>
+	 * - Détermine les différences caractère par caractère 
+	 * entre 2 chaînes pString1 et pString2.<br/>
+	 * - Génère un rapport des différences 
+	 * aux formats textuel (rapportDiff) et csv (rapportDiffCsv).<br/>
+	 * - Ecrit dans des fichiers sur disque les rapports des différences 
+	 * aux formats textuel (fileRapportDiff) et csv (fileRapportDiffCsv) 
+	 * si pRapportFichier vaut true.<br/>
+	 * - Crée des rapports de création du fichier textuel 
+	 * (rapportCreationFichierDiff) et csv (rapportCreationFichierDiffCsv).<br/>
+	 * - Retourne le rapport textuel.<br/>
+	 * - Alimente longueurChaine1 et longueurChaine2.<br/>
+	 * <br/>
+	 *
+	 * @param pString1 : String : 1ère chaîne à comparer.<br/>
+	 * @param pString2 : String : 2ème chaîne à comparer.<br/>
+	 * @param pRapportFichier : Boolean : stipule si les rapports 
+	 * textuel et csv doivent être écrits dans des fichiers.<br/>
+	 * 
+	 * @return : String : rapportDiff : Rapport textuel en UTF-8 
+	 * comparant les deux chaines de caractères.<br/>
+	 */
+	public static String differencier(
+			final String pString1
+				, final String pString2
+					, final Boolean pRapportFichier) {
 		
 		/* bloc static synchronized. */
 		synchronized (DifferentiateurString.class) {
 			
-			/* mise à null des rapports. */
+			/* mise à null des rapports, des file et des longueurs de chaine. */
 			rapportDiff = null;
 			rapportDiffCsv = null;
-			
+			fileRapportDiff = null;
+			fileRapportDiffCsv = null;
+			longueurChaine1 = 0;
+			longueurChaine2 = 0;
+			rapportCreationfichierDiff = null;
+			rapportCreationfichierDiffCsv = null;
 			
 			int longueurMax = 0;
 			int position = 0;
@@ -461,8 +617,9 @@ public final class DifferentiateurString {
 			final StringBuilder stbDiffCsv = new StringBuilder();
 			
 			/* Détermine la longueur de la plus longue chaîne. */
-			final int longueurChaine1 = pString1.length();
-			final int longueurChaine2 = pString2.length();
+			/* Alimente longueurChaine1 et longueurChaine2. */
+			longueurChaine1 = pString1.length();
+			longueurChaine2 = pString2.length();
 			
 			if (longueurChaine1 > longueurChaine2) {
 				longueurMax = longueurChaine1;
@@ -523,8 +680,9 @@ public final class DifferentiateurString {
 				}
 				
 				final String comparaison 
-					= c1.toString() + "   DIFFERENCE = " 
-								+ diff + "     " + c2.toString();
+					= c1.toString() + String.format(LOCALE_FR_FR
+							, "DIFFERENCE : %-8s", diff)
+								+ c2.toString();
 				
 				final String comparaisonCsv 
 					= c1.toCsv() + diff + ";" + c2.toCsv();
@@ -548,31 +706,87 @@ public final class DifferentiateurString {
 								
 			} // Fin de la boucle sur les caractères._______________
 			
+			/* Récupération du chemin des file 
+			 * contenant les rapports du DifferentiateurString. */
+			final String cheminRapports = fournirCheminFichiers();
+			
 			/* Injection dans le rapport textuel. */
 			rapportDiff = stbDiff.toString();
-			/* Injection du rapport textuel dans fileRapportDiff en UTF_8. */
-			if (pRapportFichier) {
-				
-				/* Récupération du chemin des rapports par défaut. */
-				ecrireStringDansFile(
-						fileRapportDiff, rapportDiff, CHARSET_UTF8, NEWLINE);
-			}
-			
-			
 			/* Injection dans le rapport csv. */
 			rapportDiffCsv = stbDiffCsv.toString();
-			/* Injection du rapport csv dans fileRapportDiffCsv en UTF-8. */
-			ecrireStringDansFile(
-					fileRapportDiffCsv, rapportDiffCsv, CHARSET_UTF8, NEWLINE);
 			
-			return stbDiff.toString();
+			/* Ecriture des rapports dans les 
+			 * fileRapportDiff et fileRapportDiffCsv 
+			 * en UTF_8. */
+			if (pRapportFichier) {
+				
+				if (!StringUtils.isBlank(cheminRapports)) {
+					
+					/* Récupère les fichiers 
+					 * pour écrire les rapports sur le disque. */
+					fileRapportDiff 
+						= fournirFile(cheminRapports
+								, "Rapport_Differentiateur"
+									, "UTF8"
+										, "txt");
+					
+					fileRapportDiffCsv 
+					= fournirFile(cheminRapports
+							, "Rapport_Differentiateur"
+								, "UTF8"
+									, "csv");
+					
+					if (fileRapportDiff != null) {
+						
+						/* Ecriture du rapport textuel 
+						 * dans fileRapportDiff en UTF_8. */
+						ecrireStringDansFile(
+								fileRapportDiff
+									, rapportDiff
+										, CHARSET_UTF8, NEWLINE);
+						
+						/* Rapport de création du fichier textuel. */
+						rapportCreationfichierDiff 
+							= "fichier de rapport textuel des différences entre les chaînes de caractères créé : " 
+									+ fileRapportDiff.getAbsolutePath();
+					}
+					else {
+						
+						rapportCreationfichierDiff 
+						= "PROBLEME - fichier de rapport textuel des différences entre les chaînes de caractères non créé.";
+					}
+					
+					if (fileRapportDiffCsv != null) {
+						
+						/* Ecriture du rapport csv 
+						 * dans fileRapportDiffCsv en UTF-8. */
+						ecrireStringDansFile(
+								fileRapportDiffCsv
+									, rapportDiffCsv
+										, CHARSET_UTF8, NEWLINE);
+						
+						/* Rapport de création du fichier csv. */
+						rapportCreationfichierDiffCsv 
+						= "fichier de rapport csv des différences entre les chaînes de caractères créé : " 
+								+ fileRapportDiffCsv.getAbsolutePath();
+					}
+					else {
+						
+						rapportCreationfichierDiffCsv 
+						= "PROBLEME - fichier de rapport csv des différences entre les chaînes de caractères non créé."; 
+					}
+				}								
+			}
+									
+			/* retourne le rapport textuel. */
+			return rapportDiff;
 						
 		} // Fin du bloc static synchronized.________________________
-		
-		
+				
 	} // Fin de differencier(
 	// String pString1
-	 // , String pString2).________________________________________________
+	 // , String pString2
+	//, Boolean pRapportFichier).__________________________________________
 
 
 	
@@ -800,6 +1014,31 @@ public final class DifferentiateurString {
 		} // Fin du bloc static synchronized.________________________
 		
 	} // Fin de ecrireStringDansFile(...)._________________________________
+	
+
+	
+	/**
+	 * method fournirCheminFichiers() :<br/>
+	 * Propose un chemin (arborescence de répertoires) pour stocker 
+	 * les fichiers de rapport du DifferentiateurString en utilisant :<br/>
+	 * 1 - un chemin des rapports fixé dans 
+	 * configurationapplication_fr_FR.properties si il existe.<br/>
+	 * 2 - un chemin en dur stocké dans la présente classe 
+	 * et fourni par fournirCheminRapportsEnDur().<br/>
+	 * <br/>
+	 * retourne le chemin des fichiers indiqué 
+	 * dans configuration_fr_FR.properties si il existe
+	 * , si la clef définie dans fournirCleCheminRapports() 
+	 * existe et si cette clef est renseignée,<br/>
+	 * - sinon retourne la valeur en dur écrite dans 
+	 * fournirCheminRapportsEnDur().<br/>
+	 * <br/>
+	 *
+	 * @return : String : Le chemin des rapports.<br/>
+	 */
+	private static String fournirCheminFichiers() {
+		return fournirCheminFichiers(null);
+	} // Fin de fournirCheminFichiers().___________________________________
 	
 	
 	
@@ -1123,44 +1362,6 @@ public final class DifferentiateurString {
 	
 	/**
 	 * method fournirNomFichier(
-	 * String pNom
-	 * , String pEncodage
-	 * , String pExtension) :<br/>
-	 * Fournit un nom pour un fichier 
-	 * de la forme [dateCourante_nom_encodage.extension].<br/>
-	 * Par exemple : <br/>
-	 * <code>GestionnaireFichiers.fournirNomFichier(
-	 * "RAPPORT", "UTF8", "txt");</code> 
-	 * retourne "dateCourante_RAPPORT_UTF8.txt".<br/>
-	 * La Date courante sera formattée sous la forme "yyyy-MM-dd_HH-mm-ss" 
-	 * de DF_DATETIME_LEXICOGRAPHIQUE comme 2012-01-16_18-09-55 <br/>
-	 * <br/>
-	 * - retourne null si pNom est blank.<br/>
-	 * <br/>
-	 *
-	 * @param pNom : String : nom de base du fichier.<br/>
-	 * @param pEncodage : String : encodage pour suffixer 
-	 * le nom du fichier.<br/>
-	 * @param pExtension : String : extension du fichier.<br/>
-	 * 
-	 * @return : String : Nom pour le fichier.<br/>
-	 */
-	private static String fournirNomFichier(
-			final String pNom
-					, final String pEncodage
-						, final String pExtension) {
-		
-		return fournirNomFichier(null, pNom, pEncodage, pExtension);
-		
-	} // Fin de fournirNomFichier(
-	 // String pNom
-	 // , String pEncodage
-	 // , String pExtension).______________________________________________
-	
-	
-	
-	/**
-	 * method fournirNomFichier(
 	 * Date pDate
 	 * , String pNom
 	 * , String pEncodage
@@ -1174,7 +1375,7 @@ public final class DifferentiateurString {
 	 * et 251 millisecondes.<br/>
 	 * <code>GestionnaireFichiers.fournirNomFichier(
 	 * date1, "RAPPORT", "UTF8", "txt");</code> 
-	 * retourne "1961-02-25_14-27-07_RAPPORT_UTF8.txt".<br/>
+	 * retourne "1961-02-25_14-27-07-789_RAPPORT_UTF8.txt".<br/>
 	 * <br/>
 	 * - passe automatiquement la date à la date système si pDate == null.<br/>
 	 * - retourne null si pNom est blank.<br/>
@@ -1182,7 +1383,7 @@ public final class DifferentiateurString {
 	 *
 	 * @param pDate : Date : Date pour préfixer le chemin. 
 	 * La Date sera formattée sous la forme "yyyy-MM-dd_HH-mm-ss" 
-	 * de DF_DATETIME_LEXICOGRAPHIQUE comme 2012-01-16_18-09-55 <br/>
+	 * de DF_DATETIME_LEXICOGRAPHIQUEMILLI comme 2012-01-16_18-09-55-789 <br/>
 	 * @param pNom : String : nom de base du fichier.<br/>
 	 * @param pEncodage : String : encodage pour suffixer 
 	 * le nom du fichier.<br/>
@@ -1216,9 +1417,9 @@ public final class DifferentiateurString {
 			}
 			
 			/* Récupère la date  
-			 * formattée sous la forme 2012-01-16_18-09-55. */
+			 * formattée sous la forme 2012-01-16_18-09-55-759. */
 			final String dateFormatteeString 
-				= fournirDateFormattee(date, DF_DATETIME_LEXICOGRAPHIQUE);
+				= fournirDateFormattee(date, DF_DATETIME_LEXICOGRAPHIQUEMILLI);
 			
 			final StringBuilder stb = new StringBuilder();
 			
@@ -1420,7 +1621,7 @@ public final class DifferentiateurString {
 	 * 
 	 * @return : boolean : true si le répertoire a été détruit.<br/>
 	 */
-	private static boolean detruireArborescence(
+	public static boolean detruireArborescence(
 			final String pChemin) {
 		
 		/* bloc static synchronized. */
@@ -1571,8 +1772,83 @@ public final class DifferentiateurString {
 	} // Fin de viderRepertoireADetruire(
 	 // File pRep).________________________________________________________
 	
+
+	
+	/**
+	 * method fournirCaractereDan(
+	 * char pChar) :<br/>
+	 * Fournit une Encapsulation permettant de calculer et de stocker 
+	 * toutes les grandeurs intéressantes d'un caractère.<br/>
+	 * "[id = null;Position = 0;Caractère;Unicode;numericValue;
+	 * Type de Caractère;Valeur Entière;Point de Code Décimal;
+	 * Point de Code HexaDécimal;Nom Unicode;]".<br/>
+	 * <br/>
+	 *
+	 * @param pChar : char : caractère dont on veut 
+	 * connaitre les valeurs unicode.<br/>
+	 * 
+	 * @return : CaractereDan.<br/>
+	 */
+	public static CaractereDan fournirCaractereDan(
+			final char pChar) {
+		return new CaractereDan(pChar);
+	} // Fin de fournirCaractereDan(
+	 // char pChar)._______________________________________________________
 	
 
+	
+	/**
+	 * method afficherTout() :<br/>
+	 * Fournit une String pour afficher à la console
+	 *  toutes les données calculées par 
+	 *  DifferentiateurString.differencier(chaine1, chaine2, true).<br/>
+	 * <br/>
+	 *
+	 * @return : String :  
+	 * Affichage à la console.<br/>
+	 */
+	public static String afficherTout() {
+		
+		final StringBuffer stb = new StringBuffer();
+		stb.append("Rapport textuel (rapportDiff) : ");
+		stb.append(NEWLINE);
+		stb.append(rapportDiff);
+		
+		stb.append(NEWLINE);
+		
+		stb.append("Rapport csv (rapportDiffCsv) : ");
+		stb.append(NEWLINE);
+		stb.append(rapportDiffCsv);
+		
+		stb.append(NEWLINE);
+		
+		stb.append("longueur de la première chaîne (longueurChaine1) : ");
+		stb.append(longueurChaine1);
+		
+		stb.append(NEWLINE);
+		
+		stb.append("longueur de la deuxième chaîne (longueurChaine2) : ");
+		stb.append(longueurChaine2);
+		
+		stb.append(NEWLINE);
+		stb.append(NEWLINE);
+		
+		stb.append("Message de création du fichier contenant le rapport textuel en UTF-8 (fileRapportDiff) : ");
+		stb.append(NEWLINE);
+		stb.append(rapportCreationfichierDiff);
+		
+		stb.append(NEWLINE);
+		
+		stb.append("Message de création du fichier contenant le rapport csv en UTF-8 (fileRapportDiffCsv) : ");
+		stb.append(NEWLINE);
+		stb.append(rapportCreationfichierDiffCsv);
+		
+		return stb.toString();
+		
+	} // Fin de afficherTout().______________________________________________
+	
+	
+	
 	/**
 	 * method affichierTableauFiles(
 	 * File[] pFiles) :<br/>
@@ -2266,6 +2542,7 @@ public final class DifferentiateurString {
 	 * method getRapportDiff() :<br/>
 	 * Getter du Rapport textuel 
 	 * comparant les deux chaines de caractères.<br/>
+	 * Fourni par la méthode differencier(...).<br/>
 	 * <br/>
 	 *
 	 * @return rapportDiff : String.<br/>
@@ -2280,6 +2557,7 @@ public final class DifferentiateurString {
 	 * method getRapportDiffCsv() :<br/>
 	 * Getter du Rapport au format csv 
 	 * comparant les deux chaines de caractères.<br/>
+	 * Fourni par la méthode differencier(...).<br/>
 	 * <br/>
 	 *
 	 * @return rapportDiffCsv : String.<br/>
@@ -2289,5 +2567,107 @@ public final class DifferentiateurString {
 	} // Fin de getRapportDiffCsv()._______________________________________
 
 
+
+	/**
+	 * method getFileRapportDiff() :<br/>
+	 * Getter du File contenant le Rapport textuel 
+	 * comparant les deux chaines de caractères.<br/>
+	 * Fourni par la méthode differencier(...).<br/>
+	 * <br/>
+	 *
+	 * @return fileRapportDiff : File.<br/>
+	 */
+	public static File getFileRapportDiff() {
+		return fileRapportDiff;
+	} // Fin de getFileRapportDiff().______________________________________
+
+
+
+	/**
+	 * method getFileRapportDiffCsv() :<br/>
+	 * Getter du File contenant le Rapport au format csv 
+	 * comparant les deux chaines de caractères.<br/>
+	 * Fourni par la méthode differencier(...).<br/>
+	 * <br/>
+	 *
+	 * @return fileRapportDiffCsv : File.<br/>
+	 */
+	public static File getFileRapportDiffCsv() {
+		return fileRapportDiffCsv;
+	} // Fin de getFileRapportDiffCsv().___________________________________
+
+
+
+	/**
+	 * method getLongueurChaine() :<br/>
+	 * Getter de la longueur de la chaîne de caractères 
+	 * transmise à la méthode listerChaineCarParCar(...).<br/>
+	 * <br/>
+	 *
+	 * @return longueurChaine : int.<br/>
+	 */
+	public static int getLongueurChaine() {
+		return longueurChaine;
+	} // Fin de getLongueurChaine()._______________________________________
+
+
+
+	/**
+	 * method getLongueurChaine1() :<br/>
+	 * Getter de la longueur de la première chaîne passée 
+	 * à la méthode differencier(String pString1, String pString2, ...).<br/>
+	 * Fourni par la méthode differencier(...).<br/>
+	 * <br/>
+	 *
+	 * @return longueurChaine1 : int.<br/>
+	 */
+	public static int getLongueurChaine1() {
+		return longueurChaine1;
+	} // Fin de getLongueurChaine1().______________________________________
+
+
+
+	/**
+	 * method getLongueurChaine2() :<br/>
+	 * Getter de la longueur de la deuxième chaîne passée à 
+	 * la méthode differencier(String pString1, String pString2, ...).<br/>
+	 * Fourni par la méthode differencier(...).<br/>
+	 * <br/>
+	 *
+	 * @return longueurChaine2 : int.<br/>
+	 */
+	public static int getLongueurChaine2() {
+		return longueurChaine2;
+	} // Fin de getLongueurChaine2().______________________________________
+
+
+
+	/**
+	 * method getRapportCreationfichierDiff() :<br/>
+	 * Getter du rapport de création de fileRapportDiff.<br/>
+	 * (le fichier a bien été créé...).<br/>
+	 * <br/>
+	 *
+	 * @return rapportCreationfichierDiff : String.<br/>
+	 */
+	public static String getRapportCreationfichierDiff() {
+		return rapportCreationfichierDiff;
+	} // Fin de getRapportCreationfichierDiff().___________________________
+
+
+
+	/**
+	 * method getRapportCreationfichierDiffCsv() :<br/>
+	 * Getter du rapport de création de fileRapportDiffCsv.<br/>
+	 * (le fichier a bien été créé...).<br/>
+	 * <br/>
+	 *
+	 * @return rapportCreationfichierDiffCsv : String.<br/>
+	 */
+	public static String getRapportCreationfichierDiffCsv() {
+		return rapportCreationfichierDiffCsv;
+	} // Fin de getRapportCreationfichierDiffCsv().________________________
+	
+		
 	
 } // FIN DE LA CLASSE DifferentiateurString.---------------------------------

@@ -29,6 +29,21 @@ import org.apache.commons.logging.LogFactory;
  * <br/>
  *
  * - Exemple d'utilisation :<br/>
+ * <code>
+ * // resultat contient "samedi 25 février 1961".<br/>
+ * final String resultat = GestionnaireDates.convertirDateFormattee(
+ * "25/02/1961", DF_DATE_FRANCAISE, DF_DATE_COMPLETE_FRANCAISE);<br/>
+ * <br/>
+ * // retourne la date sous forme de String formattée "25/02/1961" 
+ * avec maDate java.util.Date calée sur le 25/02/1961.<br/>
+ * final String resultat1 = GestionnaireDates.
+ * fournirDateFormattee(maDate, DF_DATE_FRANCAISE);<br/>
+ * <br/>
+ * // retourne une java.util.Date.<br/>
+ * final Date resultat1 = GestionnaireDates
+ * .fournirDateAvecString("25/02/1961-12:27:07", DF_DATETIME_FRANCAISE);<br/>
+ * </code>
+ *<br/>
  *<br/>
  * 
  * - Mots-clé :<br/>

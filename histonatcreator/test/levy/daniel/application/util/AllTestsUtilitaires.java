@@ -43,14 +43,17 @@ import org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 
 @SuiteClasses({
+	
 	levy.daniel.application.util.controleurstypefichier.controleurstypefichiertexte.ControleurFichierTexteTest.class
 	, levy.daniel.application.util.convertisseursencodage.ConvertisseurEncodageTest.class
 	, levy.daniel.application.util.detecteurstypefichier.DetecteurTypeMimeTest.class
 	, levy.daniel.application.util.differentiateurs.differentiateursstrings.CaractereDanTest.class
 	, levy.daniel.application.util.differentiateurs.differentiateursstrings.DifferentiateurStringTest.class
+	, levy.daniel.application.util.gestionnairesdates.GestionnaireDatesTest.class
+	, levy.daniel.application.util.gestionnairesiofichiers.GestionnaireFichiersTest.class
 	, levy.daniel.application.util.lecteursfichiers.MonFileInputStreamReaderDanTest.class
 	, levy.daniel.application.util.lecteursfichiers.MonFileReaderDanTest.class
-	, levy.daniel.application.util.gestionnairesdates.GestionnaireDatesTest.class
+	
 })
 
 public final class AllTestsUtilitaires {

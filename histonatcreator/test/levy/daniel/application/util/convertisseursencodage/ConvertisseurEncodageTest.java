@@ -1,9 +1,13 @@
 package levy.daniel.application.util.convertisseursencodage;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.File;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
+
+import levy.daniel.application.util.differentiateurs.differentiateursstrings.DifferentiateurString;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -169,7 +173,16 @@ public final class ConvertisseurEncodageTest {
 	 */
 	public static final String CHEMIN_TXT_ISO_8859_15 
 		= "texte\\2014-08-20_HITDIRA2013_ISO-8859-15.txt";
-		
+	
+	
+	/**
+	 * CHEMIN_LIGNE_LATIN9 : String :<br/>
+	 * Chemin du fichier .txt en ISO-8859-15 relativement à la racine des fichiers de test.<br/>
+	 * "texte\\ligne_latin9.txt"
+	 */
+	public static final String CHEMIN_LIGNE_LATIN9 = "texte\\ligne_latin9.txt";
+	
+	
 	/**
 	 * CHEMIN_CSV_UTF8 : String :<br/>
 	 * Chemin du fichier .csv en UTF-8 relativement à la racine des fichiers de test.<br/>
@@ -331,6 +344,14 @@ public final class ConvertisseurEncodageTest {
 	public static final String CHEMIN_DIACRITIQUES_UTF8 
 		= "encodages\\diacritiques_UTF8.txt";
 
+	/**
+	 * CHEMIN_CHARETTE_ANSI : String :<br/>
+	 * Chemin du fichier .txt codé en ANSI Windows_1252
+	 * relativement à la racine des fichiers de test.<br/>
+	 * 1 seule ligne "chaàâreéèêëtte € encodé en ANSI. 47 caractères.".<br/>
+	 */
+	public static final String CHEMIN_CHARETTE_ANSI 
+		= "encodages\\chaàâreéèêëtte_ANSI.txt";
 	
 	
 	//*****************************************************************/
@@ -447,6 +468,22 @@ public final class ConvertisseurEncodageTest {
 	 */
 	public static final File FILE_TXT_ISO_8859_15
 		= new File(CHEMIN_FICHIERS_TEST + CHEMIN_TXT_ISO_8859_15);
+	
+	/**
+	 * FILE_TXT_LIGNE_LATIN9 : File :<br/>
+	 * Fichier texte en ISO-8859-15 .txt.<br/>
+	 * 1 seule ligne "330502102110013 06300 111 241ECHANGEUR LA BARDE  0050000RD 1                0100600ROCADE EXTER(S08dépo00...."
+	 */
+	public static final File FILE_TXT_LIGNE_LATIN9 
+		= new File(CHEMIN_FICHIERS_TEST + CHEMIN_LIGNE_LATIN9);
+	
+	/**
+	 * FILE_CHARETTE_ANSI : File :<br/>
+	 * Fichier texte en ANSI (Windows-1252) .txt.<br/>
+	 * 1 seule ligne "chaàâreéèêëtte € encodé en ANSI. 47 caractères.".<br/>
+	 */
+	public static final File FILE_CHARETTE_ANSI 
+		= new File(CHEMIN_FICHIERS_TEST + CHEMIN_CHARETTE_ANSI);
 	
 	/**
 	 * FILE_CSV_UTF_8 : File :<br/>
@@ -895,15 +932,111 @@ public final class ConvertisseurEncodageTest {
 	} // Fin de ConvertisseurEncodageTest()._______________________________
 	
 	
-	//*********************************************************************/
-	// TESTS JAVA
-	//*********************************************************************/
-
 	/**
-	 * method testLireDepuisFichier() :<br/>
+	 * method testLireDepuisFichierNull() :<br/>
+	 * vérifie que lireDepuisFichier(null, ...) retourne 
+	 * ConvertisseurEncodage.MESSAGE_FICHIER_NULL.<br/>
+	 * "Le fichier passé en paramètre est null".<br/>
+	 * <br/>
+	 */
+	@Test
+	public void testLireDepuisFichierNull() {
+		
+		final String resultat 
+		 = ConvertisseurEncodage.lireDepuisFichier(
+				FILE_NULL
+				 	, CHARSET_UTF8);
+		
+		/* vérifie que lireDepuisFichier(null, ...) retourne MESSAGE_FICHIER_NULL. */
+		assertEquals("lireDepuisFichier(null, ...) doit retourner ConvertisseurEncodage.MESSAGE_FICHIER_NULL : "
+				, ConvertisseurEncodage.MESSAGE_FICHIER_NULL
+					, resultat);
+		
+	} // Fin de testLireDepuisFichierNull()._______________________________
+	
+
+	
+	/**
+	 * method testLireDepuisFichierInexistant() :<br/>
+	 * vérifie que lireDepuisFichier(inexistant, ...) retourne 
+	 * ConvertisseurEncodage.MESSAGE_FICHIER_INEXISTANT.<br/>
+	 * "Le fichier passé en paramètre est inexistant : ".<br/>
+	 * <br/>
+	 */
+	@Test
+	public void testLireDepuisFichierInexistant() {
+		
+		final String resultat 
+		 = ConvertisseurEncodage.lireDepuisFichierEnUtf8(
+				FILE_INEXISTANT);
+		
+		/* vérifie que lireDepuisFichier(inexistant, ...) retourne MESSAGE_FICHIER_INEXISTANT. */
+		assertEquals("lireDepuisFichier(inexistant, ...) doit retourner ConvertisseurEncodage.MESSAGE_FICHIER_INEXISTANT : "
+				, ConvertisseurEncodage.MESSAGE_FICHIER_INEXISTANT
+					, resultat);
+		
+	} // Fin de testLireDepuisFichierInexistant()._________________________
+	
+
+	
+	/**
+	 * method testLireDepuisFichierRepertoire() :<br/>
+	 * vérifie que lireDepuisFichier(repertoire, ...) retourne 
+	 * ConvertisseurEncodage.MESSAGE_FICHIER_REPERTOIRE.<br/>
+	 * "Le fichier passé en paramètre est un répertoire : "
+	 * <br/>
+	 */
+	@Test
+	public void testLireDepuisFichierRepertoire() {
+		
+		final String resultat 
+		 = ConvertisseurEncodage.lireDepuisFichierEnUtf8(
+				FILE_REPERTOIRE);
+		
+		/* vérifie que lireDepuisFichier(repertoire, ...) retourne MESSAGE_FICHIER_REPERTOIRE. */
+		assertEquals("lireDepuisFichier(repertoire, ...) doit retourner ConvertisseurEncodage.MESSAGE_FICHIER_REPERTOIRE : "
+				, ConvertisseurEncodage.MESSAGE_FICHIER_REPERTOIRE
+					, resultat);
+		
+	} // Fin de testLireDepuisFichierRepertoire()._________________________
+	
+
+	
+	/**
+	 * method testLireDepuisFichierLatin9() :<br/>
 	 * .<br/>
 	 * <br/>
-	 * : void :  .<br/>
+	 */
+	@Test
+	public void testLireDepuisFichierLatin9() {
+		
+		final String resultat 
+		 = ConvertisseurEncodage.lireDepuisFichier(
+				 FILE_CHARETTE_ANSI
+				 	, CHARSET_ANSI);
+		
+		final int longueur = ConvertisseurEncodage.getLongueur();
+		final boolean contientRempl 
+			= ConvertisseurEncodage.isContientCarRemplacement();
+		final boolean contientIndes 
+			= ConvertisseurEncodage.isContientCarIndesirable();
+		
+		System.out.println(DifferentiateurString.listerChaineCarParCar(resultat));
+		
+		
+		System.out.println("RESULTAT : \n" + resultat);
+		System.out.println("longueur : " + longueur);
+		System.out.println("contient des caractères de remplacement : " + contientRempl);
+		System.out.println("contient des caractères indésirables : " + contientIndes);
+		
+	}
+	
+	
+	
+	/**
+	 * method testLireDepuisFichier() :<br/>
+	 * Teste la méthode lireDepuisFichier(...).<br/>
+	 * <br/>
 	 */
 	@Test
 	public void testLireDepuisFichier() {
@@ -913,7 +1046,7 @@ public final class ConvertisseurEncodageTest {
 				 FILE_DIACRITIQUES_UTF8
 				 	, CHARSET_UTF8);
 		 
-		 final int longueur = resultat.length();
+		 final int longueur = ConvertisseurEncodage.getLongueur();
 		 
 		 System.out.println("chaine décodée : \n" + resultat);
 		 System.out.println("chaine encodée : \n" + STRING_REF_DIACRITIQUES_UTF8 +'\n');
@@ -922,7 +1055,8 @@ public final class ConvertisseurEncodageTest {
 		 System.out.println("nombre de caractères dans la chaine encodée : " + STRING_REF_DIACRITIQUES_UTF8.length() + "\n");
 		 
 		 System.out.println("BONNE LECTURE : " + StringUtils.equals(resultat, STRING_REF_DIACRITIQUES_UTF8));
-	}
+		 
+	} // Fin de testLireDepuisFichier().___________________________________
 
 
 } // FIN DE LA CLASSE ConvertisseurEncodageTest.-----------------------------
