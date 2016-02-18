@@ -3,6 +3,11 @@ package levy.daniel.application.util.differentiateurs.differentiateursstrings;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
+import java.io.File;
+import java.nio.charset.Charset;
+
+import levy.daniel.application.util.convertisseursencodage.ConvertisseurEncodageTest;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Test;
@@ -33,6 +38,23 @@ public final class DifferentiateurStringTest {
 	// ************************ATTRIBUTS************************************/
 
 	
+	/**
+	 * CHARSET_UTF8 : Charset :<br/>
+	 * Charset.forName("UTF-8").<br/>
+	 * Eight-bit Unicode (or UCS) Transformation Format.<br/> 
+	 */
+	public static final Charset CHARSET_UTF8 
+		= Charset.forName("UTF-8");
+	
+	/**
+	 * CHARSET_ISO_8859_2 : Charset :<br/>
+	 * Charset.forName("ISO-8859-2").<br/>
+	 * <br/>
+	 */
+	public static final Charset CHARSET_ISO_8859_2 
+		= Charset.forName("ISO-8859-2");
+	
+
 	/**
 	 * SAUTDELIGNE_UNIX : String :<br/>
 	 * Saut de ligne généré par les éditeurs Unix.<br/>
@@ -114,6 +136,35 @@ public final class DifferentiateurStringTest {
 		= "j'arrivât." + NEWLINE + "elle-même aussi.";
 	
 	
+/**
+ * FILE_DIACRITIQUES_UTF8 : File : <br/>
+ * txt codé en UTF-8.<br/>
+ */
+public static final File FILE_DIACRITIQUES_UTF8 
+	= ConvertisseurEncodageTest.FILE_DIACRITIQUES_UTF8;
+
+/**
+ * FILE_DIACRITIQUES_ISO_8859_2 : File : <br/>
+ * txt codé en ISO_8859_2.<br/>
+ */
+public static final File FILE_DIACRITIQUES_ISO_8859_2 
+	= ConvertisseurEncodageTest.FILE_DIACRITIQUES_ISO_8859_2;
+
+
+/**
+ * STRING_REF_DIACRITIQUES_UTF8 : String : <br/>
+ */
+public static final String STRING_REF_DIACRITIQUES_UTF8 
+	= ConvertisseurEncodageTest.STRING_REF_DIACRITIQUES_UTF8;
+
+
+/**
+ * STRING_REF_DIACRITIQUES_ISO_8859_2 : String : <br/>
+ */
+public static final String STRING_REF_DIACRITIQUES_ISO_8859_2 
+	= ConvertisseurEncodageTest.STRING_REF_DIACRITIQUES_ISO_8859_2;
+
+
 	/**
 	 * LOG : Log : 
 	 * Logger pour Log4j (utilisant commons-logging).
@@ -216,55 +267,5 @@ public final class DifferentiateurStringTest {
 	} // Fin de testSubstituerSautLignePlateforme()._______________________
 	
 
-	
-	/**
-	 * method testCreerArborescence() :<br/>
-	 * teste la méthode creerArborescence.<br/>
-	 * <br/>
-	 */
-	@Test
-	public void testCreerArborescence() {
-		
-		final boolean resultat 
-			= DifferentiateurString.creerArborescence(".\\rep_0\\rep_1_1\\rep_2_1");
-		
-		System.out.println(resultat);
-		
-	} // Fin de testCreerArborescence().___________________________________
-
-
-	/**
-	 * method test() :<br/>
-	 * .<br/>
-	 * <br/>
-	 * @throws InterruptedException 
-	 */
-	@Test
-	public void test() throws InterruptedException {
-		
-//		DifferentiateurString.viderRepertoire(new File(".\\rep_0"));
-//		final boolean resultatVidage 
-//		= DifferentiateurString.viderRepertoireADetruire(new File(".\\data2"));
-//		
-//		System.out.println("resultatVidage : " + resultatVidage);
-//		
-		final boolean resultDestruction1 = 
-				DifferentiateurString.detruireArborescence(".\\data2");
-		
-		System.out.println("resultDestruction1 : " + resultDestruction1);
-		
-		/* Attente. */
-		Thread.sleep(1000);
-		
-		final String cheminRepRapports 
-		= ".\\data2\\temp\\rapports";
-		
-		final boolean resultatCreation 
-			= DifferentiateurString.creerArborescence(cheminRepRapports);
-		
-		System.out.println("resultatCreation : " + resultatCreation);
-				
-	}
-	
 	
 } // FIN DE LA CLASSE DifferentiateurStringTest.-----------------------------
