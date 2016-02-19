@@ -6,21 +6,36 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
-import levy.daniel.application.IConstantesMessage;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 
 /**
  * class ControleurFichierTexte :<br/>
- * .<br/>
+ * Classe utilitaire spécialisée dans la détermination 
+ * du type MIME d'un fichier.<br/>
+ * ATTENTION : se base sur l'extension du fichier pour déterminer le type MIME. 
+ * On peut donc leurrer la méthode getMIMEType(File pFile) 
+ * en modifiant artificiellement l'extension du fichier.<br>
+ * <br/>
+ * - possède une méthode getMIMEType(File pFile) qui tente de détecter 
+ * (en lisant les premiers bits) et retourne le type MIME d'un fichier 
+ * en utilisant la méthode getContentType() de java.net.URLConnection.<br/>
+ * <br/>
  * <br/>
  *
  * - Exemple d'utilisation :<br/>
+ * <code>
+ * // Instanciation d'un ControleurFichierTexte.<br/>
+ * final ControleurFichierTexte control = new ControleurFichierTexte();<br/>
+ * // retourne "text/plain" avec un FILE_TXT_UTF_8 
+ * = 2014-08-20_HITDIRIF2013_UTF-8.txt.<br/>
+ * final String resultat = control.getMIMEType(FILE_TXT_UTF_8);<br/>
+ * </code>
  *<br/>
  * 
  * - Mots-clé :<br/>
+ * type MIME, fichier texte,<br/>
  * <br/>
  *
  * - Dépendances :<br/>
@@ -195,6 +210,13 @@ public class ControleurFichierTexte {
 	
 	
 	/**
+	 * SEP_MOINS : String :<br/>
+	 * " - ".<br/>
+	 */
+	public static final String SEP_MOINS = " - ";
+
+
+	/**
 	 * LOG : Log : 
 	 * Logger pour Log4j (utilisant commons-logging).
 	 */
@@ -285,9 +307,9 @@ public class ControleurFichierTexte {
 				
 				final String message 
 				= CLASSE_CONTROLEURFICHIERTEXTE 
-				+ IConstantesMessage.SEP_MOINS
+				+ SEP_MOINS
 				+ METHODE_GETMIMETYPE
-				+ IConstantesMessage.SEP_MOINS
+				+ SEP_MOINS
 				+ MESSAGE_FICHIER_NULL;
 				
 				LOG.info(message);
@@ -305,9 +327,9 @@ public class ControleurFichierTexte {
 								
 				final String message 
 				= CLASSE_CONTROLEURFICHIERTEXTE 
-				+ IConstantesMessage.SEP_MOINS
+				+ SEP_MOINS
 				+ METHODE_GETMIMETYPE
-				+ IConstantesMessage.SEP_MOINS
+				+ SEP_MOINS
 				+ MESSAGE_FICHIER_INEXISTANT 
 				+ pFile.getAbsolutePath();
 				
@@ -326,9 +348,9 @@ public class ControleurFichierTexte {
 				
 				final String message 
 				= CLASSE_CONTROLEURFICHIERTEXTE 
-				+ IConstantesMessage.SEP_MOINS
+				+ SEP_MOINS
 				+ METHODE_GETMIMETYPE
-				+ IConstantesMessage.SEP_MOINS
+				+ SEP_MOINS
 				+ MESSAGE_FICHIER_REPERTOIRE 
 				+ pFile.getAbsolutePath();
 				
@@ -357,9 +379,9 @@ public class ControleurFichierTexte {
 				
 				final String message 
 				= CLASSE_CONTROLEURFICHIERTEXTE 
-				+ IConstantesMessage.SEP_MOINS
+				+ SEP_MOINS
 				+ METHODE_GETMIMETYPE
-				+ IConstantesMessage.SEP_MOINS 
+				+ SEP_MOINS 
 				+ malformedURLExc.getMessage();
 				
 				LOG.error(message, malformedURLExc);
@@ -375,9 +397,9 @@ public class ControleurFichierTexte {
 				
 				final String message 
 				= CLASSE_CONTROLEURFICHIERTEXTE 
-				+ IConstantesMessage.SEP_MOINS
+				+ SEP_MOINS
 				+ METHODE_GETMIMETYPE
-				+ IConstantesMessage.SEP_MOINS 
+				+ SEP_MOINS 
 				+ ioe.getMessage();
 				
 				LOG.error(message, ioe);

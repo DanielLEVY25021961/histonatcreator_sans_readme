@@ -1,7 +1,14 @@
 package levy.daniel.application.util.differentiateurs.differentiateursstrings;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
+import java.nio.charset.Charset;
+
+import levy.daniel.application.util.convertisseursencodage.ConvertisseurEncodageTest;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -34,6 +41,23 @@ public final class DifferentiateurStringTest {
 
 	
 	/**
+	 * CHARSET_UTF8 : Charset :<br/>
+	 * Charset.forName("UTF-8").<br/>
+	 * Eight-bit Unicode (or UCS) Transformation Format.<br/> 
+	 */
+	public static final Charset CHARSET_UTF8 
+		= Charset.forName("UTF-8");
+	
+	/**
+	 * CHARSET_ISO_8859_2 : Charset :<br/>
+	 * Charset.forName("ISO-8859-2").<br/>
+	 * <br/>
+	 */
+	public static final Charset CHARSET_ISO_8859_2 
+		= Charset.forName("ISO-8859-2");
+	
+
+	/**
 	 * SAUTDELIGNE_UNIX : String :<br/>
 	 * Saut de ligne généré par les éditeurs Unix.<br/>
 	 * "\n" (Retour Ligne = LINE FEED (LF)).
@@ -52,7 +76,7 @@ public final class DifferentiateurStringTest {
 	/**
 	 * SAUTDELIGNE_DOS_WINDOWS : String :<br/>
 	 * Saut de ligne généré par les éditeurs DOS/Windows.<br/>
-	 * "\r\n" (Retour Chariot RC + Retour Ligne LF).
+	 * "\r\n" (Retour Chariot RC + Retour Ligne Line Feed LF).
 	 */
 	public static final String SAUTDELIGNE_DOS_WINDOWS = "\r\n";
 
@@ -114,6 +138,35 @@ public final class DifferentiateurStringTest {
 		= "j'arrivât." + NEWLINE + "elle-même aussi.";
 	
 	
+/**
+ * FILE_DIACRITIQUES_UTF8 : File : <br/>
+ * txt codé en UTF-8.<br/>
+ */
+public static final File FILE_DIACRITIQUES_UTF8 
+	= ConvertisseurEncodageTest.FILE_DIACRITIQUES_UTF8;
+
+/**
+ * FILE_DIACRITIQUES_ISO_8859_2 : File : <br/>
+ * txt codé en ISO_8859_2.<br/>
+ */
+public static final File FILE_DIACRITIQUES_ISO_8859_2 
+	= ConvertisseurEncodageTest.FILE_DIACRITIQUES_ISO_8859_2;
+
+
+/**
+ * STRING_REF_DIACRITIQUES_UTF8 : String : <br/>
+ */
+public static final String STRING_REF_DIACRITIQUES_UTF8 
+	= ConvertisseurEncodageTest.STRING_REF_DIACRITIQUES_UTF8;
+
+
+/**
+ * STRING_REF_DIACRITIQUES_ISO_8859_2 : String : <br/>
+ */
+public static final String STRING_REF_DIACRITIQUES_ISO_8859_2 
+	= ConvertisseurEncodageTest.STRING_REF_DIACRITIQUES_ISO_8859_2;
+
+
 	/**
 	 * LOG : Log : 
 	 * Logger pour Log4j (utilisant commons-logging).
@@ -147,6 +200,8 @@ public final class DifferentiateurStringTest {
 	 * retourne null.<br/>
 	 * - Vérifie que DifferentiateurString.listerChaineCarParCar(CHAINE_LISTER) 
 	 * retourne CHAINE_A_B.<br/>
+	 * - Vérifie que DifferentiateurString.getLongueurChaine() 
+	 * retourne la bonne longueur.<br/>
 	 */
 	@Test
 	public void testListerChaineCarParCar() {
@@ -177,8 +232,152 @@ public final class DifferentiateurStringTest {
 				, CHAINE_A_B
 					, resultat);
 		
+		final int longueurChaine = DifferentiateurString.getLongueurChaine();
+		
+		/* Vérifie que DifferentiateurString.getLongueurChaine() 
+		 * retourne la bonne longueur. */
+		assertEquals("DifferentiateurString.getLongueurChaine() doit retourner 3 : "
+				, 3
+					, longueurChaine);
+		
 	} // Fin de testListerChaineCarParCar()._______________________________
 
+
+	
+	/**
+	 * method testDifferencier() :<br/>
+	 * Teste la méthode differencier(
+	 * String pString1, String pString2, Boolean pRapportFichier).<br/>
+	 * <br/>
+	 * - vérifie que rapportDiff existe.<br/>
+	 * - vérifie que rapportCsvDiff existe.<br/>
+	 * - vérifie que fileRapportDiff existe.<br/>
+	 * - vérifie que fileRapportDiffCsv existe.<br/>
+	 * - vérifie la bonne longueur de longueurChaine1.<br/>
+	 * - vérifie la bonne longueur de longueurChaine2.<br/>
+	 * - vérifie que rapportCreationfichierDiff existe.<br/>
+	 * - vérifie que rapportCreationfichierDiffCsv existe.<br/>
+	 * - vérifie que le DifferentiateurString fonctionne correctement 
+	 * en cas d'appels successifs.<br/>
+	 * <br/>
+	 * @throws InterruptedException 
+	 */
+	@Test
+	public void testDifferencier() throws InterruptedException {
+		
+		final String chaine1 = "mêt";
+		final String chaine2 = "met";
+		
+		// Application de la méthode differencier(...) du DifferentiateurString.
+		DifferentiateurString.differencier(chaine1, chaine2, true);
+		
+		final String rapportTxt1 = DifferentiateurString.getRapportDiff();
+		final String rapportCsv1 = DifferentiateurString.getRapportDiffCsv();
+		final File fileRapportTxt1 = DifferentiateurString.getFileRapportDiff();
+		final File fileRapportCsv1 = DifferentiateurString.getFileRapportDiffCsv();
+		final int longueurChaine1 = DifferentiateurString.getLongueurChaine1();
+		final int longueurChaine2 = DifferentiateurString.getLongueurChaine2();		
+		final String messageCreationRapportTxt1 
+			= DifferentiateurString.getRapportCreationfichierDiff();
+		final String messageCreationRapportCsv1 
+		= DifferentiateurString.getRapportCreationfichierDiffCsv();
+		
+		
+		/* vérifie que rapportDiff existe. */
+		assertNotNull("le rapportDiff doit exister :  ", rapportTxt1);
+		
+		/* vérifie que rapportCsvDiff existe. */
+		assertNotNull("le rapportDiffCsv doit exister :  ", rapportCsv1);
+		
+		/* vérifie que fileRapportDiff existe. */
+		assertTrue("fileRapportDiff doit exister : ", fileRapportTxt1.exists());
+		
+		/* vérifie que fileRapportDiffCsv existe. */
+		assertTrue("fileRapportDiffCsv doit exister : ", fileRapportCsv1.exists());
+		
+		/* vérifie la bonne longueur de longueurChaine1. */
+		assertEquals("longueurChaine1 doit valoir 3 : ", 3, longueurChaine1);
+		
+		/* vérifie la bonne longueur de longueurChaine2. */
+		assertEquals("longueurChaine2 doit valoir 3 : ", 3, longueurChaine2);
+		
+		/* vérifie que rapportCreationfichierDiff existe. */
+		assertNotNull("le rapportCreationfichierDiff doit exister :  ", messageCreationRapportTxt1);
+		
+		/* vérifie que rapportCreationfichierDiffCsv existe. */
+		assertNotNull("le rapportCreationfichierDiffCsv doit exister :  ", messageCreationRapportCsv1);
+		
+		/* Attente d'une milliseconde. */
+		Thread.sleep(1);
+		
+		/* vérifie que le DifferentiateurString fonctionne correctement en cas d'appels successifs. */
+		final String chaine3 = "bâte";
+		final String chaine4 = "bas";
+		
+		// Application du DifferentiateurString.
+		DifferentiateurString.differencier(chaine3, chaine4, true);
+		
+		final String rapportTxt2 = DifferentiateurString.getRapportDiff();
+		final String rapportCsv2 = DifferentiateurString.getRapportDiffCsv();
+		final File fileRapportTxt2 = DifferentiateurString.getFileRapportDiff();
+		final File fileRapportCsv2 = DifferentiateurString.getFileRapportDiffCsv();
+		final int longueurChaine3 = DifferentiateurString.getLongueurChaine1();
+		final int longueurChaine4 = DifferentiateurString.getLongueurChaine2();		
+		final String messageCreationRapportTxt2 
+			= DifferentiateurString.getRapportCreationfichierDiff();
+		final String messageCreationRapportCsv2 
+		= DifferentiateurString.getRapportCreationfichierDiffCsv();
+		
+		/* vérifie que rapportDiff existe. */
+		assertNotNull("le rapportDiff existe :  ", rapportTxt2);
+		
+		/* vérifie que rapportCsvDiff existe. */
+		assertNotNull("le rapportDiffCsv doit exister :  ", rapportCsv2);
+		
+		/* vérifie que fileRapportDiff existe. */
+		assertTrue("fileRapportDiff doit exister : ", fileRapportTxt2.exists());
+		
+		/* vérifie que fileRapportDiffCsv existe. */
+		assertTrue("fileRapportDiffCsv doit exister : ", fileRapportCsv2.exists());
+		
+		/* vérifie la bonne longueur de longueurChaine1. */
+		assertEquals("longueurChaine3 doit valoir 4 : ", 4, longueurChaine3);
+		
+		/* vérifie la bonne longueur de longueurChaine2. */
+		assertEquals("longueurChaine4 doit valoir 3 : ", 3, longueurChaine4);
+		
+		/* vérifie que rapportCreationfichierDiff existe. */
+		assertNotNull("le rapportCreationfichierDiff doit exister :  ", messageCreationRapportTxt2);
+		
+		/* vérifie que rapportCreationfichierDiffCsv existe. */
+		assertNotNull("le rapportCreationfichierDiffCsv doit exister :  ", messageCreationRapportCsv2);
+		
+		/* test de la méthode afficherTout(). */
+//		System.out.println(DifferentiateurString.afficherTout());
+		
+	} // Fin de testDifferencier().________________________________________
+	
+
+	
+	/**
+	 * method testFournirCaractereDan() :<br/>
+	 * Teste la méthode fournirCaractereDan(char pChar).<br/>
+	 * <br/>
+	 */
+	@Test
+	public void testFournirCaractereDan() {
+		
+		final CaractereDan carDan 
+			= DifferentiateurString.fournirCaractereDan('é');
+		
+		final String resultat = carDan.toCsv();
+		
+		assertEquals("Doit retourner un csv : "
+				, "null;null;é;\\u00e9;-1;2;233;233;e9;LATIN SMALL LETTER E WITH ACUTE;"
+					, resultat);
+		
+	} // Fin de testFournirCaractereDan()._________________________________
+	
 	
 	
 	/**
@@ -214,57 +413,6 @@ public final class DifferentiateurStringTest {
 					, resultatUNIX);
 		
 	} // Fin de testSubstituerSautLignePlateforme()._______________________
-	
-
-	
-	/**
-	 * method testCreerArborescence() :<br/>
-	 * teste la méthode creerArborescence.<br/>
-	 * <br/>
-	 */
-	@Test
-	public void testCreerArborescence() {
-		
-		final boolean resultat 
-			= DifferentiateurString.creerArborescence(".\\rep_0\\rep_1_1\\rep_2_1");
-		
-		System.out.println(resultat);
-		
-	} // Fin de testCreerArborescence().___________________________________
-
-
-	/**
-	 * method test() :<br/>
-	 * .<br/>
-	 * <br/>
-	 * @throws InterruptedException 
-	 */
-	@Test
-	public void test() throws InterruptedException {
-		
-//		DifferentiateurString.viderRepertoire(new File(".\\rep_0"));
-//		final boolean resultatVidage 
-//		= DifferentiateurString.viderRepertoireADetruire(new File(".\\data2"));
-//		
-//		System.out.println("resultatVidage : " + resultatVidage);
-//		
-		final boolean resultDestruction1 = 
-				DifferentiateurString.detruireArborescence(".\\data2");
-		
-		System.out.println("resultDestruction1 : " + resultDestruction1);
-		
-		/* Attente. */
-		Thread.sleep(1000);
-		
-		final String cheminRepRapports 
-		= ".\\data2\\temp\\rapports";
-		
-		final boolean resultatCreation 
-			= DifferentiateurString.creerArborescence(cheminRepRapports);
-		
-		System.out.println("resultatCreation : " + resultatCreation);
-				
-	}
 	
 	
 } // FIN DE LA CLASSE DifferentiateurStringTest.-----------------------------

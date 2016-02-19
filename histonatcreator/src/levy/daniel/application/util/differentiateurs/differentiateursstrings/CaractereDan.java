@@ -140,9 +140,9 @@ public class CaractereDan implements
 	
 	/**
 	 * LOCALE_FR_FR : Locale :<br/>
-	 * new Locale("FR", "fr").<br/>
+	 * new Locale("fr", "FR").<br/>
 	 */
-	public static final Locale LOCALE_FR_FR = new Locale("FR", "fr");
+	public static final Locale LOCALE_FR_FR = new Locale("fr", "FR");
 	
 
 	/**
@@ -625,6 +625,13 @@ public class CaractereDan implements
 	
 		
 	/**
+	 * String formattée pour l'affichage d'un CaractereDan.<br/>
+	 * Par exemple :<br/>
+	 * "Caractère : é     Unicode : \u00e9  NumericValue : -1    
+	 * TypeCaractere : 2   valeurEntiere : 233   Point de Code décimal : 233  
+	 *  Point de Code Hexa : e9     
+	 *   Nom : LATIN SMALL LETTER E WITH ACUTE         ".<br/>
+	 * <br/>
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -718,6 +725,9 @@ public class CaractereDan implements
 	 * "id;Position;Caractère;Unicode;numericValue;Type de Caractère;
 	 * Valeur Entière;Point de Code Décimal;
 	 * Point de Code HexaDécimal;Nom Unicode;".<br/>
+	 * <br/>
+	 * Par exemple pour é : <br/>
+	 * null;null;é;\u00e9;-1;2;233;233;e9;LATIN SMALL LETTER E WITH ACUTE;<br/>
 	 * <br/>
 	 *
 	 * @return : String : Le valueObject sous forme csv 

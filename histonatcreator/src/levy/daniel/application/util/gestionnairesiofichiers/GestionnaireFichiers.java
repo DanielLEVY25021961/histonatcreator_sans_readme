@@ -1018,6 +1018,7 @@ static {
 	} // Fin de viderRepertoireADetruire(
 	 // File pRep).________________________________________________________
 	
+
 	
 	/**
 	 * method fournirFile(

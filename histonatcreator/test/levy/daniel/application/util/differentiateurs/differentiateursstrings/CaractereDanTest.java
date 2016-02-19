@@ -78,7 +78,9 @@ public final class CaractereDanTest {
 	
 	/**
 	 * CARAC_REPLACEMENT : CaractereDan :<br/>
-	 * REPLACEMENT CHARACTER.<br/>
+	 * REPLACEMENT CHARACTER, "\\ufffd".<br/>
+	 * Caractère de remplacement introduit lors de la lecture en UTF-8 
+	 * d'un fichier texte encodé avec un autre Charset.<br/>
 	 */
 	public static final CaractereDan CARAC_REPLACEMENT 
 	= new CaractereDan(1L, 259, '�', "\\ufffd", -1, 28, 65533, 65533, "fffd", "REPLACEMENT CHARACTER");
