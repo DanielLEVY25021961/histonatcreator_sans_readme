@@ -644,7 +644,39 @@ public final class ConvertisseurEncodageTest {
 	 */
 	public static final List<File> LISTEFILES_TXT = new ArrayList<File>();
 	
+
+	/**
+	 * SAUTDELIGNE_UNIX : String :<br/>
+	 * Saut de ligne généré par les éditeurs Unix.<br/>
+	 * "\n" (Retour Ligne = LINE FEED (LF)).
+	 */
+	public static final String SAUTDELIGNE_UNIX = "\n";
+
 	
+	/**
+	 * SAUTDELIGNE_MAC : String :<br/>
+	 * Saut de ligne généré par les éditeurs Mac.<br/>
+	 * "\r" (Retour Chariot RC = CARRIAGE RETURN (CR))
+	 */
+	public static final String SAUTDELIGNE_MAC = "\r";
+
+	
+	/**
+	 * SAUTDELIGNE_DOS_WINDOWS : String :<br/>
+	 * Saut de ligne généré par les éditeurs DOS/Windows.<br/>
+	 * "\r\n" (Retour Chariot RC + Retour Ligne Line Feed LF).
+	 */
+	public static final String SAUTDELIGNE_DOS_WINDOWS = "\r\n";
+
+	
+	/**
+	 * NEWLINE : String :<br/>
+	 * Saut de ligne spécifique de la plateforme.<br/>
+	 * System.getProperty("line.separator").<br/>
+	 */
+	public static final String NEWLINE = System.getProperty("line.separator");
+
+
 	/* Bloc statique pour remplir la liste des Files. */
 	static {
 		
@@ -1058,5 +1090,20 @@ public final class ConvertisseurEncodageTest {
 		 
 	} // Fin de testLireDepuisFichier().___________________________________
 
+
+	
+	/**
+	 * method testEcrireStringDansFile() :<br/>
+	 * .<br/>
+	 * <br/>
+	 * : void :  .<br/>
+	 */
+	@Test
+	public void testEcrireStringDansFile() {
+		
+		final File resultat = ConvertisseurEncodage.ecrireStringDansFile("toto", CHARSET_LATIN9, CHARSET_UTF8, NEWLINE);
+		
+		System.out.println(resultat);
+	}
 
 } // FIN DE LA CLASSE ConvertisseurEncodageTest.-----------------------------

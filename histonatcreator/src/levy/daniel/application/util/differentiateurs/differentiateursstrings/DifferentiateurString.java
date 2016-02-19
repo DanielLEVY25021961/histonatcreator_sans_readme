@@ -1292,7 +1292,7 @@ public final class DifferentiateurString {
 	 * pour le fichier.<br/>
 	 * @param pDate : Date : Date pour préfixer le nom du fichier. 
 	 * La Date sera formattée sous la forme "yyyy-MM-dd_HH-mm-ss" 
-	 * de DF_DATETIME_LEXICOGRAPHIQUE comme 2012-01-16_18-09-55 <br/>
+	 * de DF_DATETIMEMILLI_FRANCAISE comme 2012-01-16_18-09-55 <br/>
 	 * @param pNomFichier : String : nom de base du fichier.<br/>
 	 * @param pEncodage : String : encodage pour suffixer 
 	 * le nom du fichier.<br/>
@@ -1382,7 +1382,7 @@ public final class DifferentiateurString {
 	 * <br/>
 	 *
 	 * @param pDate : Date : Date pour préfixer le chemin. 
-	 * La Date sera formattée sous la forme "yyyy-MM-dd_HH-mm-ss" 
+	 * La Date sera formattée sous la forme "yyyy-MM-dd_HH-mm-ss-SSS" 
 	 * de DF_DATETIME_LEXICOGRAPHIQUEMILLI comme 2012-01-16_18-09-55-789 <br/>
 	 * @param pNom : String : nom de base du fichier.<br/>
 	 * @param pEncodage : String : encodage pour suffixer 
@@ -1714,32 +1714,21 @@ public final class DifferentiateurString {
 				return false;
 			}
 			
-			System.out.println();
-			System.out.println("pRep = " + pRep.getPath());
-			
 			/* Récupération des File dans pRep. */
 			final File[] filesContenus = pRep.listFiles();
 			
-			System.out.println("filesContenus dans pRep = " + pRep.getPath() + " : " + affichierTableauFiles(pRep.listFiles()));
-			
 			/* Sort Si pRep est vide. */
 			if (filesContenus.length == 0) {
-				System.out.println("if (filesContenus.length == 0) return true pour pRep = " + pRep.getPath());
 				return true;
 			}
 			
-			System.out.println();
-			System.out.println("BOUCLE DE NIVEAU pRep = " + pRep.getPath());
 			/* Si pRep non vide. */
 			/* ForEach (boucle) sur les File de pRep. ******/
 			for(final File file : filesContenus) {
 				
-				System.out.println("file dans la boucle : " + file.getPath() + "   alors que pRep = " + pRep.getPath());
-				
 				/* Appel récursif si file est un répertoire. */
 				if (file.isDirectory()) {
 					
-					System.out.println("APPEL RECURSIF viderRepertoireADetruire(file) : " + file.getPath());
 					/* APPEL RECURSIF. */
 					viderRepertoireADetruire(file);
 					
@@ -1749,7 +1738,6 @@ public final class DifferentiateurString {
 				/* Destruction du file dans tous les cas. */					
 				try {
 					
-					System.out.println("*******Destruction de file : " + file.getPath() + "   alors que pRep = " + pRep.getPath());
 					file.delete();
 					
 				} catch (Exception e) {
