@@ -178,10 +178,6 @@
             <ruleset>Basic Velocity</ruleset>
         </rule>
         <rule>
-            <name>EmptyIfStmt</name>
-            <ruleset>Empty Code</ruleset>
-        </rule>
-        <rule>
             <name>MistypedCDATASection</name>
             <ruleset>Basic XML</ruleset>
         </rule>
@@ -190,27 +186,11 @@
             <ruleset>Braces</ruleset>
         </rule>
         <rule>
-            <name>ForLoopsMustUseBraces</name>
-            <ruleset>Braces</ruleset>
-        </rule>
-        <rule>
-            <name>IfElseStmtsMustUseBraces</name>
-            <ruleset>Braces</ruleset>
-        </rule>
-        <rule>
             <name>IfElseStmtsMustUseBraces</name>
             <ruleset>Braces</ruleset>
         </rule>
         <rule>
             <name>IfStmtsMustUseBraces</name>
-            <ruleset>Braces</ruleset>
-        </rule>
-        <rule>
-            <name>IfStmtsMustUseBraces</name>
-            <ruleset>Braces</ruleset>
-        </rule>
-        <rule>
-            <name>WhileLoopsMustUseBraces</name>
             <ruleset>Braces</ruleset>
         </rule>
         <rule>
@@ -282,10 +262,6 @@
             <ruleset>Controversial</ruleset>
         </rule>
         <rule>
-            <name>UnnecessaryParentheses</name>
-            <ruleset>Unnecessary</ruleset>
-        </rule>
-        <rule>
             <name>CouplingBetweenObjects</name>
             <ruleset>Coupling</ruleset>
         </rule>
@@ -304,10 +280,6 @@
         <rule>
             <name>AvoidProtectedFieldInFinalClass</name>
             <ruleset>Design</ruleset>
-        </rule>
-        <rule>
-            <name>AvoidReassigningParameters</name>
-            <ruleset>Basic Velocity</ruleset>
         </rule>
         <rule>
             <name>AvoidSynchronizedAtMethodLevel</name>

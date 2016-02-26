@@ -822,6 +822,39 @@ public final class ConvertisseurEncodage {
 	
 
 	
+	/**
+	 * method convertirFichier(File pFile, Charset pCharsetDecodage, Charset pCharsetEncodage, String pSautLigne) :<br/>
+	 * .<br/>
+	 * <br/>
+	 *
+	 * @param pFile
+	 * @param pCharsetDecodage
+	 * @param pCharsetEncodage
+	 * @param pSautLigne
+	 * @return : File :  .<br/>
+	 */
+	public static File convertirFichier(
+			final File pFile
+				, final Charset pCharsetDecodage
+					, final Charset pCharsetEncodage
+						, final String pSautLigne) {
+		
+		/* Récupère la String à encoder en décodant le contenu de pFile avec pCharsetDecodage. */
+		final String stringAConvertir = ConvertisseurEncodage.lireDepuisFichier(pFile, pCharsetDecodage);
+		
+		/* Récupération du chemin des fichiers transcodés fourni par fournirCheminFichiers(). */
+		final String cheminTranscodes = fournirCheminFichiers();
+		
+		/* Création du nom du fichier transcodé à créer. */
+		final String nomFichier = pFile.getName() + "_Fichier_Transcode_Depuis_" + pCharsetDecodage.displayName(LOCALE_FR_FR) + "_vers";
+		
+		/* Récupération du File vide pour le fichier transcodé créé par fournirFile(...). */
+		final File file = fournirFile(cheminTranscodes, nomFichier, pCharsetEncodage.displayName(LOCALE_FR_FR), "txt");
+		
+		/* Ecriture de la String à encoder dans le fichier transcodé en encodant avec pCharsetEncodage et en substituant les sauts de ligne par pSautLigne. */
+		return ecrireStringDansFile(file, stringAConvertir, pCharsetEncodage, pSautLigne);
+	}
+
 	
 	
 	/**
@@ -844,9 +877,12 @@ public final class ConvertisseurEncodage {
 		/* Récupération du chemin des fichiers transcodés fourni par fournirCheminFichiers(). */
 		final String cheminTranscodes = fournirCheminFichiers();
 		
-		final File fileTranscode = fournirFile(cheminTranscodes, "Fichier_Transcode_Depuis_" + pCharsetDecodage.displayName(LOCALE_FR_FR) + "_vers", pCharsetEncodage.displayName(LOCALE_FR_FR), "txt");
+		final String nomFichier = "Fichier_Transcode_Depuis_" + pCharsetDecodage.displayName(LOCALE_FR_FR) + "_vers";
 		
-		return fileTranscode;
+		final File file = fournirFile(cheminTranscodes, nomFichier, pCharsetEncodage.displayName(LOCALE_FR_FR), "txt");
+		
+		return ecrireStringDansFile(file, pString, pCharsetEncodage, pSautLigne);
+		
 	}
 	
 	

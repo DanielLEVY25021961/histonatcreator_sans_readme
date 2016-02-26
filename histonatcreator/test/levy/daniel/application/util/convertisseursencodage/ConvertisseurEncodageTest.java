@@ -893,7 +893,7 @@ public final class ConvertisseurEncodageTest {
 	
 	/**
 	 * CHARSET_IBM850 : Charset :<br/>
-	 * .<br/>
+	 * Charset IBM-850.<br/>
 	 * Cp850, MS-DOS Latin-1.<br/>
 	 */
 	public static final Charset CHARSET_IBM850
@@ -917,6 +917,7 @@ public final class ConvertisseurEncodageTest {
 		LISTE_CHARSETS.add(CHARSET_ISO_8859_9);
 		LISTE_CHARSETS.add(CHARSET_ISO_8859_15);
 		LISTE_CHARSETS.add(CHARSET_ANSI);
+		LISTE_CHARSETS.add(CHARSET_IBM850);
 		
 	}
 	
@@ -1101,7 +1102,9 @@ public final class ConvertisseurEncodageTest {
 	@Test
 	public void testEcrireStringDansFile() {
 		
-		final File resultat = ConvertisseurEncodage.ecrireStringDansFile("toto", CHARSET_LATIN9, CHARSET_UTF8, NEWLINE);
+		final String charette = ConvertisseurEncodage.lireDepuisFichier(FILE_CHARETTE_ANSI, CHARSET_ANSI);
+		
+		final File resultat = ConvertisseurEncodage.ecrireStringDansFile(charette, CHARSET_ANSI, CHARSET_UTF8, NEWLINE);
 		
 		System.out.println(resultat);
 	}
