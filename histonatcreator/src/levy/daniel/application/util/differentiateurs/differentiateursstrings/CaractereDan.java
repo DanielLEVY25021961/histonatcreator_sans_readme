@@ -3,9 +3,9 @@ package levy.daniel.application.util.differentiateurs.differentiateursstrings;
 import java.io.Serializable;
 import java.util.Locale;
 
-import levy.daniel.application.IConstantesMessage;
 import levy.daniel.application.IExportateurCsv;
 import levy.daniel.application.IExportateurJTable;
+import levy.daniel.application.Resetable;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -52,7 +52,8 @@ import org.apache.commons.logging.LogFactory;
  */
 public class CaractereDan implements 
 						Serializable, Comparable<Object>, Cloneable
-							, IExportateurCsv, IExportateurJTable {
+							, IExportateurCsv, IExportateurJTable
+														, Resetable {
 
 	// ************************ATTRIBUTS************************************/
 	
@@ -145,6 +146,13 @@ public class CaractereDan implements
 	public static final Locale LOCALE_FR_FR = new Locale("fr", "FR");
 	
 
+	/**
+	 * SEP_POINTVIRGULE : String :<br/>
+	 * ";".<br/>
+	 */
+	public static final String SEP_POINTVIRGULE = ";";
+
+	
 	/**
 	 * LOG : Log : 
 	 * Logger pour Log4j (utilisant commons-logging).
@@ -739,25 +747,25 @@ public class CaractereDan implements
 		final StringBuilder stb = new StringBuilder();
 		
 		stb.append(this.id);
-		stb.append(IConstantesMessage.SEP_POINTVIRGULE);
+		stb.append(SEP_POINTVIRGULE);
 		stb.append(this.position);
-		stb.append(IConstantesMessage.SEP_POINTVIRGULE);
+		stb.append(SEP_POINTVIRGULE);
 		stb.append(this.caractere);
-		stb.append(IConstantesMessage.SEP_POINTVIRGULE);
+		stb.append(SEP_POINTVIRGULE);
 		stb.append(this.unicode);
-		stb.append(IConstantesMessage.SEP_POINTVIRGULE);
+		stb.append(SEP_POINTVIRGULE);
 		stb.append(this.numericValue);
-		stb.append(IConstantesMessage.SEP_POINTVIRGULE);
+		stb.append(SEP_POINTVIRGULE);
 		stb.append(this.typeCaractere);
-		stb.append(IConstantesMessage.SEP_POINTVIRGULE);
+		stb.append(SEP_POINTVIRGULE);
 		stb.append(this.valeurEntiere);
-		stb.append(IConstantesMessage.SEP_POINTVIRGULE);
+		stb.append(SEP_POINTVIRGULE);
 		stb.append(this.codePointDecimal);
-		stb.append(IConstantesMessage.SEP_POINTVIRGULE);
+		stb.append(SEP_POINTVIRGULE);
 		stb.append(this.codePointHexa);
-		stb.append(IConstantesMessage.SEP_POINTVIRGULE);
+		stb.append(SEP_POINTVIRGULE);
 		stb.append(this.nom);
-		stb.append(IConstantesMessage.SEP_POINTVIRGULE);
+		stb.append(SEP_POINTVIRGULE);
 		
 		return stb.toString();
 		
@@ -893,11 +901,77 @@ public class CaractereDan implements
 			break;
 			
 		} // Fin du Switch._________________________________
+		
 		return valeur;
 		
 	} // Fin de getValeurColonne(...)._____________________________________
 
 
+	
+	/**
+	 * "id;Position;Caractère;Unicode;numericValue;Type de Caractère;
+	 * Valeur Entière;Point de Code Décimal;
+	 * Point de Code HexaDécimal;Nom Unicode;".<br/>
+	 * <br/>
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void reset() {
+		
+		this.id = null;
+		this.position = null;
+		this.caractere = null;
+		this.unicode = null;
+		this.numericValue = 0;
+		this.typeCaractere = 0;
+		this.valeurEntiere = 0;
+		this.codePointDecimal = 0;
+		this.codePointHexa = null;
+		this.nom = null;
+		
+	} // Fin de reset().___________________________________________________
+
+	
+	
+	/**
+	 * method remplir(
+	 * Long pId
+	 * , Integer pPosition
+	 * , Character pChar) :<br/>
+	 * Méthode à utiliser avec reset() pour éviter d'instancier 
+	 * un nouvel objet à chaque itération d'une boucle.<br/>
+	 * <br/>
+	 * Remplit automatiquement les valeurs du caractère.<br/>
+	 * <br/>
+	 *
+	 * @param pId : Long : id en base.<br/>
+	 * @param pPosition : Integer : Position du caractère dans une String.<br/>
+	 * @param pChar : Character : caractère.<br/>
+	 */
+	public void remplir(
+			final Long pId
+			, final Integer pPosition
+			, final Character pChar) {
+		
+		this.id = pId;
+		this.position = pPosition;
+		this.caractere = pChar;
+		
+		/* Remplissage automatique. */
+		this.unicode = this.getCodeUnicodeHexaDecimal(pChar);
+		this.numericValue = this.getNumericValue(pChar);
+		this.typeCaractere = this.getTypeCharacter(pChar);
+		this.valeurEntiere = this.getIntValue(pChar);
+		this.codePointDecimal = this.getCodePointDecimal(pChar);
+		this.codePointHexa = this.getCodePointHexaDecimal(pChar);
+		this.nom = this.getNameUnicodeChar(pChar);
+		
+	} // Fin de remplir(
+	 // Long pId
+	 // , Integer pPosition
+	 // , Character pChar).________________________________________________
+	
+	
 	
 	/**
 	 * method getCodePointDecimal(

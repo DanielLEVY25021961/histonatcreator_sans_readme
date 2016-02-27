@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
-import levy.daniel.application.IConstantesMessage;
+
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -355,6 +355,13 @@ static {
 	sSdfddMMyyyy.setLenient(false);
 	sSdfyyyyMMddHHmmss.setLenient(false);
 }
+
+
+	/**
+	 * SEP_MOINS : String :<br/>
+	 * " - ".<br/>
+	 */
+	public static final String SEP_MOINS = " - ";
 
 	/**
 	 * LOG : Log : 
@@ -1317,9 +1324,9 @@ static {
 			
 			final String message 
 			= pClasse 
-			+ IConstantesMessage.SEP_MOINS
+			+ SEP_MOINS
 			+ pMethode
-			+ IConstantesMessage.SEP_MOINS
+			+ SEP_MOINS
 			+ pMessage;
 			
 			LOG.info(message);
@@ -1365,9 +1372,9 @@ static {
 			
 			final String message 
 			= pClasse 
-			+ IConstantesMessage.SEP_MOINS
+			+ SEP_MOINS
 			+ pMethode
-			+ IConstantesMessage.SEP_MOINS
+			+ SEP_MOINS
 			+ pMessage
 			+ pComplement;
 			
