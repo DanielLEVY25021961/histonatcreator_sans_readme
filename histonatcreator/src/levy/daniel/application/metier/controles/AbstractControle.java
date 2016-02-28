@@ -14,6 +14,7 @@ import java.util.ResourceBundle;
 import levy.daniel.application.IConstantesMessage;
 import levy.daniel.application.metier.rapportscontroles.LigneRapport;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -33,6 +34,8 @@ import org.apache.commons.logging.LogFactory;
  *<br/>
  * 
  * - Mots-clé :<br/>
+ * Nettoyer chaine de caractères, nettoyer String, <br/>
+ * StringUtils.trim(resultat), trim(), nettoyer valeurs dans properties<br/>
  * <br/>
  *
  * - Dépendances :<br/>
@@ -474,7 +477,7 @@ public abstract class AbstractControle {
 					
 					final String message 
 						= "messagescontroles_fr_FR.properties manquant "
-								+ "sous la racine du projet : " 
+								+ "sous la racine du projet (bin) : " 
 								+ mre.getMessage();
 					
 					/* LOG de niveau INFO. */
@@ -800,13 +803,18 @@ public abstract class AbstractControle {
 	 * récupère le niveau d'anomalie du contrôle dans 
 	 * messagescontroles_fr_FR.properties.<br/>
 	 * <br/>
+	 * - Nettoie le niveau d'anomalie lu dans 
+	 * messagescontroles_fr_FR.properties en retirant les éventuels blancs.<br/>
+	 * <br/>
 	 * - retourne null, LOG de niveau INFO et rapport 
 	 * si bundleControles est null.<br/>
 	 * - retourne null, LOG de niveau INFO et rapport 
 	 * si messagescontroles_fr_FR.properties est manquant.<br/>
 	 * - retourne null, LOG de niveau INFO et rapport 
-	 * si messagescontroles_fr_FR.properties ne contient pas la clé 
-	 * (ou pas de valeur pour cette clé).
+	 * si messagescontroles_fr_FR.properties ne contient pas la clé.<br/>
+	 * - retourne null, LOG de niveau INFO et rapport si
+	 * messagescontroles_fr_FR.properties ne contient pas la valeur 
+	 * associée à la clé.<br/>
 	 * <br/>
 	 *
 	 * @return : String : niveauAnomalie.<br/>
@@ -814,16 +822,27 @@ public abstract class AbstractControle {
 	private String recupererNiveauAnomalieDansProperties() {
 
 		String resultat = null;
+		String resultatNettoye = null;
 		
 		try {
 						
 			/* récupère le niveau d'anomalie du contrôle 
 			 * dans messagescontroles_fr_FR.properties. */
 			if (bundleControles != null) {
+				
 				resultat 
 				= bundleControles.getString(
 						this.fournirCleNiveauAnomalie());
+				
+				/* Nettoie le niveau d'anomalie lu dans 
+				 * messagescontroles_fr_FR.properties en retirant 
+				 * les éventuels blancs. */
+				resultatNettoye = StringUtils.trim(resultat);
+				
 			}
+			
+			/* retourne null, LOG de niveau INFO et rapport 
+			 * si bundleControles est null.*/
 			else {
 				
 				final String message 
@@ -857,88 +876,76 @@ public abstract class AbstractControle {
 			/* retourne null, LOG de niveau INFO et rapport 
 			 * si bundleControles est null. */
 			return null;
+			
 			}
 			
 			
 		} catch (MissingResourceException mre) {
-			
-			final String message 
-				= "messagescontroles_fr_FR.properties manquant "
-						+ "sous la racine du projet : " 
-						+ mre.getMessage();
-			
+
+			final String message = "La clé '"
+					+ this.fournirCleNiveauAnomalie()
+					+ "' n'existe pas dans  messagescontroles_fr_FR.properties : "
+					+ mre.getMessage();
+
 			/* LOG de niveau INFO. */
-			loggerInfo(
-					this.fournirNomClasseConcrete()
-					, METHODE_RECUPERERNIVEAUANOMALIEDANSPROPERTIES
-					, message);
-			
+			loggerInfo(this.fournirNomClasseConcrete(),
+					METHODE_RECUPERERNIVEAUANOMALIEDANSPROPERTIES, message);
+
 			/* rapport. */
-			final LigneRapport ligneRapport 
-				= new LigneRapport(
-						this.dateControleStringFormatee
-						, this.userName
-						, NULL
-						, TOUS
-						, TOUS
-						, "pas de messagescontroles_fr_FR.properties"
-						, SANS_OBJET
-						, null
-						, message
-						, null
-						, SANS_OBJET
-						, SANS_OBJET
-						, SANS_OBJET);
-			
+			final LigneRapport ligneRapport = new LigneRapport(
+					this.dateControleStringFormatee,
+					this.userName,
+					NULL,
+					this.typeControle,
+					this.nomControle,
+					"pas de clé ou valeur dans messagescontroles_fr_FR.properties",
+					SANS_OBJET, null, message, null, SANS_OBJET, SANS_OBJET,
+					SANS_OBJET);
+
 			this.ajouterLigneRapport(ligneRapport);
-			
-			/* retourne null, LOG de niveau INFO et rapport 
-			 * si messagescontroles_fr_FR.properties est manquant. */
+
+			/*
+			 * retourne null, LOG de niveau INFO et rapport si
+			 * messagescontroles_fr_FR.properties ne contient pas la clé.
+			 */
 			return null;
+
+		} 
+		
+		if (StringUtils.isBlank(resultatNettoye)) {
 			
-		} catch (Exception e) {
-			
-			final String message 
-			= "La clé : " + this.fournirCleNiveauAnomalie()
-					+ " n'existe pas dans  messagescontroles_fr_FR.properties "
-					+ "ou n'a pas de valeur : " 
-					+ e.getMessage();
-		
-		/* LOG de niveau INFO. */
-		loggerInfo(
-				this.fournirNomClasseConcrete()
-				, METHODE_RECUPERERNIVEAUANOMALIEDANSPROPERTIES
-				, message);
-		
-		/* rapport. */
-		final LigneRapport ligneRapport 
-			= new LigneRapport(
-					this.dateControleStringFormatee
-					, this.userName
-					, NULL
-					, TOUS
-					, TOUS
-					, "pas de clé ou valeur dans messagescontroles_fr_FR.properties"
-					, SANS_OBJET
-					, null
-					, message
-					, null
-					, SANS_OBJET
-					, SANS_OBJET
-					, SANS_OBJET);
-		
-		this.ajouterLigneRapport(ligneRapport);
-		
-		/* retourne null, LOG de niveau INFO et rapport 
-		 * si messagescontroles_fr_FR.properties ne contient pas la clé 
-		 * (ou pas de valeur pour cette clé). */
-		return null;
-		
+			final String message = "La valeur associée à La clé '"
+					+ this.fournirCleNiveauAnomalie()
+					+ "' n'existe pas dans  messagescontroles_fr_FR.properties";
+
+			/* LOG de niveau INFO. */
+			loggerInfo(this.fournirNomClasseConcrete(),
+					METHODE_RECUPERERNIVEAUANOMALIEDANSPROPERTIES, message);
+
+			/* rapport. */
+			final LigneRapport ligneRapport = new LigneRapport(
+					this.dateControleStringFormatee,
+					this.userName,
+					NULL,
+					this.typeControle,
+					this.nomControle,
+					"pas de clé ou valeur dans messagescontroles_fr_FR.properties",
+					SANS_OBJET, null, message, null, SANS_OBJET, SANS_OBJET,
+					SANS_OBJET);
+
+			this.ajouterLigneRapport(ligneRapport);
+
+			/*
+			 * retourne null, LOG de niveau INFO et rapport si
+			 * messagescontroles_fr_FR.properties ne contient 
+			 * pas la valeur associée à la clé.
+			 */
+			return null;
 		}
 		
 		/* retourne le niveau d'anomalie 
 		 * dans messagescontroles_fr_FR.properties. */
-		return resultat;
+		return resultatNettoye;
 		
 	} // Fin de recupererNiveauAnomalieDansProperties().___________________
 	

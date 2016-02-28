@@ -662,11 +662,18 @@ public class ControleurTypeTexteTest {
 	 * method testConstructeurAriteNulle() :<br/>
 	 * teste le constructeur d'arité nulle.<br/>
 	 * <br/>
+	 * - Vérifie que bundleControles est bien chargé.<br/>
 	 * - Vérifie que la date du contrôle n'est pas null.<br/>
 	 * - Vérifie que la date formattée n'est pas null.<br/>
 	 * - Vérifie que userName == 'Administrateur'.<br/>
 	 * - Vérifie que fichier == null.<br/>
 	 * - Vérifie que nomFichier == null.<br/>
+	 * - Vérifie que typeControle == "Contrôle de surface".<br/>
+	 * - Vérifie que nomControle == "Contrôle fichier texte".<br/>
+	 * - Vérifie que nomCritere == "Le fichier ne doit pas comporter 
+	 * de caractères indésirables (impossibles à écrire au clavier)".<br/>
+	 * - Vérifie que niveauAnomalie == 1.<br/>
+	 * - Vérifie que gravite == "1 - anomalie bloquante".<br/>
 	 * <br/>
 	 */
 	@Test
@@ -700,6 +707,31 @@ public class ControleurTypeTexteTest {
 		/* Vérifie que nomFichier == null. */
 		assertNull("nomFichier doit être null : "
 				, control.getNomFichier());
+		
+		/* Vérifie que typeControle == "Contrôle de surface". */
+		assertEquals("typeControle doit valoir 'Contrôle de surface' : "
+				, "Contrôle de surface"
+					, control.getTypeControle());
+		
+		/* Vérifie que nomControle == "Contrôle fichier texte". */
+		assertEquals("nomControle doit valoir 'Contrôle fichier texte' : "
+				, "Contrôle fichier texte"
+					, control.getNomControle());
+		
+		/* Vérifie que nomCritere == "Le fichier ne doit pas comporter de caractères indésirables (impossibles à écrire au clavier)". */
+		assertEquals("nomCritere doit valoir 'Le fichier ne doit pas comporter de caractères indésirables (impossibles à écrire au clavier)' : "
+				, "Le fichier ne doit pas comporter de caractères indésirables (impossibles à écrire au clavier)"
+					, control.getNomCritere());
+				
+		/* Vérifie que niveauAnomalie == 1. */
+		assertEquals("niveauAnomalie doit valoir 1 : "
+				, "1"
+					, control.getNiveauAnomalie());
+		
+		/* Vérifie que gravite == "1 - anomalie bloquante". */
+		assertEquals("gravite doit valoir '1 - anomalie bloquante' : "
+				, "1 - anomalie bloquante"
+					, control.getGravite());
 		
 	} // Fin de testConstructeurAriteNulle().______________________________
 	

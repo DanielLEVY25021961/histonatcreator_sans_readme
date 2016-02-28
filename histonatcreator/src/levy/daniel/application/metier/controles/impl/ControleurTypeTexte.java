@@ -368,6 +368,7 @@ public class ControleurTypeTexte extends AbstractControle {
 
 		try {
 
+			// LECTURE DU FICHIER CARACTERE PAR CARACTERE **************.
 			/*
 			 * Instancie un flux en lecture fileInputStream en lui passant
 			 * pFile.
@@ -503,6 +504,9 @@ public class ControleurTypeTexte extends AbstractControle {
 	 * (même si le fichier n'est pas un fichier texte).<br/>
 	 * Ne modifie pas les sauts de ligne.<br/>
 	 * <br/>
+	 * - passe pFile à this.fichier - 
+	 * rafraîchit automatiquement this.nomFichier.<br/>
+	 * <br/>
 	 * - retourne MESSAGE_FICHIER_NULL si le pFile est null.<br/>
 	 * - retourne MESSAGE_FICHIER_INEXISTANT si le pFile est inexistant.<br/>
 	 * - retourne MESSAGE_FICHIER_REPERTOIRE si le pFile est un répertoire.<br/>
@@ -518,7 +522,8 @@ public class ControleurTypeTexte extends AbstractControle {
 			final File pFile
 				, final Charset pCharset) {
 		
-		/* passe pFile à this.fichier. */
+		/* passe pFile à this.fichier - 
+		 * rafraîchit automatiquement this.nomFichier. */
 		this.setFichier(pFile);
 		
 		/* retourne MESSAGE_FICHIER_NULL 
