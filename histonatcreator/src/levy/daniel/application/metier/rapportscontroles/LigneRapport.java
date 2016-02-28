@@ -9,7 +9,7 @@ import java.util.Locale;
 
 import levy.daniel.application.IExportateurCsv;
 import levy.daniel.application.IExportateurJTable;
-import levy.daniel.application.Resetable;
+import levy.daniel.application.IResetable;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -44,7 +44,7 @@ import org.apache.commons.logging.LogFactory;
  *
  */
 public class LigneRapport implements Serializable, Comparable<Object>
-		, Cloneable, IExportateurCsv, IExportateurJTable, Resetable {
+		, Cloneable, IExportateurCsv, IExportateurJTable, IResetable {
 
 	// ************************ATTRIBUTS************************************/
 

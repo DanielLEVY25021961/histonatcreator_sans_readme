@@ -2,7 +2,7 @@ package levy.daniel.application;
 
 
 /**
- * Interface Resetable :<br/>
+ * Interface IResetable :<br/>
  * Garantit que tous les objets métier qui implémenteront 
  * cette interface auront une méthode reset().<br/>
  * <br/>
@@ -27,7 +27,7 @@ package levy.daniel.application;
  * @since 27 févr. 2016
  *
  */
-public interface Resetable {
+public interface IResetable {
 	
 
 	/**
@@ -38,4 +38,4 @@ public interface Resetable {
 	void reset();
 	
 	
-} // FIN DE L'INTERFACE Resetable.-------------------------------------------
+} // FIN DE L'INTERFACE IResetable.-------------------------------------------

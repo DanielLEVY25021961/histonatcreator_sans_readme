@@ -9,8 +9,6 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 
-import levy.daniel.application.IConstantesMessage;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -98,7 +96,14 @@ public final class MonFileInputStreamReaderDan {
 	public static final String MESSAGE_FICHIER_REPERTOIRE 
 		= "Le fichier passé en paramètre est un répertoire : ";
 
-	
+
+	/**
+	 * SEP_MOINS : String :<br/>
+	 * " - ".<br/>
+	 */
+	public static final String SEP_MOINS = " - ";
+
+
 	/**
 	 * CHARSET_UTF8 : Charset :<br/>
 	 * Charset.forName("UTF-8").<br/>
@@ -746,9 +751,9 @@ public final class MonFileInputStreamReaderDan {
 			
 			final String message 
 			= pClasse 
-			+ IConstantesMessage.SEP_MOINS
+			+ SEP_MOINS
 			+ pMethode
-			+ IConstantesMessage.SEP_MOINS
+			+ SEP_MOINS
 			+ pMessage;
 			
 			LOG.info(message);
@@ -794,9 +799,9 @@ public final class MonFileInputStreamReaderDan {
 			
 			final String message 
 			= pClasse 
-			+ IConstantesMessage.SEP_MOINS
+			+ SEP_MOINS
 			+ pMethode
-			+ IConstantesMessage.SEP_MOINS
+			+ SEP_MOINS
 			+ pMessage
 			+ pComplement;
 			
@@ -841,9 +846,9 @@ public final class MonFileInputStreamReaderDan {
 			
 			final String message 
 			= pClasse 
-			+ IConstantesMessage.SEP_MOINS
+			+ SEP_MOINS
 			+ pMethode
-			+ IConstantesMessage.SEP_MOINS 
+			+ SEP_MOINS 
 			+ pException.getMessage();
 			
 			LOG.error(message, pException);

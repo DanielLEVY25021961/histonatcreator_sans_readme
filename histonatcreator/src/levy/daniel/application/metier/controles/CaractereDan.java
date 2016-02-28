@@ -1,4 +1,4 @@
-package levy.daniel.application.util.differentiateurs.differentiateursstrings;
+package levy.daniel.application.metier.controles;
 
 import java.io.Serializable;
 import java.util.Locale;

@@ -710,7 +710,9 @@ public final class ConvertisseurEncodage {
 						contientCarRemplacement = true;
 					}
 					
-					/* Passe contientCarIndesirable à true si la chaîne lue contient un caractère indésirable stocké dans CARACTERES_INDESIRABLES_SET. */
+					/* Passe contientCarIndesirable à true si la chaîne lue 
+					 * contient un caractère indésirable stocké dans 
+					 * CARACTERES_INDESIRABLES_SET. */
 					if (CARACTERES_INDESIRABLES_SET.contains(character)) {
 						contientCarIndesirable = true;
 					}
