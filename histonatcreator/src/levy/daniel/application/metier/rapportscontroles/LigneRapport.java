@@ -7,12 +7,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import levy.daniel.application.IExportateurCsv;
 import levy.daniel.application.IExportateurJTable;
 import levy.daniel.application.IResetable;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * class LigneRapport :<br/>
@@ -35,6 +36,9 @@ import org.apache.commons.logging.LogFactory;
  * <br/>
  *
  * - Dépendances :<br/>
+ * levy.daniel.application.IExportateurCsv.<br/>
+ * levy.daniel.application.IExportateurJTable.<br/>
+ * levy.daniel.application.IResetable.<br/>
  * <br/>
  *
  *

@@ -733,6 +733,12 @@ public class ControleurTypeTexteTest {
 				, "1 - anomalie bloquante"
 					, control.getGravite());
 		
+		/* Vérifie que setFile fonctionne. */
+		control.setFichier(FILE_TXT_FAUSSE_EXTENSION);
+		
+		System.out.println(control.getFichier().getName());
+		System.out.println(control.getNomFichier());
+		
 	} // Fin de testConstructeurAriteNulle().______________________________
 	
 	

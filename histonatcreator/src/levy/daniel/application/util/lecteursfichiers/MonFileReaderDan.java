@@ -6,8 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-import levy.daniel.application.IConstantesMessage;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -117,6 +115,15 @@ public final class MonFileReaderDan {
 	 * (alimenté si le fichier n'est pas textuel).<br/>
 	 */
 	private static String rapportLecture;
+	
+
+	/**
+	 * SEP_MOINS : String :<br/>
+	 * " - ".<br/>
+	 */
+	public static final String SEP_MOINS = " - ";
+
+
 	
 	
 	/**
@@ -579,9 +586,9 @@ public final class MonFileReaderDan {
 			
 			final String message 
 			= pClasse 
-			+ IConstantesMessage.SEP_MOINS
+			+ SEP_MOINS
 			+ pMethode
-			+ IConstantesMessage.SEP_MOINS
+			+ SEP_MOINS
 			+ pMessage;
 			
 			LOG.info(message);
@@ -627,9 +634,9 @@ public final class MonFileReaderDan {
 			
 			final String message 
 			= pClasse 
-			+ IConstantesMessage.SEP_MOINS
+			+ SEP_MOINS
 			+ pMethode
-			+ IConstantesMessage.SEP_MOINS
+			+ SEP_MOINS
 			+ pMessage
 			+ pComplement;
 			
@@ -674,9 +681,9 @@ public final class MonFileReaderDan {
 			
 			final String message 
 			= pClasse 
-			+ IConstantesMessage.SEP_MOINS
+			+ SEP_MOINS
 			+ pMethode
-			+ IConstantesMessage.SEP_MOINS 
+			+ SEP_MOINS 
 			+ pException.getMessage();
 			
 			LOG.error(message, pException);

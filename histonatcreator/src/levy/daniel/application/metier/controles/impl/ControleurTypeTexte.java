@@ -11,15 +11,14 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import levy.daniel.application.metier.controles.AbstractControle;
-
-
-import levy.daniel.application.metier.controles.CaractereDan;
-import levy.daniel.application.metier.rapportscontroles.LigneRapport;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+
+import levy.daniel.application.metier.controles.AbstractControle;
+import levy.daniel.application.metier.controles.CaractereDan;
+import levy.daniel.application.metier.rapportscontroles.LigneRapport;
 
 
 /**
@@ -35,6 +34,9 @@ import org.apache.commons.logging.LogFactory;
  * <br/>
  *
  * - Dépendances :<br/>
+ * levy.daniel.application.metier.controles.AbstractControle.<br/>
+ * levy.daniel.application.metier.controles.CaractereDan.<br/>
+ * levy.daniel.application.metier.rapportscontroles.LigneRapport.<br/>
  * <br/>
  *
  *

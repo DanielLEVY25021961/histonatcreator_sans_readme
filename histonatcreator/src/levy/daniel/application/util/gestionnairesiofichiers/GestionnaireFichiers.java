@@ -12,8 +12,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import levy.daniel.application.IConstantesMessage;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -191,6 +189,20 @@ public final class GestionnaireFichiers {
 	 */
 	public static final String SEPARATEUR_FILE = "\\";
 	
+	
+	/**
+	 * SEP_REP : String :<br/>
+	 * Séparateur Java pour les répertoires "\\".<br/>
+	 */
+	public static final String SEP_REP = "\\";
+	
+
+	/**
+	 * SEP_MOINS : String :<br/>
+	 * " - ".<br/>
+	 */
+	public static final String SEP_MOINS = " - ";
+
 	
 	/**
 	 * LOCALE_FR_FR : Locale :<br/>
@@ -746,7 +758,7 @@ static {
 			for (int i = 1; i < nombreRep; i++) {
 				
 				/* Création du chemin du répertoire à créer. */
-				stb.append(IConstantesMessage.SEP_REP);
+				stb.append(SEP_REP);
 				stb.append(repertoires[i]);
 				
 				final File repertoireFile = new File(stb.toString());
@@ -1594,9 +1606,9 @@ static {
 			
 			final String message 
 			= pClasse 
-			+ IConstantesMessage.SEP_MOINS
+			+ SEP_MOINS
 			+ pMethode
-			+ IConstantesMessage.SEP_MOINS
+			+ SEP_MOINS
 			+ pMessage;
 			
 			LOG.info(message);
@@ -1642,9 +1654,9 @@ static {
 			
 			final String message 
 			= pClasse 
-			+ IConstantesMessage.SEP_MOINS
+			+ SEP_MOINS
 			+ pMethode
-			+ IConstantesMessage.SEP_MOINS
+			+ SEP_MOINS
 			+ pMessage
 			+ pComplement;
 			
@@ -1689,9 +1701,9 @@ static {
 			
 			final String message 
 			= pClasse 
-			+ IConstantesMessage.SEP_MOINS
+			+ SEP_MOINS
 			+ pMethode
-			+ IConstantesMessage.SEP_MOINS 
+			+ SEP_MOINS 
 			+ pException.getMessage();
 			
 			LOG.error(message, pException);

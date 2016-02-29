@@ -16,8 +16,6 @@ import java.util.Set;
 
 import javax.swing.JFileChooser;
 
-import levy.daniel.application.IConstantesMessage;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -229,6 +227,29 @@ public final class DetecteurTypeMime {
 	 */
 	public static final String MESSAGE_TYPE_MIME_HTML 
 		= "text/html";
+	
+	
+	/**
+	 * SEP_MOINS : String :<br/>
+	 * " - ".<br/>
+	 */
+	public static final String SEP_MOINS = " - ";
+	
+
+	/**
+	 * SEPTAB : String :<br/>
+	 * "\t".<br/>
+	 */
+	public static final String SEPTAB = "\t";
+	
+		
+	/**
+	 * NEWLINE : String :<br/>
+	 * Saut de ligne spécifique de la plateforme.<br/>
+	 * System.getProperty("line.separator").<br/>
+	 */
+	public static final String NEWLINE = System.getProperty("line.separator");
+
 	
 	/**
 	 * LOG : Log : 
@@ -670,9 +691,9 @@ public final class DetecteurTypeMime {
 			
 			final String message 
 			= pClasse 
-			+ IConstantesMessage.SEP_MOINS
+			+ SEP_MOINS
 			+ pMethode
-			+ IConstantesMessage.SEP_MOINS
+			+ SEP_MOINS
 			+ pMessage;
 			
 			LOG.info(message);
@@ -718,9 +739,9 @@ public final class DetecteurTypeMime {
 			
 			final String message 
 			= pClasse 
-			+ IConstantesMessage.SEP_MOINS
+			+ SEP_MOINS
 			+ pMethode
-			+ IConstantesMessage.SEP_MOINS
+			+ SEP_MOINS
 			+ pMessage
 			+ pComplement;
 			
@@ -765,9 +786,9 @@ public final class DetecteurTypeMime {
 			
 			final String message 
 			= pClasse 
-			+ IConstantesMessage.SEP_MOINS
+			+ SEP_MOINS
 			+ pMethode
-			+ IConstantesMessage.SEP_MOINS 
+			+ SEP_MOINS 
 			+ pException.getMessage();
 			
 			LOG.error(message, pException);
@@ -909,12 +930,12 @@ public final class DetecteurTypeMime {
 				/* key. */
 				stb.append(key);
 				/* tabulation. */
-				stb.append(IConstantesMessage.SEPTAB);
-				stb.append(IConstantesMessage.SEPTAB);
+				stb.append(SEPTAB);
+				stb.append(SEPTAB);
 				/* value. */
 				stb.append(value);
 				/* Saut de ligne. */
-				stb.append(IConstantesMessage.SAUT_DE_LIGNE);
+				stb.append(NEWLINE);
 				
 			} // Fin du while.___________________
 			

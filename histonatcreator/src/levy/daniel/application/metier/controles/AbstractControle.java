@@ -3,6 +3,7 @@ package levy.daniel.application.metier.controles;
 import java.io.File;
 import java.nio.charset.Charset;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,12 +12,11 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-import levy.daniel.application.IConstantesMessage;
-import levy.daniel.application.metier.rapportscontroles.LigneRapport;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import levy.daniel.application.metier.rapportscontroles.LigneRapport;
 
 
 /**
@@ -28,6 +28,14 @@ import org.apache.commons.logging.LogFactory;
  * - Tout contrôle s'applique sur un File 'fichier'.<br/>
  * - Tout contrôle appartient à un type de contrôle 'typeControle' 
  * comme "contrôle de surface".<br/>
+ * - Tout contrôle a un nom 'nomControle' comme 'contrôle fichier texte'.<br/>
+ * - Tout contrôle vérifie un critère 'nomCritere' comme 
+ * 'le fichier ne doit pas comporter de caractères indésirables'.<br/>
+ * - Tout contrôle a une gravité 'gravite' comme '1 - bloquant'. 
+ * Cette gravité est directement liée au niveau d'anomalie du contrôle 
+ * 'niveauAnomalie' comme "1" pour bloquant<br/>
+ * - Tout contrôle fournit un rapport de contrôle 
+ * sous forme de List&lt;LigneRapport&gt; 'rapport'.<br/>
  * <br/>
  *
  * - Exemple d'utilisation :<br/>
@@ -39,6 +47,7 @@ import org.apache.commons.logging.LogFactory;
  * <br/>
  *
  * - Dépendances :<br/>
+ * levy.daniel.application.metier.rapportscontroles.LigneRapport.<br/>
  * <br/>
  *
  *
@@ -51,6 +60,13 @@ public abstract class AbstractControle {
 
 	// ************************ATTRIBUTS************************************/
 
+	/**
+	 * nomClasseConcrete : String :<br/>
+	 * nom de la classe de contrôle concrète.<br/>
+	 */
+	protected transient String nomClasseConcrete;
+
+	
 	/**
 	 * dateControle : Date :<br/>
 	 * java.util.Date du contrôle.<br/>
@@ -65,7 +81,7 @@ public abstract class AbstractControle {
 	 * '25/02/1961-12:27:07.251'.<br/>
 	 * "dd/MM/yyyy-HH:mm:ss.SSS".<br/>
 	 */
-	protected String dateControleStringFormatee;
+	protected transient String dateControleStringFormatee;
 	
 	
 	/**
@@ -86,28 +102,30 @@ public abstract class AbstractControle {
 	 * nomFichier : String :<br/>
 	 * nom du fichier objet du contrôle.<br/>
 	 */
-	protected String nomFichier;
+	protected transient String nomFichier;
 	
 	
 	/**
 	 * typeControle : String :<br/>
-	 * type du contrôle (contrôle de surface par exemple).<br/>
+	 * type du contrôle ('contrôle de surface' par exemple).<br/>
 	 */
-	protected String typeControle;
+	protected transient String typeControle;
 
 	
 	/**
 	 * nomControle : String :<br/>
 	 * nom du contrôle ('contrôle fichier texte' par exemple).<br/>
 	 */
-	protected String nomControle;
+	protected transient String nomControle;
 
 	
 	/**
 	 * nomCritere : String :<br/>
-	 * nom du critère appliqué dans le contrôle.<br/>
+	 * nom du critère appliqué dans le contrôle 
+	 * ('le fichier ne doit pas comporter de 
+	 * caractères indésirables' par exemple).<br/>
 	 */
-	protected String nomCritere;
+	protected transient String nomCritere;
 	
 	
 	/**
@@ -115,14 +133,25 @@ public abstract class AbstractControle {
 	 * désignation de la gravité de ce contrôle 
 	 * (par exemple '1 - bloquant').<br/>
 	 */
-	protected String gravite;
+	protected transient String gravite;
 
 	
 	/**
-	 * rapport : List<LigneRapport> :<br/>
-	 * rapport fourni par le contrôle.<br/>
+	 * niveauAnomalie : String : <br/>
+	 * Niveau de l'anomalie correspondant au Contrôle
+	 * dans le messagescontroles_fr_FR.properties.<br/>
+	 * Par exemple : "1" pour le ControleurTypeTexte.<br/>
 	 */
-	protected List<LigneRapport> rapport = new ArrayList<LigneRapport>();
+	protected transient String niveauAnomalie;
+	
+
+	/**
+	 * rapport : List&lt;LigneRapport&gt; :<br/>
+	 * rapport fourni par le contrôle sous forme 
+	 * de List&lt;LigneRapport&gt;.<br/>
+	 */
+	protected transient List<LigneRapport> rapport 
+		= new ArrayList<LigneRapport>();
 	
 
 	/**
@@ -146,6 +175,14 @@ public abstract class AbstractControle {
 	 */
 	public static final String METHODE_RECUPERERNIVEAUANOMALIEDANSPROPERTIES 
 		= "Méthode recupererNiveauAnomalieDansProperties()";
+
+	
+	/**
+	 * METHODE_FOURNIRDATEAPARTIRDESTRING : String :<br/>
+	 * "Méthode fournirDateAPartirDeStringFormattee(String pStringFormattee)".<br/>
+	 */
+	public static final String METHODE_FOURNIRDATEAPARTIRDESTRING 
+		= "Méthode fournirDateAPartirDeStringFormattee(String pStringFormattee)";
 	
 	
 	/**
@@ -204,12 +241,6 @@ public abstract class AbstractControle {
 	public static final String SEP_MOINS = " - ";
 
 
-	/**
-	 * nomClasseConcrete : String :<br/>
-	 * nom de la classe de contrôle concrète.<br/>
-	 */
-	protected transient String nomClasseConcrete;
-
 	
 	/**
 	 * NULL : String :<br/>
@@ -245,15 +276,6 @@ public abstract class AbstractControle {
 	 */
 	public static ResourceBundle bundleControles;
 	
-	
-	
-	/**
-	 * niveauAnomalie : String : <br/>
-	 * Niveau de l'anomalie correspondant au Contrôle
-	 * dans le messagescontroles_fr_FR.properties.<br/>
-	 * Par exemple : "1" pour le ControleurTypeTexte.<br/>
-	 */
-	protected String niveauAnomalie;
 	
 
 	/**
@@ -506,60 +528,134 @@ public abstract class AbstractControle {
 
 
 	
-	protected void calculerValeurs() {
-		
-		/* Remplit le nom de la classe concrète. */
-		this.nomClasseConcrete = this.fournirNomClasseConcrete();
-		
-		/* remplit la dateControle. */
-		this.dateControle = this.fournirDate(null);
-		
-		/* remplit la dateControleStringFormattee. */
-		this.dateControleStringFormatee 
-			= this.fournirDateFormattee(this.dateControle);
-		
-		/* remplit le userName. */
-		this.userName = this.fournirUserName(null);
-		
-		/* remplit le nomFichier. */
-		this.nomFichier = this.fournirNomFichier(this.fichier);
-		
-		/* remplit le type du contrôle. */
-		this.typeControle = this.fournirTypeControle();
-		
-		/* remplit le nom du contrôle. */
-		this.nomControle = this.fournirNomControle();
-		
-		/* remplit le nom du critère. */
-		this.nomCritere = this.fournirNomCritere();
-		
-		/* remplit la gravité. */
-		this.gravite = this.fournirGravite();
-		
-	}
-	
 	/**
 	 * method fournirDateSystemeFormattee() :<br/>
-	 * Retourne la date système au format 
+	 * Retourne la date système au format DF_DATETIMEMILLI_FRANCAISE
 	 * des dates-heures françaises avec millisecondes comme
 	 * '25/02/1961-12:27:07.251'.<br/>
 	 * "dd/MM/yyyy-HH:mm:ss.SSS".<br/>.<br/>
 	 * <br/>
 	 *
-	 * @return : String :   la date système au format 
+	 * @return : String : la date système au format 
 	 * "dd/MM/yyyy-HH:mm:ss.SSS".<br/>
 	 */
 	public static String fournirDateSystemeFormattee() {
 		
-		/* Bloc static synchronized. */
-		synchronized (AbstractControle.class) {
-			
-			return DF_DATETIMEMILLI_FRANCAISE.format(new Date());
-			
-		} // Fin du bloc static synchronized.___________
+		return fournirDateStringFormattee(new Date());
 		
 	} // Fin de fournirDateSystemeFormattee()._____________________________
 
+
+	
+	/**
+	 * method fournirDateStringFormattee(
+	 * Date pDate) :<br/>
+	 * Retourne la date pDate au format DF_DATETIMEMILLI_FRANCAISE 
+	 * des dates-heures françaises avec millisecondes comme
+	 * '25/02/1961-12:27:07.251'.<br/>
+	 * "dd/MM/yyyy-HH:mm:ss.SSS".<br/>
+	 * <br/>
+	 * - retourne null si pDate == null.<br/>
+	 * <br/>
+	 * 
+	 * @param pDate : java.util.Date.<br/>
+	 *
+	 * @return : String : la date pDate au format 
+	 * "dd/MM/yyyy-HH:mm:ss.SSS".<br/>
+	 */
+	public static String fournirDateStringFormattee(
+			final Date pDate) {
+				
+		/* Bloc static synchronized. */
+		synchronized (AbstractControle.class) {
+			
+			/* retourne null si pDate == null. */
+			if (pDate == null) {
+				return null;
+			}
+			
+			return DF_DATETIMEMILLI_FRANCAISE.format(pDate);
+			
+		} // Fin du bloc static synchronized.___________
+		
+	} // Fin de fournirDateStringFormattee(
+	 // Date pDate)._______________________________________________________
+	
+
+	
+	/**
+	 * method fournirDateAPartirDeStringFormattee(
+	 * String pDateFormattee) :<br/>
+	 * Retourne une Java.util.Date à partir d'une String formattée 
+	 * selon le format DF_DATETIMEMILLI_FRANCAISE
+	 * des dates-heures françaises avec millisecondes comme
+	 * '25/02/1961-12:27:07.251'.<br/>
+	 * "dd/MM/yyyy-HH:mm:ss.SSS".<br/>
+	 * <br/>
+	 * - retourne null si pDateFormattee est blank.<br/>
+	 * - retourne null et LOG de niveau INFO si
+	 * la date passée en paramètre ne respecte pas le format 
+	 * 'dd/MM/yyyy-HH:mm:ss.SSS'.<br/>
+	 * <br/>
+	 *
+	 * @param pDateFormattee : String : String formattée 
+	 * selon le format DF_DATETIMEMILLI_FRANCAISE
+	 * des dates-heures françaises avec millisecondes comme
+	 * '25/02/1961-12:27:07.251'.<br/>
+	 * 
+	 * @return : Date : java.util.Date.<br/>
+	 */
+	public static Date fournirDateAPartirDeStringFormattee(
+			final String pDateFormattee) {
+		
+		/* Bloc static synchronized. */
+		synchronized (AbstractControle.class) {
+			
+			/* retourne null si pDateFormattee est blank. */
+			if (StringUtils.isBlank(pDateFormattee)) {
+				return null;
+			}
+			
+			Date resultat = null;
+			
+			try {
+				
+				resultat = DF_DATETIMEMILLI_FRANCAISE.parse(pDateFormattee);
+				
+			} catch (ParseException parseExc) {
+
+				final String message 
+				= "la date passée en paramètre ne respecte pas "
+						+ "le format 'dd/MM/yyyy-HH:mm:ss.SSS' "
+						+ pDateFormattee
+						+ " - Exception : "
+						+ parseExc.getMessage();
+
+				/* LOG de niveau INFO. */
+				if (LOG.isInfoEnabled()) {
+
+					final String messageLog = CLASSE_ABSTRACTCONTROLE
+							+ SEP_MOINS + METHODE_FOURNIRDATEAPARTIRDESTRING
+							+ SEP_MOINS + message;
+
+					LOG.info(messageLog, parseExc);
+				}
+
+				/*
+				 * retourne null et LOG de niveau INFO si
+				 * la date passée en paramètre ne respecte pas le format 
+				 * 'dd/MM/yyyy-HH:mm:ss.SSS'.
+				 */
+				return null;
+			}
+			
+			return resultat;
+			
+		} // Fin du bloc static synchronized.___________
+		
+	} // Fin de fournirDateAPartirDeStringFormattee(
+	 // String pDateFormattee).____________________________________________
+	
 	
 	
 	/**
@@ -997,7 +1093,7 @@ public abstract class AbstractControle {
 	 * @param pMethode : String : Méthode appelante.<br/>
 	 * @param pMessage : String : Message particulier de la méthode.<br/>
 	 */
-	protected void loggerInfo(
+	protected final void loggerInfo(
 			final String pClasse
 				, final String pMethode
 					, final String pMessage) {
@@ -1043,7 +1139,7 @@ public abstract class AbstractControle {
 	 * @param pMessage : String : Message particulier de la méthode.<br/>
 	 * @param pComplement : String : Complément au message de la méthode.<br/>
 	 */
-	protected void loggerInfo(
+	protected final void loggerInfo(
 			final String pClasse
 				, final String pMethode
 					, final String pMessage
@@ -1060,9 +1156,9 @@ public abstract class AbstractControle {
 			
 			final String message 
 			= pClasse 
-			+ IConstantesMessage.SEP_MOINS
+			+ SEP_MOINS
 			+ pMethode
-			+ IConstantesMessage.SEP_MOINS
+			+ SEP_MOINS
 			+ pMessage
 			+ pComplement;
 			
@@ -1093,7 +1189,7 @@ public abstract class AbstractControle {
 	 * @param pException : Exception : Exception transmise 
 	 * par la méthode appelante.<br/>
 	 */
-	protected void loggerError(
+	protected final void loggerError(
 			final String pClasse
 				, final String pMethode
 					, final Exception pException) {
@@ -1138,7 +1234,7 @@ public abstract class AbstractControle {
 	 * @return : boolean : true si la ligne de rapport 
 	 * a été ajoutée au rapport.<br/>
 	 */
-	protected boolean ajouterLigneRapport(
+	protected final boolean ajouterLigneRapport(
 			final LigneRapport pLigneRapport) {
 		
 		/* retourne false si pLigneRapport == null. */
@@ -1173,7 +1269,7 @@ public abstract class AbstractControle {
 	 * @return : boolean : true si la ligne de rapport
 	 *  a été retirée du rapport.<br/>
 	 */
-	protected boolean retirerLigneRapport(
+	protected final boolean retirerLigneRapport(
 			final LigneRapport pLigneRapport) {
 		
 		/* retourne false si pLigneRapport == null. */
@@ -1203,7 +1299,7 @@ public abstract class AbstractControle {
 	 * @return : String : String pour affichage de this.rapport 
 	 * au format textuel.<br/>
 	 */
-	public String afficherRapportTextuel() {
+	public final String afficherRapportTextuel() {
 		
 		/* retourne null si this.rapport == null. */
 		if (this.rapport == null) {
@@ -1229,7 +1325,7 @@ public abstract class AbstractControle {
 	 * 
 	 * @return : String : String pour affichage au format textuel.<br/>
 	 */
-	public String afficherRapportTextuel(
+	public final String afficherRapportTextuel(
 			final List<LigneRapport> pList) {
 		
 		/* retourne null si pList == null. */
@@ -1260,7 +1356,7 @@ public abstract class AbstractControle {
 	 * <br/>
 	 * @return String : en-tête du rapport csv.<br/>
 	 */
-	public String getEnTeteCsv() {
+	public final String getEnTeteCsv() {
 		
 		final StringBuilder stb = new StringBuilder();
 		
@@ -1284,6 +1380,7 @@ public abstract class AbstractControle {
 	} // Fin de getEnTeteCsv().____________________________________________
 
 
+	
 	/**
 	 * method afficherRapportCsv() :<br/>
 	 * Affichage au format csv de this.rapport.<br/>
@@ -1295,7 +1392,7 @@ public abstract class AbstractControle {
 	 * @return : String : String pour affichage de this.rapport 
 	 * au format csv.<br/>
 	 */
-	public String afficherRapportCsv() {
+	public final String afficherRapportCsv() {
 		
 		/* retourne null si this.rapport == null. */
 		if (this.rapport == null) {
@@ -1319,7 +1416,7 @@ public abstract class AbstractControle {
 	 * @return : String : String pour affichage de this.rapport 
 	 * au format csv.<br/>
 	 */
-	public String afficherRapportCsvAvecEntete() {
+	public final String afficherRapportCsvAvecEntete() {
 		
 		/* retourne null si this.rapport == null. */
 		if (this.rapport == null) {
@@ -1348,7 +1445,7 @@ public abstract class AbstractControle {
 	 * 
 	 * @return : String : String pour affichage au format csv.<br/>
 	 */
-	public String afficherRapportCsv(
+	public final String afficherRapportCsv(
 			final List<LigneRapport> pList
 				, final boolean pAjouterEntete) {
 		
@@ -1390,7 +1487,7 @@ public abstract class AbstractControle {
 	 *
 	 * @return dateControle : Date.<br/>
 	 */
-	public Date getDateControle() {
+	public final Date getDateControle() {
 		return this.dateControle;
 	} // Fin de getDateControle()._________________________________________
 	
@@ -1401,12 +1498,20 @@ public abstract class AbstractControle {
 	 * Date pDateControle) :<br/>
 	 * Setter de la java.util.Date du contrôle.<br/>
 	 * <br/>
+	 * - calcule automatiquement dateControleStringFormattee.<br/>
+	 * <br/>
 	 *
 	 * @param pDateControle : Date : valeur à passer à dateControle.<br/>
 	 */
-	public void setDateControle(
+	public final void setDateControle(
 			final Date pDateControle) {
+		
 		this.dateControle = pDateControle;
+		
+		/* calcule automatiquement dateControleStringFormattee. */
+		this.dateControleStringFormatee 
+			= this.fournirDateFormattee(this.dateControle);
+		
 	} // Fin de setDateControle(
 	 // Date pDateControle)._______________________________________________
 	
@@ -1423,30 +1528,9 @@ public abstract class AbstractControle {
 	 *
 	 * @return dateControleStringFormatee : String.<br/>
 	 */
-	public String getDateControleStringFormatee() {
+	public final String getDateControleStringFormatee() {
 		return this.dateControleStringFormatee;
 	} // Fin de getDateControleStringFormatee().___________________________
-
-
-
-	/**
-	 * method setDateControleStringFormatee(
-	 * String pDateControleStringFormatee) :<br/>
-	 * Setter de la date du contrôle formattée 
-	 * au format dfDatetimemilliFrancaise.<br/>
-	 * Format des dates-heures françaises avec millisecondes comme
-	 * '25/02/1961-12:27:07.251'.<br/>
-	 * "dd/MM/yyyy-HH:mm:ss.SSS".<br/>
-	 * <br/>
-	 *
-	 * @param pDateControleStringFormatee : String : 
-	 * valeur à passer à dateControleStringFormatee.<br/>
-	 */
-	public void setDateControleStringFormatee(
-			final String pDateControleStringFormatee) {
-		this.dateControleStringFormatee = pDateControleStringFormatee;
-	} // Fin de setDateControleStringFormatee(
-	 // String pDateControleStringFormatee)._______________________________
 
 
 
@@ -1468,13 +1552,16 @@ public abstract class AbstractControle {
 	 * String pUserName) :<br/>
 	 * Setter du nom de l'utilisateur qui a déclenché le contrôle.<br/>
 	 * <br/>
+	 * remplit userName avec pUserName si pUserName != null 
+	 * ou 'Administrateur' sinon.<br/>
+	 * <br/>
 	 *
 	 * @param pUserName : String : 
 	 * valeur à passer à userName.<br/>
 	 */
 	public final void setUserName(
 			final String pUserName) {
-		this.userName = pUserName;
+		this.userName = this.fournirUserName(pUserName);
 	} // Fin de setUserName(
 	 // String pUserName)._________________________________________________
 
@@ -1487,7 +1574,7 @@ public abstract class AbstractControle {
 	 *
 	 * @return fichier : File.<br/>
 	 */
-	public File getFichier() {
+	public final File getFichier() {
 		return this.fichier;
 	} // Fin de getFichier().______________________________________________
 
@@ -1503,7 +1590,7 @@ public abstract class AbstractControle {
 	 *
 	 * @param pFichier : File : valeur à passer à fichier.<br/>
 	 */
-	public void setFichier(
+	public final void setFichier(
 			final File pFichier) {
 		
 		this.fichier = pFichier;
@@ -1530,25 +1617,8 @@ public abstract class AbstractControle {
 
 
 	/**
-	 * method setNomFichier(
-	 * String pNomFichier) :<br/>
-	 * Setter du nom du fichier objet du contrôle.<br/>
-	 * <br/>
-	 *
-	 * @param pNomFichier : String : 
-	 * valeur à passer à nomFichier.<br/>
-	 */
-	public final void setNomFichier(
-			final String pNomFichier) {
-		this.nomFichier = pNomFichier;
-	} // Fin de setNomFichier(
-	 // String pNomFichier)._______________________________________________
-
-
-
-	/**
 	 * method getTypeControle() :<br/>
-	 * Getter du type du contrôle (contrôle de surface par exemple).<br/>
+	 * Getter du type du contrôle ('contrôle de surface' par exemple).<br/>
 	 * <br/>
 	 *
 	 * @return typeControle : String.<br/>
@@ -1558,27 +1628,10 @@ public abstract class AbstractControle {
 	} // Fin de getTypeControle()._________________________________________
 
 
-
-	/**
-	 * method setTypeControle(
-	 * String pTypeControle) :<br/>
-	 * Setter du type du contrôle (contrôle de surface par exemple).<br/>
-	 * <br/>
-	 *
-	 * @param pTypeControle : String : 
-	 * valeur à passer à typeControle.<br/>
-	 */
-	public final void setTypeControle(
-			final String pTypeControle) {
-		this.typeControle = pTypeControle;
-	} // Fin de setTypeControle(
-	 // String pTypeControle)._____________________________________________
-
-
 	
 	/**
 	 * method getNomControle() :<br/>
-	 * Getter du nom du contrôle (contrôle fichier texte par exemple).<br/>
+	 * Getter du nom du contrôle ('contrôle fichier texte' par exemple).<br/>
 	 * <br/>
 	 *
 	 * @return nomControle : String.<br/>
@@ -1590,79 +1643,17 @@ public abstract class AbstractControle {
 
 
 	/**
-	 * method setNomControle(
-	 * String pNomControle) :<br/>
-	 * Setter du nom du contrôle (contrôle fichier texte par exemple).<br/>
-	 * <br/>
-	 *
-	 * @param pNomControle : String : 
-	 * valeur à passer à nomControle.<br/>
-	 */
-	public final void setNomControle(
-			final String pNomControle) {
-		this.nomControle = pNomControle;
-	} // Fin de setNomControle(
-	 // String pNomControle).______________________________________________
-
-
-
-	/**
 	 * method getNomCritere() :<br/>
-	 * Getter du nom du critère appliqué dans le contrôle.<br/>
+	 * Getter du nom du critère appliqué dans le contrôle 
+	 * ('le fichier ne doit pas comporter de 
+	 * caractères indésirables' par exemple).<br/>
 	 * <br/>
 	 *
 	 * @return nomCritere : String.<br/>
 	 */
-	public String getNomCritere() {
+	public final String getNomCritere() {
 		return this.nomCritere;
 	} // Fin de getNomCritere().___________________________________________
-
-
-
-	/**
-	 * method setNomCritere(
-	 * String pNomCritere) :<br/>
-	 * Setter du nom du critère appliqué dans le contrôle.<br/>
-	 * <br/>
-	 *
-	 * @param pNomCritere : String : 
-	 * valeur à passer à nomCritere.<br/>
-	 */
-	public void setNomCritere(
-			final String pNomCritere) {
-		this.nomCritere = pNomCritere;
-	} // Fin de setNomCritere(
-	 // String pNomCritere)._______________________________________________
-
-
-
-	/**
-	 * method getRapport() :<br/>
-	 * Getter du rapport fourni par le contrôle.<br/>
-	 * <br/>
-	 *
-	 * @return rapport : List&lt;LigneRapport&gt;.<br/>
-	 */
-	public List<LigneRapport> getRapport() {
-		return this.rapport;
-	} // Fin de getRapport().______________________________________________
-
-
-
-	/**
-	 * method setRapport(
-	 * List&lt;LigneRapport&gt; pRapport) :<br/>
-	 * Setter du rapport fourni par le contrôle.<br/>
-	 * <br/>
-	 *
-	 * @param pRapport : List&lt;LigneRapport&gt; : 
-	 * valeur à passer à rapport.<br/>
-	 */
-	public void setRapport(
-			final List<LigneRapport> pRapport) {
-		this.rapport = pRapport;
-	} // Fin de setRapport(
-	 // List<LigneRapport> pRapport).______________________________________
 
 
 
@@ -1681,23 +1672,6 @@ public abstract class AbstractControle {
 
 
 	/**
-	 * method setGravite(
-	 * String pGravite) :<br/>
-	 * Setter de la désignation de la gravité de ce contrôle 
-	 * (par exemple '1 - bloquant').<br/>
-	 * <br/>
-	 *
-	 * @param pGravite : String : valeur à passer à gravite.<br/>
-	 */
-	public final void setGravite(
-			final String pGravite) {
-		this.gravite = pGravite;
-	} // Fin de setGravite(
-	 // String pGravite).__________________________________________________
-
-
-
-	/**
 	 * method getNiveauAnomalie() :<br/>
 	 * Getter du Niveau de l'anomalie correspondant au Contrôle
 	 * dans le messagescontroles_fr_FR.properties.<br/>
@@ -1706,28 +1680,23 @@ public abstract class AbstractControle {
 	 *
 	 * @return niveauAnomalie : String.<br/>
 	 */
-	public String getNiveauAnomalie() {
+	public final String getNiveauAnomalie() {
 		return this.niveauAnomalie;
 	} // Fin de getNiveauAnomalie()._______________________________________
 
 
 
 	/**
-	 * method setNiveauAnomalie(
-	 * String pNiveauAnomalie) :<br/>
-	 * Setter du Niveau de l'anomalie correspondant au Contrôle
-	 * dans le messagescontroles_fr_FR.properties.<br/>
-	 * Par exemple : "1" pour le ControleurTypeTexte.<br/>
+	 * method getRapport() :<br/>
+	 * Getter du rapport fourni par le contrôle sous forme 
+	 * de List&lt;LigneRapport&gt;.<br/>
 	 * <br/>
 	 *
-	 * @param pNiveauAnomalie : String : valeur à passer à niveauAnomalie.<br/>
+	 * @return rapport : List&lt;LigneRapport&gt;.<br/>
 	 */
-	public void setNiveauAnomalie(
-			final String pNiveauAnomalie) {
-		this.niveauAnomalie = pNiveauAnomalie;
-	} // Fin de setNiveauAnomalie(
-	 // String pNiveauAnomalie).___________________________________________
-
+	public final List<LigneRapport> getRapport() {
+		return this.rapport;
+	} // Fin de getRapport().______________________________________________
 
 
 	
