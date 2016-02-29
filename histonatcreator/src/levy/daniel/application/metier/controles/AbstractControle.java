@@ -1,14 +1,12 @@
 package levy.daniel.application.metier.controles;
 
 import java.io.File;
-import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
@@ -22,18 +20,29 @@ import levy.daniel.application.metier.rapportscontroles.LigneRapport;
 /**
  * class AbstractControle :<br/>
  * Abstraction qui garantit que :<br/>
- * - Tout contrôle est effectué à une 'dateContrôle'.<br/>
+ * - Tout contrôle est effectué à une 'dateContrôle'. 
+ * La classe calcule automatiquement 'dateControleStringFormatee' 
+ * connaissant dateControle.<br/>
  * - Tout contrôle est effectué par un utilisateur (user) 
- * dont on connait le nom 'userName'.<br/>
- * - Tout contrôle s'applique sur un File 'fichier'.<br/>
+ * dont on connait le nom 'userName'. La classe remplit automatiquement 
+ * userName avec 'Administrateur' si on ne lui fournit pas de userName.<br/>
+ * - Tout contrôle s'applique sur un File 'fichier'. 
+ * La classe calcule automatiquement 'nomFichier' connaissant fichier.<br/>
  * - Tout contrôle appartient à un type de contrôle 'typeControle' 
- * comme "contrôle de surface".<br/>
- * - Tout contrôle a un nom 'nomControle' comme 'contrôle fichier texte'.<br/>
+ * comme "contrôle de surface". 
+ * 'typeControle' est fourni par chaque classe concrète.<br/>
+ * - Tout contrôle a un nom 'nomControle' comme 'contrôle fichier texte'. 
+ * 'nomControle' est fourni par chaque classe concrète.<br/>
  * - Tout contrôle vérifie un critère 'nomCritere' comme 
- * 'le fichier ne doit pas comporter de caractères indésirables'.<br/>
+ * 'le fichier ne doit pas comporter de caractères indésirables'. 
+ * 'nomCritere' est fourni par chaque classe concrète.<br/>
  * - Tout contrôle a une gravité 'gravite' comme '1 - bloquant'. 
  * Cette gravité est directement liée au niveau d'anomalie du contrôle 
- * 'niveauAnomalie' comme "1" pour bloquant<br/>
+ * 'niveauAnomalie' comme "1" pour bloquant. 
+ * Chaque classe concrète fournit le 'niveauAnomalie' du contrôle 
+ * via sa méthode fournirCleNiveauAnomalie() qui permet d'aller 
+ * chercher la valeur dans messagescontroles_fr_FR.properties 
+ * ou via fournirNiveauAnomalieEnDur().<br/>
  * - Tout contrôle fournit un rapport de contrôle 
  * sous forme de List&lt;LigneRapport&gt; 'rapport'.<br/>
  * <br/>
@@ -56,7 +65,7 @@ import levy.daniel.application.metier.rapportscontroles.LigneRapport;
  * @since 27 févr. 2016
  *
  */
-public abstract class AbstractControle {
+public abstract class AbstractControle implements IControle {
 
 	// ************************ATTRIBUTS************************************/
 
@@ -186,13 +195,6 @@ public abstract class AbstractControle {
 	
 	
 	/**
-	 * LOCALE_FR_FR : Locale :<br/>
-	 * new Locale("fr", "FR").<br/>
-	 */
-	public static final Locale LOCALE_FR_FR = new Locale("fr", "FR");
-
-
-	/**
 	 * dfDatetimemilliFrancaise : DateFormat :<br/>
 	 * Format des dates-heures françaises avec millisecondes comme
 	 * '25/02/1961-12:27:07.251'.<br/>
@@ -200,75 +202,6 @@ public abstract class AbstractControle {
 	 */
 	public final transient DateFormat dfDatetimemilliFrancaise 
 	= new SimpleDateFormat("dd/MM/yyyy-HH:mm:ss.SSS", LOCALE_FR_FR);
-	
-	/**
-	 * DF_DATETIMEMILLI_FRANCAISE : DateFormat :<br/>
-	 * Format des dates-heures françaises avec millisecondes comme
-	 * '25/02/1961-12:27:07.251'.<br/>
-	 * "dd/MM/yyyy-HH:mm:ss.SSS".<br/>
-	 */
-	public static final DateFormat DF_DATETIMEMILLI_FRANCAISE 
-	= new SimpleDateFormat("dd/MM/yyyy-HH:mm:ss.SSS", LOCALE_FR_FR);
-
-	/**
-	 * NEWLINE : String :<br/>
-	 * Saut de ligne spécifique de la plateforme.<br/>
-	 * System.getProperty("line.separator").<br/>
-	 */
-	public static final String NEWLINE = System.getProperty("line.separator");
-
-	
-	/**
-	 * CHARSET_UTF8 : Charset :<br/>
-	 * Charset.forName("UTF-8").<br/>
-	 */
-	public static final Charset CHARSET_UTF8 = Charset.forName("UTF-8");
-
-
-	/**
-	 * CARACTERE_REMPLACEMENT : char :<br/>
-	 * Caractère de remplacement introduit lors de la lecture en UTF-8 
-	 * d'un fichier texte encodé avec un autre Charset.<br/>
-	 * REPLACEMENT CHARACTER."\\ufffd" '�'.<br/> 
-	 */
-	public static final char CARACTERE_REMPLACEMENT = '\ufffd';
-
-
-	/**
-	 * SEP_MOINS : String :<br/>
-	 * " - ".<br/>
-	 */
-	public static final String SEP_MOINS = " - ";
-
-
-	
-	/**
-	 * NULL : String :<br/>
-	 * "null".<br/>
-	 */
-	public static final String NULL = "null";
-
-	
-	/**
-	 * SANS_OBJET : String :<br/>
-	 * "sans objet".<br/>
-	 */
-	public static final String SANS_OBJET = "sans objet";
-
-	
-	/**
-	 * TOUS : String :<br/>
-	 * "tous".<br/>
-	 */
-	public static final String TOUS = "tous";
-
-	
-	 /**
-	 * ACTION_FICHIER_REFUSE : String :<br/>
-	 * "Fichier refusé".<br/>
-	 */
-	public static final String ACTION_FICHIER_REFUSE = "Fichier refusé";
-	
 	
 	/**
 	 * bundleControles : ResourceBundle :<br/>
@@ -1290,15 +1223,9 @@ public abstract class AbstractControle {
 
 	
 	/**
-	 * method afficherRapportTextuel() :<br/>
-	 * Affichage au format textuel de this.rapport.<br/>
-	 * <br/>
-	 * - retourne null si this.rapport == null.<br/>
-	 * <br/>
-	 *
-	 * @return : String : String pour affichage de this.rapport 
-	 * au format textuel.<br/>
+	 * {@inheritDoc}
 	 */
+	@Override
 	public final String afficherRapportTextuel() {
 		
 		/* retourne null si this.rapport == null. */
@@ -1313,18 +1240,9 @@ public abstract class AbstractControle {
 
 	
 	/**
-	 * method afficherRapportTextuel(
-	 * List&lt;LigneRapport&gt; pList) :<br/>
-	 * Affichage dans la console d'une List&lt;LigneRapport&gt; 
-	 * au format textuel.<br/>
-	 * <br/>
-	 * - retourne null si pList == null.<br/>
-	 * <br/>
-	 *
-	 * @param pList : List&lt;LigneRapport&gt;.<br/>
-	 * 
-	 * @return : String : String pour affichage au format textuel.<br/>
+	 * {@inheritDoc}
 	 */
+	@Override
 	public final String afficherRapportTextuel(
 			final List<LigneRapport> pList) {
 		
@@ -1348,14 +1266,9 @@ public abstract class AbstractControle {
 
 
 	/**
-	 * retourne : <br/>
-	 * "id;date du contrôle;utilisateur;Fichier;type de contrôle;
-	 * Contrôle;Critère;Gravité;
-	 * Numéro de Ligne;Message du Contrôle;Ordre du Champ;Position du Champ;
-	 * Valeur du Champ;Action;"<br/>
-	 * <br/>
-	 * @return String : en-tête du rapport csv.<br/>
+	 * {@inheritDoc}
 	 */
+	@Override
 	public final String getEnTeteCsv() {
 		
 		final StringBuilder stb = new StringBuilder();
@@ -1382,16 +1295,9 @@ public abstract class AbstractControle {
 
 	
 	/**
-	 * method afficherRapportCsv() :<br/>
-	 * Affichage au format csv de this.rapport.<br/>
-	 * <br/>
-	 * - n'ajoute pas l'en-tête du rapport csv.<br/>
-	 * - retourne null si this.rapport == null.<br/>
-	 * <br/>
-	 *
-	 * @return : String : String pour affichage de this.rapport 
-	 * au format csv.<br/>
+	 * {@inheritDoc}
 	 */
+	@Override
 	public final String afficherRapportCsv() {
 		
 		/* retourne null si this.rapport == null. */
@@ -1406,16 +1312,9 @@ public abstract class AbstractControle {
 
 	
 	/**
-	 * method afficherRapportCsvAvecEntete() :<br/>
-	 * Affichage au format csv de this.rapport.<br/>
-	 * <br/>
-	 * - Ajoute l'en-tête du rapport csv.<br/>
-	 * - retourne null si this.rapport == null.<br/>
-	 * <br/>
-	 *
-	 * @return : String : String pour affichage de this.rapport 
-	 * au format csv.<br/>
+	 * {@inheritDoc}
 	 */
+	@Override
 	public final String afficherRapportCsvAvecEntete() {
 		
 		/* retourne null si this.rapport == null. */
@@ -1430,21 +1329,9 @@ public abstract class AbstractControle {
 
 
 	/**
-	 * method afficherRapportCsv(
-	 * List&lt;LigneRapport&gt; pList
-	 * , boolean pAjouterEntete) :<br/>
-	 * Affichage dans la console d'une List&lt;LigneRapport&gt; 
-	 * au format csv.<br/>
-	 * <br/>
-	 * - ajoute l'en-tête du rapport csv si pAjouterEntete vaut true.<br/>
-	 * - retourne null si pList == null.<br/>
-	 * <br/>
-	 *
-	 * @param pList : List&lt;LigneRapport&gt;.<br/>
-	 * @param pAjouterEntete 
-	 * 
-	 * @return : String : String pour affichage au format csv.<br/>
+	 * {@inheritDoc}
 	 */
+	@Override
 	public final String afficherRapportCsv(
 			final List<LigneRapport> pList
 				, final boolean pAjouterEntete) {
@@ -1481,12 +1368,9 @@ public abstract class AbstractControle {
 	
 	
 	/**
-	 * method getDateControle() :<br/>
-	 * Getter de la java.util.Date du contrôle.<br/>
-	 * <br/>
-	 *
-	 * @return dateControle : Date.<br/>
+	 * {@inheritDoc}
 	 */
+	@Override
 	public final Date getDateControle() {
 		return this.dateControle;
 	} // Fin de getDateControle()._________________________________________
@@ -1494,15 +1378,9 @@ public abstract class AbstractControle {
 	
 
 	/**
-	 * method setDateControle(
-	 * Date pDateControle) :<br/>
-	 * Setter de la java.util.Date du contrôle.<br/>
-	 * <br/>
-	 * - calcule automatiquement dateControleStringFormattee.<br/>
-	 * <br/>
-	 *
-	 * @param pDateControle : Date : valeur à passer à dateControle.<br/>
+	 * {@inheritDoc}
 	 */
+	@Override
 	public final void setDateControle(
 			final Date pDateControle) {
 		
@@ -1518,16 +1396,9 @@ public abstract class AbstractControle {
 	
 
 	/**
-	 * method getDateControleStringFormatee() :<br/>
-	 * Getter de la date du contrôle formattée 
-	 * au format dfDatetimemilliFrancaise.<br/>
-	 * Format des dates-heures françaises avec millisecondes comme
-	 * '25/02/1961-12:27:07.251'.<br/>
-	 * "dd/MM/yyyy-HH:mm:ss.SSS".<br/>
-	 * <br/>
-	 *
-	 * @return dateControleStringFormatee : String.<br/>
+	 * {@inheritDoc}
 	 */
+	@Override
 	public final String getDateControleStringFormatee() {
 		return this.dateControleStringFormatee;
 	} // Fin de getDateControleStringFormatee().___________________________
@@ -1535,12 +1406,9 @@ public abstract class AbstractControle {
 
 
 	/**
-	 * method getUserName() :<br/>
-	 * Getter du nom de l'utilisateur qui a déclenché le contrôle.<br/>
-	 * <br/>
-	 *
-	 * @return userName : String.<br/>
+	 * {@inheritDoc}
 	 */
+	@Override
 	public final String getUserName() {
 		return this.userName;
 	} // Fin de getUserName()._____________________________________________
@@ -1548,17 +1416,9 @@ public abstract class AbstractControle {
 
 
 	/**
-	 * method setUserName(
-	 * String pUserName) :<br/>
-	 * Setter du nom de l'utilisateur qui a déclenché le contrôle.<br/>
-	 * <br/>
-	 * remplit userName avec pUserName si pUserName != null 
-	 * ou 'Administrateur' sinon.<br/>
-	 * <br/>
-	 *
-	 * @param pUserName : String : 
-	 * valeur à passer à userName.<br/>
+	 * {@inheritDoc}
 	 */
+	@Override
 	public final void setUserName(
 			final String pUserName) {
 		this.userName = this.fournirUserName(pUserName);
@@ -1568,12 +1428,9 @@ public abstract class AbstractControle {
 
 
 	/**
-	 * method getFichier() :<br/>
-	 * Getter du fichier sur lequel s'applique le contrôle.<br/>
-	 * <br/>
-	 *
-	 * @return fichier : File.<br/>
+	 * {@inheritDoc}
 	 */
+	@Override
 	public final File getFichier() {
 		return this.fichier;
 	} // Fin de getFichier().______________________________________________
@@ -1581,15 +1438,9 @@ public abstract class AbstractControle {
 
 
 	/**
-	 * method setFichier(
-	 * File pFichier) :<br/>
-	 * Setter du fichier sur lequel s'applique le contrôle.<br/>
-	 * <br/>
-	 * - calcule automatiquement nomFichier.<br/>
-	 * <br/>
-	 *
-	 * @param pFichier : File : valeur à passer à fichier.<br/>
+	 * {@inheritDoc}
 	 */
+	@Override
 	public final void setFichier(
 			final File pFichier) {
 		
@@ -1604,12 +1455,9 @@ public abstract class AbstractControle {
 
 
 	/**
-	 * method getNomFichier() :<br/>
-	 * Getter du nom du fichier objet du contrôle.<br/>
-	 * <br/>
-	 *
-	 * @return nomFichier : String.<br/>
+	 * {@inheritDoc}
 	 */
+	@Override
 	public final String getNomFichier() {
 		return this.nomFichier;
 	} // Fin de getNomFichier().___________________________________________
@@ -1617,12 +1465,9 @@ public abstract class AbstractControle {
 
 
 	/**
-	 * method getTypeControle() :<br/>
-	 * Getter du type du contrôle ('contrôle de surface' par exemple).<br/>
-	 * <br/>
-	 *
-	 * @return typeControle : String.<br/>
+	 * {@inheritDoc}
 	 */
+	@Override
 	public final String getTypeControle() {
 		return this.typeControle;
 	} // Fin de getTypeControle()._________________________________________
@@ -1630,12 +1475,9 @@ public abstract class AbstractControle {
 
 	
 	/**
-	 * method getNomControle() :<br/>
-	 * Getter du nom du contrôle ('contrôle fichier texte' par exemple).<br/>
-	 * <br/>
-	 *
-	 * @return nomControle : String.<br/>
+	 * {@inheritDoc}
 	 */
+	@Override
 	public final String getNomControle() {
 		return this.nomControle;
 	} // Fin de getNomControle().__________________________________________
@@ -1643,14 +1485,9 @@ public abstract class AbstractControle {
 
 
 	/**
-	 * method getNomCritere() :<br/>
-	 * Getter du nom du critère appliqué dans le contrôle 
-	 * ('le fichier ne doit pas comporter de 
-	 * caractères indésirables' par exemple).<br/>
-	 * <br/>
-	 *
-	 * @return nomCritere : String.<br/>
+	 * {@inheritDoc}
 	 */
+	@Override
 	public final String getNomCritere() {
 		return this.nomCritere;
 	} // Fin de getNomCritere().___________________________________________
@@ -1658,13 +1495,9 @@ public abstract class AbstractControle {
 
 
 	/**
-	 * method getGravite() :<br/>
-	 * Getter de la désignation de la gravité de ce contrôle 
-	 * (par exemple '1 - bloquant').<br/>
-	 * <br/>
-	 *
-	 * @return gravite : String.<br/>
+	 * {@inheritDoc}
 	 */
+	@Override
 	public final String getGravite() {
 		return this.gravite;
 	} // Fin de getGravite().______________________________________________
@@ -1672,14 +1505,9 @@ public abstract class AbstractControle {
 
 
 	/**
-	 * method getNiveauAnomalie() :<br/>
-	 * Getter du Niveau de l'anomalie correspondant au Contrôle
-	 * dans le messagescontroles_fr_FR.properties.<br/>
-	 * Par exemple : "1" pour le ControleurTypeTexte.<br/>
-	 * <br/>
-	 *
-	 * @return niveauAnomalie : String.<br/>
+	 * {@inheritDoc}
 	 */
+	@Override
 	public final String getNiveauAnomalie() {
 		return this.niveauAnomalie;
 	} // Fin de getNiveauAnomalie()._______________________________________
@@ -1687,13 +1515,9 @@ public abstract class AbstractControle {
 
 
 	/**
-	 * method getRapport() :<br/>
-	 * Getter du rapport fourni par le contrôle sous forme 
-	 * de List&lt;LigneRapport&gt;.<br/>
-	 * <br/>
-	 *
-	 * @return rapport : List&lt;LigneRapport&gt;.<br/>
+	 * {@inheritDoc}
 	 */
+	@Override
 	public final List<LigneRapport> getRapport() {
 		return this.rapport;
 	} // Fin de getRapport().______________________________________________

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import levy.daniel.application.metier.controles.AbstractControle;
+import levy.daniel.application.metier.controles.impl.controlessurface.ControleurTypeTexte;
 import levy.daniel.application.metier.rapportscontroles.LigneRapport;
 
 import org.apache.commons.logging.Log;
