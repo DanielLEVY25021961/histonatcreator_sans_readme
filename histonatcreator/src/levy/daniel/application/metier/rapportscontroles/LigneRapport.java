@@ -110,7 +110,7 @@ public class LigneRapport implements Serializable, Comparable<Object>
 	
 	/**
 	 * typeControle : String :<br/>
-	 * type du contrôle (contrôle de surface par exemple).<br/>
+	 * type du contrôle ('contrôle de surface' par exemple).<br/>
 	 */
 	private String typeControle;
 
@@ -133,7 +133,8 @@ public class LigneRapport implements Serializable, Comparable<Object>
 	
 	/**
 	 * gravite : String :<br/>
-	 * désignation de la gravité de ce contrôle (par exemple 'bloquant').<br/>
+	 * désignation de la gravité de ce contrôle 
+	 * (par exemple '1 - bloquant').<br/>
 	 */
 	private String gravite;
 	
@@ -171,7 +172,7 @@ public class LigneRapport implements Serializable, Comparable<Object>
 	
 	/**
 	 * valeurChamp : String :<br/>
-	 * valeur prise par le champ contrôlé.<br/>
+	 * valeur prise par le champ contrôlé exprimée sous forme de String.<br/>
 	 */
 	private String valeurChamp;
 

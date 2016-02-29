@@ -43,6 +43,9 @@ import levy.daniel.application.metier.rapportscontroles.LigneRapport;
  * via sa méthode fournirCleNiveauAnomalie() qui permet d'aller 
  * chercher la valeur dans messagescontroles_fr_FR.properties 
  * ou via fournirNiveauAnomalieEnDur().<br/>
+ * - Tout contrôle sait si il est bloquant via 'estBloquant'. 
+ * La classe remplit automatiquement 'estBloquant' 
+ * connaissant niveauAnomalie.<br/>
  * - Tout contrôle fournit un rapport de contrôle 
  * sous forme de List&lt;LigneRapport&gt; 'rapport'.<br/>
  * <br/>
@@ -155,6 +158,14 @@ public abstract class AbstractControle implements IControle {
 	
 
 	/**
+	 * estBloquant : boolean :<br/>
+	 * boolean qui stipule si le contrôle doit pouvoir 
+	 * bloquer le programme.<br/>
+	 */
+	protected transient boolean estBloquant;
+	
+	
+	/**
 	 * rapport : List&lt;LigneRapport&gt; :<br/>
 	 * rapport fourni par le contrôle sous forme 
 	 * de List&lt;LigneRapport&gt;.<br/>
@@ -239,7 +250,8 @@ public abstract class AbstractControle implements IControle {
 	 * this.fournirNomControle() dans la classe concrète.<br/>
 	 * - Remplit le nom du critère nomCritere fourni par 
 	 * this.fournirNomCritere() dans la classe concrète.<br/>
-	 * - Remplit gravite (ce qui remplit également niveauAnomalie).<br/>
+	 * - Remplit gravite (ce qui remplit également niveauAnomalie 
+	 * et estBloquant).<br/>
 	 * <br/>
 	 */
 	public AbstractControle() {
@@ -268,7 +280,8 @@ public abstract class AbstractControle implements IControle {
 	 * this.fournirNomControle() dans la classe concrète.<br/>
 	 * - Remplit le nom du critère nomCritere fourni par 
 	 * this.fournirNomCritere() dans la classe concrète.<br/>
-	 * - Remplit gravite (ce qui remplit également niveauAnomalie).<br/>
+	 * - Remplit gravite (ce qui remplit également niveauAnomalie 
+	 * et estBloquant).<br/>
 	 * <br/>
 	 *
 	 * @param pFichier : File : fichier sur lequel s'applique le contrôle.<br/>
@@ -303,7 +316,8 @@ public abstract class AbstractControle implements IControle {
 	 * this.fournirNomControle() dans la classe concrète.<br/>
 	 * - Remplit le nom du critère nomCritere fourni par 
 	 * this.fournirNomCritere() dans la classe concrète.<br/>
-	 * - Remplit gravite (ce qui remplit également niveauAnomalie).<br/>
+	 * - Remplit gravite (ce qui remplit également niveauAnomalie 
+	 * et estBloquant).<br/>
 	 * <br/>
 	 *
 	 * @param pUserName : String : nom de l'utilisateur 
@@ -340,7 +354,8 @@ public abstract class AbstractControle implements IControle {
 	 * this.fournirNomControle() dans la classe concrète.<br/>
 	 * - Remplit le nom du critère nomCritere fourni par 
 	 * this.fournirNomCritere() dans la classe concrète.<br/>
-	 * - Remplit gravite (ce qui remplit également niveauAnomalie).<br/>
+	 * - Remplit gravite (ce qui remplit également niveauAnomalie 
+	 * et estBloquant).<br/>
 	 * <br/>
 	 *
 	 * @param pDateControle : Date : java.util.Date du contrôle.<br/>
@@ -394,7 +409,8 @@ public abstract class AbstractControle implements IControle {
 		 * par this.fournirNomCritere() dans la classe concrète. */
 		this.nomCritere = this.fournirNomCritere();
 		
-		/* Remplit gravite (ce qui remplit également niveauAnomalie). */
+		/* Remplit gravite (ce qui remplit également niveauAnomalie 
+		 * et estBloquant). */
 		this.gravite = this.fournirGravite();
 		
 		
@@ -750,6 +766,7 @@ public abstract class AbstractControle implements IControle {
 	/**
 	 * method fournirGravite() :<br/>
 	 * - remplit this.niveauAnomalie.<br/>
+	 * - remplit this.estBloquant.
 	 * - Constitue la clé de la gravité (label) 
 	 * de l'anomalie dans messagescontroles_fr_FR.properties 
 	 * comme "label.niveau1".<br/>
@@ -768,6 +785,9 @@ public abstract class AbstractControle implements IControle {
 		
 		/* remplit this.niveauAnomalie. */
 		this.niveauAnomalie = this.fournirNiveauAnomalie(null);
+		
+		/* remplit this.estBloquant. */
+		this.estBloquant = this.fournirEstBloquant(this.niveauAnomalie);
 		
 		/* Constitue la clé de la gravité (label) 
 		 * de l'anomalie dans messagescontroles_fr_FR.properties. */
@@ -826,6 +846,43 @@ public abstract class AbstractControle implements IControle {
 	 // String pNiveauAnomalie).___________________________________________
 	
 
+	
+	/**
+	 * method fournirEstBloquant(
+	 * String pNiveauAnomalie) :<br/>
+	 * Décide si le contrôle est bloquant 
+	 * en fonction de son niveauAnomalie.<br/>
+	 * <br/>
+	 * - retourne true si pNiveauAnomalie nettoyé vaut "1".<br/>
+	 * - retourne false sinon.<br/>
+	 * <br/>
+	 * - retourne false si pNiveauAnomalie est blank.<br/>
+	 * <br/>
+	 *
+	 * @param pNiveauAnomalie : String : "1" pour bloquant.<br/>
+	 * 
+	 * @return : boolean : true si le contrôle est bloquant.<br/>
+	 */
+	private boolean fournirEstBloquant(
+			final String pNiveauAnomalie) {
+		
+		/* retourne false si pNiveauAnomalie est blank. */
+		if (StringUtils.isBlank(pNiveauAnomalie)) {
+			return false;
+		}
+		
+		/* retourne true si pNiveauAnomalie nettoyé vaut "1". */
+		if (StringUtils.equals("1", StringUtils.trim(pNiveauAnomalie))) {
+			return true;
+		}
+		
+		/* retourne false sinon. */
+		return false;
+		
+	} // Fin de fournirEstBloquant(
+	 // String pNiveauAnomalie).___________________________________________
+	
+	
 	
 	/**
 	 * method recupererNiveauAnomalieDansProperties() :<br/>
@@ -1223,6 +1280,82 @@ public abstract class AbstractControle implements IControle {
 
 	
 	/**
+	 * method creerLigneRapport(
+	 * Integer pNumeroLigne
+	 * , String pMessageControle
+	 * , Integer pOrdreChamp
+	 * , String pPositionChamp
+	 * , String pValeurChamp
+	 * , String pAction) :<br/>
+	 * Crée et retourne une ligne de rapport LigneRapport 
+	 * avec des attributs pré-remplis et les valeurs passées en paramètre.<br/>
+	 * <br/>
+	 * Liste des attributs pré-remplis : <br/>
+	 * - Met automatiquement this.dateControleStringFormatee 
+	 * dans la date d'exécution du contrôle 'dateControle'.<br/>
+	 * - Met automatiquement this.userName dans le nom 
+	 * de l'utilisateur qui a déclenché le contrôle 'userName'.<br/>
+	 * - Met automatiquement this.nomFichier dans le nom du fichier 
+	 * objet du contrôle 'nomFichier'.<br/>
+	 * - Met automatiquement this.typeControle dans le type du contrôle 
+	 * ('contrôle de surface' par exemple) 'typeControle'.<br/>
+	 * - Met automatiquement this.nomControle dans le nom du contrôle 
+	 * ('contrôle fichier texte' par exemple) 'nomControle'.<br/>
+	 * - Met automatiquement this.nomCritere dans la désignation 
+	 * du critère vérifié par le contrôle 
+	 * ('une ligne ne doit pas être vide' par exemple) 'critere'.<br/>
+	 * - Met automatiquement this.gravite dans la désignation 
+	 * de la gravité de ce contrôle (par exemple '1 - bloquant') 'gravité'.<br/>
+	 * <br/>
+	 *
+	 * @param pNumeroLigne : Integer : numéro de la ligne dans le fichier 
+	 * qui déclenche le contrôle.<br/>
+	 * @param pMessageControle : String : message émis par le contrôle.<br/>
+	 * @param pOrdreChamp : Integer : ordre du champ contrôlé
+	 * (dans un fichier comportant une liste de champs comme un fichier 
+	 * ASCII HIT).<br/>
+	 * @param pPositionChamp : String : position du champ contrôlé 
+	 * dans une ligne du fichier comme 7 ou [7-12].<br/>
+	 * @param pValeurChamp : String : valeur prise par le champ contrôlé 
+	 * exprimée sous forme de String.<br/>
+	 * @param pAction : String : action menée après le contrôle 
+	 * comme "ligne éliminée" ou "ligne conservée".<br/>
+	 * <br/>
+	 * 
+	 * @return : LigneRapport : Une ligne de rapport.<br/>
+	 */
+	protected final LigneRapport creerLigneRapport(
+			final Integer pNumeroLigne
+			, final String pMessageControle
+			, final Integer pOrdreChamp
+			, final String pPositionChamp
+			, final String pValeurChamp
+			, final String pAction) {
+		
+		return new LigneRapport(
+				this.dateControleStringFormatee
+				, this.userName
+				, this.nomFichier
+				, this.typeControle
+				, this.nomControle
+				, this.nomCritere
+				, this.gravite
+				, pNumeroLigne
+				, pMessageControle
+				, pOrdreChamp
+				, pPositionChamp, pValeurChamp, pAction);
+		
+	} // Fin de creerLigneRapport(
+	 // Integer pNumeroLigne
+	 // , String pMessageControle
+	 // , Integer pOrdreChamp
+	 // , String pPositionChamp
+	 // , String pValeurChamp
+	 // , String pAction)._________________________________________________
+	
+	
+	
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -1511,6 +1644,16 @@ public abstract class AbstractControle implements IControle {
 	public final String getNiveauAnomalie() {
 		return this.niveauAnomalie;
 	} // Fin de getNiveauAnomalie()._______________________________________
+
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final boolean isEstBloquant() {
+		return this.estBloquant;
+	} // Fin de isEstBloquant().___________________________________________
 
 
 

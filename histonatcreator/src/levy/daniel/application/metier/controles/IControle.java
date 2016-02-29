@@ -5,13 +5,10 @@ import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
-import levy.daniel.application.metier.rapportscontroles.LigneRapport;
-
 /**
- * class IControle :<br/>
+ * Interface IControle :<br/>
  * Abstraction qui garantit que :<br/>
  * - Tout contrôle est effectué à une 'dateContrôle'. 
  * La classe calcule automatiquement 'dateControleStringFormatee' 
@@ -36,6 +33,9 @@ import levy.daniel.application.metier.rapportscontroles.LigneRapport;
  * via sa méthode fournirCleNiveauAnomalie() qui permet d'aller 
  * chercher la valeur dans messagescontroles_fr_FR.properties 
  * ou via fournirNiveauAnomalieEnDur().<br/>
+ * - Tout contrôle sait si il est bloquant via 'estBloquant'. 
+ * La classe remplit automatiquement 'estBloquant' 
+ * connaissant niveauAnomalie.<br/>
  * - Tout contrôle fournit un rapport de contrôle 
  * sous forme de List&lt;LigneRapport&gt; 'rapport'.<br/>
  * <br/>
@@ -47,7 +47,7 @@ import levy.daniel.application.metier.rapportscontroles.LigneRapport;
  * <br/>
  *
  * - Dépendances :<br/>
- * levy.daniel.application.metier.rapportscontroles.LigneRapport.<br/>
+ * <br/>
  * <br/>
  *
  *
@@ -56,7 +56,7 @@ import levy.daniel.application.metier.rapportscontroles.LigneRapport;
  * @since 29 févr. 2016
  *
  */
-public interface IControle {
+public interface IControle extends IRapporteurControle {
 
 	/**
 	 * LOCALE_FR_FR : Locale :<br/>
@@ -134,102 +134,6 @@ public interface IControle {
 	String ACTION_FICHIER_REFUSE = "Fichier refusé";
 	
 
-	
-	/**
-	 * method afficherRapportTextuel() :<br/>
-	 * Affichage au format textuel de this.rapport.<br/>
-	 * <br/>
-	 * - retourne null si this.rapport == null.<br/>
-	 * <br/>
-	 *
-	 * @return : String : String pour affichage de this.rapport 
-	 * au format textuel.<br/>
-	 */
-	String afficherRapportTextuel();
-	
-
-	
-	/**
-	 * method afficherRapportTextuel(
-	 * List&lt;LigneRapport&gt; pList) :<br/>
-	 * Affichage dans la console d'une List&lt;LigneRapport&gt; 
-	 * au format textuel.<br/>
-	 * <br/>
-	 * - retourne null si pList == null.<br/>
-	 * <br/>
-	 *
-	 * @param pList : List&lt;LigneRapport&gt;.<br/>
-	 * 
-	 * @return : String : String pour affichage au format textuel.<br/>
-	 */
-	String afficherRapportTextuel(List<LigneRapport> pList);
-	
-	
-
-	/**
-	 * retourne : <br/>
-	 * "id;date du contrôle;utilisateur;Fichier;type de contrôle;
-	 * Contrôle;Critère;Gravité;
-	 * Numéro de Ligne;Message du Contrôle;Ordre du Champ;Position du Champ;
-	 * Valeur du Champ;Action;"<br/>
-	 * <br/>
-	 * @return String : en-tête du rapport csv.<br/>
-	 */
-	String getEnTeteCsv();
-	
-	
-
-	/**
-	 * method afficherRapportCsv() :<br/>
-	 * Affichage au format csv de this.rapport.<br/>
-	 * <br/>
-	 * - n'ajoute pas l'en-tête du rapport csv.<br/>
-	 * - retourne null si this.rapport == null.<br/>
-	 * <br/>
-	 *
-	 * @return : String : String pour affichage de this.rapport 
-	 * au format csv.<br/>
-	 */
-	String afficherRapportCsv();
-	
-	
-
-	/**
-	 * method afficherRapportCsvAvecEntete() :<br/>
-	 * Affichage au format csv de this.rapport.<br/>
-	 * <br/>
-	 * - Ajoute l'en-tête du rapport csv.<br/>
-	 * - retourne null si this.rapport == null.<br/>
-	 * <br/>
-	 *
-	 * @return : String : String pour affichage de this.rapport 
-	 * au format csv.<br/>
-	 */
-	String afficherRapportCsvAvecEntete();
-	
-	
-
-	/**
-	 * method afficherRapportCsv(
-	 * List&lt;LigneRapport&gt; pList
-	 * , boolean pAjouterEntete) :<br/>
-	 * Affichage dans la console d'une List&lt;LigneRapport&gt; 
-	 * au format csv.<br/>
-	 * <br/>
-	 * - ajoute l'en-tête du rapport csv si pAjouterEntete vaut true.<br/>
-	 * - retourne null si pList == null.<br/>
-	 * <br/>
-	 *
-	 * @param pList : List&lt;LigneRapport&gt;.<br/>
-	 * @param pAjouterEntete 
-	 * 
-	 * @return : String : String pour affichage au format csv.<br/>
-	 */
-	String afficherRapportCsv(
-			final List<LigneRapport> pList
-				, final boolean pAjouterEntete);
-	
-	
 
 	/**
 	 * method getDateControle() :<br/>
@@ -391,17 +295,19 @@ public interface IControle {
 	 * @return niveauAnomalie : String.<br/>
 	 */
 	String getNiveauAnomalie();
-	
-	
 
+	
+	
 	/**
-	 * method getRapport() :<br/>
-	 * Getter du rapport fourni par le contrôle sous forme 
-	 * de List&lt;LigneRapport&gt;.<br/>
+	 * method isEstBloquant() :<br/>
+	 * Getter du boolean qui stipule si le contrôle doit pouvoir 
+	 * bloquer le programme.<br/>
 	 * <br/>
 	 *
-	 * @return rapport : List&lt;LigneRapport&gt;.<br/>
+	 * @return estBloquant : boolean.<br/>
 	 */
-	List<LigneRapport> getRapport();
+	boolean isEstBloquant();
+	
+	
 
-}
+} // FIN DE L'INTERFACE IControle.-------------------------------------------

@@ -1,18 +1,23 @@
-package levy.daniel.application.metier.controles.impl;
+package levy.daniel.application.metier.controles.impl.controlessurface;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import levy.daniel.application.metier.controles.AbstractControle;
-import levy.daniel.application.metier.controles.impl.controlessurface.ControleurTypeTexte;
-import levy.daniel.application.metier.rapportscontroles.LigneRapport;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+
+import levy.daniel.application.metier.controles.AbstractControle;
+import levy.daniel.application.metier.rapportscontroles.LigneRapport;
+
 
 
 /**
@@ -308,6 +313,45 @@ public class ControleurTypeTexteTest {
 	= "faussesextensions\\2014-08-20_HITDIRIF2013_UTF-8txt.csv";
 	
 	
+	/**
+	 * CHEMIN_ANSI : String :<br/>
+	 * Chemin du fichier .txt codé en ANSI 
+	 * relativement à la racine des fichiers de test.<br/>
+	 * "encodages\\chaàâreéèêëtte_ANSI.txt"
+	 */
+	public static final String CHEMIN_ANSI 
+		= "encodages\\chaàâreéèêëtte_ANSI.txt";
+	
+	
+	/**
+	 * CHEMIN_DIACRITIQUES_ISO_8859_2 : String :<br/>
+	 * Chemin du fichier .txt codé en ISO-8859-2 
+	 * relativement à la racine des fichiers de test.<br/>
+	 */
+	public static final String CHEMIN_DIACRITIQUES_ISO_8859_2 
+		= "encodages\\diacritiques_ISO-8859-2.txt";
+	
+	
+	/**
+	 * CHEMIN_DIACRITIQUES_UTF8 : String :<br/>
+	 * Chemin du fichier .txt codé en UTF-8 
+	 * relativement à la racine des fichiers de test.<br/>
+	 */
+	public static final String CHEMIN_DIACRITIQUES_UTF8 
+		= "encodages\\diacritiques_UTF8.txt";
+
+	/**
+	 * CHEMIN_CHARETTE_ANSI : String :<br/>
+	 * Chemin du fichier .txt codé en ANSI Windows_1252
+	 * relativement à la racine des fichiers de test.<br/>
+	 * 1 seule ligne "chaàâreéèêëtte € encodé en ANSI. 47 caractères.".<br/>
+	 */
+	public static final String CHEMIN_CHARETTE_ANSI 
+		= "encodages\\chaàâreéèêëtte_ANSI.txt";
+	
+
+	
+	
 	//*****************************************************************/
 	//**************************FICHIERS ******************************/
 	//*****************************************************************/
@@ -537,6 +581,32 @@ public class ControleurTypeTexteTest {
 
 	
 	/**
+	 * FILE_ANSI : File :<br/>
+	 * Fichier .txt 
+	 * contenant "chaàâreéèêëtte € encodé en ANSI. 47 caractères." 
+	 * codé en ANSI.<br/>
+	 */
+	public static final File FILE_ANSI 
+		= new File(CHEMIN_FICHIERS_TEST + CHEMIN_ANSI);
+	
+	
+	/**
+	 * FILE_DIACRITIQUES_ISO_8859_2 : File : <br/>
+	 * txt codé en ISO_8859_2.<br/>
+	 */
+	public static final File FILE_DIACRITIQUES_ISO_8859_2 
+		= new File(CHEMIN_FICHIERS_TEST + CHEMIN_DIACRITIQUES_ISO_8859_2);
+	
+	
+	/**
+	 * FILE_DIACRITIQUES_UTF8 : File : <br/>
+	 * txt codé en UTF-8.<br/>
+	 */
+	public static final File FILE_DIACRITIQUES_UTF8 
+	= new File(CHEMIN_FICHIERS_TEST + CHEMIN_DIACRITIQUES_UTF8);
+	
+
+	/**
 	 * LISTEFILES : List<File> :<br/>
 	 * Liste contenant tous les File utilisés pour les tests.<br/>
 	 */
@@ -632,6 +702,8 @@ public class ControleurTypeTexteTest {
 		LISTEFILES_TXT.add(FILE_HTML);
 		LISTEFILES_TXT.add(FILE_TXT_SANS_EXTENSION);
 		LISTEFILES_TXT.add(FILE_TXT_FAUSSE_EXTENSION);
+		LISTEFILES_TXT.add(FILE_ANSI);
+		LISTEFILES_TXT.add(FILE_DIACRITIQUES_ISO_8859_2);
 		
 	}
 
@@ -674,7 +746,9 @@ public class ControleurTypeTexteTest {
 	 * - Vérifie que nomCritere == "Le fichier ne doit pas comporter 
 	 * de caractères indésirables (impossibles à écrire au clavier)".<br/>
 	 * - Vérifie que niveauAnomalie == 1.<br/>
+	 * - Vérifie que estBloquant prend la bonne valeur.<br/>
 	 * - Vérifie que gravite == "1 - anomalie bloquante".<br/>
+	 * - Vérifie que setFile() fonctionne.<br/>
 	 * <br/>
 	 */
 	@Test
@@ -729,16 +803,23 @@ public class ControleurTypeTexteTest {
 				, "1"
 					, control.getNiveauAnomalie());
 		
+		/* Vérifie que estBloquant prend la bonne valeur. */
+		assertTrue("estBloquant doit valoir true : "
+				, control.isEstBloquant());
+		
 		/* Vérifie que gravite == "1 - anomalie bloquante". */
 		assertEquals("gravite doit valoir '1 - anomalie bloquante' : "
 				, "1 - anomalie bloquante"
 					, control.getGravite());
 		
-		/* Vérifie que setFile fonctionne. */
+		/* Vérifie que setFile() fonctionne. */
 		control.setFichier(FILE_TXT_FAUSSE_EXTENSION);
 		
-		System.out.println(control.getFichier().getName());
-		System.out.println(control.getNomFichier());
+		assertNotNull("fichier ne doit pas être null : "
+				, control.getFichier());
+		
+		assertNotNull("nomFichier ne doit pas être null : "
+				, control.getNomFichier());
 		
 	} // Fin de testConstructeurAriteNulle().______________________________
 	
@@ -766,6 +847,7 @@ public class ControleurTypeTexteTest {
 				, ControleurTypeTexte.MESSAGE_FICHIER_NULL
 					, resultat);
 		
+		/* récupération du rapport. */
 		final List<LigneRapport> rapport = control.getRapport();
 		
 		/* vérifie que le rapport n'est pas null. */
@@ -793,18 +875,263 @@ public class ControleurTypeTexteTest {
 		System.out.println(listeCaract);
 	}
 
+	
 
+	/**
+	 * method testControlerFileNull() :<br/>
+	 * Teste la méthode controler(File null).<br/>
+	 * <br/>
+	 * - Vérifie que la méthode retourne false.<br/>
+	 * - Vérifie que fichier == null.<br/>
+	 * - Vérifie que nomFichier == null.<br/>
+	 * - vérifie que le rapport n'est pas null.<br/>
+	 * - vérifie que le rapport n'est pas vide.<br/>
+	 * <br/>
+	 */
+	@Test
+	public void testControlerFileNull() {
+		
+		/* Instanciation d'un ControleurTypeTexte 
+		 * avec le constructeur d'arité nulle. */
+		final ControleurTypeTexte control = new ControleurTypeTexte();
+		
+		/* invocation de la méthode controler(File pFile). */
+		final boolean resultat = control.controler(FILE_NULL);
+		
+		/* Vérifie que la méthode retourne false. */
+		assertFalse("controler(null) doit retourner false : "
+				, resultat);
+		
+		/* Vérifie que fichier == null. */
+		assertNull("fichier doit être null : "
+				, control.getFichier());
+		
+		/* Vérifie que nomFichier == null. */
+		assertNull("nomFichier doit être null : "
+				, control.getNomFichier());
+		
+	
+		/* récupération du rapport. */
+		final List<LigneRapport> rapport = control.getRapport();
+		
+		/* vérifie que le rapport n'est pas null. */
+		assertNotNull("Le rapport ne doit pas être null : ", rapport);
+		
+		/* vérifie que le rapport n'est pas vide. */
+		assertFalse("Le rapport ne doit pas être vide : "
+				, rapport.isEmpty());
+				
+	} // Fin de testControlerFileNull().___________________________________
+	
+
+	
+	/**
+	 * method testControlerFileInexistant() :<br/>
+	 * Teste la méthode controler(File inexistant).<br/>
+	 * <br/>
+	 * - Vérifie que la méthode retourne false.<br/>
+	 * - Vérifie que fichier == null.<br/>
+	 * - Vérifie que nomFichier == null.<br/>
+	 * - vérifie que le rapport n'est pas null.<br/>
+	 * - vérifie que le rapport n'est pas vide.<br/>
+	 * <br/>
+	 */
+	@Test
+	public void testControlerFileInexistant() {
+		
+		/* Instanciation d'un ControleurTypeTexte 
+		 * avec le constructeur d'arité nulle. */
+		final ControleurTypeTexte control = new ControleurTypeTexte();
+		
+		/* invocation de la méthode controler(File pFile). */
+		final boolean resultat = control.controler(FILE_INEXISTANT);
+		
+		/* Vérifie que la méthode retourne false. */
+		assertFalse("controler(inexistant) doit retourner false : "
+				, resultat);
+		
+		/* Vérifie que fichier == null. */
+		assertNull("fichier doit être null : "
+				, control.getFichier());
+		
+		/* Vérifie que nomFichier == null. */
+		assertNull("nomFichier doit être null : "
+				, control.getNomFichier());
+		
+	
+		/* récupération du rapport. */
+		final List<LigneRapport> rapport = control.getRapport();
+		
+		/* vérifie que le rapport n'est pas null. */
+		assertNotNull("Le rapport ne doit pas être null : ", rapport);
+		
+		/* vérifie que le rapport n'est pas vide. */
+		assertFalse("Le rapport ne doit pas être vide : "
+				, rapport.isEmpty());
+				
+	} // Fin de testControlerFileInexistant()._____________________________
+	
+
+	
+	/**
+	 * method testControlerFileRepertoire() :<br/>
+	 * Teste la méthode controler(File repertoire).<br/>
+	 * <br/>
+	 * - Vérifie que la méthode retourne false.<br/>
+	 * - Vérifie que fichier == null.<br/>
+	 * - Vérifie que nomFichier == null.<br/>
+	 * - vérifie que le rapport n'est pas null.<br/>
+	 * - vérifie que le rapport n'est pas vide.<br/>
+	 * <br/>
+	 */
+	@Test
+	public void testControlerFileRepertoire() {
+		
+		/* Instanciation d'un ControleurTypeTexte 
+		 * avec le constructeur d'arité nulle. */
+		final ControleurTypeTexte control = new ControleurTypeTexte();
+		
+		/* invocation de la méthode controler(File pFile). */
+		final boolean resultat = control.controler(FILE_REPERTOIRE);
+		
+		/* Vérifie que la méthode retourne false. */
+		assertFalse("controler(repertoire) doit retourner false : "
+				, resultat);
+		
+		/* Vérifie que fichier == null. */
+		assertNull("fichier doit être null : "
+				, control.getFichier());
+		
+		/* Vérifie que nomFichier == null. */
+		assertNull("nomFichier doit être null : "
+				, control.getNomFichier());
+		
+	
+		/* récupération du rapport. */
+		final List<LigneRapport> rapport = control.getRapport();
+		
+		/* vérifie que le rapport n'est pas null. */
+		assertNotNull("Le rapport ne doit pas être null : ", rapport);
+		
+		/* vérifie que le rapport n'est pas vide. */
+		assertFalse("Le rapport ne doit pas être vide : "
+				, rapport.isEmpty());
+		
+	} // Fin de testControlerFileRepertoire()._____________________________
+
+	
+	
+	/**
+	 * method testControlerFileAnsi() :<br/>
+	 * Teste la méthode controler(File pFile ANSI).<br/>
+	 * <br/>
+	 * - Vérifie que controler(ANSI) retourne true.<br/>
+	 * - vérifie que le rapport est vide (non null).<br/>
+	 * <br/>
+	 */
+	@Test
+	public void testControlerFileAnsi() {
+		
+		/* Instanciation d'un ControleurTypeTexte 
+		 * avec le constructeur d'arité nulle. */
+		final ControleurTypeTexte control = new ControleurTypeTexte();
+		
+		final boolean resultat = control.controler(FILE_ANSI);
+		
+		/* Vérifie que controler(ANSI) retourne true. */
+		assertTrue("La méthode controler(ANSI) doit retourner true : "
+					, resultat);
+		
+		/* récupération du rapport. */
+		final List<LigneRapport> rapport = control.getRapport();
+		
+		/* vérifie que le rapport est vide (non null). */
+		assertTrue("Le rapport doit être vide (non null) : "
+				, rapport.isEmpty());
+		
+	} // Fin de testControlerFileAnsi().___________________________________
+
+	
+	
+	/**
+	 * method testControlerFileLatin2() :<br/>
+	 * Teste la méthode controler(File pFile LATIN2).<br/>
+	 * <br/>
+	 * - Vérifie que controler(LATIN2) retourne true.<br/>
+	 * - vérifie que le rapport est vide (non null).<br/>
+	 * <br/>
+	 */
+	@Test
+	public void testControlerFileLatin2() {
+		
+		/* Instanciation d'un ControleurTypeTexte 
+		 * avec le constructeur d'arité nulle. */
+		final ControleurTypeTexte control = new ControleurTypeTexte();
+		
+		final boolean resultat = control.controler(FILE_DIACRITIQUES_ISO_8859_2);
+		
+		/* Vérifie que controler(LATIN2) retourne true. */
+		assertTrue("La méthode controler(LATIN2) doit retourner true : "
+					, resultat);
+		
+		/* récupération du rapport. */
+		final List<LigneRapport> rapport = control.getRapport();
+		
+		/* vérifie que le rapport est vide (non null). */
+		assertTrue("Le rapport doit être vide (non null) : "
+				, rapport.isEmpty());
+		
+	} // Fin de testControlerFileLatin2()._________________________________
+	
+	
+	
+	/**
+	 * method testControlerFileUtf8() :<br/>
+	 * Teste la méthode controler(File pFile UTF-8).<br/>
+	 * <br/>
+	 * - Vérifie que controler(UTF-8) retourne true.<br/>
+	 * - vérifie que le rapport est vide (non null).<br/>
+	 * <br/>
+	 */
+	@Test
+	public void testControlerFileUtf8() {
+		
+		/* Instanciation d'un ControleurTypeTexte 
+		 * avec le constructeur d'arité nulle. */
+		final ControleurTypeTexte control = new ControleurTypeTexte();
+		
+		final boolean resultat = control.controler(FILE_DIACRITIQUES_UTF8);
+		
+		/* Vérifie que controler(UTF-8) retourne true. */
+		assertTrue("La méthode controler(UTF-8) doit retourner true : "
+					, resultat);
+		
+		/* récupération du rapport. */
+		final List<LigneRapport> rapport = control.getRapport();
+		
+		/* vérifie que le rapport est vide (non null). */
+		assertTrue("Le rapport doit être vide (non null) : "
+				, rapport.isEmpty());
+		
+	} // Fin de testControlerFileUtf8().___________________________________
+	
+	
 	
 	/**
 	 * method testControler() :<br/>
 	 * Test de la méthode controler(File pFile).<br/>
 	 * <br/>
 	 * - vérifie que la méthode détecte correctement les fichiers texte.<br/>
+	 * Utilise un jeu de fichiers texte encodés 
+	 * avec divers Charsets (UTF-8, ANSI, ...) 
+	 * et un jeu de fichiers non texte (.wav, . mp3, ..).<br/>
 	 * <br/>
 	 */
 	@Test
 	public void testControler() {
 		
+		/* Instanciation d'un ControleurTypeTexte 
+		 * avec le constructeur d'arité nulle. */
 		final ControleurTypeTexte control = new ControleurTypeTexte();
 		
 		for (final File fichier : LISTEFILES_TXT) {

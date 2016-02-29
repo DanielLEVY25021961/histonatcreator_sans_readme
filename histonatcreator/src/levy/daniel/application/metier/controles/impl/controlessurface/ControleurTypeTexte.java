@@ -15,7 +15,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-
 import levy.daniel.application.metier.controles.AbstractControle;
 import levy.daniel.application.metier.controles.CaractereDan;
 import levy.daniel.application.metier.rapportscontroles.LigneRapport;
@@ -23,6 +22,19 @@ import levy.daniel.application.metier.rapportscontroles.LigneRapport;
 
 /**
  * class ControleurTypeTexte :<br/>
+ * Classe chargée de détecter si un fichier peut être un fichier texte.<br/>
+ * Contrôle dans sa méthode controler(File pFile) 
+ * si le fichier pFile est de type texte 
+ * et retourne true si c'est le cas.<br/>
+ * Utilise pour celà le critère 'le fichier ne doit pas comporter de 
+ * caractères indésirables' (aucun caractère du fichier ne 
+ * doit être contenu dans CARACTERES_INDESIRABLES_SET).<br/> 
+ * <br/>
+ * - retourne false et rapporte si CARACTERES_INDESIRABLES_SET 
+ * contient un des caractères de pFile.<br/>
+ * - retourne true et ne génère pas de rapport si pFile 
+ * ne contient pas de caractères indésirables.<br/>
+ * <br/>
  * - typeControle = Contrôle de surface.<br/>
  * - nomControle = Contrôle fichier texte.<br/>
  * <br/>
@@ -351,13 +363,127 @@ public class ControleurTypeTexte extends AbstractControle {
 	/**
 	 * method controler(
 	 * File pFile) :<br/>
-	 * .<br/>
+	 * Contrôle si le fichier pFile est de type texte 
+	 * et retourne true si c'est le cas.<br/>
+	 * Utilise pour celà le critère 'le fichier ne doit pas comporter de 
+	 * caractères indésirables' (aucun caractère du fichier ne 
+	 * doit être contenu dans CARACTERES_INDESIRABLES_SET).<br/> 
+	 * <br/>
+	 * - retourne false et rapporte si CARACTERES_INDESIRABLES_SET 
+	 * contient un des caractères de pFile.<br/>
+	 * - retourne true et ne remplit pas de rapport si pFile 
+	 * ne contient pas de caractères indésirables. 
+	 * Le rapport est alors vide (pas null).<br/>
+	 * <br/>
+	 * - passe pFile à this.fichier - 
+	 * rafraîchit automatiquement this.nomFichier.<br/>
+	 * <br/>
+	 * - retourne false, LOG de niveau INFO et rapport si pFile == null.<br/>
+	 * - retourne false, LOG de niveau INFO et rapport si pFile 
+	 * est inexistant.<br/>
+	 * - retourne false, LOG de niveau INFO et rapport si pFile 
+	 * est un répertoire.<br/>
 	 * <br/>
 	 *
-	 * @param pFile
-	 * @return : boolean :  .<br/>
+	 * @param pFile : File : fichier dont on veut savoir 
+	 * si il est un fichier texte.<br/>
+	 * 
+	 * @return : boolean : true si pFile est un fichier texte.<br/>
 	 */
-	public boolean controler(final File pFile) {
+	public boolean controler(
+			final File pFile) {
+		
+		/* retourne false, LOG de niveau INFO 
+		 * et rapport si pFile == null. */
+		if (pFile == null) {
+			
+			/* LOG de niveau INFO. */
+			loggerInfo(
+					CLASSE_CONTROLEURTYPETEXTE
+						, METHODE_CONTROLER
+							, MESSAGE_FICHIER_NULL);
+			
+			/* rapport. */
+			final LigneRapport ligneRapport 
+				= creerLigneRapport(
+						null
+						, MESSAGE_FICHIER_NULL
+						, null
+						, SANS_OBJET
+						, SANS_OBJET
+						, ACTION_FICHIER_REFUSE);
+			
+			this.ajouterLigneRapport(ligneRapport);
+			
+			/* retourne false, LOG de niveau INFO 
+			 * et rapport si pFile == null. */
+			return false;
+			
+		} // Fin de if (pFile == null)._______________
+		
+		/* retourne false, LOG de niveau INFO 
+		 * et rapport si pFile est inexistant. */
+		if (!pFile.exists()) {
+			
+			/* LOG de niveau INFO. */
+			loggerInfo(
+					CLASSE_CONTROLEURTYPETEXTE
+						, METHODE_CONTROLER
+							, MESSAGE_FICHIER_INEXISTANT
+								, pFile.getAbsolutePath());
+			
+			/* rapport. */
+			final LigneRapport ligneRapport 
+				= creerLigneRapport(
+						null
+						, MESSAGE_FICHIER_INEXISTANT + pFile.getAbsolutePath()
+						, null
+						, SANS_OBJET
+						, SANS_OBJET
+						, ACTION_FICHIER_REFUSE);
+						
+			this.ajouterLigneRapport(ligneRapport);
+			
+			/* retourne false, LOG de niveau INFO 
+			 * et rapport si pFile est inexistant. */
+			return false;
+			
+		} // Fin de if (!pFile.exists())._________________________
+		
+		/* retourne false, LOG de niveau INFO 
+		 * et rapport si pFile est un répertoire. */
+		if (pFile.isDirectory()) {
+			
+			/* LOG de niveau INFO. */
+			loggerInfo(
+					CLASSE_CONTROLEURTYPETEXTE
+						, METHODE_LIREFICHIER
+							, MESSAGE_FICHIER_REPERTOIRE
+								, pFile.getAbsolutePath());
+			
+			/* rapport. */
+			final LigneRapport ligneRapport 
+				= creerLigneRapport(
+						null
+						, MESSAGE_FICHIER_REPERTOIRE + pFile.getAbsolutePath()
+						, null
+						, SANS_OBJET
+						, SANS_OBJET
+						, ACTION_FICHIER_REFUSE);
+						
+			this.ajouterLigneRapport(ligneRapport);
+			
+			/* retourne false, LOG de niveau INFO 
+			 * et rapport si pFile est un répertoire. */
+			return false;
+			
+		} // Fin de if (pFile.isDirectory())._______________________
+
+
+		/* passe pFile à this.fichier - 
+		 * rafraîchit automatiquement this.nomFichier. */
+		this.setFichier(pFile);
+		
 		
 		// LECTURE ***************
 		FileInputStream fileInputStream = null;
@@ -379,7 +505,7 @@ public class ControleurTypeTexte extends AbstractControle {
 
 			/*
 			 * Instancie un InputStreamReader en lui passant le FileReader et le
-			 * Charset.
+			 * Charset UTF-8.
 			 */
 			inputStreamReader = new InputStreamReader(fileInputStream,
 					CHARSET_UTF8);
@@ -406,12 +532,34 @@ public class ControleurTypeTexte extends AbstractControle {
 				/* Conversion de l'entier en caractère. */
 				character = (char) characterEntier;
 
+				// TEST DU CRITERE ****************************************
 				/* Teste si le fichier contient un caractère indésirable 
 				 * et retourne false si c'est le cas. */
 				if (CARACTERES_INDESIRABLES_SET.contains(character)) {
-					System.out.println(new CaractereDan(position, character).toString());
+					
+					/* Constitution du message pour le rapport. */
+					final String message 
+						= new CaractereDan(position, character).toString();
+					
+					/* rapport. */
+					final LigneRapport ligneRapport 
+						= creerLigneRapport(
+								null
+								, message
+								, position
+								, String.valueOf(position)
+								, String.valueOf(character)
+								, ACTION_FICHIER_REFUSE);
+								
+					this.ajouterLigneRapport(ligneRapport);
+					
+					/* retourne false et rapporte si 
+					 * CARACTERES_INDESIRABLES_SET contient 
+					 * un des caractères de pFile. */
 					return false;
-				}
+					
+				} // Fin de if (CARACTERES_INDESIRABLES_SET
+				// .contains(character)).______________________
 
 			} // Fin du parcours du bufferedReader._________
 
@@ -506,6 +654,7 @@ public class ControleurTypeTexte extends AbstractControle {
 	 * (même si le fichier n'est pas un fichier texte).<br/>
 	 * Ne modifie pas les sauts de ligne.<br/>
 	 * <br/>
+	 * - Choisit automatiquement le CHARSET_UTF8 si pCharset == null.<br/>
 	 * - passe pFile à this.fichier - 
 	 * rafraîchit automatiquement this.nomFichier.<br/>
 	 * <br/>
@@ -524,10 +673,6 @@ public class ControleurTypeTexte extends AbstractControle {
 			final File pFile
 				, final Charset pCharset) {
 		
-		/* passe pFile à this.fichier - 
-		 * rafraîchit automatiquement this.nomFichier. */
-		this.setFichier(pFile);
-		
 		/* retourne MESSAGE_FICHIER_NULL 
 		 * si le pFile est null. */
 		if (pFile == null) {
@@ -540,15 +685,8 @@ public class ControleurTypeTexte extends AbstractControle {
 			
 			/* rapport. */
 			final LigneRapport ligneRapport 
-				= new LigneRapport(
-						this.dateControleStringFormatee
-						, this.userName
-						, this.nomFichier
-						, this.typeControle
-						, this.nomControle
-						, this.nomCritere
-						, this.gravite
-						, null
+				= creerLigneRapport(
+						null
 						, MESSAGE_FICHIER_NULL
 						, null
 						, SANS_OBJET
@@ -559,7 +697,8 @@ public class ControleurTypeTexte extends AbstractControle {
 			
 			/* retour de MESSAGE_FICHIER_NULL. */
 			return MESSAGE_FICHIER_NULL;
-		}
+			
+		} // Fin de if (pFile == null).__________________________
 		
 		/* retourne MESSAGE_FICHIER_INEXISTANT 
 		 * si le pFile est inexistant. */
@@ -574,15 +713,8 @@ public class ControleurTypeTexte extends AbstractControle {
 			
 			/* rapport. */
 			final LigneRapport ligneRapport 
-				= new LigneRapport(
-						this.dateControleStringFormatee
-						, this.userName
-						, this.nomFichier
-						, this.typeControle
-						, this.nomControle
-						, this.nomCritere
-						, this.gravite
-						, null
+				= creerLigneRapport(
+						null
 						, MESSAGE_FICHIER_INEXISTANT + pFile.getAbsolutePath()
 						, null
 						, SANS_OBJET
@@ -593,7 +725,8 @@ public class ControleurTypeTexte extends AbstractControle {
 			
 			/* retour de MESSAGE_FICHIER_INEXISTANT. */
 			return MESSAGE_FICHIER_INEXISTANT;
-		}
+			
+		} // Fin de if (!pFile.exists()).___________________________
 		
 		
 		/* retourne MESSAGE_FICHIER_REPERTOIRE 
@@ -609,15 +742,8 @@ public class ControleurTypeTexte extends AbstractControle {
 			
 			/* rapport. */
 			final LigneRapport ligneRapport 
-				= new LigneRapport(
-						this.dateControleStringFormatee
-						, this.userName
-						, this.nomFichier
-						, this.typeControle
-						, this.nomControle
-						, this.nomCritere
-						, this.gravite
-						, null
+				= creerLigneRapport(
+						null
 						, MESSAGE_FICHIER_REPERTOIRE + pFile.getAbsolutePath()
 						, null
 						, SANS_OBJET
@@ -628,9 +754,14 @@ public class ControleurTypeTexte extends AbstractControle {
 			
 			/* retour de MESSAGE_FICHIER_REPERTOIRE. */
 			return MESSAGE_FICHIER_REPERTOIRE;
-		}
+			
+		} // Fin de if (pFile.isDirectory())._______________________
 
-
+		
+		/* passe pFile à this.fichier - 
+		 * rafraîchit automatiquement this.nomFichier. */
+		this.setFichier(pFile);
+		
 		// LECTURE ***************
 		FileInputStream fileInputStream = null;
 		InputStreamReader inputStreamReader = null;
