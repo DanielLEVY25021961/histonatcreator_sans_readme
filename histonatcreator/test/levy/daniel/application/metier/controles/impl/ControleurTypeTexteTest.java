@@ -781,7 +781,7 @@ public class ControleurTypeTexteTest {
 	public void testLireFichier() {
 		
 		final ControleurTypeTexte control = new ControleurTypeTexte();
-		final String resultat = control.lireFichier(FILE_PPTX, null);
+		final String resultat = control.lireFichier(FILE_PROPERTIES, null);
 		final String listeCaract = control.listerChaineCarParCar(resultat);
 		System.out.println(listeCaract);
 	}
