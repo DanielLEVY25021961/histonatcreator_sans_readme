@@ -1715,6 +1715,11 @@ public final class DifferentiateurString {
 			/* Récupération des File dans pRep. */
 			final File[] filesContenus = pRep.listFiles();
 			
+			/* Sort si filesContenus == null. */
+			if (filesContenus == null) {
+				return true;
+			}
+			
 			/* Sort Si pRep est vide. */
 			if (filesContenus.length == 0) {
 				return true;

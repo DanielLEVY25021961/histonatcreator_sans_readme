@@ -1978,6 +1978,11 @@ public final class ConvertisseurEncodage {
 			/* Récupération des File dans pRep. */
 			final File[] filesContenus = pRep.listFiles();
 			
+			/* Sort si filesContenus est null. */
+			if (filesContenus == null) {
+				return true;
+			}
+			
 			/* Sort Si pRep est vide. */
 			if (filesContenus.length == 0) {
 				return true;
