@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -137,8 +138,6 @@ public class ControleurTypeTexte extends AbstractControle {
 		CARACTERES_INDESIRABLES_SET.add('\u2510');
 		/* LATIN CAPITAL LETTER U WITH ACUTE 'Ú' */
 		CARACTERES_INDESIRABLES_SET.add('\u00da');
-		/* ZERO WIDTH NO-BREAK SPACE ' ' */
-		CARACTERES_INDESIRABLES_SET.add('\ufeff');
 		/* RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK '»' */
 		CARACTERES_INDESIRABLES_SET.add('\u00bb');
 		/* INVERTED QUESTION MARK '¿' */
@@ -484,6 +483,9 @@ public class ControleurTypeTexte extends AbstractControle {
 		 * rafraîchit automatiquement this.nomFichier. */
 		this.setFichier(pFile);
 		
+		/* rafraîchit le rapport. */
+		this.rapport = new ArrayList<LigneRapport>();
+		
 		
 		// LECTURE ***************
 		FileInputStream fileInputStream = null;
@@ -761,6 +763,9 @@ public class ControleurTypeTexte extends AbstractControle {
 		/* passe pFile à this.fichier - 
 		 * rafraîchit automatiquement this.nomFichier. */
 		this.setFichier(pFile);
+		
+		/* rafraîchit le rapport. */
+		this.rapport = new ArrayList<LigneRapport>();
 		
 		// LECTURE ***************
 		FileInputStream fileInputStream = null;

@@ -1,0 +1,5 @@
+id;Position;Caractère;Unicode;numericValue;Type de Caractère;Valeur Entière;Point de Code Décimal;Point de Code HexaDécimal;Nom Unicode;DIFFERENCE;id;Position;Caractère;Unicode;numericValue;Type de Caractère;Valeur Entière;Point de Code Décimal;Point de Code HexaDécimal;Nom Unicode;
+null;1;b;\u0062;11;2;98;98;62;LATIN SMALL LETTER B;equals;null;1;b;\u0062;11;2;98;98;62;LATIN SMALL LETTER B;
+null;2;â;\u00e2;-1;2;226;226;e2;LATIN SMALL LETTER A WITH CIRCUMFLEX;DIFF;null;2;a;\u0061;10;2;97;97;61;LATIN SMALL LETTER A;
+null;3;t;\u0074;29;2;116;116;74;LATIN SMALL LETTER T;DIFF;null;3;s;\u0073;28;2;115;115;73;LATIN SMALL LETTER S;
+null;4;e;\u0065;14;2;101;101;65;LATIN SMALL LETTER E;DIFF;null;4;null;null;0;0;0;0;null;null;

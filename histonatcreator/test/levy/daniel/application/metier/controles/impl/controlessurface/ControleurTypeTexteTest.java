@@ -8,11 +8,13 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Test;
+
 
 
 import levy.daniel.application.metier.controles.AbstractControle;
@@ -59,6 +61,17 @@ public class ControleurTypeTexteTest {
 	public static final String CHEMIN_FICHIERS_TEST 
 		= ".\\test\\ressourcesjunit\\differentstypesfichiers\\";
 
+	
+	/**
+	 * CHEMIN_FICHIERS_TRAFIC : String :<br/>
+	 * Chemin des fichiers de trafic pour les tests 
+	 * relativement à la racine du projet courant.<br/>
+	 * ".\\test\\ressourcesjunit\\differentstypesfichiers\\texte\\trafics\\".<br/>
+	 */
+	public static final String CHEMIN_FICHIERS_TRAFIC 
+		= ".\\test\\ressourcesjunit\\differentstypesfichiers\\texte\\trafics\\";
+
+	
 	/**
 	 * CHEMIN_INEXISTANT : String :<br/>
 	 * Chemin d'un fichier inexistant.<br/>
@@ -350,6 +363,14 @@ public class ControleurTypeTexteTest {
 		= "encodages\\chaàâreéèêëtte_ANSI.txt";
 	
 
+	/**
+	 * CHEMIN_CHARETTE_OEM : String :<br/>
+	 * Chemin du fichier .txt codé en OEM (IBM-850)
+	 * relativement à la racine des fichiers de test.<br/>
+	 * 1 seule ligne "chaàâreéèêëtte € encodé en UTF-8. 47 caractères.".<br/>
+	 */
+	public static final String CHEMIN_CHARETTE_OEM 
+		= "encodages\\chaàâreéèêëtte_OEM.txt";
 	
 	
 	//*****************************************************************/
@@ -581,14 +602,24 @@ public class ControleurTypeTexteTest {
 
 	
 	/**
-	 * FILE_ANSI : File :<br/>
+	 * FILE_CHARETTE_ANSI : File :<br/>
 	 * Fichier .txt 
 	 * contenant "chaàâreéèêëtte € encodé en ANSI. 47 caractères." 
 	 * codé en ANSI.<br/>
 	 */
-	public static final File FILE_ANSI 
+	public static final File FILE_CHARETTE_ANSI 
 		= new File(CHEMIN_FICHIERS_TEST + CHEMIN_ANSI);
+
 	
+	/**
+	 * FILE_CHARETTE_OEM : File :<br/>
+	 * Fichier .txt 
+	 * contenant "chaàâreéèêëtte € encodé en UTF-8. 47 caractères."
+	 * codé en OEM (IBM-850).<br/>
+	 */
+	public static final File FILE_CHARETTE_OEM 
+	= new File(CHEMIN_FICHIERS_TEST + CHEMIN_CHARETTE_OEM);
+
 	
 	/**
 	 * FILE_DIACRITIQUES_ISO_8859_2 : File : <br/>
@@ -625,6 +656,14 @@ public class ControleurTypeTexteTest {
 	 * Liste contenant tous les File TXT utilisés pour les tests.<br/>
 	 */
 	public static final List<File> LISTEFILES_TXT = new ArrayList<File>();
+
+	
+	/**
+	 * LISTEFILES_TRAFIC : List<File> :<br/>
+	 * Liste contenant tous les File de trafic utilisés pour les tests.<br/>
+	 */
+	public static final List<File> LISTEFILES_TRAFIC = new ArrayList<File>();
+
 
 	
 	/* Bloc statique pour remplir la liste des Files. */
@@ -702,8 +741,10 @@ public class ControleurTypeTexteTest {
 		LISTEFILES_TXT.add(FILE_HTML);
 		LISTEFILES_TXT.add(FILE_TXT_SANS_EXTENSION);
 		LISTEFILES_TXT.add(FILE_TXT_FAUSSE_EXTENSION);
-		LISTEFILES_TXT.add(FILE_ANSI);
+		LISTEFILES_TXT.add(FILE_CHARETTE_ANSI);
+		LISTEFILES_TXT.add(FILE_CHARETTE_OEM);
 		LISTEFILES_TXT.add(FILE_DIACRITIQUES_ISO_8859_2);
+		LISTEFILES_TXT.add(FILE_DIACRITIQUES_UTF8);
 		
 	}
 
@@ -727,9 +768,54 @@ public class ControleurTypeTexteTest {
 	 */
 	public ControleurTypeTexteTest() {
 		super();
+		
+		/* Remplit LISTEFILES_TRAFIC. */
+		remplirListeTrafics();
+		
 	} // Fin de CONSTRUCTEUR D'ARITE NULLE.________________________________
 	
 
+	
+	/**
+	 * method remplirListeTrafics() :<br/>
+	 * Remplit LISTEFILES_TRAFIC.<br/>
+	 * <br/>
+	 */
+	public static void remplirListeTrafics() {
+		
+		/* Récupère le répertoire trafics. */
+		final File repertoireTrafics = new File(CHEMIN_FICHIERS_TRAFIC);
+		
+		/* récupère le tableau des enfants de repertoireTrafics. */
+		final File[] tableauRepertoires = repertoireTrafics.listFiles();
+		
+		/* remplit la liste des sous-répertoires de trafics. */		
+		final List<File> listeSousRepertoires 
+			= Arrays.asList(tableauRepertoires);
+		
+		/* Remplit LISTEFILES_TRAFIC. */
+		for (final File rep : listeSousRepertoires) {
+			
+			if (rep.isDirectory()) {
+				
+				final File[] tabContenuSousRep = rep.listFiles();
+				
+				for (int j = 0; j < tabContenuSousRep.length; j++) {
+					
+					if (!tabContenuSousRep[j].isDirectory()) {
+						LISTEFILES_TRAFIC.add(tabContenuSousRep[j]);
+					}
+					
+				}
+			}
+			else {
+				LISTEFILES_TRAFIC.add(rep);
+			}
+		}
+		
+	} // Fin de remplirListeTrafics()._____________________________________
+	
+	
 	
 	/**
 	 * method testConstructeurAriteNulle() :<br/>
@@ -1036,7 +1122,7 @@ public class ControleurTypeTexteTest {
 		 * avec le constructeur d'arité nulle. */
 		final ControleurTypeTexte control = new ControleurTypeTexte();
 		
-		final boolean resultat = control.controler(FILE_ANSI);
+		final boolean resultat = control.controler(FILE_CHARETTE_ANSI);
 		
 		/* Vérifie que controler(ANSI) retourne true. */
 		assertTrue("La méthode controler(ANSI) doit retourner true : "
@@ -1051,6 +1137,38 @@ public class ControleurTypeTexteTest {
 		
 	} // Fin de testControlerFileAnsi().___________________________________
 
+
+	
+	/**
+	 * method testControlerFileOem() :<br/>
+	 * Teste la méthode controler(File pFile OEM).<br/>
+	 * <br/>
+	 * - Vérifie que controler(OEM) retourne true.<br/>
+	 * - vérifie que le rapport est vide (non null).<br/>
+	 * <br/>
+	 */
+	@Test
+	public void testControlerFileOem() {
+		
+		/* Instanciation d'un ControleurTypeTexte 
+		 * avec le constructeur d'arité nulle. */
+		final ControleurTypeTexte control = new ControleurTypeTexte();
+		
+		final boolean resultat = control.controler(FILE_CHARETTE_OEM);
+		
+		/* Vérifie que controler(OEM) retourne true. */
+		assertTrue("La méthode controler(OEM) doit retourner true : "
+					, resultat);
+		
+		/* récupération du rapport. */
+		final List<LigneRapport> rapport = control.getRapport();
+		
+		/* vérifie que le rapport est vide (non null). */
+		assertTrue("Le rapport doit être vide (non null) : "
+				, rapport.isEmpty());
+		
+	} // Fin de testControlerFileOem().____________________________________
+	
 	
 	
 	/**
@@ -1143,6 +1261,12 @@ public class ControleurTypeTexteTest {
 		for (final File fichier : LISTEFILES_NON_TXT) {
 			assertFalse(
 					"fichier non texte doit retourner false : "
+						, control.controler(fichier));
+		}
+		
+		for (final File fichier : LISTEFILES_TRAFIC) {
+			assertTrue(
+					"fichier texte doit retourner true : "
 						, control.controler(fichier));
 		}
 		
