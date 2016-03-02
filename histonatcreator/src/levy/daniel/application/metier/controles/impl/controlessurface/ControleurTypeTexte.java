@@ -6,24 +6,23 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import levy.daniel.application.metier.controles.AbstractControle;
 import levy.daniel.application.metier.controles.CaractereDan;
 import levy.daniel.application.metier.rapportscontroles.LigneRapport;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 
 /**
  * class ControleurTypeTexte :<br/>
- * Classe chargée de détecter si un fichier peut être un fichier texte.<br/>
+ * Classe chargée de détecter si un fichier peut être un fichier texte 
+ * (donc pas un .wav, .mp3, ...).<br/>
  * Contrôle dans sa méthode controler(File pFile) 
  * si le fichier pFile est de type texte 
  * et retourne true si c'est le cas.<br/>
@@ -34,19 +33,40 @@ import levy.daniel.application.metier.rapportscontroles.LigneRapport;
  * - retourne false et rapporte si CARACTERES_INDESIRABLES_SET 
  * contient un des caractères de pFile.<br/>
  * - retourne true et ne génère pas de rapport si pFile 
- * ne contient pas de caractères indésirables.<br/>
+ * ne contient pas de caractères indésirables. 
+ * Le rapport est alors vide (pas null).<br/>
  * <br/>
  * - typeControle = Contrôle de surface.<br/>
  * - nomControle = Contrôle fichier texte.<br/>
+ * - critere = Le fichier ne doit pas comporter de caractères indésirables 
+ * (impossibles à écrire au clavier).<br/>
+ * - gravite = '1 - Bloquant'.<br/>
+ * - niveauAnomalie = "1".<br/>
+ * - estBloquant = true.<br/>
+ * <br/>
+ * <br/>
+ * Attributs : <br/>
+ * [nomClasseConcrete;dateControle;dateControleStringFormatee;userName;
+ * fichier;nomFichier;typeControle;nomControle;nomCritere;gravite;
+ * niveauAnomalie;estBloquant;rapport].<br/>
  * <br/>
  *
  * - Exemple d'utilisation :<br/>
  *<br/>
  * 
  * - Mots-clé :<br/>
+ * rapport, FileInputStream, rafraîchir le rapport, rafraichir le rapport<br/>
+ * InputStreamReader, lecture caractère par caractère,<br/>
+ * BufferedReader, <br/>
+ * Conversion entier en caractère, cast entier en caractère, <br/>
+ * boucle while (true),<br/> 
  * <br/>
  *
  * - Dépendances :<br/>
+ * levy.daniel.application.ILecteurDecodeurFile.<br/>
+ * levy.daniel.application.IListeurDeCaracteresUnicode.<br/>
+ * levy.daniel.application.metier.controles.IRapporteurControle<br/>
+ * levy.daniel.application.metier.controles.IControle.<br/>
  * levy.daniel.application.metier.controles.AbstractControle.<br/>
  * levy.daniel.application.metier.controles.CaractereDan.<br/>
  * levy.daniel.application.metier.rapportscontroles.LigneRapport.<br/>
@@ -69,13 +89,6 @@ public class ControleurTypeTexte extends AbstractControle {
 	public static final String CLASSE_CONTROLEURTYPETEXTE 
 		= "Classe ControleurTypeTexte";
 	
-	/**
-	 * METHODE_LIREFICHIER : String :<br/>
-	 * "Méthode lireFichier(File pFile, Charset pCharset)".<br/>
-	 */
-	public static final String METHODE_LIREFICHIER 
-		= "Méthode lireFichier(File pFile, Charset pCharset)";
-	
 
 	/**
 	 * METHODE_CONTROLER : String :<br/>
@@ -84,36 +97,6 @@ public class ControleurTypeTexte extends AbstractControle {
 	public static final String METHODE_CONTROLER 
 		= "Méthode controler(File pFile)";
 	
-	
-	/**
-	 * MESSAGE_FICHIER_NULL : String :<br/>
-	 * Message retourné par la méthode lireFichier(File pFile) 
-	 * si le fichier est null.<br/>
-	 * "Le fichier passé en paramètre est null".<br/>
-	 */
-	public static final String MESSAGE_FICHIER_NULL 
-		= "Le fichier passé en paramètre est null";
-
-	
-	/**
-	 * MESSAGE_FICHIER_INEXISTANT : String :<br/>
-	 * Message retourné par la méthode lireFichier(File pFile) 
-	 * si le fichier est inexistant.<br/>
-	 * "Le fichier passé en paramètre est inexistant : "
-	 */
-	public static final String MESSAGE_FICHIER_INEXISTANT 
-		= "Le fichier passé en paramètre est inexistant : ";
-
-	
-	/**
-	 * MESSAGE_FICHIER_REPERTOIRE : String :<br/>
-	 * Message retourné par la méthode lireFichier(File pFile) 
-	 * si le fichier est un répertoire.<br/>
-	 * "Le fichier passé en paramètre est un répertoire : ".<br/>
-	 */
-	public static final String MESSAGE_FICHIER_REPERTOIRE 
-		= "Le fichier passé en paramètre est un répertoire : ";
-
 	
 	/**
 	 * CARACTERES_INDESIRABLES_SET : Set&lt;Character&gt; :<br/>
@@ -366,7 +349,10 @@ public class ControleurTypeTexte extends AbstractControle {
 	 * et retourne true si c'est le cas.<br/>
 	 * Utilise pour celà le critère 'le fichier ne doit pas comporter de 
 	 * caractères indésirables' (aucun caractère du fichier ne 
-	 * doit être contenu dans CARACTERES_INDESIRABLES_SET).<br/> 
+	 * doit être contenu dans CARACTERES_INDESIRABLES_SET).<br/>
+	 * Lit le fichier caractère par caractère en UTF-8 en utilisant 
+	 * un BufferedReader(InputStreamReader(fileInputStream, CHARSET_UTF8)) 
+	 * et détecte les caractères indésirables.<br/> 
 	 * <br/>
 	 * - retourne false et rapporte si CARACTERES_INDESIRABLES_SET 
 	 * contient un des caractères de pFile.<br/>
@@ -374,8 +360,10 @@ public class ControleurTypeTexte extends AbstractControle {
 	 * ne contient pas de caractères indésirables. 
 	 * Le rapport est alors vide (pas null).<br/>
 	 * <br/>
-	 * - passe pFile à this.fichier - 
+	 * - passe pFile à this.fichier et 
 	 * rafraîchit automatiquement this.nomFichier.<br/>
+	 * - rafraîchit le rapport (en instancie un nouveau 
+	 * à chaque appel de la méthode controler(File pFile)).<br/>
 	 * <br/>
 	 * - retourne false, LOG de niveau INFO et rapport si pFile == null.<br/>
 	 * - retourne false, LOG de niveau INFO et rapport si pFile 
@@ -389,7 +377,8 @@ public class ControleurTypeTexte extends AbstractControle {
 	 * 
 	 * @return : boolean : true si pFile est un fichier texte.<br/>
 	 */
-	public boolean controler(
+	@Override
+	public final boolean controler(
 			final File pFile) {
 		
 		/* retourne false, LOG de niveau INFO 
@@ -479,11 +468,12 @@ public class ControleurTypeTexte extends AbstractControle {
 		} // Fin de if (pFile.isDirectory())._______________________
 
 
-		/* passe pFile à this.fichier - 
+		/* passe pFile à this.fichier et 
 		 * rafraîchit automatiquement this.nomFichier. */
 		this.setFichier(pFile);
 		
-		/* rafraîchit le rapport. */
+		/* rafraîchit le rapport (en instancie un nouveau à chaque appel 
+		 * de la méthode controler(File pFile)). */
 		this.rapport = new ArrayList<LigneRapport>();
 		
 		
@@ -642,359 +632,24 @@ public class ControleurTypeTexte extends AbstractControle {
 	// File pFile).________________________________________________________
 
 
-		
-	/**
-	 * method lireFichier(
-	 * File pFile
-	 * , Charset pCharset) :<br/>
-	 * Lit un fichier pFile et 
-	 * retourne son contenu dans une chaîne de caractères.<br/>
-	 * Lit le fichier en utilisant la méthode read() 
-	 * de BufferedReader appliqué à un InputStreamReader 
-	 * avec le Charset de décodage pCharset.<br/>
-	 * Lit chaque caractère quoi qu'il arrive 
-	 * (même si le fichier n'est pas un fichier texte).<br/>
-	 * Ne modifie pas les sauts de ligne.<br/>
-	 * <br/>
-	 * - Choisit automatiquement le CHARSET_UTF8 si pCharset == null.<br/>
-	 * - passe pFile à this.fichier - 
-	 * rafraîchit automatiquement this.nomFichier.<br/>
-	 * <br/>
-	 * - retourne MESSAGE_FICHIER_NULL si le pFile est null.<br/>
-	 * - retourne MESSAGE_FICHIER_INEXISTANT si le pFile est inexistant.<br/>
-	 * - retourne MESSAGE_FICHIER_REPERTOIRE si le pFile est un répertoire.<br/>
-	 * <br/>
-	 *
-	 * @param pFile : File : fichier à lire.<br/>
-	 * @param pCharset : Charset : Charset utilisé par l'InputStreamReader 
-	 * pour lire dans le fichier.<br/>
-	 * 
-	 * @return : String : Chaine de caractères avec le contenu du fichier.<br/>
-	 */
-	public String lireFichier(
-			final File pFile
-				, final Charset pCharset) {
-		
-		/* retourne MESSAGE_FICHIER_NULL 
-		 * si le pFile est null. */
-		if (pFile == null) {
-			
-			/* LOG de niveau INFO. */
-			loggerInfo(
-					CLASSE_CONTROLEURTYPETEXTE
-						, METHODE_LIREFICHIER
-							, MESSAGE_FICHIER_NULL);
-			
-			/* rapport. */
-			final LigneRapport ligneRapport 
-				= creerLigneRapport(
-						null
-						, MESSAGE_FICHIER_NULL
-						, null
-						, SANS_OBJET
-						, SANS_OBJET
-						, ACTION_FICHIER_REFUSE);
-			
-			this.ajouterLigneRapport(ligneRapport);
-			
-			/* retour de MESSAGE_FICHIER_NULL. */
-			return MESSAGE_FICHIER_NULL;
-			
-		} // Fin de if (pFile == null).__________________________
-		
-		/* retourne MESSAGE_FICHIER_INEXISTANT 
-		 * si le pFile est inexistant. */
-		if (!pFile.exists()) {
-							
-			/* LOG de niveau INFO. */
-			loggerInfo(
-					CLASSE_CONTROLEURTYPETEXTE
-						, METHODE_LIREFICHIER
-							, MESSAGE_FICHIER_INEXISTANT
-								, pFile.getAbsolutePath());
-			
-			/* rapport. */
-			final LigneRapport ligneRapport 
-				= creerLigneRapport(
-						null
-						, MESSAGE_FICHIER_INEXISTANT + pFile.getAbsolutePath()
-						, null
-						, SANS_OBJET
-						, SANS_OBJET
-						, ACTION_FICHIER_REFUSE);
-			
-			this.ajouterLigneRapport(ligneRapport);
-			
-			/* retour de MESSAGE_FICHIER_INEXISTANT. */
-			return MESSAGE_FICHIER_INEXISTANT;
-			
-		} // Fin de if (!pFile.exists()).___________________________
-		
-		
-		/* retourne MESSAGE_FICHIER_REPERTOIRE 
-		 * si le pFile est un répertoire. */
-		if (pFile.isDirectory()) {
-			
-			/* LOG de niveau INFO. */
-			loggerInfo(
-					CLASSE_CONTROLEURTYPETEXTE
-						, METHODE_LIREFICHIER
-							, MESSAGE_FICHIER_REPERTOIRE
-								, pFile.getAbsolutePath());
-			
-			/* rapport. */
-			final LigneRapport ligneRapport 
-				= creerLigneRapport(
-						null
-						, MESSAGE_FICHIER_REPERTOIRE + pFile.getAbsolutePath()
-						, null
-						, SANS_OBJET
-						, SANS_OBJET
-						, ACTION_FICHIER_REFUSE);
-			
-			this.ajouterLigneRapport(ligneRapport);
-			
-			/* retour de MESSAGE_FICHIER_REPERTOIRE. */
-			return MESSAGE_FICHIER_REPERTOIRE;
-			
-		} // Fin de if (pFile.isDirectory())._______________________
-
-		
-		/* passe pFile à this.fichier - 
-		 * rafraîchit automatiquement this.nomFichier. */
-		this.setFichier(pFile);
-		
-		/* rafraîchit le rapport. */
-		this.rapport = new ArrayList<LigneRapport>();
-		
-		// LECTURE ***************
-		FileInputStream fileInputStream = null;
-		InputStreamReader inputStreamReader = null;
-		BufferedReader bufferedReader = null;
-
-		int characterEntier = 0;
-		Character character = null;
-		
-		final StringBuilder stb = new StringBuilder();
-
-		Charset charset = null;
-
-		/* Choisit automatiquement le CHARSET_UTF8 si pCharset == null. */
-		if (pCharset == null) {
-			charset = CHARSET_UTF8;
-		} else {
-			charset = pCharset;
-		}
-
-		try {
-
-			/*
-			 * Instancie un flux en lecture fileInputStream en lui passant
-			 * pFile.
-			 */
-			fileInputStream = new FileInputStream(pFile);
-
-			/*
-			 * Instancie un InputStreamReader en lui passant le FileReader et le
-			 * Charset.
-			 */
-			inputStreamReader = new InputStreamReader(fileInputStream, charset);
-
-			/*
-			 * Instancie un tampon de flux de caractères en lecture en lui
-			 * passant le flux inputStreamReader.
-			 */
-			bufferedReader = new BufferedReader(inputStreamReader);
-			
-			/* Parcours du bufferedReader. */
-			while (true) {
-				
-				/* Lecture de chaque caractère. */
-				characterEntier = bufferedReader.read();
-				
-				/* Arrêt de la lecture si fin de fichier. */
-				if (characterEntier < 0) {
-					break;
-				}
-				
-				/* Conversion de l'entier en caractère. */
-				character = (char) characterEntier;
-								
-				/* Ajout du caractère au StringBuilder. */
-				stb.append(character);
-				
-			} // Fin du parcours du bufferedReader._________
-
-		} catch (FileNotFoundException fnfe) {
-			
-			/* LOG de niveau ERROR. */
-			loggerError(
-					CLASSE_CONTROLEURTYPETEXTE
-						, METHODE_LIREFICHIER
-							, fnfe);
-			
-			/* retourne le message de l'exception. */
-			return fnfe.getMessage();
-			
-		} catch (IOException ioe) {
-			
-			/* LOG de niveau ERROR. */
-			loggerError(
-					CLASSE_CONTROLEURTYPETEXTE
-						, METHODE_LIREFICHIER
-							, ioe);
-			
-			/* retourne le message de l'exception. */
-			return ioe.getMessage();
-		}
-		
-		finally {
-			
-			/* fermeture du flux BufferedReader. */
-			if (bufferedReader != null) {
-				
-				try {
-					
-					bufferedReader.close();
-					
-				} catch (IOException ioe2) {
-					
-					/* LOG de niveau ERROR. */
-					loggerError(
-							CLASSE_CONTROLEURTYPETEXTE
-								, METHODE_LIREFICHIER
-									, ioe2);
-					
-				}
-				
-			} // Fin de if (bufferedReader != null).____
-			
-			/* fermeture du flux inputStreamReader. */
-			if (inputStreamReader != null) {
-				
-				try {
-					
-					inputStreamReader.close();
-					
-				} catch (IOException ioe4) {
-					
-					/* LOG de niveau ERROR. */
-					loggerError(
-							CLASSE_CONTROLEURTYPETEXTE
-								, METHODE_LIREFICHIER
-									, ioe4);
-				}
-				
-			} // Fin de if (inputStreamReader != null).______
-			
-			/* fermeture du flux fileInputStream. */
-			if (fileInputStream != null) {
-				
-				try {
-					
-					fileInputStream.close();
-					
-				} catch (IOException ioe3) {
-					
-					/* LOG de niveau ERROR. */
-					loggerError(
-							CLASSE_CONTROLEURTYPETEXTE
-								, METHODE_LIREFICHIER
-									, ioe3);
-					
-				}
-				
-			} // Fin de if (fileInputStream != null).________
-			
-		} // Fin du finally._____________________________
-		
-		return stb.toString();
-		
-	} // Fin de lireFichier(
-	 // File pFile
-	 // , Charset pCharset)._______________________________________________
-
-	
 	
 	/**
-	 * method listerChaineCarParCar(
+	 * method controler(
 	 * String pString) :<br/>
-	 * - Retourne une String permettant l'affichage 
-	 * caractère par caractère sur des lignes distinctes 
-	 * d'une chaine de caractères pString 
-	 * avec les informations 
-	 * Unicode concernant les caractères.<br/>
-	 * - Alimente longueurChaine.<br/>
-	 * <br/>
-	 * Par exemple : <br/>
-	 * <code>DifferentiateurString.listerChaineCarParCar("à b")</code> 
-	 * retourne : <br/>
-	 * Position : 1      Caractère : à     Unicode : \u00e0  NumericValue : -1    TypeCaractere : 2   valeurEntiere : 224   Point de Code décimal : 224   Point de Code Hexa : e0      Nom : LATIN SMALL LETTER A WITH GRAVE         <br/>
-	 * Position : 2      Caractère :       Unicode : \u0020  NumericValue : -1    TypeCaractere : 12  valeurEntiere : 32    Point de Code décimal : 32    Point de Code Hexa : 20      Nom : SPACE                                   <br/>
-	 * Position : 3      Caractère : b     Unicode : \u0062  NumericValue : 11    TypeCaractere : 2   valeurEntiere : 98    Point de Code décimal : 98    Point de Code Hexa : 62      Nom : LATIN SMALL LETTER B                    <br/>
-	 * <br/>
-	 * - retourne null si pString est blank (null ou vide).<br/>
+	 * .<br/>
 	 * <br/>
 	 *
-	 * @param pString : String : String à afficher 
-	 * caractère par caractère.<br/>
-	 * 
-	 * @return : String : Affichage caractère 
-	 * par caractère sur des lignes distinctes.<br/>
+	 * @param pString
+	 * @return : boolean :  .<br/>
 	 */
-	public String listerChaineCarParCar(
+	@Override
+	public final boolean controler(
 			final String pString) {
-		
-			
-			/* retourne null si pString est blank (null ou vide). */
-			if (StringUtils.isBlank(pString)) {
-				return null;
-			}
-						
-			/* Détermine la longueur de la chaîne. */
-			final int longueurChaine = pString.length();
-			int position = 0;
-			Character caractereChaine = null;
-			final StringBuilder stb = new StringBuilder();
-			
-			/* Parcours de la chaîne caractère par caractère. */
-//			for(int index = 0; index < longueurChaine; index++) {
-			
-			int l = 0;
-			if (longueurChaine < 1000) {
-				l = longueurChaine;
-			}
-			else {
-				l = 1000;
-			}
-			
-			for(int index = 0; index < l; index++) {
-				
-				/* L'index est 0-based. */
-				position = index + 1;
-				
-				/* détermination du caractère dans la chaine. */
-				try {
-					caractereChaine = pString.charAt(index);
-				} catch (IndexOutOfBoundsException e1) {
-					caractereChaine = null;
-				}
-				
-				/* Instanciation d'un CaractereDan. */
-				final CaractereDan carDan 
-					= new CaractereDan(position, caractereChaine);
-				
-				stb.append(carDan.toString());
-				stb.append(NEWLINE);
-				
-			} // Fin du parcours de la chaîne._______________
-			
-			/* Retour du résultat. */
-			return stb.toString();
-					
-	} // Fin de listerChaineCarParCar(
+		return false;
+	} // Fin de controler(
 	 // String pString).___________________________________________________
 	
+
 
 
 	/**
@@ -1003,36 +658,43 @@ public class ControleurTypeTexte extends AbstractControle {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected String fournirNomClasseConcrete() {
+	protected final String fournirNomClasseConcrete() {
 		return CLASSE_CONTROLEURTYPETEXTE;
 	} // Fin de fournirNomClasseConcrete().________________________________
 	
 	
 
 	/**
+	 * "Contrôle de surface".<br/>
+	 * <br/>
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected String fournirTypeControle() {
+	protected final String fournirTypeControle() {
 		return "Contrôle de surface";
 	} // Fin de fournirTypeControle()._____________________________________
 
 
 	/**
+	 * "Contrôle fichier texte".<br/>
+	 * <br/>
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected String fournirNomControle() {
+	protected final String fournirNomControle() {
 		return "Contrôle fichier texte";
 	} // Fin de fournirNomControle().______________________________________
 
 
 
 	/**
+	 * "Le fichier ne doit pas comporter de caractères 
+	 * indésirables (impossibles à écrire au clavier)".<br/>
+	 * <br/>
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected String fournirNomCritere() {
+	protected final String fournirNomCritere() {
 		return "Le fichier ne doit pas comporter de caractères "
 				+ "indésirables (impossibles à écrire au clavier)";
 	} // Fin de fournirNomCritere()._______________________________________
@@ -1045,7 +707,7 @@ public class ControleurTypeTexte extends AbstractControle {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected String fournirCleNiveauAnomalie() {
+	protected final String fournirCleNiveauAnomalie() {
 		return "ControleurTypeTexte.niveau.anomalie";
 	} // Fin de fournirCleNiveauAnomalie().________________________________
 
@@ -1057,7 +719,7 @@ public class ControleurTypeTexte extends AbstractControle {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected String fournirNiveauAnomalieEnDur() {
+	protected final String fournirNiveauAnomalieEnDur() {
 		return "1";
 	} // Fin de fournirNiveauAnomalieEnDur().______________________________
 

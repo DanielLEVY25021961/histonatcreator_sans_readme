@@ -17,7 +17,9 @@ import org.junit.Test;
 
 
 
+
 import levy.daniel.application.metier.controles.AbstractControle;
+import levy.daniel.application.metier.controles.IControle;
 import levy.daniel.application.metier.rapportscontroles.LigneRapport;
 
 
@@ -937,7 +939,7 @@ public class ControleurTypeTexteTest {
 		/* vérifie que lireFichier(FILE_NULL, ...) retourne 
 		 * ControleurTypeTexte.MESSAGE_FICHIER_NULL. */
 		assertEquals("doit retourner MESSAGE_FICHIER_NULL : "
-				, ControleurTypeTexte.MESSAGE_FICHIER_NULL
+				, IControle.MESSAGE_FICHIER_NULL
 					, resultat);
 		
 		/* récupération du rapport. */

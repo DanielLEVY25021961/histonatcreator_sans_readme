@@ -1,11 +1,13 @@
 package levy.daniel.application.metier.controles;
 
 import java.io.File;
-import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+
+import levy.daniel.application.ILecteurDecodeurFile;
+import levy.daniel.application.IListeurDeCaracteresUnicode;
 
 /**
  * Interface IControle :<br/>
@@ -39,15 +41,24 @@ import java.util.Locale;
  * - Tout contrôle fournit un rapport de contrôle 
  * sous forme de List&lt;LigneRapport&gt; 'rapport'.<br/>
  * <br/>
+ * <br/>
+ * Attributs : <br/>
+ * [nomClasseConcrete;dateControle;dateControleStringFormatee;userName;
+ * fichier;nomFichier;typeControle;nomControle;nomCritere;gravite;
+ * niveauAnomalie;estBloquant;rapport].<br/>
+ * <br/>
  *
  * - Exemple d'utilisation :<br/>
  *<br/>
  * 
  * - Mots-clé :<br/>
+ * Charset de décodage pCharset, lireFichier(File pFile)<br/>
  * <br/>
  *
  * - Dépendances :<br/>
- * <br/>
+ * levy.daniel.application.ILecteurDecodeurFile.<br/>
+ * levy.daniel.application.IListeurDeCaracteresUnicode.<br/>
+ * levy.daniel.application.metier.controles.IRapporteurControle<br/>
  * <br/>
  *
  *
@@ -56,7 +67,8 @@ import java.util.Locale;
  * @since 29 févr. 2016
  *
  */
-public interface IControle extends IRapporteurControle {
+public interface IControle extends IRapporteurControle
+			, ILecteurDecodeurFile, IListeurDeCaracteresUnicode {
 
 	/**
 	 * LOCALE_FR_FR : Locale :<br/>
@@ -82,14 +94,7 @@ public interface IControle extends IRapporteurControle {
 	 */
 	String NEWLINE = System.getProperty("line.separator");
 	
-	
-	/**
-	 * CHARSET_UTF8 : Charset :<br/>
-	 * Charset.forName("UTF-8").<br/>
-	 */
-	Charset CHARSET_UTF8 = Charset.forName("UTF-8");
-	
-	
+		
 	/**
 	 * CARACTERE_REMPLACEMENT : char :<br/>
 	 * Caractère de remplacement introduit lors de la lecture en UTF-8 
@@ -128,13 +133,87 @@ public interface IControle extends IRapporteurControle {
 	
 	
 	/**
+	 * METHODE_LIREFICHIER : String :<br/>
+	 * "Méthode lireFichier(File pFile, Charset pCharset)".<br/>
+	 */
+	String METHODE_LIREFICHIER 
+		= "Méthode lireFichier(File pFile, Charset pCharset)";
+
+	
+	/**
+	 * MESSAGE_FICHIER_NULL : String :<br/>
+	 * Message retourné par la méthode lireFichier(File pFile) 
+	 * si le fichier est null.<br/>
+	 * "Le fichier passé en paramètre est null".<br/>
+	 */
+	String MESSAGE_FICHIER_NULL 
+		= "Le fichier passé en paramètre est null";
+
+	
+	/**
+	 * MESSAGE_FICHIER_INEXISTANT : String :<br/>
+	 * Message retourné par la méthode lireFichier(File pFile) 
+	 * si le fichier est inexistant.<br/>
+	 * "Le fichier passé en paramètre est inexistant : "
+	 */
+	String MESSAGE_FICHIER_INEXISTANT 
+		= "Le fichier passé en paramètre est inexistant : ";
+
+	
+	/**
+	 * MESSAGE_FICHIER_REPERTOIRE : String :<br/>
+	 * Message retourné par la méthode lireFichier(File pFile) 
+	 * si le fichier est un répertoire.<br/>
+	 * "Le fichier passé en paramètre est un répertoire : ".<br/>
+	 */
+	String MESSAGE_FICHIER_REPERTOIRE 
+		= "Le fichier passé en paramètre est un répertoire : ";
+
+
+	/**
 	 * ACTION_FICHIER_REFUSE : String :<br/>
 	 * "Fichier refusé".<br/>
 	 */
 	String ACTION_FICHIER_REFUSE = "Fichier refusé";
+
+	
+	
+	/**
+	 * method controler(
+	 * File pFile) :<br/>
+	 * SERVICE PRINCIPAL.<br/>
+	 * Contrôle d'un fichier.<br/>
+	 * Vérifie qu'un fichier passe un contrôle.<br/>
+	 * <br/>
+	 *
+	 * @param pFile : File : fichier dont on veut savoir 
+	 * si il passe le contrôle.<br/>
+	 * 
+	 * @return : boolean : true si pFile passe le contrôle.<br/>
+	 */
+	boolean controler(
+			final File pFile);
+	
+	
+	
+	/**
+	 * method controler(
+	 * String pString) :<br/>
+	 * SERVICE PRINCIPAL.<br/>
+	 * Contrôle d'une String.<br/>
+	 * Vérifie qu'une String passe un contrôle.<br/>
+	 * <br/>
+	 *
+	 * @param pString : String : chaîne de caractères dont on veut savoir 
+	 * si elle passe le contrôle.<br/>
+	 * 
+	 * @return : boolean : true si pString passe le contrôle.<br/>
+	 */
+	boolean controler(
+			final String pString);
 	
 
-
+	
 	/**
 	 * method getDateControle() :<br/>
 	 * Getter de la java.util.Date du contrôle.<br/>
