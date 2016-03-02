@@ -877,48 +877,37 @@ static {
 			if (pRep == null) {
 				return;
 			}
-			
-			System.out.println();
-			System.out.println("DEBUT METHODE viderRepertoire(File pRep) - pRep = " + pRep.getPath());
-			
-			
-			
+						
 			/* retourne false si pRep n'existe pas. */
 			if (!pRep.exists()) {
-				System.out.println("METHODE viderRepertoire(File pRep) - pRep = " + pRep.getPath() + "     !pRep.exists()) RETURN");
 				return;
 			}
 			
 			/* retourne false si pRep n'est pas un répertoire. */
 			if(!pRep.isDirectory()) {
-				System.out.println("METHODE viderRepertoire(File pRep) - pRep = " + pRep.getPath() + "     !pRep.isDirectory()) RETURN");
 				return;
 			}
 			
 			/* Récupération des File dans pRep. */
 			final File[] filesContenus = pRep.listFiles();
-			System.out.println("filesContenus dans pRep = " + pRep.getPath() + " : " + affichierTableauFiles(pRep.listFiles()));
 			
-			System.out.println();
-			System.out.println("BOUCLE DE NIVEAU pRep = " + pRep.getPath());
+			if (filesContenus == null) {
+				return;
+			}
+			
 			/* ForEach (boucle) sur les File de pRep. ******/
 			for (final File file : filesContenus) {
 				
 				/* Sort Si pRep est vide. */
 				if (filesContenus.length == 0) {
-					System.out.println("if (filesContenus.length == 0) RETURN pour pRep = " + pRep.getPath());
 					return;
 				}
 				
-				System.out.println();
-				System.out.println("file dans la boucle : " + file.getPath() + "   alors que pRep = " + pRep.getPath());
-				
+				/* APPEL RECURSIF si file est un répertoire. */
 				if (file.isDirectory()) {
-					System.out.println("APPEL RECURSIF emptyDirectory(file) - file est Directory : " + file.getPath());
 					viderRepertoire(file);
 				}
 				
-				System.out.println("*************Destruction de file : " + file.getPath() + "   alors que pRep = " + pRep.getPath());
 				file.delete();
 				
 			} // Fin de ForEach (boucle) sur les File de pRep. ******__
@@ -972,32 +961,25 @@ static {
 				return false;
 			}
 			
-			System.out.println();
-			System.out.println("pRep = " + pRep.getPath());
-			
 			/* Récupération des File dans pRep. */
 			final File[] filesContenus = pRep.listFiles();
 			
-			System.out.println("filesContenus dans pRep = " + pRep.getPath() + " : " + affichierTableauFiles(pRep.listFiles()));
-			
-			/* Sort Si pRep est vide. */
-			if (filesContenus.length == 0) {
-				System.out.println("if (filesContenus.length == 0) return true pour pRep = " + pRep.getPath());
+			if (filesContenus == null) {
 				return true;
 			}
 			
-			System.out.println();
-			System.out.println("BOUCLE DE NIVEAU pRep = " + pRep.getPath());
+			/* Sort Si pRep est vide. */
+			if (filesContenus.length == 0) {
+				return true;
+			}
+
 			/* Si pRep non vide. */
 			/* ForEach (boucle) sur les File de pRep. ******/
 			for(final File file : filesContenus) {
 				
-				System.out.println("file dans la boucle : " + file.getPath() + "   alors que pRep = " + pRep.getPath());
-				
 				/* Appel récursif si file est un répertoire. */
 				if (file.isDirectory()) {
 					
-					System.out.println("APPEL RECURSIF viderRepertoireADetruire(file) : " + file.getPath());
 					/* APPEL RECURSIF. */
 					viderRepertoireADetruire(file);
 					
@@ -1007,7 +989,6 @@ static {
 				/* Destruction du file dans tous les cas. */					
 				try {
 					
-					System.out.println("*******Destruction de file : " + file.getPath() + "   alors que pRep = " + pRep.getPath());
 					file.delete();
 					
 				} catch (Exception e) {

@@ -789,6 +789,10 @@ public class ControleurTypeTexteTest {
 		/* récupère le tableau des enfants de repertoireTrafics. */
 		final File[] tableauRepertoires = repertoireTrafics.listFiles();
 		
+		if (tableauRepertoires == null) {
+			return;
+		}
+		
 		/* remplit la liste des sous-répertoires de trafics. */		
 		final List<File> listeSousRepertoires 
 			= Arrays.asList(tableauRepertoires);
@@ -800,13 +804,16 @@ public class ControleurTypeTexteTest {
 				
 				final File[] tabContenuSousRep = rep.listFiles();
 				
-				for (int j = 0; j < tabContenuSousRep.length; j++) {
+				if (tabContenuSousRep != null) {
 					
-					if (!tabContenuSousRep[j].isDirectory()) {
-						LISTEFILES_TRAFIC.add(tabContenuSousRep[j]);
+					for (int j = 0; j < tabContenuSousRep.length; j++) {
+						
+						if (!tabContenuSousRep[j].isDirectory()) {
+							LISTEFILES_TRAFIC.add(tabContenuSousRep[j]);
+						}						
 					}
-					
 				}
+					
 			}
 			else {
 				LISTEFILES_TRAFIC.add(rep);
