@@ -18,9 +18,10 @@ import org.junit.Test;
 
 
 
+
 import levy.daniel.application.metier.controles.AbstractControle;
 import levy.daniel.application.metier.controles.IControle;
-import levy.daniel.application.metier.rapportscontroles.LigneRapport;
+import levy.daniel.application.metier.controles.rapportscontroles.LigneRapport;
 
 
 

@@ -2,7 +2,7 @@ package levy.daniel.application.metier.controles;
 
 import java.util.List;
 
-import levy.daniel.application.metier.rapportscontroles.LigneRapport;
+import levy.daniel.application.metier.controles.rapportscontroles.LigneRapport;
 
 
 /**

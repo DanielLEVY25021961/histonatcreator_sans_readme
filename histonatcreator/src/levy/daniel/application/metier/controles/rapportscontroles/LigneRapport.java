@@ -1,4 +1,4 @@
-package levy.daniel.application.metier.rapportscontroles;
+package levy.daniel.application.metier.controles.rapportscontroles;
 
 import java.io.Serializable;
 import java.text.DateFormat;
