@@ -1,6 +1,12 @@
 package levy.daniel.application.metier.controles;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -49,6 +55,12 @@ import levy.daniel.application.metier.rapportscontroles.LigneRapport;
  * - Tout contrôle fournit un rapport de contrôle 
  * sous forme de List&lt;LigneRapport&gt; 'rapport'.<br/>
  * <br/>
+ * <br/>
+ * Attributs : <br/>
+ * [nomClasseConcrete;dateControle;dateControleStringFormatee;userName;
+ * fichier;nomFichier;typeControle;nomControle;nomCritere;gravite;
+ * niveauAnomalie;estBloquant;rapport].<br/>
+ * <br/>
  *
  * - Exemple d'utilisation :<br/>
  *<br/>
@@ -59,6 +71,10 @@ import levy.daniel.application.metier.rapportscontroles.LigneRapport;
  * <br/>
  *
  * - Dépendances :<br/>
+ * levy.daniel.application.ILecteurDecodeurFile.<br/>
+ * levy.daniel.application.IListeurDeCaracteresUnicode.<br/>
+ * levy.daniel.application.metier.controles.IRapporteurControle<br/>
+ * levy.daniel.application.metier.controles.IControle.<br/>
  * levy.daniel.application.metier.rapportscontroles.LigneRapport.<br/>
  * <br/>
  *
@@ -417,6 +433,24 @@ public abstract class AbstractControle implements IControle {
 	} // Fin de CONSTRUCTEUR COMPLET.______________________________________
 
 
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public abstract boolean controler(
+			final File pFile);
+
+	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public abstract boolean controler(
+			final String pString);
+	
+	
 
 	/**
 	 * method initialiserBundleControles() :<br/>
@@ -1352,8 +1386,430 @@ public abstract class AbstractControle implements IControle {
 	 // , String pPositionChamp
 	 // , String pValeurChamp
 	 // , String pAction)._________________________________________________
+
 	
 	
+	 /**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final String lireFichierEnUTF8(
+			final File pFile) {
+		return this.lireFichier(pFile, CHARSET_UTF8);
+	} // Fin de lireFichierEnUTF8(
+	// File pFile).________________________________________________________
+
+	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final String lireFichierEnAscii(
+			final File pFile) {
+		return this.lireFichier(pFile, CHARSET_US_ASCII);
+	} // Fin de lireFichierEnAscii(
+	// File pFile).________________________________________________________
+	
+
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final String lireFichierEnLatin1(
+			final File pFile) {
+		return this.lireFichier(pFile, CHARSET_ISO_8859_1);
+	} // Fin de lireFichierEnLatin1(
+	// File pFile).________________________________________________________
+	
+
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final String lireFichierEnLatin2(
+			final File pFile) {
+		return this.lireFichier(pFile, CHARSET_ISO_8859_2);
+	} // Fin de lireFichierEnLatin2(
+	// File pFile).________________________________________________________
+	
+
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final String lireFichierEnLatin9(
+			final File pFile) {
+		return this.lireFichier(pFile, CHARSET_ISO_8859_15);
+	} // Fin de lireFichierEnLatin9(
+	// File pFile).________________________________________________________
+	
+
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final String lireFichierEnAnsi(
+			final File pFile) {
+		return this.lireFichier(pFile, CHARSET_WINDOWS_1252);
+	} // Fin de lireFichierEnAnsi(
+	// File pFile).________________________________________________________
+	
+
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final String lireFichierEnIbm850(
+			final File pFile) {
+		return this.lireFichier(pFile, CHARSET_IBM850);
+	} // Fin de lireFichierEnIbm850(
+	// File pFile).________________________________________________________
+
+	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final String lireFichier(
+			final File pFile
+				, final Charset pCharset) {
+		
+		/* retourne MESSAGE_FICHIER_NULL 
+		 * si le pFile est null. */
+		if (pFile == null) {
+			
+			/* LOG de niveau INFO. */
+			loggerInfo(
+					this.fournirNomClasseConcrete()
+						, METHODE_LIREFICHIER
+							, MESSAGE_FICHIER_NULL);
+			
+			/* rapport. */
+			final LigneRapport ligneRapport 
+				= creerLigneRapport(
+						null
+						, MESSAGE_FICHIER_NULL
+						, null
+						, SANS_OBJET
+						, SANS_OBJET
+						, ACTION_FICHIER_REFUSE);
+			
+			this.ajouterLigneRapport(ligneRapport);
+			
+			/* retour de MESSAGE_FICHIER_NULL. */
+			return MESSAGE_FICHIER_NULL;
+			
+		} // Fin de if (pFile == null).__________________________
+		
+		/* retourne MESSAGE_FICHIER_INEXISTANT 
+		 * si le pFile est inexistant. */
+		if (!pFile.exists()) {
+							
+			/* LOG de niveau INFO. */
+			loggerInfo(
+					this.fournirNomClasseConcrete()
+						, METHODE_LIREFICHIER
+							, MESSAGE_FICHIER_INEXISTANT
+								, pFile.getAbsolutePath());
+			
+			/* rapport. */
+			final LigneRapport ligneRapport 
+				= creerLigneRapport(
+						null
+						, MESSAGE_FICHIER_INEXISTANT + pFile.getAbsolutePath()
+						, null
+						, SANS_OBJET
+						, SANS_OBJET
+						, ACTION_FICHIER_REFUSE);
+			
+			this.ajouterLigneRapport(ligneRapport);
+			
+			/* retour de MESSAGE_FICHIER_INEXISTANT. */
+			return MESSAGE_FICHIER_INEXISTANT;
+			
+		} // Fin de if (!pFile.exists()).___________________________
+		
+		
+		/* retourne MESSAGE_FICHIER_REPERTOIRE 
+		 * si le pFile est un répertoire. */
+		if (pFile.isDirectory()) {
+			
+			/* LOG de niveau INFO. */
+			loggerInfo(
+					this.fournirNomClasseConcrete()
+						, METHODE_LIREFICHIER
+							, MESSAGE_FICHIER_REPERTOIRE
+								, pFile.getAbsolutePath());
+			
+			/* rapport. */
+			final LigneRapport ligneRapport 
+				= creerLigneRapport(
+						null
+						, MESSAGE_FICHIER_REPERTOIRE + pFile.getAbsolutePath()
+						, null
+						, SANS_OBJET
+						, SANS_OBJET
+						, ACTION_FICHIER_REFUSE);
+			
+			this.ajouterLigneRapport(ligneRapport);
+			
+			/* retour de MESSAGE_FICHIER_REPERTOIRE. */
+			return MESSAGE_FICHIER_REPERTOIRE;
+			
+		} // Fin de if (pFile.isDirectory())._______________________
+
+		
+		/* passe pFile à this.fichier et 
+		 * rafraîchit automatiquement this.nomFichier. */
+		this.setFichier(pFile);
+		
+		/* rafraîchit le rapport. */
+		this.rapport = new ArrayList<LigneRapport>();
+		
+		// LECTURE ***************
+		FileInputStream fileInputStream = null;
+		InputStreamReader inputStreamReader = null;
+		BufferedReader bufferedReader = null;
+
+		int characterEntier = 0;
+		Character character = null;
+		
+		final StringBuilder stb = new StringBuilder();
+
+		Charset charset = null;
+
+		/* Choisit automatiquement le CHARSET_UTF8 si pCharset == null. */
+		if (pCharset == null) {
+			charset = CHARSET_UTF8;
+		} else {
+			charset = pCharset;
+		}
+
+		try {
+
+			/*
+			 * Instancie un flux en lecture fileInputStream en lui passant
+			 * pFile.
+			 */
+			fileInputStream = new FileInputStream(pFile);
+
+			/*
+			 * Instancie un InputStreamReader en lui passant le FileReader et le
+			 * Charset.
+			 */
+			inputStreamReader = new InputStreamReader(fileInputStream, charset);
+
+			/*
+			 * Instancie un tampon de flux de caractères en lecture en lui
+			 * passant le flux inputStreamReader.
+			 */
+			bufferedReader = new BufferedReader(inputStreamReader);
+			
+			/* Parcours du bufferedReader. */
+			while (true) {
+				
+				/* Lecture de chaque caractère. */
+				characterEntier = bufferedReader.read();
+				
+				/* Arrêt de la lecture si fin de fichier. */
+				if (characterEntier < 0) {
+					break;
+				}
+				
+				/* Conversion de l'entier en caractère. */
+				character = (char) characterEntier;
+								
+				/* Ajout du caractère au StringBuilder. */
+				stb.append(character);
+				
+			} // Fin du parcours du bufferedReader._________
+
+		} catch (FileNotFoundException fnfe) {
+			
+			/* LOG de niveau ERROR. */
+			loggerError(
+					this.fournirNomClasseConcrete()
+						, METHODE_LIREFICHIER
+							, fnfe);
+			
+			/* retourne le message de l'exception. */
+			return fnfe.getMessage();
+			
+		} catch (IOException ioe) {
+			
+			/* LOG de niveau ERROR. */
+			loggerError(
+					this.fournirNomClasseConcrete()
+						, METHODE_LIREFICHIER
+							, ioe);
+			
+			/* retourne le message de l'exception. */
+			return ioe.getMessage();
+		}
+		
+		finally {
+			
+			/* fermeture du flux BufferedReader. */
+			if (bufferedReader != null) {
+				
+				try {
+					
+					bufferedReader.close();
+					
+				} catch (IOException ioe2) {
+					
+					/* LOG de niveau ERROR. */
+					loggerError(
+							this.fournirNomClasseConcrete()
+								, METHODE_LIREFICHIER
+									, ioe2);
+					
+				}
+				
+			} // Fin de if (bufferedReader != null).____
+			
+			/* fermeture du flux inputStreamReader. */
+			if (inputStreamReader != null) {
+				
+				try {
+					
+					inputStreamReader.close();
+					
+				} catch (IOException ioe4) {
+					
+					/* LOG de niveau ERROR. */
+					loggerError(
+							this.fournirNomClasseConcrete()
+								, METHODE_LIREFICHIER
+									, ioe4);
+				}
+				
+			} // Fin de if (inputStreamReader != null).______
+			
+			/* fermeture du flux fileInputStream. */
+			if (fileInputStream != null) {
+				
+				try {
+					
+					fileInputStream.close();
+					
+				} catch (IOException ioe3) {
+					
+					/* LOG de niveau ERROR. */
+					loggerError(
+							this.fournirNomClasseConcrete()
+								, METHODE_LIREFICHIER
+									, ioe3);
+					
+				}
+				
+			} // Fin de if (fileInputStream != null).________
+			
+		} // Fin du finally._____________________________
+		
+		return stb.toString();
+		
+	} // Fin de lireFichier(
+	 // File pFile
+	 // , Charset pCharset)._______________________________________________
+
+	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final String listerChaineCarParCar(
+			final String pString) {
+		
+		return this.listerChaineCarParCar(pString, null);
+		
+	} // Fin de listerChaineCarParCar(
+	 // String pString).___________________________________________________
+	
+	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final String listerChaineCarParCar(
+			final String pString
+			, final Integer pNombreMaxiCaracteres) {
+		
+			
+			/* retourne null si pString est blank (null ou vide). */
+			if (StringUtils.isBlank(pString)) {
+				return null;
+			}
+			
+			int longueurALire = 0;
+			
+			/* Détermine la longueur de la chaîne. */
+			final int longueurChaine = pString.length();
+			int position = 0;
+			Character caractereChaine = null;
+			final StringBuilder stb = new StringBuilder();
+			
+			/* Calcul de longueurALire. */
+			/* si pNombreMaxiCaracteres == null, 
+			 * lit les 1000 premiers caractères. */
+			if (pNombreMaxiCaracteres == null) {
+				longueurALire = 1000;
+			}
+			/* si pNombreMaxiCaracteres == 0, lit toute la chaîne. */
+			else if (pNombreMaxiCaracteres == 0) {
+				longueurALire = longueurChaine;
+			}
+			/* si la longueur de pString <= pNombreMaxiCaracteres
+			 * , lit toute la chaîne.  */
+			else if (longueurChaine <= pNombreMaxiCaracteres) {
+				longueurALire = longueurChaine;
+			}
+			/* si la longueur de pString > pNombreMaxiCaracteres
+			 * , lit pNombreMaxiCaracteres.  */
+			else {
+				longueurALire = pNombreMaxiCaracteres;
+			}
+			
+			/* Parcours de longueurALire de la chaîne 
+			 * caractère par caractère. */
+			for(int index = 0; index < longueurALire; index++) {
+				
+				/* L'index est 0-based. */
+				position = index + 1;
+				
+				/* détermination du caractère dans la chaine. */
+				try {
+					caractereChaine = pString.charAt(index);
+				} catch (IndexOutOfBoundsException e1) {
+					caractereChaine = null;
+				}
+				
+				/* Instanciation d'un CaractereDan. */
+				final CaractereDan carDan 
+					= new CaractereDan(position, caractereChaine);
+				
+				stb.append(carDan.toString());
+				stb.append(NEWLINE);
+				
+			} // Fin du parcours de la chaîne._______________
+			
+			/* Retour du résultat. */
+			return stb.toString();
+					
+	} // Fin de listerChaineCarParCar(
+	 // String pString
+	// , Integer pNombreMaxiCaracteres).___________________________________
+	
+
 	
 	/**
 	 * {@inheritDoc}
