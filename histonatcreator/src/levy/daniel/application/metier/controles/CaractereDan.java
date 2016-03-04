@@ -92,7 +92,7 @@ public class CaractereDan implements
 	 * unicode : String :<br/>
 	 * Unicode du caractère (\u0020...).<br/>
 	 */
-	private String unicode;
+	private transient String unicode;
 	
 	
 	/**
@@ -100,7 +100,7 @@ public class CaractereDan implements
 	 * valeur entière que le caractère Unicode représente 
 	 * fournie par Character.getNumericValue(pChar).<br/>
 	 */
-	private int numericValue;
+	private transient int numericValue;
 
 	
 	/**
@@ -108,7 +108,7 @@ public class CaractereDan implements
 	 * valeur entière indiquant 
 	 * la catégorie générale d'un caractère.<br/>
 	 */
-	private int typeCaractere;
+	private transient int typeCaractere;
 
 	
 	/**
@@ -117,21 +117,21 @@ public class CaractereDan implements
 	 * par la méthode read() d'un Reader.<br/>
 	 * A priori similaire au point de code décimal.<br/>
 	 */
-	private int valeurEntiere;
+	private transient int valeurEntiere;
 
 	
 	/**
 	 * codePointDecimal : int :<br/>
 	 * Point de code du caractère en décimal.<br/>
 	 */
-	private int codePointDecimal;
+	private transient int codePointDecimal;
 	
 
 	/**
 	 * codePointHexa : String :<br/>
 	 * Point de code du caractère en hexadécimal.<br/>
 	 */
-	private String codePointHexa;
+	private transient String codePointHexa;
 	
 	
 	/**
@@ -139,7 +139,7 @@ public class CaractereDan implements
 	 * nom Unicode du caractère.<br/>
 	 * (LATIN CAPITAL LETTER E, SPACE, ...).<br/>
 	 */
-	private String nom;
+	private transient String nom;
 	
 	
 	/**
@@ -223,7 +223,7 @@ public class CaractereDan implements
 	 * CONSTRUCTEUR A REMPLISSAGE_PERSISTANT.<br/>
 	 * - AVEC id en base.<br/>
 	 * - AVEC position.<br/>
-	 * Remplit automatiquement les valeurs du caractère.<br/>
+	 * Calcule automatiquement les valeurs unicode dépendantes de pChar.<br/>
 	 * <br/>
 	 *
 	 * @param pId : Long : id en base.<br/>
@@ -236,6 +236,24 @@ public class CaractereDan implements
 				
 		this(pId, pPosition, pChar, null, 0, 0, 0, 0, null, null);
 		
+		/* Calcule automatiquement les valeurs unicode dépendantes de pChar. */
+		this.remplirAuto(pChar);
+		
+	} // Fin de CONSTRUCTEUR A REMPLISSAGE_PERSISTANT.______________________
+	
+
+	
+	/**
+	 * method remplirAuto(
+	 * Character pChar) :<br/>
+	 * Calcule automatiquement les valeurs unicode dépendantes de pChar.<br/>
+	 * <br/>
+	 *
+	 * @param pChar : Character.<br/>
+	 */
+	private void remplirAuto(
+			final Character pChar) {
+		
 		this.unicode = this.getCodeUnicodeHexaDecimal(pChar);
 		this.numericValue = this.getNumericValue(pChar);
 		this.typeCaractere = this.getTypeCharacter(pChar);
@@ -244,9 +262,10 @@ public class CaractereDan implements
 		this.codePointHexa = this.getCodePointHexaDecimal(pChar);
 		this.nom = this.getNameUnicodeChar(pChar);
 		
-	} // Fin de CONSTRUCTEUR A REMPLISSAGE_PERSISTANT.______________________
+	} // Fin de remplirAuto(
+	 // Character pChar).__________________________________________________
 	
-
+	
 		
 	 /**
 	 * method CONSTRUCTEUR CaractereDan(COMPLET) :<br/>
@@ -343,7 +362,7 @@ public class CaractereDan implements
 	 * {@inheritDoc}
 	 */
 	@Override
-	public int hashCode() {
+	public final int hashCode() {
 		
 		final int prime = 31;
 		int result = 1;
@@ -373,7 +392,7 @@ public class CaractereDan implements
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean equals(
+	public final boolean equals(
 			final Object pObj) {
 		
 		if (this == pObj) {
@@ -456,7 +475,7 @@ public class CaractereDan implements
 	 * {@inheritDoc}
 	 */
 	@Override
-	public int compareTo(
+	public final int compareTo(
 			final Object pObject) {
 		
 		/* Même instance : 0. */
@@ -617,17 +636,11 @@ public class CaractereDan implements
 	@Override
 	public final Object clone() throws CloneNotSupportedException {
 		
-		final CaractereDan clone 
-			= new CaractereDan(this.id
-					, this.position
-					, this.caractere
-					, this.unicode
-					, this.numericValue
-					, this.typeCaractere
-					, this.valeurEntiere
-					, this.codePointDecimal
-					, this.codePointHexa
-					, this.nom);
+		final CaractereDan clone = (CaractereDan) super.clone();
+		
+		clone.setId(this.id);
+		clone.setPosition(this.position);
+		clone.setCaractere(this.caractere);
 		
 		return clone;
 		
@@ -646,7 +659,7 @@ public class CaractereDan implements
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String toString() {
+	public final String toString() {
 		
 		final StringBuilder builder = new StringBuilder();
 		
@@ -708,7 +721,7 @@ public class CaractereDan implements
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String getEnTeteCsv() {
+	public final String getEnTeteCsv() {
 		
 		final StringBuilder stb = new StringBuilder();
 		
@@ -745,7 +758,7 @@ public class CaractereDan implements
 	 * avec le séparateur ';'.<br/>
 	 */
 	@Override
-	public String toCsv() {
+	public final String toCsv() {
 		
 		final StringBuilder stb = new StringBuilder();
 		
@@ -785,7 +798,7 @@ public class CaractereDan implements
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String getEnTeteColonne(
+	public final String getEnTeteColonne(
 			final int pI) {
 		
 		String entete = null;
@@ -852,7 +865,7 @@ public class CaractereDan implements
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Object getValeurColonne(
+	public final Object getValeurColonne(
 			final int pI) {
 		
 		Object valeur = null;
@@ -919,7 +932,7 @@ public class CaractereDan implements
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void reset() {
+	public final void reset() {
 		
 		this.id = null;
 		this.position = null;
@@ -944,14 +957,14 @@ public class CaractereDan implements
 	 * Méthode à utiliser avec reset() pour éviter d'instancier 
 	 * un nouvel objet à chaque itération d'une boucle.<br/>
 	 * <br/>
-	 * Remplit automatiquement les valeurs du caractère.<br/>
+	 * Calcule automatiquement les valeurs unicode dépendantes de pChar.<br/>
 	 * <br/>
 	 *
 	 * @param pId : Long : id en base.<br/>
 	 * @param pPosition : Integer : Position du caractère dans une String.<br/>
 	 * @param pChar : Character : caractère.<br/>
 	 */
-	public void remplir(
+	public final void remplir(
 			final Long pId
 			, final Integer pPosition
 			, final Character pChar) {
@@ -960,14 +973,8 @@ public class CaractereDan implements
 		this.position = pPosition;
 		this.caractere = pChar;
 		
-		/* Remplissage automatique. */
-		this.unicode = this.getCodeUnicodeHexaDecimal(pChar);
-		this.numericValue = this.getNumericValue(pChar);
-		this.typeCaractere = this.getTypeCharacter(pChar);
-		this.valeurEntiere = this.getIntValue(pChar);
-		this.codePointDecimal = this.getCodePointDecimal(pChar);
-		this.codePointHexa = this.getCodePointHexaDecimal(pChar);
-		this.nom = this.getNameUnicodeChar(pChar);
+		/* Calcule automatiquement les valeurs unicode dépendantes de pChar. */
+		this.remplirAuto(pChar);
 		
 	} // Fin de remplir(
 	 // Long pId
@@ -1290,7 +1297,7 @@ public class CaractereDan implements
 	 * 
 	 * @return this.id : Long.<br/>
 	 */
-	public Long getId() {
+	public final Long getId() {
 		return this.id;
 	} // Fin de getId().___________________________________________________
 
@@ -1304,7 +1311,7 @@ public class CaractereDan implements
 	 * 
 	 * @param pId : Long.<br/>
 	 */
-	public void setId(
+	public final void setId(
 			final Long pId) {
 		this.id = pId;
 	} // Fin de setId(
@@ -1355,17 +1362,24 @@ public class CaractereDan implements
 
 	/**
 	 * method setCaractere(
-	 * Character pCaractere) :<br/>
+	 * Character pChar) :<br/>
 	 * Setter du caractère.<br/>
 	 * <br/>
+	 * Calcule automatiquement les valeurs unicode dépendantes de pChar.<br/>
+	 * <br/>
 	 *
-	 * @param pCaractere : Character : valeur à passer à caractere.<br/>
+	 * @param pChar : Character : valeur à passer à caractere.<br/>
 	 */
 	public final void setCaractere(
-			final Character pCaractere) {
-		this.caractere = pCaractere;
+			final Character pChar) {
+		
+		this.caractere = pChar;
+		
+		/* Calcule automatiquement les valeurs unicode dépendantes de pChar. */
+		this.remplirAuto(pChar);
+		
 	} // Fin de setCaractere(
-	 // Character pCaractere)._____________________________________________
+	 // Character pChar).__________________________________________________
 
 
 
@@ -1379,22 +1393,6 @@ public class CaractereDan implements
 	public final String getUnicode() {
 		return this.unicode;
 	} // Fin de getUnicode().______________________________________________
-
-
-
-	/**
-	 * method setUnicode(
-	 * String pUnicode) :<br/>
-	 * Setter du Unicode du caractère (\u0020...).<br/>
-	 * <br/>
-	 *
-	 * @param pUnicode : String : valeur à passer à unicode.<br/>
-	 */
-	public final void setUnicode(
-			final String pUnicode) {
-		this.unicode = pUnicode;
-	} // Fin de setUnicode(
-	 // String pUnicode).__________________________________________________
 
 
 
@@ -1413,23 +1411,6 @@ public class CaractereDan implements
 
 
 	/**
-	 * method setNumericValue(
-	 * int pNumericValue) :<br/>
-	 * Setter de la valeur entière que le caractère Unicode représente 
-	 * fournie par Character.getNumericValue(pChar).<br/>
-	 * <br/>
-	 *
-	 * @param pNumericValue : int : valeur à passer à numericValue.<br/>
-	 */
-	public final void setNumericValue(
-			final int pNumericValue) {
-		this.numericValue = pNumericValue;
-	} // Fin de setNumericValue(
-	 // int pNumericValue).________________________________________________
-
-
-
-	/**
 	 * method getTypeCaractere() :<br/>
 	 * Getter de la valeur entière indiquant 
 	 * la catégorie générale d'un caractère.<br/>
@@ -1440,23 +1421,6 @@ public class CaractereDan implements
 	public final int getTypeCaractere() {
 		return this.typeCaractere;
 	} // Fin de getTypeCaractere().________________________________________
-
-
-
-	/**
-	 * method setTypeCaractere(
-	 * int pTypeCaractere) :<br/>
-	 * Setter de la valeur entière indiquant 
-	 * la catégorie générale d'un caractère.<br/>
-	 * <br/>
-	 *
-	 * @param pTypeCaractere : int : valeur à passer à typeCaractere.<br/>
-	 */
-	public final void setTypeCaractere(
-			final int pTypeCaractere) {
-		this.typeCaractere = pTypeCaractere;
-	} // Fin de setTypeCaractere(
-	 // int pTypeCaractere)._______________________________________________
 
 
 
@@ -1475,23 +1439,6 @@ public class CaractereDan implements
 
 
 	/**
-	 * method setValeurEntiere(
-	 * int pValeurEntiere) :<br/>
-	 * Setter de la valeur entière d'un caractère retournée 
-	 * par la méthode read() d'un Reader.<br/>
-	 * <br/>
-	 *
-	 * @param pValeurEntiere : int : valeur à passer à valeurEntiere.<br/>
-	 */
-	public final void setValeurEntiere(
-			final int pValeurEntiere) {
-		this.valeurEntiere = pValeurEntiere;
-	} // Fin de setValeurEntiere(
-	 // int pValeurEntiere)._______________________________________________
-
-
-
-	/**
 	 * method getCodePointDecimal() :<br/>
 	 * Getter du Point de code du caractère en décimal.<br/>
 	 * <br/>
@@ -1501,22 +1448,6 @@ public class CaractereDan implements
 	public final int getCodePointDecimal() {
 		return this.codePointDecimal;
 	} // Fin de getCodePointDecimal()._____________________________________
-
-
-
-	/**
-	 * method setCodePointDecimal(
-	 * int pCodePointDecimal) :<br/>
-	 * Setter du Point de code du caractère en décimal.<br/>
-	 * <br/>
-	 *
-	 * @param pCodePointDecimal : int : valeur à passer à codePointDecimal.<br/>
-	 */
-	public final void setCodePointDecimal(
-			final int pCodePointDecimal) {
-		this.codePointDecimal = pCodePointDecimal;
-	} // Fin de setCodePointDecimal(
-	 // int pCodePointDecimal).____________________________________________
 
 
 
@@ -1534,22 +1465,6 @@ public class CaractereDan implements
 
 
 	/**
-	 * method setCodePointHexa(
-	 * String pCodePointHexa) :<br/>
-	 * Setter du Point de code du caractère en hexadécimal.<br/>
-	 * <br/>
-	 *
-	 * @param pCodePointHexa : String : valeur à passer à codePointHexa.<br/>
-	 */
-	public final void setCodePointHexa(
-			final String pCodePointHexa) {
-		this.codePointHexa = pCodePointHexa;
-	} // Fin de setCodePointHexa(
-	 // String pCodePointHexa).____________________________________________
-
-
-
-	/**
 	 * method getNom() :<br/>
 	 * Getter du nom Unicode du caractère.<br/>
 	 * <br/>
@@ -1559,22 +1474,6 @@ public class CaractereDan implements
 	public final String getNom() {
 		return this.nom;
 	} // Fin de getNom().__________________________________________________
-
-
-
-	/**
-	 * method setNom(
-	 * String pNom) :<br/>
-	 * Setter du nom Unicode du caractère.<br/>
-	 * <br/>
-	 *
-	 * @param pNom : String : valeur à passer à nom.<br/>
-	 */
-	public final void setNom(
-			final String pNom) {
-		this.nom = pNom;
-	} // Fini de setNom(
-	 //* String pNom)._____________________________________________________
 
 
 	

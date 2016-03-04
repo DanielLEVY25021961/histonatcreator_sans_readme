@@ -20,7 +20,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import levy.daniel.application.metier.rapportscontroles.LigneRapport;
+import levy.daniel.application.metier.controles.rapportscontroles.LigneRapport;
 
 
 /**
@@ -73,9 +73,13 @@ import levy.daniel.application.metier.rapportscontroles.LigneRapport;
  * - Dépendances :<br/>
  * levy.daniel.application.ILecteurDecodeurFile.<br/>
  * levy.daniel.application.IListeurDeCaracteresUnicode.<br/>
- * levy.daniel.application.metier.controles.IRapporteurControle<br/>
+ * levy.daniel.application.IExportateurCsv.<br/>
+ * levy.daniel.application.IExportateurJTable.<br/>
+ * levy.daniel.application.IResetable.<br/>
+ * levy.daniel.application.metier.controles.rapportscontroles.LigneRapport.<br/>
+ * levy.daniel.application.metier.controles.IRapporteurControle.<br/>
  * levy.daniel.application.metier.controles.IControle.<br/>
- * levy.daniel.application.metier.rapportscontroles.LigneRapport.<br/>
+ * levy.daniel.application.metier.controles.CaractereDan.<br/>
  * <br/>
  *
  *
@@ -229,6 +233,7 @@ public abstract class AbstractControle implements IControle {
 	 */
 	public final transient DateFormat dfDatetimemilliFrancaise 
 	= new SimpleDateFormat("dd/MM/yyyy-HH:mm:ss.SSS", LOCALE_FR_FR);
+
 	
 	/**
 	 * bundleControles : ResourceBundle :<br/>
@@ -407,7 +412,7 @@ public abstract class AbstractControle implements IControle {
 		 * ou 'Administrateur' sinon. */
 		this.userName = this.fournirUserName(pUserName);
 		
-		/* remplissage de fichier. */
+		/* passe pFichier à this.fichier. */
 		this.fichier = pFichier;
 		
 		/* calcule automatiquement nomFichier. */
@@ -428,8 +433,7 @@ public abstract class AbstractControle implements IControle {
 		/* Remplit gravite (ce qui remplit également niveauAnomalie 
 		 * et estBloquant). */
 		this.gravite = this.fournirGravite();
-		
-		
+				
 	} // Fin de CONSTRUCTEUR COMPLET.______________________________________
 
 
@@ -691,7 +695,7 @@ public abstract class AbstractControle implements IControle {
 	 * <br/>
 	 *
 	 * @param pDate
-	 * @return : String :  .<br/>
+	 * @return : String : "dd/MM/yyyy-HH:mm:ss.SSS".<br/>
 	 */
 	private String fournirDateFormattee(
 			final Date pDate) {

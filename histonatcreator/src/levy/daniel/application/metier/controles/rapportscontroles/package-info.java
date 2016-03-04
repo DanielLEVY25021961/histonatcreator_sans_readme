@@ -15,9 +15,9 @@
  * <br/>
  *
  *
- * @author daniel.levy Lévy
+ * @author dan Lévy
  * @version 1.0
- * @since 26 févr. 2016
+ * @since 3 mars 2016
  *
  */
-package levy.daniel.application.metier.rapportscontroles;
+package levy.daniel.application.metier.controles.rapportscontroles;
