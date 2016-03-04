@@ -1,4 +1,6 @@
-package levy.daniel.application.util.differentiateurs.differentiateursstrings;
+package levy.daniel.application.metier.controles;
+
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,9 +8,6 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
-
 
 /**
  * class CaractereDanTest :<br/>
@@ -27,12 +26,13 @@ import static org.junit.Assert.*;
  *
  * @author dan Lévy
  * @version 1.0
- * @since 6 févr. 2016
+ * @since 4 mars 2016
  *
  */
-public final class CaractereDanTest {
+public class CaractereDanTest {
 
 	// ************************ATTRIBUTS************************************/
+
 
 	/**
 	 * CARAC_NULL : CaractereDan :<br/>
@@ -163,6 +163,7 @@ public final class CaractereDanTest {
 	}
 	
 	
+
 	/**
 	 * LOG : Log : 
 	 * Logger pour Log4j (utilisant commons-logging).
@@ -170,9 +171,9 @@ public final class CaractereDanTest {
 	@SuppressWarnings("unused")
 	private static final Log LOG = LogFactory.getLog(CaractereDanTest.class);
 	
-
-	// *************************METHODES************************************/
 	
+	// *************************METHODES************************************/
+
 	
 	 /**
 	 * method CONSTRUCTEUR CaractereDanTest() :<br/>
@@ -625,6 +626,6 @@ public final class CaractereDanTest {
 		
 	} // Fin de assertionsListeColonne().__________________________________
 	
-	
-	
+
+
 } // FIN DE LA CLASSE CaractereDanTest.--------------------------------------

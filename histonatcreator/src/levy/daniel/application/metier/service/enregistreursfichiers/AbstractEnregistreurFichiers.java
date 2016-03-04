@@ -7,14 +7,17 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
-
-import levy.daniel.application.util.differentiateurs.differentiateursstrings.DifferentiateurString;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import levy.daniel.application.metier.service.enregistreursfichiers.rapportsenregistrements.LigneRapportEnregistrement;
 
 /**
  * class AbstractEnregistreurFichiers :<br/>
@@ -108,6 +111,13 @@ public abstract class AbstractEnregistreurFichiers implements
 	 */
 	public static final String MESSAGE_EXCEPTION = "Exception GRAVE : ";
 	
+
+	/**
+	 * nomClasseConcrete : String :<br/>
+	 * nom de la classe de contrôle concrète.<br/>
+	 */
+	protected transient String nomClasseConcrete;
+
 	
 	/**
 	 * dateEnregistrement : Date :<br/>
@@ -118,7 +128,7 @@ public abstract class AbstractEnregistreurFichiers implements
 	
 	/**
 	 * dateEnregistrementStringFormatee : String :<br/>
-	 * date se l'enregistrement du fichier 
+	 * date de l'enregistrement du fichier 
 	 * formattée au format dfDatetimemilliFrancaise.<br/>
 	 * Format des dates-heures françaises avec millisecondes comme
 	 * '25/02/1961-12:27:07.251'.<br/>
@@ -135,6 +145,14 @@ public abstract class AbstractEnregistreurFichiers implements
 
 	
 	/**
+	 * objet : String :<br/>
+	 * objet (ou motif) ayant demandé la création du fichier 
+	 * comme 'contrôle de lignes vide'.<br/>
+	 */
+	protected String objet;
+	
+	
+	/**
 	 * fichier : File :<br/>
 	 * fichier enregistré.<br/>
 	 */
@@ -147,6 +165,25 @@ public abstract class AbstractEnregistreurFichiers implements
 	 */
 	protected transient String nomFichier;
 	
+	
+	/**
+	 * rapport : List&lt;LigneRapportEnregistrement&gt; :<br/>
+	 * rapport fourni par l'enregistreur sous forme 
+	 * de List&lt;LigneRapportEnregistrement&gt;.<br/>
+	 */
+	protected transient List<LigneRapportEnregistrement> rapport 
+		= new ArrayList<LigneRapportEnregistrement>();
+	
+	
+	/**
+	 * dfDatetimemilliFrancaise : DateFormat :<br/>
+	 * Format des dates-heures françaises avec millisecondes comme
+	 * '25/02/1961-12:27:07.251'.<br/>
+	 * "dd/MM/yyyy-HH:mm:ss.SSS".<br/>
+	 */
+	public final transient DateFormat dfDatetimemilliFrancaise 
+	= new SimpleDateFormat("dd/MM/yyyy-HH:mm:ss.SSS", LOCALE_FR_FR);
+
 
 	/**
 	 * LOG : Log : 
@@ -160,15 +197,71 @@ public abstract class AbstractEnregistreurFichiers implements
 	// *************************METHODES************************************/
 	
 	
+	 
+	
 	 /**
-	 * method CONSTRUCTEUR AbstractEnregistreurFichiers() :<br/>
-	 * .<br/>
+	 * method CONSTRUCTEUR AbstractEnregistreurFichiers(COMPLET) :<br/>
+	 * CONSTRUCTEUR COMPLET.<br/>
+	 * <br/>
+	 * - Remplit le nom de la classe concrète this.nomClasseConcrete 
+	 * fourni par this.fournirNomClasseConcrete() 
+	 * dans la classe concrète.<br/>
+	 * - Remplit dateEnregistrement avec pDateEnregistrement 
+	 * si pDateEnregistrement != null 
+	 * ou la date système sinon.<br/>
+	 * - calcule automatiquement dateControleStringFormattee.<br/>
+	 * - remplit userName avec pUserName si pUserName != null 
+	 * ou 'Administrateur' sinon.<br/>
+	 * - passe pObjet à this.objet.<br/>
+	 * - passe pFichier à this.fichier.<br/>
+	 * - calcule automatiquement nomFichier.<br/>
 	 * <br/>
 	 *
+	 * @param pDateEnregistrement : Date : 
+	 * java.util.Date de l'enregistrement du fichier.<br/>
+	 * @param pUserName : String : 
+	 * nom de l'utilisateur qui a déclenché l'enregistrement du fichier.<br/>
+	 * @param pObjet : String : objet (ou motif) ayant demandé 
+	 * la création du fichier 
+	 * comme 'contrôle de lignes vide'.<br/>
+	 * @param pFichier : File : fichier enregistré.<br/>
 	 */
-	public AbstractEnregistreurFichiers() {
+	public AbstractEnregistreurFichiers(
+			final Date pDateEnregistrement
+				, final String pUserName
+					, final String pObjet
+						, final File pFichier) {
+		
 		super();
-	}
+		
+		/* Remplit le nom de la classe concrète this.nomClasseConcrete 
+		 * fourni par this.fournirNomClasseConcrete() 
+		 * dans la classe concrète. */
+		this.nomClasseConcrete = this.fournirNomClasseConcrete();
+		
+		/* Remplit dateEnregistrement avec pDateEnregistrement 
+		 * si pDateEnregistrement != null 
+		 * ou la date système sinon. */
+		this.dateEnregistrement = this.fournirDate(pDateEnregistrement);
+		
+		/* calcule automatiquement dateControleStringFormattee. */
+		this.dateEnregistrementStringFormatee
+			= this.fournirDateFormattee(this.dateEnregistrement);
+		
+		/* remplit userName avec pUserName si pUserName != null 
+		 * ou 'Administrateur' sinon. */
+		this.userName = this.fournirUserName(pUserName);
+		
+		/* passe pObjet à this.objet. */
+		this.objet = pObjet;
+		
+		/* passe pFichier à this.fichier. */
+		this.fichier = pFichier;
+		
+		/* calcule automatiquement nomFichier. */
+		this.nomFichier = this.fournirNomFichier(this.fichier);
+		
+	} // Fin de CONSTRUCTEUR COMPLET.______________________________________
 	
 	
 	
@@ -474,11 +567,8 @@ public abstract class AbstractEnregistreurFichiers implements
 	 * @return : String : Affichage des caractères non imprimables 
 	 * saut de ligne (\n ou \r ou \r\n).<br/>
 	 */
-	public static String afficherSautLigne(
+	public final String afficherSautLigne(
 			final String pSautLigne) {
-		
-		/* block static synchronized. */
-		synchronized (DifferentiateurString.class) {
 			
 			/* retourne null si pSautLigne est null. */
 			if (pSautLigne == null) {
@@ -506,12 +596,9 @@ public abstract class AbstractEnregistreurFichiers implements
 			
 			return stb.toString();
 			
-		} // Fin du bloc static synchronized.________________________
-		
 	} // Fin de afficherSautLigne(
 	 // String pSautLigne).________________________________________________
 	
-
 
 	
 	/**
@@ -525,6 +612,119 @@ public abstract class AbstractEnregistreurFichiers implements
 	
 	
 	
+	/**
+	 * method fournirDate(
+	 * Date pDate) :<br/>
+	 * - retourne la date système si pDate == null.<br/>
+	 * - retourne pDate sinon.<br/>
+	 * <br/>
+	 *
+	 * @param pDate : java.util.Date.<br/>
+	 * @return : Date : date système ou pDate.<br/>
+	 */
+	private Date fournirDate(
+			final Date pDate) {
+		
+		/* retourne la date système si pDate == null. */
+		if (pDate == null) {
+			return new Date();
+		}
+		
+		/* retourne pDate sinon. */
+		return pDate;
+		
+	} // Fin de fournirDate(
+	 // Date pDate)._______________________________________________________
+	
+
+	
+	/**
+	 * method fournirDateFormattee(
+	 * Date pDate) :<br/>
+	 * Fournit une date sous forme de String formattée 
+	 * au format dfDatetimemilliFrancaise.<br/>
+	 * Format des dates-heures françaises avec millisecondes comme
+	 * '25/02/1961-12:27:07.251'.<br/>
+	 * "dd/MM/yyyy-HH:mm:ss.SSS".<br/>
+	 * <br/>
+	 * - retourne null si pDate == null.<br/>
+	 * <br/>
+	 *
+	 * @param pDate
+	 * @return : String : "dd/MM/yyyy-HH:mm:ss.SSS".<br/>
+	 */
+	private String fournirDateFormattee(
+			final Date pDate) {
+		
+		/* retourne null si pDate == null. */
+		if (pDate == null) {
+			return null;
+		}
+		
+		final String dateFormattee 
+			= this.dfDatetimemilliFrancaise.format(pDate);
+		
+		return dateFormattee;
+		
+	} // Fin de fournirDateFormattee(
+	 // Date pDate)._______________________________________________________
+	
+	
+	
+	/**
+	 * method fournirUserName(
+	 * String pUserName) :<br/>
+	 * - retourne 'Administrateur' si pUsername == null.<br/>
+	 * - retourne pUserName sinon.<br/>
+	 * <br/>
+	 *
+	 * @param pUserName
+	 * @return : String :  .<br/>
+	 */
+	private String fournirUserName(
+			final String pUserName) {
+		
+		/* retourne 'Administrateur' si pUsername == null. */
+		if (pUserName == null) {
+			return "Administrateur";
+		}
+		
+		/* retourne pUserName sinon. */
+		return pUserName;
+		
+	} // Fin de fournirUserName(
+	 // String pUserName)._________________________________________________
+	
+
+	
+	/**
+	 * method fournirNomFichier(
+	 * File pFile) :<br/>
+	 * retourne le nom de pFile.<br/>
+	 * <br/>
+	 * - retourne null si pFile == null.<br/>
+	 * <br/>
+	 *
+	 * @param pFile : File.<br/>
+	 * 
+	 * @return : String : nom du fichier.<br/>
+	 */
+	private String fournirNomFichier(
+			final File pFile) {
+		
+		/* retourne null si pFile == null. */
+		if (pFile == null) {
+			return null;
+		}
+		
+		/* retourne le nom de pFile. */
+		return pFile.getName();
+		
+	} // Fin de fournirNomFichier(
+	 // File pFile)._______________________________________________________
+	
+	
+
 	/**
 	 * method loggerInfo(
 	 * String pClasse
@@ -663,6 +863,278 @@ public abstract class AbstractEnregistreurFichiers implements
 	 // , String pMethode
 	 // , Exception pException).___________________________________________
 	
+
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final String afficherRapportTextuel() {
+		
+		/* retourne null si this.rapport == null. */
+		if (this.rapport == null) {
+			return null;
+		}
+		
+		return this.afficherRapportTextuel(this.rapport);
+		
+	} // Fin de afficherRapportTextuel().__________________________________
+	
+
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final String afficherRapportTextuel(
+			final List<LigneRapportEnregistrement> pList) {
+		
+		/* retourne null si pList == null. */
+		if (pList == null) {
+			return null;
+		}
+		
+		final StringBuilder stb = new StringBuilder();
+		
+		for (final LigneRapportEnregistrement ligne : pList) {
+			stb.append(ligne.toString());
+			stb.append(NEWLINE);
+		}
+		
+		return stb.toString();
+		
+	} // Fin de afficherRapportTextuel(
+	 // List<LigneRapportEnregistrement> pList).___________________________
+
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final String getEnTeteCsv() {
+		
+		final StringBuilder stb = new StringBuilder();
+		
+		stb.append("id;");
+		stb.append("date de l'enregistrement;");
+		stb.append("utilisateur;");
+		stb.append("Objet;");
+		stb.append("Fichier;");
+		stb.append("Message de l'enregistrement;");
+		stb.append("Chemin du fichier enregistré;");
+		stb.append("Statut de l'enregistrement;");
+		
+		return stb.toString();
+		
+	} // Fin de getEnTeteCsv().____________________________________________
+
+
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final String afficherRapportCsv() {
+		
+		/* retourne null si this.rapport == null. */
+		if (this.rapport == null) {
+			return null;
+		}
+		
+		return this.afficherRapportCsv(this.rapport, false);
+		
+	} // Fin de afficherRapportCsv().______________________________________
+	
+
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final String afficherRapportCsvAvecEntete() {
+		
+		/* retourne null si this.rapport == null. */
+		if (this.rapport == null) {
+			return null;
+		}
+		
+		return this.afficherRapportCsv(this.rapport, true);
+		
+	} // Fin de afficherRapportCsvAvecEntete().____________________________
+
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final String afficherRapportCsv(
+			final List<LigneRapportEnregistrement> pList
+				, final boolean pAjouterEntete) {
+		
+		/* retourne null si pList == null. */
+		if (pList == null) {
+			return null;
+		}
+		
+		final StringBuilder stb = new StringBuilder();
+		
+		int compteur = 0;
+		
+		for (final LigneRapportEnregistrement ligne : pList) {
+			
+			compteur++;
+			
+			/* Ajout de l'en-tête. */
+			if (compteur == 1 && pAjouterEntete) {
+				stb.append(this.getEnTeteCsv());
+				stb.append(NEWLINE);
+			}
+			
+			stb.append(ligne.toCsv());
+			stb.append(NEWLINE);
+		}
+		
+		return stb.toString();
+				
+	} // Fin de afficherRapportCsv(
+	 // List<LigneRapportEnregistrement> pList
+	// , boolean pAjouterEntete).__________________________________________
+	
+	
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final Date getDateEnregistrement() {
+		return this.dateEnregistrement;
+	} // Fin de getDateEnregistrement().___________________________________
+
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final void setDateEnregistrement(
+			final Date pDateEnregistrement) {
+		
+		this.dateEnregistrement = pDateEnregistrement;
+		
+		/* calcule automatiquement dateControleStringFormattee. */
+		this.dateEnregistrementStringFormatee
+			= this.fournirDateFormattee(this.dateEnregistrement);
+		
+	} // Fin de setDateEnregistrement(
+	 // Date pDateEnregistrement)._________________________________________
+
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final String getDateEnregistrementStringFormatee() {
+		return this.dateEnregistrementStringFormatee;
+	} // Fin de getDateEnregistrementStringFormatee()._____________________
+
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final String getUserName() {
+		return this.userName;
+	} // Fin de getUserName()._____________________________________________
+
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final void setUserName(
+			final String pUserName) {
+		
+		/* remplit userName avec pUserName si pUserName != null 
+		 * ou 'Administrateur' sinon. */
+		this.userName = this.fournirUserName(pUserName);
+		
+	} // Fin de setUserName(
+	 // String pUserName)._________________________________________________
+
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final String getObjet() {
+		return this.objet;
+	} // Fin de getObjet().________________________________________________
+
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final void setObjet(
+			final String pObjet) {
+		this.objet = pObjet;
+	} // Fin de setObjet(
+	 // String pObjet).____________________________________________________
+
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final File getFichier() {
+		return this.fichier;
+	} // Fin de getFichier().______________________________________________
+
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final void setFichier(
+			final File pFichier) {
+		
+		this.fichier = pFichier;
+		
+		/* calcule automatiquement nomFichier. */
+		this.nomFichier = this.fournirNomFichier(this.fichier);
+		
+	} // Fin de setFichier(
+	 // File pFichier).____________________________________________________
+
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final String getNomFichier() {
+		return this.nomFichier;
+	} // Fin de getNomFichier().___________________________________________
+
+
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final List<LigneRapportEnregistrement> getRapport() {
+		return this.rapport;
+	} // Fin de getRapport().______________________________________________
+
 
 
 } // FIN DE LA CLASSE AbstractEnregistreurFichiers.--------------------------

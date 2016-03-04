@@ -4,6 +4,7 @@ import java.io.File;
 import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 
@@ -20,6 +21,11 @@ import java.util.Locale;
  * <br/>
  *
  * - Dépendances :<br/>
+ * levy.daniel.application.IExportateurCsv.<br/>
+ * levy.daniel.application.IExportateurJTable.<br/>
+ * levy.daniel.application.IResetable.<br/>
+ * levy.daniel.application.metier.service.enregistreursfichiers.rapportsenregistrements.LigneRapportEnregistrement.<br/>
+ * levy.daniel.application.metier.service.enregistreursfichiers.IRapporteurEnregistrement.<br/>
  * <br/>
  *
  *
@@ -28,7 +34,7 @@ import java.util.Locale;
  * @since 3 mars 2016
  *
  */
-public interface IEnregistreurFichiers {
+public interface IEnregistreurFichiers extends IRapporteurEnregistrement {
 	
 		
 	/**
@@ -339,5 +345,140 @@ public interface IEnregistreurFichiers {
 					, final Charset pCharset
 						, final String pSautLigne);
 	
+	
+
+	/**
+	 * method getDateEnregistrement() :<br/>
+	 * Getter de la java.util.Date de l'enregistrement du fichier.<br/>
+	 * <br/>
+	 *
+	 * @return dateEnregistrement : Date.<br/>
+	 */
+	Date getDateEnregistrement();
+
+
+	
+	/**
+	 * method setDateEnregistrement(
+	 * Date pDateEnregistrement) :<br/>
+	 * Setter de la java.util.Date de l'enregistrement du fichier.<br/>
+	 * <br/>
+	 * - calcule automatiquement dateControleStringFormattee.<br/>
+	 * <br/>
+	 *
+	 * @param pDateEnregistrement : Date : 
+	 * valeur à passer à dateEnregistrement.<br/>
+	 */
+	void setDateEnregistrement(
+			final Date pDateEnregistrement);
+
+
+
+	/**
+	 * method getDateEnregistrementStringFormatee() :<br/>
+	 * Getter de la date de l'enregistrement du fichier 
+	 * formattée au format dfDatetimemilliFrancaise.<br/>
+	 * Format des dates-heures françaises avec millisecondes comme
+	 * '25/02/1961-12:27:07.251'.<br/>
+	 * "dd/MM/yyyy-HH:mm:ss.SSS".<br/>
+	 * <br/>
+	 *
+	 * @return dateEnregistrementStringFormatee : String.<br/>
+	 */
+	String getDateEnregistrementStringFormatee();
+
+
+
+	/**
+	 * method getUserName() :<br/>
+	 * Getter du nom de l'utilisateur 
+	 * qui a déclenché l'enregistrement du fichier.<br/>
+	 * <br/>
+	 *
+	 * @return userName : String.<br/>
+	 */
+	String getUserName();
+
+
+
+	/**
+	 * method setUserName(
+	 * String pUserName) :<br/>
+	 * Setter du nom de l'utilisateur 
+	 * qui a déclenché l'enregistrement du fichier.<br/>
+	 * <br/>
+	 * - remplit userName avec pUserName si pUserName != null 
+     * ou 'Administrateur' sinon.<br/>
+     * <br/>
+	 *
+	 * @param pUserName : String : valeur à passer à userName.<br/>
+	 */
+	void setUserName(
+			final String pUserName);
+
+
+
+	/**
+	 * method getObjet() :<br/>
+	 * Getter de l'objet (ou motif) ayant demandé la création du fichier 
+	 * comme 'contrôle de lignes vide'.<br/>
+	 * <br/>
+	 *
+	 * @return objet : String.<br/>
+	 */
+	String getObjet();
+
+
+
+	/**
+	 * method setObjet(
+	 * String pObjet) :<br/>
+	 * Setter de l'objet (ou motif) ayant demandé la création du fichier 
+	 * comme 'contrôle de lignes vide'.<br/>
+	 * <br/>
+	 *
+	 * @param pObjet : String : valeur à passer à objet.<br/>
+	 */
+	void setObjet(
+			final String pObjet);
+
+
+
+	/**
+	 * method getFichier() :<br/>
+	 * Getter du fichier enregistré.<br/>
+	 * <br/>
+	 *
+	 * @return fichier : File.<br/>
+	 */
+	File getFichier();
+
+
+
+	/**
+	 * method setFichier(
+	 * File pFichier) :<br/>
+	 * Setter du fichier enregistré.<br/>
+	 * <br/>
+	 * - calcule automatiquement nomFichier.<br/>
+	 * <br/>
+	 *
+	 * @param pFichier : File : valeur à passer à fichier.<br/>
+	 */
+	void setFichier(
+			final File pFichier);
+
+
+
+	/**
+	 * method getNomFichier() :<br/>
+	 * Getter du nom du fichier objet de l'enregistrement.<br/>
+	 * <br/>
+	 *
+	 * @return nomFichier : String.<br/>
+	 */
+	String getNomFichier();
+
+
 
 } // FIN DE L'INTERFACE IEnregistreurFichiers.-------------------------------

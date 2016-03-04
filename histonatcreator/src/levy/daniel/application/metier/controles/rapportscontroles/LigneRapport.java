@@ -77,7 +77,7 @@ public class LigneRapport implements Serializable, Comparable<Object>
 	
 	/**
 	 * id : Long :<br/>
-	 * Identifiant en base de l'objet métier
+	 * Identifiant en base de l'objet métier.<br/>
 	 */
 	private Long id;
 
@@ -233,12 +233,15 @@ public class LigneRapport implements Serializable, Comparable<Object>
 	 * <br/>
 	 */
 	public LigneRapport() {
-		super();
+		
+		this(null
+				, null, null, null, null, null, null, null
+				, null, null, null, null, null, null);
+		
 	} // FIn de CONSTRUCTEUR D'ARITE NULLE.________________________________
 
 
-	
-	
+		
 	 /**
 	 * method CONSTRUCTEUR LigneRapport(COMPLET) :<br/>
 	 * CONSTRUCTEUR COMPLET.<br/>
@@ -386,7 +389,7 @@ public class LigneRapport implements Serializable, Comparable<Object>
 	 * {@inheritDoc}<br/>
 	 */
 	@Override
-	public int hashCode() {
+	public final int hashCode() {
 		
 		final int prime = 31;
 		
@@ -447,7 +450,7 @@ public class LigneRapport implements Serializable, Comparable<Object>
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean equals(
+	public final boolean equals(
 			final Object pObj) {
 		
 		if (this == pObj) {
@@ -584,7 +587,7 @@ public class LigneRapport implements Serializable, Comparable<Object>
 	 * {@inheritDoc}
 	 */
 	@Override
-	public int compareTo(
+	public final int compareTo(
 			final Object pObject) {
 		
 		/* Même instance : 0. */
@@ -942,8 +945,8 @@ public class LigneRapport implements Serializable, Comparable<Object>
 	
 	
 	/**
-	 * Champs (13 attributs) : <br/>
-	 * [dateControle;userName;nomFichier;typeControle;
+	 * Champs (13 attributs + id) : <br/>
+	 * [id;dateControle;userName;nomFichier;typeControle;
 	 * nomControle;critere;gravite;
 	 * numeroLigne;messageControle;ordreChamp;positionChamp;
 	 * valeurChamp;action;]<br/>
@@ -953,35 +956,34 @@ public class LigneRapport implements Serializable, Comparable<Object>
 	@Override
 	public final Object clone() throws CloneNotSupportedException {
 		
-		final LigneRapport clone 
-			= new LigneRapport(
-					this.id
-					, this.dateControle
-					, this.userName
-					, this.nomFichier
-					, this.typeControle
-					, this.nomControle
-					, this.critere
-					, this.gravite
-					, this.numeroLigne
-					, this.messageControle
-					, this.ordreChamp
-					, this.positionChamp
-					, this.valeurChamp
-					, this.action);
+		final LigneRapport clone = (LigneRapport) super.clone();
+		
+		clone.setId(this.id);
+		clone.setDateControle(this.dateControle);
+		clone.setUserName(this.userName);
+		clone.setNomFichier(this.nomFichier);
+		clone.setTypeControle(this.typeControle);
+		clone.setNomControle(this.nomControle);
+		clone.setCritere(this.critere);
+		clone.setGravite(this.gravite);
+		clone.setNumeroLigne(this.numeroLigne);
+		clone.setMessageControle(this.messageControle);
+		clone.setOrdreChamp(this.ordreChamp);
+		clone.setPositionChamp(this.positionChamp);
+		clone.setValeurChamp(this.valeurChamp);
+		clone.setAction(this.action);
 		
 		return clone;
 		
 	} // Fin de clone().___________________________________________________
 	
 	
-	
-	
+		
 	/**
 	 * Sert à afficher à la console un LigneRapport.<br/>
 	 * <br/>
-	 * Champs (13 attributs) : <br/>
-	 * [dateControle;userName;nomFichier;typeControle;
+	 * Champs (13 attributs + id) : <br/>
+	 * [id;dateControle;userName;nomFichier;typeControle;
 	 * nomControle;critere;gravite;
 	 * numeroLigne;messageControle;ordreChamp;positionChamp;
 	 * valeurChamp;action;].<br/>
@@ -989,7 +991,7 @@ public class LigneRapport implements Serializable, Comparable<Object>
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String toString() {
+	public final String toString() {
 		
 		final StringBuilder builder = new StringBuilder();
 		
@@ -1087,7 +1089,7 @@ public class LigneRapport implements Serializable, Comparable<Object>
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String getEnTeteCsv() {
+	public final String getEnTeteCsv() {
 		
 		final StringBuilder stb = new StringBuilder();
 		
@@ -1123,7 +1125,7 @@ public class LigneRapport implements Serializable, Comparable<Object>
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String toCsv() {
+	public final String toCsv() {
 		
 		final StringBuilder stb = new StringBuilder();
 		
@@ -1171,10 +1173,9 @@ public class LigneRapport implements Serializable, Comparable<Object>
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String getEnTeteColonne(
+	public final String getEnTeteColonne(
 			final int pI) {
-		
-		
+				
 		String entete = null;
 		
 		switch (pI) {
@@ -1256,10 +1257,9 @@ public class LigneRapport implements Serializable, Comparable<Object>
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Object getValeurColonne(
+	public final Object getValeurColonne(
 			final int pI) {
-		
-		
+				
 		Object valeur = null;
 		
 		switch (pI) {
@@ -1341,7 +1341,7 @@ public class LigneRapport implements Serializable, Comparable<Object>
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void reset() {
+	public final void reset() {
 		
 		this.id = null;
 		this.dateControle = null;
@@ -1401,7 +1401,7 @@ public class LigneRapport implements Serializable, Comparable<Object>
 	 * @param pAction : String : action menée après le contrôle 
 	 * comme "ligne éliminée" ou "ligne conservée".<br/>
 	 */
-	public void remplir(
+	public final void remplir(
 			final Long pId
 			, final String pDateControle
 			, final String pUserName
@@ -1493,7 +1493,7 @@ public class LigneRapport implements Serializable, Comparable<Object>
 	 * 
 	 * @return this.id : Long.<br/>
 	 */
-	public Long getId() {
+	public final Long getId() {
 		return this.id;
 	} // Fin de getId().___________________________________________________
 
@@ -1507,7 +1507,7 @@ public class LigneRapport implements Serializable, Comparable<Object>
 	 * 
 	 * @param pId : Long.<br/>
 	 */
-	public void setId(
+	public final void setId(
 			final Long pId) {
 		this.id = pId;
 	} // Fin de setId(

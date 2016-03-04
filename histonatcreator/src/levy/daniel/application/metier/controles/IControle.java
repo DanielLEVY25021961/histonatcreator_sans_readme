@@ -58,7 +58,11 @@ import levy.daniel.application.IListeurDeCaracteresUnicode;
  * - Dépendances :<br/>
  * levy.daniel.application.ILecteurDecodeurFile.<br/>
  * levy.daniel.application.IListeurDeCaracteresUnicode.<br/>
- * levy.daniel.application.metier.controles.IRapporteurControle<br/>
+ * levy.daniel.application.IExportateurCsv.<br/>
+ * levy.daniel.application.IExportateurJTable.<br/>
+ * levy.daniel.application.IResetable.<br/>
+ * levy.daniel.application.metier.controles.rapportscontroles.LigneRapport.<br/>
+ * levy.daniel.application.metier.controles.IRapporteurControle.<br/>
  * <br/>
  *
  *

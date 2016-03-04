@@ -11,13 +11,12 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import levy.daniel.application.metier.controles.AbstractControle;
-import levy.daniel.application.metier.controles.CaractereDan;
-import levy.daniel.application.metier.controles.rapportscontroles.LigneRapport;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import levy.daniel.application.metier.controles.AbstractControle;
+import levy.daniel.application.metier.controles.CaractereDan;
+import levy.daniel.application.metier.controles.rapportscontroles.LigneRapport;
 
 /**
  * class ControleurTypeTexte :<br/>
@@ -65,11 +64,14 @@ import org.apache.commons.logging.LogFactory;
  * - Dépendances :<br/>
  * levy.daniel.application.ILecteurDecodeurFile.<br/>
  * levy.daniel.application.IListeurDeCaracteresUnicode.<br/>
- * levy.daniel.application.metier.controles.IRapporteurControle<br/>
+ * levy.daniel.application.IExportateurCsv.<br/>
+ * levy.daniel.application.IExportateurJTable.<br/>
+ * levy.daniel.application.IResetable.<br/>
+ * levy.daniel.application.metier.controles.rapportscontroles.LigneRapport.<br/>
+ * levy.daniel.application.metier.controles.IRapporteurControle.<br/>
  * levy.daniel.application.metier.controles.IControle.<br/>
  * levy.daniel.application.metier.controles.AbstractControle.<br/>
  * levy.daniel.application.metier.controles.CaractereDan.<br/>
- * levy.daniel.application.metier.rapportscontroles.LigneRapport.<br/>
  * <br/>
  *
  *

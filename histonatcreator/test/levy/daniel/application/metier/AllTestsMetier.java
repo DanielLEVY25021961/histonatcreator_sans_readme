@@ -16,7 +16,8 @@ import org.junit.runners.Suite.SuiteClasses;
  * appeler le .class pour l'introspection.<br/>
  * <br/>
  * Par exemple : <br/>
- * levy.daniel.application.metier.controles.impl.controlessurface.ControleurTypeTexteTest.class<br/>
+ * levy.daniel.application.metier.controles.CaractereDanTest.class<br/>
+ * , levy.daniel.application.metier.controles.impl.controlessurface.ControleurTypeTexteTest.class<br/>
  * , ..............<br/>
  * <br/>
  * <br/>
@@ -38,7 +39,8 @@ import org.junit.runners.Suite.SuiteClasses;
  */
 @RunWith(Suite.class)
 @SuiteClasses({
-	levy.daniel.application.metier.controles.impl.controlessurface.ControleurTypeTexteTest.class
+	levy.daniel.application.metier.controles.CaractereDanTest.class
+	, levy.daniel.application.metier.controles.impl.controlessurface.ControleurTypeTexteTest.class
 })
 public final class AllTestsMetier {
 
