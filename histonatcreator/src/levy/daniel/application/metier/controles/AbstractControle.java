@@ -79,6 +79,7 @@ import levy.daniel.application.metier.controles.rapportscontroles.LigneRapport;
  * levy.daniel.application.metier.controles.rapportscontroles.LigneRapport.<br/>
  * levy.daniel.application.metier.controles.IRapporteurControle.<br/>
  * levy.daniel.application.metier.controles.IControle.<br/>
+ * levy.daniel.application.metier.controles.CaractereDan.<br/>
  * <br/>
  *
  *
