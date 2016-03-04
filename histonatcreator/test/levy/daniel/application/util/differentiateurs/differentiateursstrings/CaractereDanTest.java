@@ -376,13 +376,6 @@ public final class CaractereDanTest {
 		caracEAiguNull.setId(454L);
 		caracEAiguNull.setPosition(454);
 		caracEAiguNull.setCaractere('é');
-		caracEAiguNull.setUnicode("\\u00e9");
-		caracEAiguNull.setNumericValue(-1);
-		caracEAiguNull.setTypeCaractere(2);
-		caracEAiguNull.setValeurEntiere(233);
-		caracEAiguNull.setCodePointDecimal(233);
-		caracEAiguNull.setCodePointHexa("e9");
-		caracEAiguNull.setNom("LATIN SMALL LETTER E WITH ACUTE");
 		
 		/* Vérifie le toString(). */
 		assertEquals("caracEAiguNull.toString() equals CARAC_E_AIGU.toString() : "
