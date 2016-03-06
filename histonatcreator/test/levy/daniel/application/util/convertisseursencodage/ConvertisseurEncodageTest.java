@@ -1102,15 +1102,24 @@ public final class ConvertisseurEncodageTest {
 	 * Teste la méthode lireDepuisFichier(File pFile, Charset pCharset).<br/>
 	 * <br/>
 	 * : void :  .<br/>
+	 * @throws InterruptedException 
 	 */
 	@Test
-	public void testEcrireStringDansFile() {
+	public void testEcrireStringDansFile() throws InterruptedException {
 		
 		final String charette = ConvertisseurEncodage.lireDepuisFichier(FILE_CHARETTE_ANSI, CHARSET_ANSI);
 		
 		final File resultat = ConvertisseurEncodage.ecrireStringDansFile(charette, CHARSET_ANSI, CHARSET_UTF8, NEWLINE);
 		
 		System.out.println(resultat);
-	}
+		
+		/* Destruction du répertoire créé pourle test. */
+		ConvertisseurEncodage.detruireArborescence(".\\data\\temp\\fichierstranscodes");
+		
+		Thread.sleep(100);
+		
+	} // Fin de testEcrireStringDansFile().________________________________
+	
+	
 
 } // FIN DE LA CLASSE ConvertisseurEncodageTest.-----------------------------

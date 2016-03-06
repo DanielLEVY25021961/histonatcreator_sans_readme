@@ -11,12 +11,12 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import levy.daniel.application.metier.controles.AbstractControle;
 import levy.daniel.application.metier.controles.CaractereDan;
 import levy.daniel.application.metier.controles.rapportscontroles.LigneRapport;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * class ControleurTypeTexte :<br/>
@@ -31,9 +31,10 @@ import levy.daniel.application.metier.controles.rapportscontroles.LigneRapport;
  * <br/>
  * - retourne false et rapporte si CARACTERES_INDESIRABLES_SET 
  * contient un des caractères de pFile.<br/>
- * - retourne true et ne génère pas de rapport si pFile 
- * ne contient pas de caractères indésirables. 
- * Le rapport est alors vide (pas null).<br/>
+ * - retourne true et génère un rapport favorable si pFile 
+ * ne contient pas de caractères indésirables.<br/>
+ * - Peut écrire le rapport de contrôle sous forme textuelle 
+ * et csv sur disque.<br/> 
  * <br/>
  * - typeControle = Contrôle de surface.<br/>
  * - nomControle = Contrôle fichier texte.<br/>
@@ -51,6 +52,32 @@ import levy.daniel.application.metier.controles.rapportscontroles.LigneRapport;
  * <br/>
  *
  * - Exemple d'utilisation :<br/>
+ * <code>
+ *  // Instanciation d'un ControleurTypeTexte.<br/>
+ *  final ControleurTypeTexte control = new ControleurTypeTexte();<br/>
+ *  // Invocation de la méthode controler(...) en demandant 
+ *  l'écriture des rapports textuels et csv sur disque.<br/>
+ *  final boolean resultat = control.controler(FILE_CHARETTE_ANSI, true);<br/>
+ *  // resultat = true FILE_CHARETTE_ANSI est un fichier textuel.<br/>
+ *  control.afficherRapportTextuel() // Pour voir le 
+ *  rapport de contrôle sous forme textuelles.<br/>
+ *  control.afficherRapportCsvAvecEntete() // Pour voir le 
+ *  rapport de contrôle sous forme csv.<br/>
+ *  // id;date du contrôle;utilisateur;Fichier;type de contrôle;Contrôle;
+ *  Critère du Contrôle;Gravité du Contrôle;Numéro de Ligne;
+ *  Message du Contrôle;Ordre du Champ;Position du Champ;
+ *  Valeur du Champ;Action;<br/>
+ *  // null;2016-03-06_19-08-55-259;Administrateur;
+ *  chaàâreéèêëtte_ANSI.txt;Contrôle de surface;Contrôle fichier texte;
+ *  Le fichier ne doit pas comporter de caractères indésirables 
+ *  (impossibles à écrire au clavier);1 - anomalie bloquante;
+ *  null;Le fichier 'chaàâreéèêëtte_ANSI.txt' est bien un fichier texte;
+ *  null;sans objet;sans objet;OK - Fichier accepté;<br/> 
+ *  control.afficherRapportEnregistrementTextuel() // Pour voir le compte-rendu 
+ *  de l'enregistrement du rapport de contrôle sous forme textuelle.<br/>
+ *  control.afficherRapportEnregistrementCsv() // Pour voir le compte-rendu 
+ *  de l'enregistrement du rapport de contrôle sous forme csv.<br/>
+ * </code>
  *<br/>
  * 
  * - Mots-clé :<br/>
@@ -407,9 +434,8 @@ public class ControleurTypeTexte extends AbstractControle {
 	 * <br/>
 	 * - retourne false et rapporte si CARACTERES_INDESIRABLES_SET 
 	 * contient un des caractères de pFile.<br/>
-	 * - retourne true et ne remplit pas de rapport si pFile 
-	 * ne contient pas de caractères indésirables. 
-	 * Le rapport est alors vide (pas null).<br/>
+	 * - retourne true et remplit un rapport favorable si pFile 
+	 * ne contient pas de caractères indésirables. <br/>
 	 * <br/>
 	 * - passe pFile à this.fichier et 
 	 * rafraîchit automatiquement this.nomFichier.<br/>
@@ -457,6 +483,14 @@ public class ControleurTypeTexte extends AbstractControle {
 			
 			this.ajouterLigneRapport(ligneRapport);
 			
+			/* Enregistrement du rapport sur disque. */
+			if (pEnregistrerRapport) {
+				
+				this.enregistrerRapportTextuelUTF8(this.fournirFileTxtUTF8());
+				this.enregistrerRapportCsvUTF8(this.fournirFileCsvUTF8());
+				
+			}
+			
 			/* retourne false, LOG de niveau INFO 
 			 * et rapport si pFile == null. */
 			return false;
@@ -486,6 +520,14 @@ public class ControleurTypeTexte extends AbstractControle {
 						
 			this.ajouterLigneRapport(ligneRapport);
 			
+			/* Enregistrement du rapport sur disque. */
+			if (pEnregistrerRapport) {
+				
+				this.enregistrerRapportTextuelUTF8(this.fournirFileTxtUTF8());
+				this.enregistrerRapportCsvUTF8(this.fournirFileCsvUTF8());
+				
+			}
+			
 			/* retourne false, LOG de niveau INFO 
 			 * et rapport si pFile est inexistant. */
 			return false;
@@ -514,6 +556,14 @@ public class ControleurTypeTexte extends AbstractControle {
 						, ACTION_FICHIER_REFUSE);
 						
 			this.ajouterLigneRapport(ligneRapport);
+			
+			/* Enregistrement du rapport sur disque. */
+			if (pEnregistrerRapport) {
+				
+				this.enregistrerRapportTextuelUTF8(this.fournirFileTxtUTF8());
+				this.enregistrerRapportCsvUTF8(this.fournirFileCsvUTF8());
+				
+			}
 			
 			/* retourne false, LOG de niveau INFO 
 			 * et rapport si pFile est un répertoire. */
@@ -599,6 +649,16 @@ public class ControleurTypeTexte extends AbstractControle {
 								
 					this.ajouterLigneRapport(ligneRapport);
 					
+					/* Enregistrement du rapport sur disque. */
+					if (pEnregistrerRapport) {
+						
+						this.enregistrerRapportTextuelUTF8(
+								this.fournirFileTxtUTF8());
+						this.enregistrerRapportCsvUTF8(
+								this.fournirFileCsvUTF8());
+						
+					}
+					
 					/* retourne false et rapporte si 
 					 * CARACTERES_INDESIRABLES_SET contient 
 					 * un des caractères de pFile. */
@@ -608,6 +668,35 @@ public class ControleurTypeTexte extends AbstractControle {
 				// .contains(character)).______________________
 
 			} // Fin du parcours du bufferedReader._________
+			
+			
+			/* rapport. */
+			
+			final String message 
+				= "Le fichier '" 
+						+ pFile.getName() 
+						+ "' est bien un fichier texte";
+			
+			final LigneRapport ligneRapport 
+				= creerLigneRapport(
+						null
+						, message
+						, null
+						, SANS_OBJET
+						, SANS_OBJET
+						, ACTION_FICHIER_ACCEPTE);
+						
+			this.ajouterLigneRapport(ligneRapport);
+			
+			/* Enregistrement du rapport sur disque. */
+			if (pEnregistrerRapport) {
+				
+				this.enregistrerRapportTextuelUTF8(
+						this.fournirFileTxtUTF8());
+				this.enregistrerRapportCsvUTF8(
+						this.fournirFileCsvUTF8());
+				
+			}
 
 		} catch (FileNotFoundException fnfe) {
 

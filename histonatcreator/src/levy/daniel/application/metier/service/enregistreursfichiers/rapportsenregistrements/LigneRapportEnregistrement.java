@@ -83,7 +83,7 @@ public class LigneRapportEnregistrement  implements
 	 * date d'exécution de l'enregistrement.<br/>
 	 * doit être impérativement fournie au format 
 	 * des dates-heures françaises avec millisecondes 
-	 * (dfDatetimemilliFrancaise) comme
+	 * (dfDatetimemilliFrancaiseLexico) comme
 	 * '25/02/1961-12:27:07.251'.<br/>
 	 * "dd/MM/yyyy-HH:mm:ss.SSS".<br/>
 	 */
@@ -143,7 +143,7 @@ public class LigneRapportEnregistrement  implements
 
 
 	/**
-	 * dfDatetimemilliFrancaise : DateFormat :<br/>
+	 * dfDatetimemilliFrancaiseLexico : DateFormat :<br/>
 	 * Format des dates-heures françaises avec millisecondes comme
 	 * '25/02/1961-12:27:07.251'.<br/>
 	 * "dd/MM/yyyy-HH:mm:ss.SSS".<br/>
@@ -200,7 +200,7 @@ public class LigneRapportEnregistrement  implements
 	 * date d'exécution de l'enregistrement.
 	 * doit être impérativement fournie au format 
 	 * des dates-heures françaises avec millisecondes 
-	 * (dfDatetimemilliFrancaise) comme
+	 * (dfDatetimemilliFrancaiseLexico) comme
 	 * '25/02/1961-12:27:07.251'.<br/>
 	 * "dd/MM/yyyy-HH:mm:ss.SSS".<br/>
 	 * @param pUserName : String : nom de l'utilisateur 
@@ -249,7 +249,7 @@ public class LigneRapportEnregistrement  implements
 	 * date d'exécution de l'enregistrement.
 	 * doit être impérativement fournie au format 
 	 * des dates-heures françaises avec millisecondes 
-	 * (dfDatetimemilliFrancaise) comme
+	 * (dfDatetimemilliFrancaiseLexico) comme
 	 * '25/02/1961-12:27:07.251'.<br/>
 	 * "dd/MM/yyyy-HH:mm:ss.SSS".<br/>
 	 * @param pUserName : String : nom de l'utilisateur 
@@ -947,7 +947,7 @@ public class LigneRapportEnregistrement  implements
 	 * date d'exécution de l'enregistrement.
 	 * doit être impérativement fournie au format 
 	 * des dates-heures françaises avec millisecondes 
-	 * (dfDatetimemilliFrancaise) comme
+	 * (dfDatetimemilliFrancaiseLexico) comme
 	 * '25/02/1961-12:27:07.251'.<br/>
 	 * "dd/MM/yyyy-HH:mm:ss.SSS".<br/>
 	 * @param pUserName : String : nom de l'utilisateur 
@@ -1071,7 +1071,7 @@ public class LigneRapportEnregistrement  implements
 	 * Getter de la date d'exécution de l'enregistrement.<br/>
 	 * doit être impérativement fournie au format 
 	 * des dates-heures françaises avec millisecondes 
-	 * (dfDatetimemilliFrancaise) comme
+	 * (dfDatetimemilliFrancaiseLexico) comme
 	 * '25/02/1961-12:27:07.251'.<br/>
 	 * "dd/MM/yyyy-HH:mm:ss.SSS".<br/>
 	 * <br/>
@@ -1090,7 +1090,7 @@ public class LigneRapportEnregistrement  implements
 	 * Setter de la date d'exécution de l'enregistrement.<br/>
 	 * doit être impérativement fournie au format 
 	 * des dates-heures françaises avec millisecondes 
-	 * (dfDatetimemilliFrancaise) comme
+	 * (dfDatetimemilliFrancaiseLexico) comme
 	 * '25/02/1961-12:27:07.251'.<br/>
 	 * "dd/MM/yyyy-HH:mm:ss.SSS".<br/>
 	 * <br/>

@@ -113,7 +113,7 @@ public abstract class AbstractControle implements IControle {
 	
 	/**
 	 * dateControleStringFormatee : String :<br/>
-	 * date du contrôle formattée au format dfDatetimemilliFrancaise.<br/>
+	 * date du contrôle formattée au format dfDatetimemilliFrancaiseLexico.<br/>
 	 * Format des dates-heures françaises avec millisecondes comme
 	 * '25/02/1961-12:27:07.251'.<br/>
 	 * "dd/MM/yyyy-HH:mm:ss.SSS".<br/>
@@ -272,13 +272,14 @@ public abstract class AbstractControle implements IControle {
 
 
 	/**
-	 * dfDatetimemilliFrancaise : DateFormat :<br/>
-	 * Format des dates-heures françaises avec millisecondes comme
-	 * '25/02/1961-12:27:07.251'.<br/>
-	 * "dd/MM/yyyy-HH:mm:ss.SSS".<br/>
+	 * dfDatetimemilliFrancaiseLexico : DateFormat :<br/>
+	 * Format des dates-heures françaises lexicographique 
+	 * avec millisecondes comme
+	 * '1961-01-25_12-27-07-251'.<br/>
+	 * "yyyy-MM-dd_HH-mm-ss-SSS".<br/>
 	 */
-	public final transient DateFormat dfDatetimemilliFrancaise 
-	= new SimpleDateFormat("dd/MM/yyyy-HH:mm:ss.SSS", LOCALE_FR_FR);
+	public final transient DateFormat dfDatetimemilliFrancaiseLexico 
+	= new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss-SSS", LOCALE_FR_FR);
 
 
 	/**
@@ -743,7 +744,7 @@ public abstract class AbstractControle implements IControle {
 	 * method fournirDateFormattee(
 	 * Date pDate) :<br/>
 	 * Fournit une date sous forme de String formattée 
-	 * au format dfDatetimemilliFrancaise.<br/>
+	 * au format dfDatetimemilliFrancaiseLexico.<br/>
 	 * Format des dates-heures françaises avec millisecondes comme
 	 * '25/02/1961-12:27:07.251'.<br/>
 	 * "dd/MM/yyyy-HH:mm:ss.SSS".<br/>
@@ -764,7 +765,7 @@ public abstract class AbstractControle implements IControle {
 		}
 		
 		final String dateFormattee 
-			= this.dfDatetimemilliFrancaise.format(pDate);
+			= this.dfDatetimemilliFrancaiseLexico.format(pDate);
 		
 		return dateFormattee;
 		
@@ -1810,8 +1811,8 @@ public abstract class AbstractControle implements IControle {
 		stb.append("Fichier;");
 		stb.append("type de contrôle;");
 		stb.append("Contrôle;");
-		stb.append("Critère;");
-		stb.append("Gravité;");
+		stb.append("Critère du Contrôle;");
+		stb.append("Gravité du Contrôle;");
 		stb.append("Numéro de Ligne;");
 		stb.append("Message du Contrôle;");
 		stb.append("Ordre du Champ;");
@@ -2319,6 +2320,12 @@ public abstract class AbstractControle implements IControle {
 			
 			compteur++;
 			
+			/* Ajout d'un caractère BOM-UTF-8 si le Charset est UTF-8 
+			 * pour forcer Excel 2010 à détecter l'UTF-8. */
+			if (pCharset == CHARSET_UTF8) {
+				stb.append(BOM_UTF_8);
+			}
+			
 			/* Ajout de l'en-tête csv. */
 			if (pEnteteCsv) {
 				if (compteur == 1) {
@@ -2356,7 +2363,96 @@ public abstract class AbstractControle implements IControle {
 	} // Fin de getRapportEnregistrement().________________________________
 
 
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final String afficherRapportEnregistrementTextuel() {
+		return this.afficherRapportEnregistrementTextuel(
+				this.rapportEnregistrement);
+	} // Fin de afficherRapportEnregistrementTextuel().____________________
 
+	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final String afficherRapportEnregistrementTextuel(
+			final List<LigneRapportEnregistrement> pList) {
+		
+		/* retourne null si pList est null. */
+		if (pList == null) {
+			return null;
+		}
+		
+		final StringBuilder stb = new StringBuilder();
+		
+		for (final LigneRapportEnregistrement ligne : pList) {
+			stb.append(ligne.toString());
+			stb.append(NEWLINE);
+		}
+		
+		return stb.toString();
+		
+	} // Fin de afficherRapportEnregistrementTextuel(
+	 // List<LigneRapportEnregistrement> pList).___________________________
+
+	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final String afficherRapportEnregistrementCsv() {
+		return this.afficherRapportEnregistrementCsv(
+				this.rapportEnregistrement, true);
+	} // Fin de afficherRapportEnregistrementCsv().________________________
+	
+	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final String afficherRapportEnregistrementCsv(
+			final List<LigneRapportEnregistrement> pList
+				, final boolean pEnTete) {
+		
+		/* retourne null si pList est null. */
+		if (pList == null) {
+			return null;
+		}
+		
+		final StringBuilder stb = new StringBuilder();
+		int compteur = 0;
+		
+		for (final LigneRapportEnregistrement ligne : pList) {
+			
+			compteur++;
+			
+			/* Ajout d'un caractère BOM-UTF-8
+			 * pour forcer Excel 2010 à détecter l'UTF-8. */
+			stb.append(BOM_UTF_8);
+			
+			if (pEnTete) {
+				if (compteur == 1) {
+					stb.append(ligne.getEnTeteCsv());
+					stb.append(NEWLINE);
+				}
+			}
+			
+			stb.append(ligne.toCsv());
+			stb.append(NEWLINE);
+		}
+		
+		return stb.toString();
+		
+	} // Fin de afficherRapportEnregistrementCsv(
+	 // List<LigneRapportEnregistrement> pList
+	 // , boolean pEnTete).________________________________________________
+	
 	/**
 	 * method ajouterARapportEnregistrement(
 	 * List&lt;LigneRapportEnregistrement&gt; pList) :<br/>
@@ -2427,7 +2523,7 @@ public abstract class AbstractControle implements IControle {
 			= this.fournirFile(
 					cheminRapports
 						, this.dateControle
-							, this.fournirBaseNomRapport()
+							, this.fournirBaseNomRapport() + UNDERSCORE + this.nomFichier
 								, "UTF8"
 									, "txt");
 		
@@ -2482,7 +2578,7 @@ public abstract class AbstractControle implements IControle {
 			= this.fournirFile(
 					cheminRapports
 						, this.dateControle
-							, this.fournirBaseNomRapport()
+							, this.fournirBaseNomRapport()+ UNDERSCORE + this.nomFichier
 								, "UTF8"
 									, "csv");
 		
@@ -2703,7 +2799,7 @@ public abstract class AbstractControle implements IControle {
 	 * <code>
 	 * final String chemin1 = ".\\data2\\temp\\rapports";<br/>
 	 * final Date date1 = GestionnaireDates.fournirDateAvecString(
-	 * "25/02/1961-14:27:07.251", dfDatetimemilliFrancaise);<br/>
+	 * "25/02/1961-14:27:07.251", dfDatetimemilliFrancaiseLexico);<br/>
 	 * // Crée le fichier 
 	 * .\data2\temp\rapports\1961-02-25_14-27-07_RAPPORT_UTF8.txt<br/>
 	 * final File resultat = controle.fournirFile(
@@ -2720,7 +2816,7 @@ public abstract class AbstractControle implements IControle {
 	 * pour le fichier.<br/>
 	 * @param pDate : Date : Date pour préfixer le nom du fichier. 
 	 * La Date sera formattée sous la forme "yyyy-MM-dd_HH-mm-ss" 
-	 * de dfDatetimemilliFrancaise comme 2012-01-16_18-09-55 <br/>
+	 * de dfDatetimemilliFrancaiseLexico comme 2012-01-16_18-09-55 <br/>
 	 * @param pNomFichier : String : nom de base du fichier.<br/>
 	 * @param pEncodage : String : encodage pour suffixer 
 	 * le nom du fichier.<br/>
@@ -2793,7 +2889,7 @@ public abstract class AbstractControle implements IControle {
 	 * de la forme [date_nom_encodage.extension].<br/>
 	 * Par exemple : <br/>
 	 * <code>final Date date1 = controle.fournirDateAvecString(
-	 * "25/02/1961-14:27:07.251", dfDatetimemilliFrancaise);</code> 
+	 * "25/02/1961-14:27:07.251", dfDatetimemilliFrancaiseLexico);</code> 
 	 * instancie une date calée le 25/02/1961 à 14h27'07" 
 	 * et 251 millisecondes.<br/>
 	 * <code>GestionnaireFichiers.fournirNomFichier(
@@ -2806,7 +2902,7 @@ public abstract class AbstractControle implements IControle {
 	 *
 	 * @param pDate : Date : Date pour préfixer le chemin. 
 	 * La Date sera formattée sous la forme "yyyy-MM-dd_HH-mm-ss-SSS" 
-	 * de dfDatetimemilliFrancaise comme 2012-01-16_18-09-55-789 <br/>
+	 * de dfDatetimemilliFrancaiseLexico comme 2012-01-16_18-09-55-789 <br/>
 	 * @param pNom : String : nom de base du fichier.<br/>
 	 * @param pEncodage : String : encodage pour suffixer 
 	 * le nom du fichier.<br/>
@@ -2839,7 +2935,7 @@ public abstract class AbstractControle implements IControle {
 		/* Récupère la date  
 		 * formattée sous la forme 2012-01-16_18-09-55-759. */
 		final String dateFormatteeString 
-			= fournirDateFormattee(date, this.dfDatetimemilliFrancaise);
+			= fournirDateFormattee(date, this.dfDatetimemilliFrancaiseLexico);
 		
 		final StringBuilder stb = new StringBuilder();
 		

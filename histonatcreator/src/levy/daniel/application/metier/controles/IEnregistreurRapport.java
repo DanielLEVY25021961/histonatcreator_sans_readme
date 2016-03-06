@@ -246,6 +246,8 @@ public interface IEnregistreurRapport {
 	 * dans un fichier pFichier sur le disque.<br/>
 	 * Fournit un rapport encodé en UTF-8 
 	 * de l'enregistrement dans le fichier.<br/>
+	 * - Ajout d'un caractère BOM-UTF-8 si le Charset est UTF-8 
+	 * pour forcer Excel 2010 à détecter l'UTF-8.<br/>
 	 * <br/>
 	 * - retourne null si pFichier == null.<br/>
 	 * - retourne null si pFichier est inexistant.<br/>
@@ -281,6 +283,8 @@ public interface IEnregistreurRapport {
 	 * au format csv dans un fichier pFichier sur le disque.<br/>
 	 * Fournit un rapport encodé en pCharset 
 	 * de l'enregistrement dans le fichier.<br/>
+	 * - Ajout d'un caractère BOM-UTF-8 si le Charset est UTF-8 
+	 * pour forcer Excel 2010 à détecter l'UTF-8.<br/>
 	 * <br/>
 	 * - retourne null si pFichier == null.<br/>
 	 * - retourne null si pFichier est inexistant.<br/>
@@ -334,5 +338,75 @@ public interface IEnregistreurRapport {
 	List<LigneRapportEnregistrement> getRapportEnregistrement();
 
 
+	
+	/**
+	 * method afficherRapportEnregistrementTextuel() :<br/>
+	 * Retourne une String pour afficher à la console au format textuel 
+	 * this.rapportEnregistrement.<br/>
+	 * <br/>
+	 * - retourne null si pList est null.<br/>
+	 * <br/>
+	 *
+	 * @return : String : Affichage à la console.<br/>
+	 */
+	String afficherRapportEnregistrementTextuel();
+	
 
+	
+	/**
+	 * method afficherRapportEnregistrementTextuel(
+	 * List&lt;LigneRapportEnregistrement&gt; pList) :<br/>
+	 * Retourne une String pour afficher à la console au format textuel 
+	 * une List&lt;LigneRapportEnregistrement&gt;.<br/>
+	 * <br/>
+	 * - retourne null si pList est null.<br/>
+	 * <br/>
+	 *
+	 * @param pList : List&lt;LigneRapportEnregistrement&gt;.<br/>
+	 * 
+	 * @return : String : Affichage à la console.<br/>
+	 */
+	String afficherRapportEnregistrementTextuel(
+			final List<LigneRapportEnregistrement> pList);
+
+
+	
+	/**
+	 * method afficherRapportEnregistrementCsv() :<br/>
+	 * Retourne une String pour afficher à la console au format csv 
+	 * this.rapportEnregistrement.<br/>
+	 * <br/>
+	 * - retourne null si pList est null.<br/>
+	 * <br/>
+	 *
+	 * @return : String : Affichage à la console.<br/>
+	 */
+	String afficherRapportEnregistrementCsv();
+	
+
+	
+	/**
+	 * method afficherRapportEnregistrementCsv(
+	 * List<LigneRapportEnregistrement> pList
+	 * , boolean pEnTete) :<br/>
+	 * Retourne une String pour afficher à la console au format csv 
+	 * une List&lt;LigneRapportEnregistrement&gt;.<br/>
+	 * - Ajout d'un caractère BOM-UTF-8 pour forcer Excel 2010 
+	 * à détecter l'UTF-8.<br/>
+	 * <br/>
+	 * - retourne null si pList est null.<br/>
+	 * <br/>
+	 *
+	 * @param pList : List&lt;LigneRapportEnregistrement&gt;.<br/>
+	 * @param pEnTete : boolean : true si on veut 
+	 * rajouter l'en-tête au rapport csv.<br/>
+	 * 
+	 * @return : String : Affichage à la console.<br/>
+	 */
+	String afficherRapportEnregistrementCsv(
+			final List<LigneRapportEnregistrement> pList
+				, final boolean pEnTete);
+
+	
+	
 } // FIn DE L'INTERFACE IEnregistreurRapport.------------------------------

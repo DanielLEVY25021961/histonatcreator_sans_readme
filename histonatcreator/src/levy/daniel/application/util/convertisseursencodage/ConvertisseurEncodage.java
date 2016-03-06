@@ -860,7 +860,11 @@ public final class ConvertisseurEncodage {
 	
 	
 	/**
-	 * method ecrireStringDansFile() :<br/>
+	 * method ecrireStringDansFile(
+	 * String pString
+	 * , Charset pCharsetDecodage
+	 * , Charset pCharsetEncodage
+	 * , String pSautLigne) :<br/>
 	 * .<br/>
 	 * <br/>
 	 *
@@ -885,7 +889,11 @@ public final class ConvertisseurEncodage {
 		
 		return ecrireStringDansFile(file, pString, pCharsetEncodage, pSautLigne);
 		
-	}
+	} // Fin de ecrireStringDansFile(
+	 // String pString
+	 // , Charset pCharsetDecodage
+	 // , Charset pCharsetEncodage
+	 // , String pSautLigne).______________________________________________
 	
 	
 	

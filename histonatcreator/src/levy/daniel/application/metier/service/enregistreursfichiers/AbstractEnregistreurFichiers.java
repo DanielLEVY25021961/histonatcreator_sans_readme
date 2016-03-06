@@ -135,7 +135,7 @@ public abstract class AbstractEnregistreurFichiers implements
 	/**
 	 * dateEnregistrementStringFormatee : String :<br/>
 	 * date de l'enregistrement du fichier 
-	 * formattée au format dfDatetimemilliFrancaise.<br/>
+	 * formattée au format dfDatetimemilliFrancaiseLexico.<br/>
 	 * Format des dates-heures françaises avec millisecondes comme
 	 * '25/02/1961-12:27:07.251'.<br/>
 	 * "dd/MM/yyyy-HH:mm:ss.SSS".<br/>
@@ -182,7 +182,7 @@ public abstract class AbstractEnregistreurFichiers implements
 	
 	
 	/**
-	 * dfDatetimemilliFrancaise : DateFormat :<br/>
+	 * dfDatetimemilliFrancaiseLexico : DateFormat :<br/>
 	 * Format des dates-heures françaises avec millisecondes comme
 	 * '25/02/1961-12:27:07.251'.<br/>
 	 * "dd/MM/yyyy-HH:mm:ss.SSS".<br/>
@@ -924,7 +924,7 @@ public abstract class AbstractEnregistreurFichiers implements
 	 * method fournirDateFormattee(
 	 * Date pDate) :<br/>
 	 * Fournit une date sous forme de String formattée 
-	 * au format dfDatetimemilliFrancaise.<br/>
+	 * au format dfDatetimemilliFrancaiseLexico.<br/>
 	 * Format des dates-heures françaises avec millisecondes comme
 	 * '25/02/1961-12:27:07.251'.<br/>
 	 * "dd/MM/yyyy-HH:mm:ss.SSS".<br/>

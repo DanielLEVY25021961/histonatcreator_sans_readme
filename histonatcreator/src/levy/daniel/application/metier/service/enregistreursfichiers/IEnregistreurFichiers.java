@@ -543,7 +543,7 @@ public interface IEnregistreurFichiers extends IRapporteurEnregistrement {
 	/**
 	 * method getDateEnregistrementStringFormatee() :<br/>
 	 * Getter de la date de l'enregistrement du fichier 
-	 * formattée au format dfDatetimemilliFrancaise.<br/>
+	 * formattée au format dfDatetimemilliFrancaiseLexico.<br/>
 	 * Format des dates-heures françaises avec millisecondes comme
 	 * '25/02/1961-12:27:07.251'.<br/>
 	 * "dd/MM/yyyy-HH:mm:ss.SSS".<br/>

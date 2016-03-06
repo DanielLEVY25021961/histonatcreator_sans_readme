@@ -277,7 +277,14 @@ public interface IControle extends IRapporteurControle
 	 * REPLACEMENT CHARACTER."\\ufffd" '�'.<br/> 
 	 */
 	char CARACTERE_REMPLACEMENT = '\ufffd';
+
 	
+	/**
+	 * BOM_UTF : char :<br/>
+	 * BOM UTF-8 pour forcer Excel 2010 à lire en UTF-8.<br/>
+	 */
+	char BOM_UTF_8 = '\uFEFF';
+
 	
 	/**
 	 * SEP_MOINS : String :<br/>
@@ -384,8 +391,15 @@ public interface IControle extends IRapporteurControle
 	 * ACTION_FICHIER_REFUSE : String :<br/>
 	 * "Fichier refusé".<br/>
 	 */
-	String ACTION_FICHIER_REFUSE = "Fichier refusé";
+	String ACTION_FICHIER_REFUSE = "KO - Fichier refusé";
 
+	
+	/**
+	 * ACTION_FICHIER_ACCEPTE : String :<br/>
+	 * "OK - Fichier accepté".<br/>
+	 */
+	String ACTION_FICHIER_ACCEPTE = "OK - Fichier accepté";
+	
 	
 	/**
 	 * method controler(
@@ -478,7 +492,7 @@ public interface IControle extends IRapporteurControle
 	/**
 	 * method getDateControleStringFormatee() :<br/>
 	 * Getter de la date du contrôle formattée 
-	 * au format dfDatetimemilliFrancaise.<br/>
+	 * au format dfDatetimemilliFrancaiseLexico.<br/>
 	 * Format des dates-heures françaises avec millisecondes comme
 	 * '25/02/1961-12:27:07.251'.<br/>
 	 * "dd/MM/yyyy-HH:mm:ss.SSS".<br/>
