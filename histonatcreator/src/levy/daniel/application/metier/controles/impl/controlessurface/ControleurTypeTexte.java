@@ -68,6 +68,8 @@ import levy.daniel.application.metier.controles.rapportscontroles.LigneRapport;
  * levy.daniel.application.IExportateurJTable.<br/>
  * levy.daniel.application.IResetable.<br/>
  * levy.daniel.application.metier.controles.rapportscontroles.LigneRapport.<br/>
+ * levy.daniel.application.metier.service.enregistreursfichiers.rapportsenregistrements.LigneRapportEnregistrement.<br/>
+ * levy.daniel.application.metier.controles.IEnregistreurRapport.<br/>
  * levy.daniel.application.metier.controles.IRapporteurControle.<br/>
  * levy.daniel.application.metier.controles.IControle.<br/>
  * levy.daniel.application.metier.controles.CaractereDan.<br/>
@@ -342,11 +344,58 @@ public class ControleurTypeTexte extends AbstractControle {
 		
 	} // Fin de CONSTRUCTEUR COMPLET.______________________________________
 	
-	
+
 	
 	/**
 	 * method controler(
 	 * File pFile) :<br/>
+	 * Contrôle si le fichier pFile est de type texte 
+	 * et retourne true si c'est le cas.<br/>
+	 * Utilise pour celà le critère 'le fichier ne doit pas comporter de 
+	 * caractères indésirables' (aucun caractère du fichier ne 
+	 * doit être contenu dans CARACTERES_INDESIRABLES_SET).<br/>
+	 * Lit le fichier caractère par caractère en UTF-8 en utilisant 
+	 * un BufferedReader(InputStreamReader(fileInputStream, CHARSET_UTF8)) 
+	 * et détecte les caractères indésirables.<br/> 
+	 * <br/>
+	 * - N'enregistre pas de rapport sur le disque.<br/>
+	 * <br/>
+	 * - retourne false et rapporte si CARACTERES_INDESIRABLES_SET 
+	 * contient un des caractères de pFile.<br/>
+	 * - retourne true et ne remplit pas de rapport si pFile 
+	 * ne contient pas de caractères indésirables. 
+	 * Le rapport est alors vide (pas null).<br/>
+	 * <br/>
+	 * - passe pFile à this.fichier et 
+	 * rafraîchit automatiquement this.nomFichier.<br/>
+	 * - rafraîchit le rapport (en instancie un nouveau 
+	 * à chaque appel de la méthode controler(File pFile)).<br/>
+	 * <br/>
+	 * - retourne false, LOG de niveau INFO et rapport si pFile == null.<br/>
+	 * - retourne false, LOG de niveau INFO et rapport si pFile 
+	 * est inexistant.<br/>
+	 * - retourne false, LOG de niveau INFO et rapport si pFile 
+	 * est un répertoire.<br/>
+	 * <br/>
+	 *
+	 * @param pFile : File : fichier dont on veut savoir 
+	 * si il est un fichier texte.<br/>
+	 */
+	@Override
+	public final boolean controler(
+			final File pFile) {
+		
+		return this.controler(pFile, false);
+		
+	} // Fin de controler(
+	 // File pFile)._______________________________________________________
+	
+	
+	
+	/**
+	 * method controler(
+	 * File pFile
+	 * , boolean pEnregistrerRapport) :<br/>
 	 * Contrôle si le fichier pFile est de type texte 
 	 * et retourne true si c'est le cas.<br/>
 	 * Utilise pour celà le critère 'le fichier ne doit pas comporter de 
@@ -376,12 +425,15 @@ public class ControleurTypeTexte extends AbstractControle {
 	 *
 	 * @param pFile : File : fichier dont on veut savoir 
 	 * si il est un fichier texte.<br/>
+	 * @param pEnregistrerRapport : boolean : 
+	 * true si on veut enregistrer le rapport dans un fichier sur disque.<br/>
 	 * 
 	 * @return : boolean : true si pFile est un fichier texte.<br/>
 	 */
 	@Override
 	public final boolean controler(
-			final File pFile) {
+			final File pFile
+				, final boolean pEnregistrerRapport) {
 		
 		/* retourne false, LOG de niveau INFO 
 		 * et rapport si pFile == null. */
@@ -631,25 +683,32 @@ public class ControleurTypeTexte extends AbstractControle {
 		return true;
 		
 	} // Fin de controler(
-	// File pFile).________________________________________________________
+	// File pFile
+	// , boolean pEnregistrerRapport)._____________________________________
 
 
 	
 	/**
 	 * method controler(
-	 * String pString) :<br/>
+	 * String pString
+	 * , boolean pEnregistrerRapport) :<br/>
 	 * .<br/>
 	 * <br/>
 	 *
-	 * @param pString
+	 * @param pString : String :
+	 * @param pEnregistrerRapport : boolean : 
+	 * true si on veut enregistrer le rapport dans un fichier sur disque.<br/>
+	 * 
 	 * @return : boolean :  .<br/>
 	 */
 	@Override
 	public final boolean controler(
-			final String pString) {
+			final String pString
+				, final boolean pEnregistrerRapport) {
 		return false;
 	} // Fin de controler(
-	 // String pString).___________________________________________________
+	 // String pString
+	// , boolean pEnregistrerRapport)._____________________________________
 	
 
 
@@ -725,6 +784,18 @@ public class ControleurTypeTexte extends AbstractControle {
 		return "1";
 	} // Fin de fournirNiveauAnomalieEnDur().______________________________
 
+	
+	
+	/**
+	 * "RAPPORT-CONTROLE-FICHIER-TEXTE".<br/>
+	 * <br/>
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected final String fournirBaseNomRapport() {
+		return "RAPPORT-CONTROLE-FICHIER-TEXTE";
+	} // Fin de fournirBaseNomRapport().___________________________________
+	
 	
 	
 } // FIN DE LA CLASSE ControleurTypeTexte.-----------------------------------

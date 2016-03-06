@@ -16,11 +16,13 @@ import java.util.List;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-import levy.daniel.application.metier.controles.rapportscontroles.LigneRapport;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import levy.daniel.application.metier.controles.rapportscontroles.LigneRapport;
+import levy.daniel.application.metier.service.enregistreursfichiers.impl.EnregistreurFichiers;
+import levy.daniel.application.metier.service.enregistreursfichiers.rapportsenregistrements.LigneRapportEnregistrement;
 
 
 /**
@@ -80,6 +82,9 @@ import org.apache.commons.logging.LogFactory;
  * levy.daniel.application.metier.controles.IRapporteurControle.<br/>
  * levy.daniel.application.metier.controles.IControle.<br/>
  * levy.daniel.application.metier.controles.CaractereDan.<br/>
+ * levy.daniel.application.metier.service.enregistreursfichiers.impl.EnregistreurFichiers.<br/>
+ * levy.daniel.application.metier.service.enregistreursfichiers.rapportsenregistrements.LigneRapportEnregistrement.<br/>
+ * levy.daniel.application.metier.controles.IEnregistreurRapport.<br/>
  * <br/>
  *
  *
@@ -193,7 +198,17 @@ public abstract class AbstractControle implements IControle {
 	protected transient List<LigneRapport> rapport 
 		= new ArrayList<LigneRapport>();
 	
+	
+	/**
+	 * rapportEnregistrement : List&lt;LigneRapportEnregistrement&gt; :<br/>
+	 * rapport fourni par l'enregistreur sous forme 
+	 * de List&lt;LigneRapportEnregistrement&gt;.<br/>
+	 */
+	protected transient List<LigneRapportEnregistrement> rapportEnregistrement 
+		= new ArrayList<LigneRapportEnregistrement>();
 
+	
+	
 	/**
 	 * CLASSE_ABSTRACTCONTROLE : String :<br/>
 	 * "Classe AbstractControle".<br/>
@@ -224,7 +239,38 @@ public abstract class AbstractControle implements IControle {
 	public static final String METHODE_FOURNIRDATEAPARTIRDESTRING 
 		= "Méthode fournirDateAPartirDeStringFormattee(String pStringFormattee)";
 	
+	/**
+	 * METHODE_FOURNIRCHEMINRAPPORTSDANSPROPERTIES : String :<br/>
+	 * "Méthode fournirCheminRapportsDansProperties()".<br/>
+	 */
+	public static final String METHODE_FOURNIRCHEMINRAPPORTSDANSPROPERTIES 
+		= "Méthode fournirCheminRapportsDansProperties()";
 	
+	
+	/**
+	 * METHODE_DETRUIRE_ARBORESCENCE : String :<br/>
+	 * "méthode detruireArborescence(String pChemin)".<br/>
+	 */
+	public static final String METHODE_DETRUIRE_ARBORESCENCE 
+		= "méthode detruireArborescence(String pChemin)";
+
+	
+	/**
+	 * METHODE_VIDER_REPERTOIRE : String :<br/>
+	 * "méthode viderRepertoireADetruire(File pFile)".<br/>
+	 */
+	public static final String METHODE_VIDER_REPERTOIRE 
+		= "méthode viderRepertoireADetruire(File pFile)";
+	
+
+	/**
+	 * METHODE_FOURNIRFILE : String :<br/>
+	 * "méthode fournirFile(String pChemin, Date pDate, String pNomFichier)".<br/>
+	 */
+	public static final String METHODE_FOURNIRFILE 
+		= "méthode fournirFile(String pChemin, Date pDate, String pNomFichier)";
+
+
 	/**
 	 * dfDatetimemilliFrancaise : DateFormat :<br/>
 	 * Format des dates-heures françaises avec millisecondes comme
@@ -234,7 +280,7 @@ public abstract class AbstractControle implements IControle {
 	public final transient DateFormat dfDatetimemilliFrancaise 
 	= new SimpleDateFormat("dd/MM/yyyy-HH:mm:ss.SSS", LOCALE_FR_FR);
 
-	
+
 	/**
 	 * bundleControles : ResourceBundle :<br/>
 	 * Encapsulation de messagescontroles_fr_FR.properties.<br/>
@@ -437,13 +483,20 @@ public abstract class AbstractControle implements IControle {
 	} // Fin de CONSTRUCTEUR COMPLET.______________________________________
 
 
-	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public abstract boolean controler(
 			final File pFile);
+	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public abstract boolean controler(
+			final File pFile, final boolean pEnregistrerRapport);
 
 	
 	
@@ -452,7 +505,7 @@ public abstract class AbstractControle implements IControle {
 	 */
 	@Override
 	public abstract boolean controler(
-			final String pString);
+			final String pString, final boolean pEnregistrerRapport);
 	
 	
 
@@ -527,7 +580,7 @@ public abstract class AbstractControle implements IControle {
 	 * @return : String : la date système au format 
 	 * "dd/MM/yyyy-HH:mm:ss.SSS".<br/>
 	 */
-	public static String fournirDateSystemeFormattee() {
+	public static final String fournirDateSystemeFormattee() {
 		
 		return fournirDateStringFormattee(new Date());
 		
@@ -552,7 +605,7 @@ public abstract class AbstractControle implements IControle {
 	 * @return : String : la date pDate au format 
 	 * "dd/MM/yyyy-HH:mm:ss.SSS".<br/>
 	 */
-	public static String fournirDateStringFormattee(
+	public static final String fournirDateStringFormattee(
 			final Date pDate) {
 				
 		/* Bloc static synchronized. */
@@ -595,7 +648,7 @@ public abstract class AbstractControle implements IControle {
 	 * 
 	 * @return : Date : java.util.Date.<br/>
 	 */
-	public static Date fournirDateAPartirDeStringFormattee(
+	public static final Date fournirDateAPartirDeStringFormattee(
 			final String pDateFormattee) {
 		
 		/* Bloc static synchronized. */
@@ -2026,8 +2079,1093 @@ public abstract class AbstractControle implements IControle {
 	 // , String pValeurChamp
 	 // , String pAction)._________________________________________________
 
+
+	
+	/**
+	 * SERVICE ACCESSOIRE.<br/>
+	 * <br/>
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final File enregistrerRapportTextuelANSI(
+			final File pFichier) {
+		
+		return this.enregistrerRapportTextuel(
+				this.rapport
+				, this.dateControle
+				, this.userName
+				, this.nomControle, pFichier, CHARSET_ANSI, NEWLINE);
+		
+	} // Fin de enregistrerRapportTextuelANSI(
+	 // File pFichier).____________________________________________________
+	
+	
+	
+	/**
+	 * SERVICE ACCESSOIRE.<br/>
+	 * <br/>
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final File enregistrerRapportTextuelLatin9(
+			final File pFichier) {
+		
+		return this.enregistrerRapportTextuel(
+				this.rapport
+				, this.dateControle
+				, this.userName
+				, this.nomControle, pFichier, CHARSET_LATIN9, NEWLINE);
+		
+	} // Fin de enregistrerRapportTextuelLatin9(
+	 // File pFichier).____________________________________________________
+	
+	
+	
+	/**
+	 * SERVICE ACCESSOIRE.<br/>
+	 * <br/>
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final File enregistrerRapportTextuelUTF8(
+			final File pFichier) {
+		
+		return this.enregistrerRapportTextuel(
+				this.rapport
+				, this.dateControle
+				, this.userName
+				, this.nomControle, pFichier, CHARSET_UTF8, NEWLINE);
+		
+	} // Fin de enregistrerRapportTextuelUTF8(
+	 // File pFichier).____________________________________________________
+	
+	
+	
+	/**
+	 * SERVICE ACCESSOIRE.<br/>
+	 * <br/>
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final File enregistrerRapportTextuel(
+			final List<LigneRapport> pRapportList
+				, final Date pDateEnregistrement
+					, final String pUserName
+						, final String pObjet
+							, final File pFichier
+								, final Charset pCharset
+									, final String pSautLigne) {
+		
+		/* retourne null si pFichier == null. */
+		if (pFichier == null) {
+			return null;
+		}
+		
+		/* retourne null si pFichier est inexistant. */
+		if (!pFichier.exists()) {
+			return null;
+		}
+		
+		/* retourne null si pFichier est un répertoire. */
+		if (pFichier.isDirectory()) {
+			return null;
+		}
+		
+		/* retourne null si pRapportList == null. */
+		if (pRapportList == null) {
+			return null;
+		}
+		
+		final EnregistreurFichiers enregistreur 
+			= new EnregistreurFichiers(
+					pDateEnregistrement, pUserName, pObjet, pFichier);
+		
+		String aEcrire = null;
+		
+		final StringBuilder stb = new StringBuilder();
+		
+		/* Constitution de la String à ecrire dans le fichier. */
+		for (final LigneRapport ligne : pRapportList) {
+			stb.append(ligne.toString());
+			stb.append(pSautLigne);
+		}
+		
+		aEcrire = stb.toString();
+		
+		final File resultat = enregistreur.ecrireStringDansFile(
+				pFichier, aEcrire, pCharset, pSautLigne);
+		
+		/* Ajout du rapport d'enregistrement 
+		 * de l'enregistreur à this.rapportEnregistrement. */
+		this.ajouterARapportEnregistrement(enregistreur.getRapport());
+		
+		return resultat;
+		
+	} // Fin de enregistrerRapportTextuel(....).___________________________
 	
 
+	
+	/**
+	 * SERVICE ACCESSOIRE.<br/>
+	 * <br/>
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final File enregistrerRapportCsvANSI(
+			final File pFichier) {
+		
+		return this.enregistrerRapportCsv(
+				this.rapport
+				, this.dateControle
+				, this.userName
+				, this.nomControle, pFichier, CHARSET_ANSI, NEWLINE
+				, true);
+		
+	} // Fin de enregistrerRapportCsvANSI(
+	// File pFichier)._____________________________________________________
+	
+
+	
+	/**
+	 * SERVICE ACCESSOIRE.<br/>
+	 * <br/>
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final File enregistrerRapportCsvLatin9(
+			final File pFichier) {
+		
+		return this.enregistrerRapportCsv(
+				this.rapport
+				, this.dateControle
+				, this.userName
+				, this.nomControle, pFichier, CHARSET_LATIN9, NEWLINE
+				, true);
+		
+	} // Fin de enregistrerRapportCsvLatin9(
+	// File pFichier)._____________________________________________________
+	
+
+	
+	/**
+	 * SERVICE ACCESSOIRE.<br/>
+	 * <br/>
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final File enregistrerRapportCsvUTF8(
+			final File pFichier) {
+		
+		return this.enregistrerRapportCsv(
+				this.rapport
+				, this.dateControle
+				, this.userName
+				, this.nomControle, pFichier, CHARSET_UTF8, NEWLINE
+				, true);
+		
+	} // Fin de enregistrerRapportCsvUTF8(
+	// File pFichier)._____________________________________________________
+	
+	
+	
+	/**
+	 * SERVICE ACCESSOIRE.<br/>
+	 * <br/>
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final File enregistrerRapportCsv(
+			final List<LigneRapport> pRapportList
+				, final Date pDateEnregistrement
+					, final String pUserName
+						, final String pObjet
+							, final File pFichier
+								, final Charset pCharset
+									, final String pSautLigne
+										, final boolean pEnteteCsv) {
+		
+		/* retourne null si pFichier == null. */
+		if (pFichier == null) {
+			return null;
+		}
+		
+		/* retourne null si pFichier est inexistant. */
+		if (!pFichier.exists()) {
+			return null;
+		}
+		
+		/* retourne null si pFichier est un répertoire. */
+		if (pFichier.isDirectory()) {
+			return null;
+		}
+		
+		/* retourne null si pRapportList == null. */
+		if (pRapportList == null) {
+			return null;
+		}
+		
+		final EnregistreurFichiers enregistreur 
+			= new EnregistreurFichiers(
+					pDateEnregistrement, pUserName, pObjet, pFichier);
+		
+		String aEcrire = null;
+		
+		final StringBuilder stb = new StringBuilder();
+		
+		/* Constitution de la String à ecrire dans le fichier. */
+		int compteur = 0;
+		
+		for (final LigneRapport ligne : pRapportList) {
+			
+			compteur++;
+			
+			/* Ajout de l'en-tête csv. */
+			if (pEnteteCsv) {
+				if (compteur == 1) {
+					stb.append(ligne.getEnTeteCsv());
+					stb.append(pSautLigne);
+				}
+			}
+			
+			
+			stb.append(ligne.toCsv());
+			stb.append(pSautLigne);
+		}
+		
+		aEcrire = stb.toString();
+		
+		final File resultat = enregistreur.ecrireStringDansFile(
+				pFichier, aEcrire, pCharset, pSautLigne);
+		
+		/* Ajout du rapport d'enregistrement 
+		 * de l'enregistreur à this.rapportEnregistrement. */
+		this.ajouterARapportEnregistrement(enregistreur.getRapport());
+		
+		return resultat;
+		
+	} // Fin de enregistrerRapportCsv(....)._______________________________
+	
+
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final List<LigneRapportEnregistrement> getRapportEnregistrement() {
+		return this.rapportEnregistrement;
+	} // Fin de getRapportEnregistrement().________________________________
+
+
+
+	/**
+	 * method ajouterARapportEnregistrement(
+	 * List&lt;LigneRapportEnregistrement&gt; pList) :<br/>
+	 * Ajoute une List&lt;LigneRapportEnregistrement&gt; 
+	 * à this.rapportEnregistrement.<br/>
+	 * <br/>
+	 *
+	 * @param pList : List&lt;LigneRapportEnregistrement&gt;.<br/>
+	 * 
+	 * @return : boolean : true si pList à été ajoutée.<br/>
+	 */
+	private boolean ajouterARapportEnregistrement(
+			final List<LigneRapportEnregistrement> pList) {
+		
+		if (this.rapportEnregistrement == null) {
+			return false;
+		}
+		
+		return this.rapportEnregistrement.addAll(pList);
+		
+	} // Fin de ajouterARapportEnregistrement(
+	 // List<LigneRapportEnregistrement> pList).___________________________
+	
+
+	
+	/**
+	 * method fournirFileTxtUTF8() :<br/>
+	 * Fournit un fichier pour enregistrer le rapport au 
+	 * format textuel en UTF-8.<br/>
+	 * <br/>
+	 * - Récupère le chemin des rapports stocké dans 
+	 * configurationapplication_fr_FR.properties si il existe
+	 * , sinon, récupère le chemin en dur fourni 
+	 * par this.fournirCheminRapportsEnDur().<br/>
+	 * - Fabrique éventuellement l'arborescence du chemin des rapports
+	 * (".\\data\\temp\\rapports" par exemple)<br/>
+	 * - Fabrique le nom du fichier sous la forme 
+	 * [date_nom_encodage.extension] 
+	 * comme "1961-02-25_14-27-07_RAPPORT_UTF8.txt" par exemple<br/>
+	 * - Fabrique et retourne le fichier 
+	 * (.\data2\temp\rapports\1961-02-25_14-27-07_RAPPORT_UTF8.txt 
+	 * par exemple).<br/>
+	 * <br/>
+	 *
+	 * @return : File : Contient this.rapport au format textuel en UTF-8.<br/>
+	 */
+	protected final File fournirFileTxtUTF8() {
+		
+		/* Récupère le chemin des rapports stocké dans 
+		 * configurationapplication_fr_FR.properties si il existe
+		 * , sinon, récupère le chemin en dur fourni par 
+		 * this.fournirCheminRapportsEnDur(). */
+		final String cheminRapports = this.fournirCheminFichiers();
+		
+		if (StringUtils.isBlank(cheminRapports)) {
+			return null;
+		}
+		
+		/* - Fabrique éventuellement l'arborescence du chemin des rapports
+		 * (".\\data\\temp\\rapports" par exemple)<br/>
+		 * - Fabrique le nom du fichier sous la forme 
+		 * [date_nom_encodage.extension] 
+		 * comme "1961-02-25_14-27-07_RAPPORT_UTF8.txt" par exemple<br/>
+		 * - Fabrique et retourne le fichier 
+		 * (.\data2\temp\rapports\1961-02-25_14-27-07_RAPPORT_UTF8.txt 
+		 * par exemple).<br/>*/
+		final File resultat 
+			= this.fournirFile(
+					cheminRapports
+						, this.dateControle
+							, this.fournirBaseNomRapport()
+								, "UTF8"
+									, "txt");
+		
+		return resultat;
+		
+	} // Fin de fournirFileTxtUTF8().______________________________________
+	
+	
+	
+	/**
+	 * method fournirFileCsvUTF8() :<br/>
+	 * Fournit un fichier pour enregistrer le rapport au 
+	 * format csv en UTF-8.<br/>
+	 * <br/>
+	 * - Récupère le chemin des rapports stocké dans 
+	 * configurationapplication_fr_FR.properties si il existe
+	 * , sinon, récupère le chemin en dur fourni 
+	 * par this.fournirCheminRapportsEnDur().<br/>
+	 * - Fabrique éventuellement l'arborescence du chemin des rapports
+	 * (".\\data\\temp\\rapports" par exemple)<br/>
+	 * - Fabrique le nom du fichier sous la forme 
+	 * [date_nom_encodage.extension] 
+	 * comme "1961-02-25_14-27-07_RAPPORT_UTF8.txt" par exemple<br/>
+	 * - Fabrique et retourne le fichier 
+	 * (.\data2\temp\rapports\1961-02-25_14-27-07_RAPPORT_UTF8.txt 
+	 * par exemple).<br/>
+	 * <br/>
+	 *
+	 * @return : File : Contient this.rapport au format textuel en UTF-8.<br/>
+	 */
+	protected final File fournirFileCsvUTF8() {
+		
+		/* Récupère le chemin des rapports stocké dans 
+		 * configurationapplication_fr_FR.properties si il existe
+		 * , sinon, récupère le chemin en dur fourni par 
+		 * this.fournirCheminRapportsEnDur(). */
+		final String cheminRapports = this.fournirCheminFichiers();
+		
+		if (StringUtils.isBlank(cheminRapports)) {
+			return null;
+		}
+		
+		/* - Fabrique éventuellement l'arborescence du chemin des rapports
+		 * (".\\data\\temp\\rapports" par exemple)<br/>
+		 * - Fabrique le nom du fichier sous la forme 
+		 * [date_nom_encodage.extension] 
+		 * comme "1961-02-25_14-27-07_RAPPORT_UTF8.txt" par exemple<br/>
+		 * - Fabrique et retourne le fichier 
+		 * (.\data2\temp\rapports\1961-02-25_14-27-07_RAPPORT_UTF8.txt 
+		 * par exemple).<br/>*/
+		final File resultat 
+			= this.fournirFile(
+					cheminRapports
+						, this.dateControle
+							, this.fournirBaseNomRapport()
+								, "UTF8"
+									, "csv");
+		
+		return resultat;
+		
+	} // Fin de fournirFileTxtUTF8().______________________________________
+	
+	
+		
+	/**
+	 * method fournirBaseNomRapport() :<br/>
+	 * Fournit la base du nom pour créer 
+	 * les fichiers de stockage des rapports.<br/>
+	 * Par exemple : <br/>
+	 * "RAPPORT-CONTROLE-FICHIER-TEXTE"
+	 * <br/>
+	 *
+	 * @return : String : Nom de base des fichiers de rapport.<br/>
+	 */
+	protected abstract String fournirBaseNomRapport();
+	
+	
+	
+	/**
+	 * method fournirCheminFichiers() :<br/>
+	 * Propose un chemin (arborescence de répertoires) pour stocker 
+	 * les fichiers de rapport en utilisant :<br/>
+	 * 1 - un chemin des rapports fixé dans 
+	 * configurationapplication_fr_FR.properties si il existe.<br/>
+	 * 2 - un chemin en dur stocké dans la présente classe 
+	 * et fourni par fournirCheminRapportsEnDur().<br/>
+	 * <br/>
+	 * retourne le chemin des fichiers indiqué 
+	 * dans configuration_fr_FR.properties si il existe
+	 * , si la clef définie dans fournirCleCheminRapports() 
+	 * existe et si cette clef est renseignée,<br/>
+	 * - sinon retourne la valeur en dur écrite dans 
+	 * fournirCheminRapportsEnDur().<br/>
+	 * <br/>
+	 *
+	 * @return : String : Le chemin des rapports.<br/>
+	 */
+	private String fournirCheminFichiers() {
+		return fournirCheminFichiers(null);
+	} // Fin de fournirCheminFichiers().___________________________________
+	
+	
+	
+	/**
+	 * method fournirCheminFichiers(
+	 * String pCheminFichiers) :<br/>
+	 * Propose un chemin (arborescence de répertoires) pour stocker 
+	 * les fichiers de rapport en utilisant :<br/>
+	 * 1 - pCheminFichiers si il n'est pas blank.<br/>
+	 * 2 - un chemin des rapports fixé dans 
+	 * configurationapplication_fr_FR.properties si il existe.<br/>
+	 * 3 - un chemin en dur stocké dans la présente classe 
+	 * et fourni par fournirCheminRapportsEnDur().<br/>
+	 * <br/>
+	 * - retourne pCheminFichiers si pCheminFichiers n'est pas blank,<br/>
+	 * - sinon retourne le chemin des fichiers indiqué 
+	 * dans configuration_fr_FR.properties si il existe
+	 * , si la clef définie dans fournirCleCheminRapports() 
+	 * existe et si cette clef est renseignée,<br/>
+	 * - sinon retourne la valeur en dur écrite dans 
+	 * fournirCheminRapportsEnDur().<br/>
+	 * <br/>
+	 *
+	 * @param pCheminFichiers : String : 
+	 * chemin des rapports proposé par le développeur.<br/>
+	 * 
+	 * @return : String : Le chemin des rapports.<br/>
+	 */
+	private String fournirCheminFichiers(
+			final String pCheminFichiers) {
+		
+		/* retourne pCheminFichiers si pCheminFichiers n'est pas blank. */
+		if (!StringUtils.isBlank(pCheminFichiers)) {
+			return pCheminFichiers;
+		}
+		
+		/* sinon, retourne le chemin des fichiers indiqué 
+		 * dans configuration_fr_FR.properties si il existe
+		 * , si la clef définie dans fournirCleCheminRapports() existe 
+		 * et si cette clef est renseignée. */
+		if (!StringUtils.isBlank(fournirCheminRapportsDansProperties())) {
+			return fournirCheminRapportsDansProperties();
+		}
+		
+		/* sinon, retourne la valeur en dur écrite 
+		 * dans fournirCheminRapportsEnDur.*/
+		return fournirCheminRapportsEnDur() ;
+		
+	} // Fin de fournirCheminFichiers(
+	 // String pCheminFichiers).___________________________________________
+	
+	
+	
+	/**
+	 * method fournirCleCheminRapports() :<br/>
+	 * Fournit la clé dans configurationapplication_fr_FR.properties 
+	 * associée au chemin des rapports.<br/>
+	 * <br/>
+	 * "AbstractControle.fournirCheminFichiers.cheminrapports".<br/>
+	 * <br/>
+	 *
+	 * @return : String : 
+	 * "AbstractControle.fournirCheminFichiers.cheminrapports".<br/>
+	 */
+	private String fournirCleCheminRapports() {
+		return "AbstractControle.fournirCheminFichiers.cheminrapports";
+	} // Fin de fournirCleCheminRapports().________________________________
+	
+	
+	
+	/**
+	 * method fournirValeurCheminRapports() :<br/>
+	 * retourne la valeur du chemin des rapports associée 
+	 * à la clé fournie par fournirCleCheminRapports() 
+	 * contenue dans ./bin/configurationapplication_fr_FR.properties.<br/>
+	 * retourne null ou "  " si le properties a été oublié
+	 * , si la clé est absente dans le properties, 
+	 * ou si la valeur associée à la clef est inexistante.<br/>
+	 * <br/>
+	 * - retourne null si ./bin/configurationapplication_fr_FR.properties 
+	 * est manquant.<br/>
+	 * - retourne null si ./bin/configurationapplication_fr_FR.properties 
+	 * ne contient pas la clef fournie par fournirCleCheminRapports().<br/>
+	 * - retourne " " si ./bin/configurationapplication_fr_FR.properties 
+	 * contient la clef fournie par fournirCleCheminRapports() 
+	 * mais qu'il n'y a pas de valeur associée à cette clé 
+	 * dans le properties.<br/>
+	 * <br/>
+	 *
+	 * @return : String :   le chemin des rapports dans 
+	 * ./bin/configurationapplication_fr_FR.properties.<br/>
+	 */
+	private String fournirCheminRapportsDansProperties() {
+	
+		String chemin = null;
+		
+		try {
+			
+			/* Charge le ResourceBundle encapsulant 
+			 * configurationapplication_fr_FR.properties*/
+			final ResourceBundle bundle 
+				= ResourceBundle.getBundle(
+						"configurationapplication", LOCALE_FR_FR);
+			
+			chemin = bundle.getString(this.fournirCleCheminRapports());
+			
+		} catch (Exception e) {
+			
+			final String message 
+			= "./bin/configurationapplication_fr_FR.properties "
+					+ "est manquant ou la clé n'existe pas - Exception : ";
+			
+			/* LOG de niveau INFO. */
+			loggerInfo(
+					CLASSE_ABSTRACTCONTROLE
+					, METHODE_FOURNIRCHEMINRAPPORTSDANSPROPERTIES
+					, message
+					, e.getMessage());
+			
+			/* retourne null si 
+			 * ./bin/configurationapplication_fr_FR.properties 
+			 * est manquant. */
+			return null;
+		}
+		
+		return chemin;
+				
+	} // Fin de fournirCheminRapportsDansProperties()._____________________
+
+
+	
+	/**
+	 * method fournirCheminRapportsEnDur() :<br/>
+	 * Fournit un chemin (arborescence) en dur au cas où :<br/>
+	 * 1 - le developpeur ne propose pas de chemin en paramètre  
+	 * dans fournirCheminFichiers(String pCheminFichiers),<br/>
+	 * 2 - Il n'existe pas de ./bin/configurationapplication_fr_FR.properties 
+	 * (ou pas la clef dans le properties fournie par 
+	 * fournirCleCheminRapports(), 
+	 * ou pas de valeur associée à cette clef).<br/>
+	 * <br/>
+	 *
+	 * @return : String : 
+	 * ".\\data\\temp\\rapports\\rapportscontroles".<br/>
+	 */
+	private String fournirCheminRapportsEnDur() {
+		return ".\\data\\temp\\rapports\\rapportscontroles";
+	} // Fin de fournirCheminRapportsEnDur().______________________________
+	
+	
+	
+	/**
+	 * method fournirFile(
+	 * String pChemin
+	 * , Date pDate
+	 * , String pNomFichier
+	 * , String pEncodage
+	 * , String pExtension) :<br/>
+	 * Fabrique éventuellement l'arborescence pChemin 
+	 * (".\\data\\temp\\rapports" par exemple)<br/>
+	 * , fabrique le nom du fichier sous la forme 
+	 * [date_nom_encodage.extension] 
+	 * comme "1961-02-25_14-27-07_RAPPORT_UTF8.txt" par exemple<br/>
+	 * , fabrique et retourne le fichier 
+	 * (.\data2\temp\rapports\1961-02-25_14-27-07_RAPPORT_UTF8.txt 
+	 * par exemple).<br/>
+	 * <br/>
+	 * - crée un répertoire (ou toute l'arborescence) 
+	 * pour le fichier si il n'existe pas.<br/>
+	 * - Prend automatiquement la date système si pDate est null.<br/>
+	 * <br/>
+	 * Par exemple : <br/>
+	 * <code>
+	 * final String chemin1 = ".\\data2\\temp\\rapports";<br/>
+	 * final Date date1 = GestionnaireDates.fournirDateAvecString(
+	 * "25/02/1961-14:27:07.251", dfDatetimemilliFrancaise);<br/>
+	 * // Crée le fichier 
+	 * .\data2\temp\rapports\1961-02-25_14-27-07_RAPPORT_UTF8.txt<br/>
+	 * final File resultat = controle.fournirFile(
+	 * chemin1, date1, "RAPPORT", "UTF8", "txt");<br/>
+	 * </code>
+	 * <br/>
+	 * - retourne null si pChemin est blank.<br/>
+	 * - retourne null si pNomFichier est blank.<br/>
+	 * - retourne null (et LOG ERROR) si il se produit une Exception 
+	 * lors de la création du fichier.<br/>
+	 * <br/>
+	 * 
+	 * @param pChemin : String : chemin (arborescence de répertoires) 
+	 * pour le fichier.<br/>
+	 * @param pDate : Date : Date pour préfixer le nom du fichier. 
+	 * La Date sera formattée sous la forme "yyyy-MM-dd_HH-mm-ss" 
+	 * de dfDatetimemilliFrancaise comme 2012-01-16_18-09-55 <br/>
+	 * @param pNomFichier : String : nom de base du fichier.<br/>
+	 * @param pEncodage : String : encodage pour suffixer 
+	 * le nom du fichier.<br/>
+	 * @param pExtension : String : extension du fichier.<br/>
+	 * 
+	 * @return : File : Le File créé.<br/>
+	 */
+	private File fournirFile(
+			final String pChemin
+				, final Date pDate
+					, final String pNomFichier
+						, final String pEncodage
+							, final String pExtension) {
+		
+		/* retourne null si pChemin est blank. */
+		if (StringUtils.isBlank(pChemin)) {
+			return null;
+		}
+		
+		/* retourne null si pNomFichier est blank. */
+		if (StringUtils.isBlank(pNomFichier)) {
+			return null;
+		}
+					
+		/* crée un répertoire pour le fichier si il n'existe pas. */
+		creerArborescence(pChemin);
+		
+		/* crée le chemin complet du fichier en nommant le fichier. */
+		final String cheminFichier 
+			= pChemin 
+			+ SEPARATEUR_FILE 
+			+ fournirNomFichier(pDate, pNomFichier, pEncodage, pExtension);
+		
+		final File resultatFile = new File(cheminFichier);
+		
+		/* Création du fichier si il n'existe pas. */
+		if (!resultatFile.exists()) {
+			try {
+				
+				resultatFile.createNewFile();
+				
+			} catch (IOException ioe) {
+				
+				/* LOG de niveau ERROR. */
+				loggerError(
+						CLASSE_ABSTRACTCONTROLE
+							, METHODE_FOURNIRFILE
+								, ioe);
+				
+				/* retourne null (et LOG ERROR) si il se produit 
+				 * une Exception lors de la création du fichier. */
+				return null;
+				
+			}
+		}
+		
+		return resultatFile;
+			
+	} // Fin de fournirFile()._____________________________________________
+
+
+	
+	/**
+	 * method fournirNomFichier(
+	 * Date pDate
+	 * , String pNom
+	 * , String pEncodage
+	 * , String pExtension) :<br/>
+	 * Fournit un nom pour un fichier 
+	 * de la forme [date_nom_encodage.extension].<br/>
+	 * Par exemple : <br/>
+	 * <code>final Date date1 = controle.fournirDateAvecString(
+	 * "25/02/1961-14:27:07.251", dfDatetimemilliFrancaise);</code> 
+	 * instancie une date calée le 25/02/1961 à 14h27'07" 
+	 * et 251 millisecondes.<br/>
+	 * <code>GestionnaireFichiers.fournirNomFichier(
+	 * date1, "RAPPORT", "UTF8", "txt");</code> 
+	 * retourne "1961-02-25_14-27-07-789_RAPPORT_UTF8.txt".<br/>
+	 * <br/>
+	 * - passe automatiquement la date à la date système si pDate == null.<br/>
+	 * - retourne null si pNom est blank.<br/>
+	 * <br/>
+	 *
+	 * @param pDate : Date : Date pour préfixer le chemin. 
+	 * La Date sera formattée sous la forme "yyyy-MM-dd_HH-mm-ss-SSS" 
+	 * de dfDatetimemilliFrancaise comme 2012-01-16_18-09-55-789 <br/>
+	 * @param pNom : String : nom de base du fichier.<br/>
+	 * @param pEncodage : String : encodage pour suffixer 
+	 * le nom du fichier.<br/>
+	 * @param pExtension : String : extension du fichier.<br/>
+	 * 
+	 * @return : String : Nom pour le fichier.<br/>
+	 */
+	private String fournirNomFichier(
+			final Date pDate
+				, final String pNom
+					, final String pEncodage
+						, final String pExtension) {
+		
+		Date date = null;
+		
+		/* passe automatiquement la date 
+		 * à la date système si pDate == null. */
+		if (pDate == null) {
+			date = new Date();
+		}
+		else {
+			date = pDate;
+		}
+		
+		/* retourne null si pNom est blank. */
+		if(StringUtils.isBlank(pNom)) {
+			return null;
+		}
+		
+		/* Récupère la date  
+		 * formattée sous la forme 2012-01-16_18-09-55-759. */
+		final String dateFormatteeString 
+			= fournirDateFormattee(date, this.dfDatetimemilliFrancaise);
+		
+		final StringBuilder stb = new StringBuilder();
+		
+		stb.append(dateFormatteeString);
+		stb.append(UNDERSCORE);
+		stb.append(pNom);
+		
+		if (!StringUtils.isBlank(pEncodage)) {
+			stb.append(UNDERSCORE);
+			stb.append(pEncodage);
+		}
+		
+		if (!StringUtils.isBlank(pExtension)) {
+			stb.append(POINT);
+			stb.append(pExtension);
+		}
+		
+		return stb.toString();
+		
+	} // Fin de fournirNomFichier(...).____________________________________
+	
+	
+	
+	/**
+	 * method fournirDateFormattee(
+	 * Date pDate
+	 * , DateFormat pDateFormat) :<br/>
+	 * Retourne une String représentant la java.util.Date pDate 
+	 * au format pDateFormat.<br/>
+	 * Par exemple :<br/>
+	 * - Retourne la String "25/02/1961" 
+	 * avec une Date au 25/02/1961 et un DateFormat 
+	 * DF_DATE_FRANCAISE (
+	 * new SimpleDateFormat("dd/MM/yyyy", LOCALE_FR_FR)).<br/>
+	 * <br/>
+	 * - retourne null si pDate == null.<br/>
+	 * - retourne null si pDateFormat == null.<br/>
+	 * <br/>
+	 *
+	 * @param pDate : java.util.Date.<br/>
+	 * @param pDateFormat : DateFormat.<br/>
+	 * 
+	 * @return : String : String pour affichage 
+	 * formatté de pDate selon pDateFormat.<br/>
+	 */
+	private String fournirDateFormattee(
+			final Date pDate
+				, final DateFormat pDateFormat) {
+					
+		/* retourne null si pDate == null. */
+		if(pDate == null) {
+			return null;
+		}
+		
+		/* retourne null si pDateFormat == null. */
+		if(pDateFormat == null) {
+			return null;
+		}
+		
+		pDateFormat.setLenient(false);
+		
+		return pDateFormat.format(pDate);
+			
+	} // Fin de fournirDateFormattee(
+	 // Date pDate
+	 // DateFormat pDateFormat).___________________________________________
+	
+
+
+	/**
+	 * method creerArborescence(
+	 * String pChemin) :<br/>
+	 * Créée en une seule fois toute l'arborescence passée en paramètre.<br/>
+	 * <br/>
+	 * Par exemple :<br/>
+	 * - creerArborescence("C:\\NewRep1\\NewRep2\\NewRep3") 
+	 * va créer toute cette arborescence sur le disque d'un seul coup.<br/>
+	 * - creerArborescence(".\\data2\\temp\\rapports") 
+	 * va créer cette arborescence à partir 
+	 * du répertoire courant d'un seul coup.<br/>
+	 * <br/>
+	 * - retourne false si pChemin est blank.<br/>
+	 * - retourne false si l'arborescence existe déjà.<br/>
+	 * - retourne false si pChemin ne contient pas '\\'.<br/>
+	 * - retourne false si un des répertoires du chemin est blank.<br/>
+	 * - retourne false si la racine du chemin n'existe pas.<br/>
+	 * - retourne false si la racine du chemin n'est pas un répertoire.<br/>
+	 * - retourne false si un répertoire a créer n'a pas été créé.<br/>
+	 * <br/>
+	 *
+	 * @param pChemin : String : Chemin de l'arborescence à créer.<br/>
+	 * 
+	 * @return boolean : true si l'arborescence a été créée.<br/>
+	 */
+	private boolean creerArborescence(
+			final String pChemin) {
+		
+		/* retourne false si pChemin est blank. */
+		if (StringUtils.isBlank(pChemin)) {
+			return false;
+		}
+		
+		final File cheminFile = new File(pChemin);
+		
+		/* retourne false si l'arborescence existe déjà. */
+		if (cheminFile.exists()) {
+			return false;
+		}
+		
+		/* retourne false si pChemin ne contient pas '\\'. */
+		if (!StringUtils.contains(pChemin, "\\")) {
+			return false;
+		}
+		
+		/* Récupération des répertoires par découpage de la chaine. */
+		final String[] repertoires = StringUtils.split(pChemin, "\\");
+		final int nombreRep = repertoires.length;
+		
+		/* retourne false si un des répertoires du chemin est blank. */
+		for(final String rep : repertoires) {
+			if (StringUtils.isBlank(rep)) {
+				return false;
+			}
+		}
+		
+		/* Extraction de la racine. */
+		final String repRacineString = repertoires[0];
+		
+		final File repRacine = new File(repRacineString);
+		
+		/* retourne false si la racine du chemin n'existe pas. */
+		if (!repRacine.exists()) {
+			return false;
+		}
+		
+		/* retourne false si la racine du chemin n'est pas un répertoire. */
+		if (!repRacine.isDirectory()) {
+			return false;
+		}
+		
+		final StringBuffer stb = new StringBuffer();
+		
+		stb.append(repRacineString);
+		
+		/* Boucle sur les répertoires du chemin. */
+		for (int i = 1; i < nombreRep; i++) {
+			
+			/* Création du chemin du répertoire à créer. */
+			stb.append(SEP_REP);
+			stb.append(repertoires[i]);
+			
+			final File repertoireFile = new File(stb.toString());
+			
+			/* Créée le répertoire au chemin de création 
+			 * si il n'existait pas.*/
+			if (!repertoireFile.exists()) {
+				
+				if (!repertoireFile.mkdir()) {
+					/* retourne false si un répertoire 
+					 * a créer n'a pas été créé. */
+					return false;
+				}
+			}
+			
+		} // Fin de boucle.________________________
+		
+		/* retourne true si l'arborescence a été créée. */
+		return true;
+		
+	} // Fin de creerArborescence(
+	 // String pChemin).___________________________________________________
+	
+	
+	
+	/**
+	 * method detruireArborescence(
+	 * String pChemin) :<br/>
+	 * SERVICE ACCESSOIRE.<br/>
+	 * Détruit le répertoire situé au chemin pChemin.<br/>
+	 * Vide le contenu du répertoire si nécessaire avant de le supprimer.<br/>
+	 * <br/>
+	 * - retourne false si pChemin est blank.<br/>
+	 * - retourne false si le répertoire à détruire n'existe pas.<br/>
+	 * - retourne false si le File à détruire n'est pas un répertoire.
+	 * <br/>
+	 *
+	 * @param pChemin : String : Chemin du répertoire à détruire.<br/>
+	 * 
+	 * @return : boolean : true si le répertoire a été détruit.<br/>
+	 */
+	public final boolean detruireArborescence(
+			final String pChemin) {
+		
+		/* retourne false si pChemin est blank. */
+		if (StringUtils.isBlank(pChemin)) {
+			return false;
+		}
+					
+		final File repADetruire = new File(pChemin);
+		
+		/* retourne false si le répertoire à détruire n'existe pas. */
+		if (!repADetruire.exists()) {
+			return false;
+		}
+		
+		/* retourne false si le File à détruire n'est pas un répertoire. */
+		if (!repADetruire.isDirectory()) {
+			return false;
+		}
+					
+		/* Détruit le répertoire et retourne le boolean. */				
+		try {
+			
+			/* Vide d'abord le contenu du répertoire. */
+			viderRepertoireADetruire(repADetruire);
+			
+			/* Détruit le répertoire. */
+			return repADetruire.delete();
+			
+		} catch (Exception e) {
+			
+			/* LOG de niveau INFO. */
+			loggerInfo(
+					CLASSE_ABSTRACTCONTROLE
+						, METHODE_DETRUIRE_ARBORESCENCE
+							, e.getMessage());
+			
+			return false;
+			
+		}
+				
+	} // Fin de detruireArborescence(
+	 // String pChemin).___________________________________________________
+	
+	
+
+	/**
+	 * method viderRepertoireADetruire(
+	 * File pRep) :<br/>
+	 * SERVICE ACCESSOIRE.<br/>
+	 * Vide tout le contenu du répertoire pRep sans écraser pRep.<br/>
+	 * méthode récursive.<br/>
+	 * Il est indispensable de vider tout le contenu d'un répertoire 
+	 * avant de pouvoir supprimer celui-ci en Java.<br/>
+	 * <br/>
+	 * Retourne un boolean à true si le 
+	 * contenu du répertoire a bien été effacé.<br/>
+	 * <br/>
+	 * - retourne false si pRep == null.<br/>
+	 * - retourne false si pRep n'existe pas.<br/>
+	 * - retourne false si pRep n'est pas un répertoire.<br/>
+	 * <br/>
+	 *
+	 * @param pRep : File : Répertoire dont on veut vider 
+	 * tout le contenu le contenu tout en le conservant.<br/>
+	 * 
+	 * @return : boolean : true si le contenu du répertoire a été vidé.<br/>
+	 */
+	public final boolean viderRepertoireADetruire(
+			final File pRep) {
+				
+		/* retourne false si pRep == null. */
+		if (pRep == null) {
+			return false;
+		}
+		
+		/* retourne false si pRep n'existe pas. */
+		if (!pRep.exists()) {
+			return false;
+		}
+		
+		/* retourne false si pRep n'est pas un répertoire. */
+		if(!pRep.isDirectory()) {
+			return false;
+		}
+		
+		/* Récupération des File dans pRep. */
+		final File[] filesContenus = pRep.listFiles();
+		
+		if (filesContenus == null) {
+			return true;
+		}
+		
+		/* Sort Si pRep est vide. */
+		if (filesContenus.length == 0) {
+			return true;
+		}
+		
+		/* Si pRep non vide. */
+		/* ForEach (boucle) sur les File de pRep. ******/
+		for(final File file : filesContenus) {
+			
+			/* Appel récursif si file est un répertoire. */
+			if (file.isDirectory()) {
+				
+				/* APPEL RECURSIF. */
+				viderRepertoireADetruire(file);
+				
+				
+			} // Fin de if (!file.isDirectory()).___________
+			
+			/* Destruction du file dans tous les cas. */					
+			try {
+				
+				file.delete();
+				
+			} catch (Exception e) {
+				
+				/* LOG de niveau INFO. */
+				loggerInfo(
+						CLASSE_ABSTRACTCONTROLE
+							, METHODE_VIDER_REPERTOIRE
+								, e.getMessage());
+				return false;
+				
+			}
+								
+		} // Fin du ForEach (boucle) sur les File de pRep.___
+		
+		return true;
+		
+	} // Fin de viderRepertoireADetruire(
+	 // File pRep).________________________________________________________
+	
+
+	
 	/**
 	 * {@inheritDoc}
 	 */

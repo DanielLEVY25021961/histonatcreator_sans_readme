@@ -132,6 +132,7 @@ public final class DifferentiateurString {
 	 */
 	public static final String METHODE_DETRUIRE_ARBORESCENCE 
 		= "méthode detruireArborescence(String pChemin)";
+
 	
 	/**
 	 * METHODE_VIDER_REPERTOIRE : String :<br/>

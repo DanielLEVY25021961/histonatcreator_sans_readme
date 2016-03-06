@@ -1,4 +1,0 @@
-id;Position;Caractère;Unicode;numericValue;Type de Caractère;Valeur Entière;Point de Code Décimal;Point de Code HexaDécimal;Nom Unicode;DIFFERENCE;id;Position;Caractère;Unicode;numericValue;Type de Caractère;Valeur Entière;Point de Code Décimal;Point de Code HexaDécimal;Nom Unicode;
-null;1;m;\u006d;22;2;109;109;6d;LATIN SMALL LETTER M;equals;null;1;m;\u006d;22;2;109;109;6d;LATIN SMALL LETTER M;
-null;2;ê;\u00ea;-1;2;234;234;ea;LATIN SMALL LETTER E WITH CIRCUMFLEX;DIFF;null;2;e;\u0065;14;2;101;101;65;LATIN SMALL LETTER E;
-null;3;t;\u0074;29;2;116;116;74;LATIN SMALL LETTER T;equals;null;3;t;\u0074;29;2;116;116;74;LATIN SMALL LETTER T;
