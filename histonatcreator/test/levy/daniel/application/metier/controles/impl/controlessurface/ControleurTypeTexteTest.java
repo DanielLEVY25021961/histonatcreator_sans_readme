@@ -15,19 +15,14 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Test;
 
-
-
-
-
 import levy.daniel.application.metier.controles.AbstractControle;
 import levy.daniel.application.metier.controles.IControle;
 import levy.daniel.application.metier.controles.rapportscontroles.LigneRapport;
 
 
-
 /**
  * class ControleurTypeTexteTest :<br/>
- * .<br/>
+ * Test JUnit de la classe ControleurTypeTexte.<br/>
  * <br/>
  *
  * - Exemple d'utilisation :<br/>
@@ -928,6 +923,7 @@ public class ControleurTypeTexteTest {
 	 * - vérifie que lireFichier(FILE_NULL, ...) retourne 
 	 * ControleurTypeTexte.MESSAGE_FICHIER_NULL.<br/>
 	 * - vérifie que le rapport n'est pas null.<br/>
+	 * - vérifie que le rapport n'est pas vide.<br/>
 	 * <br/>
 	 */
 	@Test
@@ -959,17 +955,19 @@ public class ControleurTypeTexteTest {
 	
 	/**
 	 * method testLireFichier() :<br/>
-	 * .<br/>
+	 * Utile pour tester la méthode lireFichier(File pFile, Charset pCharset).<br/>
+	 * (Réactiver l'annotation @Test).<br/>
 	 * <br/>
 	 */
-	@Test
+//	@Test
 	public void testLireFichier() {
 		
 		final ControleurTypeTexte control = new ControleurTypeTexte();
 		final String resultat = control.lireFichier(FILE_PROPERTIES, null);
 		final String listeCaract = control.listerChaineCarParCar(resultat);
 		System.out.println(listeCaract);
-	}
+		
+	} // Fin de testLireFichier()._________________________________________
 
 	
 

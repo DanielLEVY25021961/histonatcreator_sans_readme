@@ -661,7 +661,8 @@ public final class MonFileReaderDanTest {
 	
 	/**
 	 * method testLireFichierFileNull() :<br/>
-	 * Garantit que lireFichier(null) retourne 
+	 * Teste la méthode lireFichier(File pFile).<br/>
+	 * - vérifie que que lireFichier(null) retourne 
 	 * MonFileReaderDan.MESSAGE_FICHIER_NULL.<br/>
 	 */
 	@Test
@@ -669,6 +670,8 @@ public final class MonFileReaderDanTest {
 		
 		final String resultat = MonFileReaderDan.lireFichier(FILE_NULL);
 		
+		/* vérifie que que lireFichier(null) retourne 
+		 * MonFileReaderDan.MESSAGE_FICHIER_NULL.*/
 		assertEquals("Doit retourner MonFileReaderDan.MESSAGE_FICHIER_NULL : "
 				, MonFileReaderDan.MESSAGE_FICHIER_NULL, resultat);
 		
@@ -678,7 +681,8 @@ public final class MonFileReaderDanTest {
 	
 	/**
 	 * method testLireFichierFileInexistant() :<br/>
-	 * Garantit que lireFichier(fichier inexistant) retourne 
+	 * Teste la méthode lireFichier(File pFile).<br/>
+	 * - vérifie que lireFichier(fichier inexistant) retourne 
 	 * MonFileReaderDan.MESSAGE_FICHIER_INEXISTANT.<br/>
 	 */
 	@Test
@@ -686,6 +690,8 @@ public final class MonFileReaderDanTest {
 		
 		final String resultat = MonFileReaderDan.lireFichier(FILE_INEXISTANT);
 		
+		/* - vérifie que lireFichier(fichier inexistant) retourne 
+		 * MonFileReaderDan.MESSAGE_FICHIER_INEXISTANT.<br/>*/
 		assertEquals("Doit retourner MonFileReaderDan.MESSAGE_FICHIER_INEXISTANT : "
 				, MonFileReaderDan.MESSAGE_FICHIER_INEXISTANT, resultat);
 		
@@ -695,7 +701,8 @@ public final class MonFileReaderDanTest {
 	
 	/**
 	 * method testLireFichierFileRepertoire() :<br/>
-	 * Garantit que lireFichier(fichier repertoire) retourne 
+	 * Teste la méthode lireFichier(File pFile).<br/>
+	 * - vérifie que lireFichier(fichier repertoire) retourne 
 	 * MonFileReaderDan.MESSAGE_FICHIER_REPERTOIRE.<br/>
 	 */
 	@Test
@@ -703,6 +710,8 @@ public final class MonFileReaderDanTest {
 		
 		final String resultat = MonFileReaderDan.lireFichier(FILE_REPERTOIRE);
 		
+		/* vérifie que lireFichier(fichier repertoire) retourne 
+		 * MonFileReaderDan.MESSAGE_FICHIER_REPERTOIRE.*/
 		assertEquals("Doit retourner MonFileReaderDan.MESSAGE_FICHIER_REPERTOIRE : "
 				, MonFileReaderDan.MESSAGE_FICHIER_REPERTOIRE, resultat);
 		
@@ -712,16 +721,27 @@ public final class MonFileReaderDanTest {
 	
 	/**
 	 * method testLireFichierDeCaracteresFileNull() :<br/>
-	 * Garantit que lireFichierDeCaracteres(null) retourne 
+	 * Teste la méthode lireFichierDeCaracteres(File pFile).<br/>
+	 * - vérifie que lireFichierDeCaracteres(null) retourne 
 	 * MonFileReaderDan.MESSAGE_FICHIER_NULL.<br/>
+	 * - vérifie que lireFichierDeCaracteres(null) 
+	 * ne génère pas de rapport de lecture.<br/>
 	 */
 	@Test
 	public void testLireFichierDeCaracteresFileNull() {
 		
-		final String resultat = MonFileReaderDan.lireFichierDeCaracteres(FILE_NULL);
+		final String resultat 
+			= MonFileReaderDan.lireFichierDeCaracteres(FILE_NULL);
 		
+		/* vérifie que lireFichierDeCaracteres(null) retourne 
+		 * MonFileReaderDan.MESSAGE_FICHIER_NULL.*/
 		assertEquals("Doit retourner MonFileReaderDan.MESSAGE_FICHIER_NULL : "
 				, MonFileReaderDan.MESSAGE_FICHIER_NULL, resultat);
+		
+		/* vérifie que lireFichierDeCaracteres(null) ne génère 
+		 * pas de rapport de lecture. */
+		assertNull("Ne doit pas générer de rapport : "
+				, MonFileReaderDan.getRapportLecture());
 		
 	} // Fin de testLireFichierDeCaracteresFileNull()._____________________
 
@@ -729,16 +749,27 @@ public final class MonFileReaderDanTest {
 	
 	/**
 	 * method testLireFichierDeCaracteresFileInexistant() :<br/>
-	 * Garantit que lireFichierDeCaracteres(fichier inexistant) retourne 
+	 * Teste la méthode lireFichierDeCaracteres(File pFile).<br/>
+	 * - vérifie que lireFichierDeCaracteres(fichier inexistant) retourne 
 	 * MonFileReaderDan.MESSAGE_FICHIER_INEXISTANT.<br/>
+	 * - vérifie que lireFichierDeCaracteres(inexistant) 
+	 * ne génère pas de rapport de lecture.<br/>
 	 */
 	@Test
 	public void testLireFichierDeCaracteresFileInexistant() {
 		
-		final String resultat = MonFileReaderDan.lireFichierDeCaracteres(FILE_INEXISTANT);
+		final String resultat 
+			= MonFileReaderDan.lireFichierDeCaracteres(FILE_INEXISTANT);
 		
+		/* vérifie que lireFichierDeCaracteres(fichier inexistant) retourne 
+		 * MonFileReaderDan.MESSAGE_FICHIER_INEXISTANT.*/
 		assertEquals("Doit retourner MonFileReaderDan.MESSAGE_FICHIER_INEXISTANT : "
 				, MonFileReaderDan.MESSAGE_FICHIER_INEXISTANT, resultat);
+		
+		/* vérifie que lireFichierDeCaracteres(inexistant) ne génère 
+		 * pas de rapport de lecture. */
+		assertNull("Ne doit pas générer de rapport : "
+				, MonFileReaderDan.getRapportLecture());
 		
 	} // Fin de testLireFichierDeCaracteresFileInexistant()._______________
 	
@@ -746,16 +777,27 @@ public final class MonFileReaderDanTest {
 	
 	/**
 	 * method testLireFichierDeCaracteresFileRepertoire() :<br/>
-	 * Garantit que lireFichierDeCaracteres(fichier repertoire) retourne 
+	 * Teste la méthode lireFichierDeCaracteres(File pFile).<br/>
+	 * - vérifie que lireFichierDeCaracteres(fichier repertoire) retourne 
 	 * MonFileReaderDan.MESSAGE_FICHIER_REPERTOIRE.<br/>
+	 * - vérifie que lireFichierDeCaracteres(repertoire) 
+	 * ne génère pas de rapport de lecture.<br/>
 	 */
 	@Test
 	public void testLireFichierDeCaracteresFileRepertoire() {
 		
-		final String resultat = MonFileReaderDan.lireFichierDeCaracteres(FILE_REPERTOIRE);
+		final String resultat 
+			= MonFileReaderDan.lireFichierDeCaracteres(FILE_REPERTOIRE);
 		
+		/* vérifie que lireFichierDeCaracteres(fichier repertoire) retourne 
+		 * MonFileReaderDan.MESSAGE_FICHIER_REPERTOIRE.*/
 		assertEquals("Doit retourner MonFileReaderDan.MESSAGE_FICHIER_REPERTOIRE : "
 				, MonFileReaderDan.MESSAGE_FICHIER_REPERTOIRE, resultat);
+		
+		/* vérifie que lireFichierDeCaracteres(repertoire) ne génère 
+		 * pas de rapport de lecture. */
+		assertNull("Ne doit pas générer de rapport : "
+				, MonFileReaderDan.getRapportLecture());
 		
 	} // Fin de testLireFichierDeCaracteresFileRepertoire()._______________
 	
@@ -763,7 +805,12 @@ public final class MonFileReaderDanTest {
 	
 	/**
 	 * method testLireFichierDeCaracteresFileNONTXT() :<br/>
-	 * Garantit que lireFichierDeCaracteres(fichier non textuel) retourne 
+	 * Teste la méthode lireFichierDeCaracteres(File pFile).<br/>
+	 * - vérifie que le rapport de lireFichierDeCaracteres(fichier non textuel) 
+	 * n'est pas null.<br/>
+	 * - vérifie que le rapport de lireFichierDeCaracteres(fichier non textuel) 
+	 * n'est pas vide.<br/>
+	 * - vérifie que lireFichierDeCaracteres(fichier non textuel) retourne 
 	 * null.<br/>
 	 */
 	@Test
@@ -771,15 +818,26 @@ public final class MonFileReaderDanTest {
 		
 		String resultat =null;
 		
+		/* Boucle sur la liste des fichiers non texte. */
 		for(final File file : LISTEFILES_NON_TXT) {
 			
 			resultat = MonFileReaderDan.lireFichierDeCaracteres(file);
 			
-			assertNotNull("Le rapport doit être rempli : "
+			/* vérifie que le rapport de 
+			 * lireFichierDeCaracteres(fichier non textuel) n'est pas null. */
+			assertNotNull("Le rapport ne doit pas être null : "
 					, MonFileReaderDan.getRapportLecture());
 			
+			/* vérifie que le rapport de 
+			 * lireFichierDeCaracteres(fichier non textuel) n'est pas vide. */
+			assertFalse("le rapport ne doit pas être vide : "
+					, MonFileReaderDan.getRapportLecture().length() == 0);
+			
+			/* vérifie que lireFichierDeCaracteres(fichier non textuel) retourne 
+			 * null.*/
 			assertNull("Doit retourner null : ", resultat);
-		}
+			
+		} // Fin de Boucle sur la liste des fichiers non texte.____
 						
 	} // Fin de testLireFichierDeCaracteresFileNONTXT().___________________
 	
@@ -787,7 +845,10 @@ public final class MonFileReaderDanTest {
 	
 	/**
 	 * method testLireFichierDeCaracteresFileTXT() :<br/>
-	 * Garantit que lireFichierDeCaracteres(fichier textuel) ne retourne 
+	 * Teste la méthode lireFichierDeCaracteres(File pFile).<br/>
+	 * - vérifie que le rapport de lireFichierDeCaracteres(fichier textuel) 
+	 * est null.<br/>
+	 * - vérifie que lireFichierDeCaracteres(fichier textuel) ne retourne 
 	 * pas null.<br/>
 	 */
 	@Test
@@ -795,15 +856,22 @@ public final class MonFileReaderDanTest {
 		
 		String resultat =null;
 		
+		/* Boucle sur la liste des fichiers texte.*/
 		for(final File file : LISTEFILES_TXT) {
 			
-			resultat = MonFileReaderDan.lireFichierDeCaracteres(file);
+			resultat 
+				= MonFileReaderDan.lireFichierDeCaracteres(file);
 			
+			/* vérifie que le rapport de 
+			 * lireFichierDeCaracteres(fichier textuel) est null. */
 			assertNull("Le rapport doit être null : "
 					, MonFileReaderDan.getRapportLecture());
 			
+			/* - vérifie que lireFichierDeCaracteres(fichier textuel) 
+			 * ne retourne pas null.*/
 			assertNotNull("Ne Doit PAS retourner null : ", resultat);
-		}
+			
+		} // Fin de Boucle sur la liste des fichiers texte.___________
 						
 	} // Fin de testLireFichierDeCaracteresFileTXT().______________________
 	
@@ -811,15 +879,16 @@ public final class MonFileReaderDanTest {
 	
 	/**
 	 * method testLireFichierDeCaracteres() :<br/>
-	 * .<br/>
+	 *  Utile pour tester la méthode lireFichierDeCaracteres(File pFile).<br/>
+	 * (Réactiver l'annotation @Test).<br/>
 	 * <br/>
-	 * : void :  .<br/>
 	 */
-	@Test
+//	@Test
 	public void testLireFichierDeCaracteres() {
 		
 		// Lecture du Fichier et récupération de son contenu sous forme de String.
-		final String resultat = MonFileReaderDan.lireFichierDeCaracteres(FILE_GIF_EN_BMP);
+		final String resultat 
+			= MonFileReaderDan.lireFichierDeCaracteres(FILE_GIF_EN_BMP);
 		
 		// Test du résultat.
 		// Si fichier Textuel.
@@ -833,6 +902,8 @@ public final class MonFileReaderDanTest {
 			System.out.println(MonFileReaderDan.getRapportLecture());
 		}
 		
-	}
+	} // Fin de testLireFichierDeCaracteres()._____________________________
+	
+	
 
 } // FIN DE LA CLASSE MonFileReaderDanTest.----------------------------------

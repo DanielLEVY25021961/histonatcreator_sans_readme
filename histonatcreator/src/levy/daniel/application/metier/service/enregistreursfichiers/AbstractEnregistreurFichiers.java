@@ -13,11 +13,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import levy.daniel.application.metier.service.enregistreursfichiers.rapportsenregistrements.LigneRapportEnregistrement;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import levy.daniel.application.metier.service.enregistreursfichiers.rapportsenregistrements.LigneRapportEnregistrement;
 
 /**
  * class AbstractEnregistreurFichiers :<br/>
@@ -32,6 +32,12 @@ import levy.daniel.application.metier.service.enregistreursfichiers.rapportsenre
  * <br/>
  *
  * - Dépendances :<br/>
+ * levy.daniel.application.IExportateurCsv.<br/>
+ * levy.daniel.application.IExportateurJTable.<br/>
+ * levy.daniel.application.IResetable.<br/>
+ * levy.daniel.application.metier.service.enregistreursfichiers.rapportsenregistrements.LigneRapportEnregistrement.<br/>
+ * levy.daniel.application.metier.service.enregistreursfichiers.IRapporteurEnregistrement.<br/>
+ * levy.daniel.application.metier.service.enregistreursfichiers.IEnregistreurFichiers.<br/>
  * <br/>
  *
  *
@@ -197,7 +203,133 @@ public abstract class AbstractEnregistreurFichiers implements
 	// *************************METHODES************************************/
 	
 	
-	 
+	
+	 /**
+	 * method CONSTRUCTEUR AbstractEnregistreurFichiers() :<br/>
+	 * CONSTRUCTEUR D'ARITE NULLE.<br/>
+	 * <br/>
+	 * - Remplit le nom de la classe concrète this.nomClasseConcrete 
+	 * fourni par this.fournirNomClasseConcrete() 
+	 * dans la classe concrète.<br/>
+	 * - Met automatiquement dateEnregistrement à date système.<br/>
+	 * - Met automatiquement userName à "Administrateur".<br/>
+	 * <br/>
+	 * - calcule automatiquement dateEnregistrementStringFormattee.<br/>
+	 * - passe null à this.objet.<br/>
+	 * - passe null à this.fichier.<br/>
+	 * - calcule automatiquement nomFichier (null).<br/>
+	 * <br/>
+	 */
+	public AbstractEnregistreurFichiers() {
+		this(null, null, null, null);
+	} // Fin de CONSTRUCTEUR D'ARITE NULLE.________________________________
+	
+	
+	
+	 /**
+	 * method CONSTRUCTEUR AbstractEnregistreurFichiers(
+	 * String pObjet) :<br/>
+	 * Constructeur avec objet.<br/>
+	 * <br/>
+	 * - Remplit le nom de la classe concrète this.nomClasseConcrete 
+	 * fourni par this.fournirNomClasseConcrete() 
+	 * dans la classe concrète.<br/>
+	 * - Met automatiquement dateEnregistrement à date système.<br/>
+	 * - Met automatiquement userName à "Administrateur".<br/>
+	 * <br/>
+	 * - calcule automatiquement dateEnregistrementStringFormattee.<br/>
+	 * - passe pObjet à this.objet.<br/>
+	 * - passe null à this.fichier.<br/>
+	 * - calcule automatiquement nomFichier (null).<br/>
+	 * <br/>
+	 *
+	 * @param pObjet : String : objet (ou motif) ayant demandé 
+	 * la création du fichier 
+	 * comme 'contrôle de lignes vide'.<br/>
+	 */
+	public AbstractEnregistreurFichiers(
+			final String pObjet) {
+		this(null, null, pObjet, null);
+	} // Fin de CONSTRUCTEUR AbstractEnregistreurFichiers(
+	 // String pObjet).____________________________________________________
+	
+	
+	
+	 /**
+	 * method CONSTRUCTEUR AbstractEnregistreurFichiers(
+	 * String pObjet
+	 * , File pFichier) :<br/>
+	 * Constructeur avec objet et fichier.<br/>
+	 * <br/>
+	 * - Remplit le nom de la classe concrète this.nomClasseConcrete 
+	 * fourni par this.fournirNomClasseConcrete() 
+	 * dans la classe concrète.<br/>
+	 * - Met automatiquement dateEnregistrement à date système.<br/>
+	 * - Met automatiquement userName à "Administrateur".<br/>
+	 * <br/>
+	 * - calcule automatiquement dateEnregistrementStringFormattee.<br/>
+	 * - passe pObjet à this.objet.<br/>
+	 * - passe pFichier à this.fichier.<br/>
+	 * - calcule automatiquement nomFichier.<br/>
+	 * <br/>
+	 *
+	 * @param pObjet : String : objet (ou motif) ayant demandé 
+	 * la création du fichier 
+	 * comme 'contrôle de lignes vide'.<br/>
+	 * @param pFichier : File : fichier enregistré.<br/>
+	 */
+	public AbstractEnregistreurFichiers(
+				final String pObjet
+						, final File pFichier) {
+		
+		this(null, null, pObjet, pFichier);
+		
+	} // Fin de CONSTRUCTEUR AbstractEnregistreurFichiers(
+	 // String pObjet
+	 // , File pFichier).__________________________________________________
+
+	
+	
+	 /**
+	 * method CONSTRUCTEUR AbstractEnregistreurFichiers(
+	 * String pUserName
+	 * , String pObjet
+	 * , File pFichier) :<br/>
+	 * Constructeur avec user, objet et fichier.<br/>
+	 * <br/>
+	 * - Remplit le nom de la classe concrète this.nomClasseConcrete 
+	 * fourni par this.fournirNomClasseConcrete() 
+	 * dans la classe concrète.<br/>
+	 * - Met automatiquement dateEnregistrement à date système.<br/>
+	 * <br/>
+	 * - calcule automatiquement dateEnregistrementStringFormattee.<br/>
+	 * - remplit userName avec pUserName si pUserName != null 
+	 * ou 'Administrateur' sinon.<br/>
+	 * - passe pObjet à this.objet.<br/>
+	 * - passe pFichier à this.fichier.<br/>
+	 * - calcule automatiquement nomFichier.<br/>
+	 * <br/>
+	 *
+	 * @param pUserName : String : 
+	 * nom de l'utilisateur qui a déclenché l'enregistrement du fichier.<br/>
+	 * @param pObjet : String : objet (ou motif) ayant demandé 
+	 * la création du fichier 
+	 * comme 'contrôle de lignes vide'.<br/>
+	 * @param pFichier : File : fichier enregistré.<br/>
+	 */
+	public AbstractEnregistreurFichiers(
+			final String pUserName
+					, final String pObjet
+						, final File pFichier) {
+		
+		this(null, pUserName, pObjet, pFichier);
+		
+	} // Fin de CONSTRUCTEUR AbstractEnregistreurFichiers(
+	 // String pUserName
+	 // , String pObjet
+	 // , File pFichier).__________________________________________________
+	
+	
 	
 	 /**
 	 * method CONSTRUCTEUR AbstractEnregistreurFichiers(COMPLET) :<br/>
@@ -209,7 +341,7 @@ public abstract class AbstractEnregistreurFichiers implements
 	 * - Remplit dateEnregistrement avec pDateEnregistrement 
 	 * si pDateEnregistrement != null 
 	 * ou la date système sinon.<br/>
-	 * - calcule automatiquement dateControleStringFormattee.<br/>
+	 * - calcule automatiquement dateEnregistrementStringFormattee.<br/>
 	 * - remplit userName avec pUserName si pUserName != null 
 	 * ou 'Administrateur' sinon.<br/>
 	 * - passe pObjet à this.objet.<br/>
@@ -244,7 +376,7 @@ public abstract class AbstractEnregistreurFichiers implements
 		 * ou la date système sinon. */
 		this.dateEnregistrement = this.fournirDate(pDateEnregistrement);
 		
-		/* calcule automatiquement dateControleStringFormattee. */
+		/* calcule automatiquement dateEnregistrementStringFormattee. */
 		this.dateEnregistrementStringFormatee
 			= this.fournirDateFormattee(this.dateEnregistrement);
 		
@@ -263,6 +395,51 @@ public abstract class AbstractEnregistreurFichiers implements
 		
 	} // Fin de CONSTRUCTEUR COMPLET.______________________________________
 	
+
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final File ecrireStringDansFileLatin9(
+			final File pFile
+				, final String pString) {
+		
+		return this.ecrireStringDansFile(pFile, pString
+				, CHARSET_LATIN9, NEWLINE);
+		
+	} // Fin de ecrireStringDansFileLatin9(...).___________________________
+	
+
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final File ecrireStringDansFileANSI(
+			final File pFile
+				, final String pString) {
+		
+		return this.ecrireStringDansFile(pFile, pString
+				, CHARSET_ANSI, NEWLINE);
+		
+	} // Fin de ecrireStringDansFileANSI(...)._____________________________
+	
+	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final File ecrireStringDansFileUTF8(
+			final File pFile
+				, final String pString) {
+		
+		return this.ecrireStringDansFile(pFile, pString
+				, CHARSET_UTF8, NEWLINE);
+		
+	} // Fin de ecrireStringDansFileUTF8(...)._____________________________
+	
 	
 	
 	/**
@@ -273,22 +450,36 @@ public abstract class AbstractEnregistreurFichiers implements
 			final File pFile
 				, final String pString
 					, final Charset pCharset
-,
-			final String pSautLigne) {
+						, final String pSautLigne) {
+		
+		/* rafraîchit le rapport (en instancie un nouveau à chaque appel 
+		 * de la méthode ecrireStringDansFile(File pFile)). */
+		this.rapport = new ArrayList<LigneRapportEnregistrement>();
 
-		/* retourne null si le pFile est null. */
+		/* retourne null, LOG de niveau INFO 
+		 * et rapport si pFile est null. */
 		if (pFile == null) {
 
 			/* LOG de niveau INFO. */
 			loggerInfo(this.fournirNomClasseConcrete(),
 					METHODE_ECRIRESTRINGDANSFILE
 						, MESSAGE_FICHIER_NULL);
-
+			
+			/* rapport. */
+			final LigneRapportEnregistrement ligne 
+				= this.creerLigneRapport(
+						MESSAGE_FICHIER_NULL
+							, null
+								, "KO");
+			
+			this.ajouterLigneRapport(ligne);
+			
 			/* retour de null. */
 			return null;
 		}
 
-		/* retourne null si le pFile est inexistant. */
+		/* retourne null, LOG de niveau INFO 
+		 * et rapport si pFile est inexistant. */
 		if (!pFile.exists()) {
 
 			/* LOG de niveau INFO. */
@@ -296,12 +487,22 @@ public abstract class AbstractEnregistreurFichiers implements
 					METHODE_ECRIRESTRINGDANSFILE
 						, MESSAGE_FICHIER_INEXISTANT
 							, pFile.getAbsolutePath());
+			
+			/* rapport. */
+			final LigneRapportEnregistrement ligne 
+				= this.creerLigneRapport(
+						MESSAGE_FICHIER_INEXISTANT + pFile.getAbsolutePath()
+							, null
+								, "KO");
+			
+			this.ajouterLigneRapport(ligne);
 
 			/* retour de null. */
 			return null;
 		}
 
-		/* retourne null si le pFile est un répertoire. */
+		/* retourne null, LOG de niveau INFO 
+		 * et rapport si pFile est un répertoire. */
 		if (pFile.isDirectory()) {
 
 			/* LOG de niveau INFO. */
@@ -309,12 +510,22 @@ public abstract class AbstractEnregistreurFichiers implements
 					METHODE_ECRIRESTRINGDANSFILE
 						, MESSAGE_FICHIER_REPERTOIRE
 							, pFile.getAbsolutePath());
+			
+			/* rapport. */
+			final LigneRapportEnregistrement ligne 
+				= this.creerLigneRapport(
+						MESSAGE_FICHIER_REPERTOIRE + pFile.getAbsolutePath()
+							, null
+								, "KO");
+			
+			this.ajouterLigneRapport(ligne);
 
 			/* retour de null. */
 			return null;
 		}
 
-		/* retourne null si pString est blank. */
+		/* retourne null, LOG de niveau INFO 
+		 * et rapport si pString est blank. */
 		if (StringUtils.isBlank(pString)) {
 
 			/* LOG de niveau INFO. */
@@ -322,10 +533,24 @@ public abstract class AbstractEnregistreurFichiers implements
 					METHODE_ECRIRESTRINGDANSFILE
 						, MESSAGE_STRING_BLANK
 							, pString);
-
+			
+			/* rapport. */
+			final LigneRapportEnregistrement ligne 
+			= this.creerLigneRapport(
+					MESSAGE_STRING_BLANK + pString
+						, null
+							, "KO");
+		
+			this.ajouterLigneRapport(ligne);
+			
+			/* retour de null. */
 			return null;
 		}
-
+		
+		/* passe pFile à this.fichier et 
+		 * rafraîchit automatiquement this.nomFichier. */
+		this.setFichier(pFile);
+				
 		Charset charset = null;
 
 		/* Passe automatiquement le charset à UTF-8 si pCharset est null. */
@@ -376,28 +601,55 @@ public abstract class AbstractEnregistreurFichiers implements
 			 * pString si nécessaire.
 			 */
 			bufferedWriter.write(substituerSautLigne(pString, sautLigne));
+			
+			/* rapport. */
+			final LigneRapportEnregistrement ligne 
+				= this.creerLigneRapport(
+						"Le fichier " + pFile.getName() + " a bien été créé"
+							, pFile.getAbsolutePath()
+								, "OK");
+			
+			this.ajouterLigneRapport(ligne);
 
 			// Retour du fichier.
 			return pFile;
 
 		} catch (FileNotFoundException fnfe) {
 
-			/* LOG de niveau ERROR. */
+			/* LOG de niveau ERROR et rapport. */
 			loggerError(
 					this.fournirNomClasseConcrete()
 						, MESSAGE_EXCEPTION
 							, fnfe);
+			
+			/* rapport. */
+			final LigneRapportEnregistrement ligne 
+			= this.creerLigneRapport(
+					MESSAGE_EXCEPTION + fnfe
+						, null
+							, "KO");
+		
+			this.ajouterLigneRapport(ligne);
 
 			/* retour de null. */
 			return null;
 
 		} catch (IOException ioe) {
 
-			/* LOG de niveau ERROR. */
+			/* LOG de niveau ERROR et rapport. */
 			loggerError(
 					this.fournirNomClasseConcrete()
 						, MESSAGE_EXCEPTION
 							, ioe);
+			
+			/* rapport. */
+			final LigneRapportEnregistrement ligne 
+			= this.creerLigneRapport(
+					MESSAGE_EXCEPTION + ioe
+						, null
+							, "KO");
+		
+			this.ajouterLigneRapport(ligne);
 
 			/* retour de null. */
 			return null;
@@ -412,11 +664,20 @@ public abstract class AbstractEnregistreurFichiers implements
 
 				} catch (IOException ioe1) {
 
-					/* LOG de niveau ERROR. */
+					/* LOG de niveau ERROR et rapport. */
 					loggerError(
 							this.fournirNomClasseConcrete()
 								, MESSAGE_EXCEPTION
 									, ioe1);
+					
+					/* rapport. */
+					final LigneRapportEnregistrement ligne 
+					= this.creerLigneRapport(
+							MESSAGE_EXCEPTION + ioe1
+								, null
+									, "KO");
+				
+					this.ajouterLigneRapport(ligne);
 				}
 			} // Fin de if (bufferedWriter != null).__________
 
@@ -427,11 +688,20 @@ public abstract class AbstractEnregistreurFichiers implements
 
 				} catch (IOException ioe2) {
 
-					/* LOG de niveau ERROR. */
+					/* LOG de niveau ERROR et rapport. */
 					loggerError(
 							this.fournirNomClasseConcrete()
 							, MESSAGE_EXCEPTION
 								, ioe2);
+					
+					/* rapport. */
+					final LigneRapportEnregistrement ligne 
+					= this.creerLigneRapport(
+							MESSAGE_EXCEPTION + ioe2
+								, null
+									, "KO");
+				
+					this.ajouterLigneRapport(ligne);
 				}
 			} // Fin de if (outputStreamWriter != null).______
 
@@ -442,11 +712,20 @@ public abstract class AbstractEnregistreurFichiers implements
 
 				} catch (IOException ioe3) {
 
-					// * LOG de niveau ERROR. */
+					// * LOG de niveau ERROR et rapport. */
 					loggerError(
 							this.fournirNomClasseConcrete()
 							, MESSAGE_EXCEPTION
 								, ioe3);
+					
+					/* rapport. */
+					final LigneRapportEnregistrement ligne 
+					= this.creerLigneRapport(
+							MESSAGE_EXCEPTION + ioe3
+								, null
+									, "KO");
+				
+					this.ajouterLigneRapport(ligne);
 				}
 			}
 
@@ -459,6 +738,7 @@ public abstract class AbstractEnregistreurFichiers implements
 	/**
 	 * method substituerSautLignePlateforme(
 	 * String pString) :<br/>
+	 * SERVICE ACCESSOIRE.<br/>
 	 * Substitue les sauts de ligne dans pString 
 	 * (\r\n pour DOS/Windows, \r pour Mac, \n pour Unix) 
 	 * par les sauts de ligne de la plate-forme
@@ -487,6 +767,7 @@ public abstract class AbstractEnregistreurFichiers implements
 	 * method substituerSautLigne(
 	 * String pString
 	 * , String pSautLigne) :<br/>
+	 * SERVICE ACCESSOIRE.<br/>
 	 * Substitue les sauts de ligne dans pString 
 	 * (\r\n pour DOS/Windows, \r pour Mac, \n pour Unix) 
 	 * par les sauts de ligne pSautLigne.<br/>
@@ -554,6 +835,7 @@ public abstract class AbstractEnregistreurFichiers implements
 	/**
 	 * method afficherSautLigne(
 	 * String pSautLigne) :<br/>
+	 * SERVICE ACCESSOIRE.<br/>
 	 * Affiche les caractères non imprimables 
 	 * saut de ligne (\n ou \r ou \r\n).<br/>
 	 * <br/>
@@ -1002,8 +1284,162 @@ public abstract class AbstractEnregistreurFichiers implements
 	 // List<LigneRapportEnregistrement> pList
 	// , boolean pAjouterEntete).__________________________________________
 	
+
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final String getEnTeteRapportJTable(final int pI) {
+		
+		final LigneRapportEnregistrement ligne 
+			= new LigneRapportEnregistrement();
+				
+		return ligne.getEnTeteColonne(pI);
+		
+	} // Fin de getEnTeteRapportJTable(
+	// int pI).____________________________________________________________
 	
 
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final Object getValeurRapportJTable(
+			final int pLigne
+				, final int pColonne) {
+		
+		/* retourne null si this.rapport == null. */
+		if (this.rapport == null) {
+			return null;
+		}
+		
+		return this.rapport.get(pLigne).getValeurColonne(pColonne);
+		
+	} // Fin de getValeurRapportJTable(
+	// int pLigne
+	// , int pColonne).____________________________________________________
+	
+	
+	
+	/**
+	 * method ajouterLigneRapport(
+	 * LigneRapportEnregistrement pLigneRapport) :<br/>
+	 * Ajoute une LigneRapportEnregistrement 
+	 * au rapport de l'enregistrement.<br/>
+	 * <br/>
+	 * - retourne false si pLigneRapport == null.<br/>
+	 * - retourne false si rapport == null.<br/>
+	 * <br/>
+	 *
+	 * @param pLigneRapport : LigneRapportEnregistrement.<br/>
+	 * 
+	 * @return : boolean : true si la ligne de rapport 
+	 * a été ajoutée au rapport.<br/>
+	 */
+	protected final boolean ajouterLigneRapport(
+			final LigneRapportEnregistrement pLigneRapport) {
+		
+		/* retourne false si pLigneRapport == null. */
+		if (pLigneRapport == null) {
+			return false;
+		}
+		
+		/* retourne false si rapport == null. */
+		if (this.rapport == null) {
+			return false;
+		}
+		
+		/* Ajout de la ligne de rapport. */
+		return this.rapport.add(pLigneRapport);
+		
+	} // Fin de ajouterLigneRapport(
+	 // LigneRapportEnregistrement pLigneRapport)._________________________
+
+
+	
+	/**
+	 * method retirerLigneRapport(
+	 * LigneRapportEnregistrement pLigneRapport) :<br/>
+	 * Retire une LigneRapportEnregistrement au rapport du contrôle.<br/>
+	 * <br/>
+	 * - retourne false si pLigneRapport == null.<br/>
+	 * - retourne false si rapport == null.<br/>
+	 * <br/>
+	 *
+	 * @param pLigneRapport : LigneRapportEnregistrement.<br/>
+	 * 
+	 * @return : boolean : true si la ligne de rapport
+	 *  a été retirée du rapport.<br/>
+	 */
+	protected final boolean retirerLigneRapport(
+			final LigneRapportEnregistrement pLigneRapport) {
+		
+		/* retourne false si pLigneRapport == null. */
+		if (pLigneRapport == null) {
+			return false;
+		}
+		
+		/* retourne false si rapport == null. */
+		if (this.rapport == null) {
+			return false;
+		}
+		
+		/* retrait de la ligne de rapport. */
+		return this.rapport.remove(pLigneRapport);
+		
+	} // Fin de retirerLigneRapport(
+	 // LigneRapportEnregistrement pLigneRapport)._________________________
+	
+
+	
+	/**
+	 * method creerLigneRapport(
+	 * String pMessage
+	 * , String pChemin
+	 * , String pStatut) :<br/>
+	 * Crée et retourne une ligne de rapport LigneRapportEnregistrement 
+	 * avec des attributs pré-remplis et les valeurs passées en paramètre.<br/>
+	 * <br/>
+	 * Liste des attributs pré-remplis : <br/>
+	 * - Met automatiquement this.dateEnregistrementStringFormatee 
+	 * dans la date de l'enregistrement 'dateEnregistrement'.<br/>
+	 * - Met automatiquement this.userName dans le nom 
+	 * de l'utilisateur qui a déclenché l'enregistrement 'userName'.<br/>
+	 * - Met automatiquement this.objet dans 'objet'.<br/>
+	 * - Met automatiquement this.nomFichier dans le nom du fichier 
+	 * enregistré 'nomFichier'.<br/>
+	 * <br/>
+	 *
+	 * @param pMessage : String : message à l'attention de l'utilisateur 
+	 * indiquant si le fichier a bien été enregistré.<br/>
+	 * @param pChemin : String : chemin de création du fichier 
+	 * enregistré sur le disque.<br/>
+	 * @param pStatut : String : statut de la création du fichier 
+	 * (OK si créé, KO sinon).<br/>
+	 * 
+	 * @return : LigneRapportEnregistrement :  .<br/>
+	 */
+	protected final LigneRapportEnregistrement creerLigneRapport(
+			final String pMessage
+				, final String pChemin
+					, final String pStatut) {
+		
+		return new LigneRapportEnregistrement(
+				this.dateEnregistrementStringFormatee
+				, this.userName
+				, this.objet
+				, this.nomFichier
+				, pMessage, pChemin, pStatut);
+		
+	} // Fin de creerLigneRapport(
+	 // String pMessage
+	 // , String pChemin
+	 // , String pStatut)._________________________________________________
+	
+
+	
 	/**
 	 * {@inheritDoc}
 	 */

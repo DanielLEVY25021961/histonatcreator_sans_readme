@@ -195,13 +195,26 @@ public final class CaractereDanTest {
 	 * - Si deux objets ne sont pas equals, alors HashCode différents.<br/>
 	 * <br/>
 	 * - x.equals(y) ---> x.compareTo(y) == 0.<br/>
+	 * <br/>
+	 * - vérifie les contrats Java.<br/>
+	 * - vérifie que CONSTRUCTEUR_ARITE_NULLE == CONSTRUCTEUR_AUTO_NULL 
+	 * == CONSTRUCTEUR_COMPLET_NULL.<br/>
+	 * - Vérifie le toString().<br/>
+	 * - Vérifie le toCsv().<br/>
+	 * - Vérifie le getValeurColonne().<br/>
+	 * - vérifie equals.<br/>
+	 * - vérifie hashcode.<br/>
+	 * - vérifie compare.<br/>
+	 * - vérifie clone.<br/>
+	 * <br/>
 	 * 
 	 * @throws CloneNotSupportedException 
 	 */
 	@Test
 	public void testConstructeurAriteNulle() throws CloneNotSupportedException {
 		
-		
+		/* vérifie que CONSTRUCTEUR_ARITE_NULLE == CONSTRUCTEUR_AUTO_NULL 
+		 * == CONSTRUCTEUR_COMPLET_NULL.*/
 		final CaractereDan caracAriteNulle1 = new CaractereDan();
 		
 		final CaractereDan caracAutoNull = new CaractereDan(null);
@@ -309,6 +322,23 @@ public final class CaractereDanTest {
 	/**
 	 * method testConstructeurAutoNul() :<br/>
 	 * Teste le constructeur à remplissage automatique avec un Character null.<br/>
+	 * <br/>
+	 * Contrats Java :<br/>
+	 * - Si deux objets sont equals, alors même HashCode.<br/>
+	 * - Si deux objets ne sont pas equals, alors HashCode différents.<br/>
+	 * <br/>
+	 * - x.equals(y) ---> x.compareTo(y) == 0.<br/>
+	 * <br/>
+	 * - vérifie les contrats Java.<br/>
+	 * - vérifie que CONSTRUCTEUR_ARITE_NULLE == CONSTRUCTEUR_AUTO_NULL 
+	 * == CONSTRUCTEUR_COMPLET_NULL.<br/>
+	 * - Vérifie le toString().<br/>
+	 * - Vérifie le toCsv().<br/>
+	 * - Vérifie le getValeurColonne().<br/>
+	 * - vérifie equals.<br/>
+	 * - vérifie hashcode.<br/>
+	 * - vérifie compare.<br/>
+	 * - vérifie clone.<br/>
 	 * <br/>
 	 *
 	 * @throws CloneNotSupportedException

@@ -173,7 +173,7 @@ public class CaractereDan implements
 	 * <br/>
 	 */
 	public CaractereDan() {
-		super();
+		this(null, null, null);
 	} // Fin de CONSTRUCTEUR D'ARITE NULLE.________________________________
 	
 	

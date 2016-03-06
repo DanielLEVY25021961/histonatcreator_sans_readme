@@ -576,7 +576,9 @@ public final class MonFileInputStreamReaderDan {
 							final String message 
 							= "Le caractère lu à la position : " 
 							+ compteur 
-							+ " ne semble pas être un caractère humain : " 
+							+ " du fichier '"
+							+ pFile.getName()
+							+ "' ne semble pas être un caractère humain : " 
 							+ character 
 							+ "\nNuméro du caractère : " 
 							+ characterEntier 
@@ -923,25 +925,6 @@ public final class MonFileInputStreamReaderDan {
 		return rapportLecture;
 	} // Fin de getRapportLecture()._______________________________________
 
-
-
-	/**
-	 * method setRapportLecture(
-	 * String pRapportLecture) :<br/>
-	 * Setter du rapport de lecture du fichier 
-	 * (alimenté si le fichier n'est pas textuel).<br/>
-	 * <br/>
-	 *
-	 * @param pRapportLecture : String : 
-	 * valeur à passer à rapportLecture.<br/>
-	 */
-	public static void setRapportLecture(
-			final String pRapportLecture) {
-		rapportLecture = pRapportLecture;
-	} // Fin de setRapportLecture(
-	 // String pRapportLecture).___________________________________________
-	
-	
 		
 	
 } // FIN DE LA CLASSE MonFileInputStreamReaderDan.---------------------------

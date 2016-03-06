@@ -16,11 +16,11 @@ import java.util.List;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import levy.daniel.application.metier.controles.rapportscontroles.LigneRapport;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import levy.daniel.application.metier.controles.rapportscontroles.LigneRapport;
 
 
 /**
@@ -517,6 +517,7 @@ public abstract class AbstractControle implements IControle {
 	
 	/**
 	 * method fournirDateSystemeFormattee() :<br/>
+	 * SERVICE ANNEXE.<br/>
 	 * Retourne la date système au format DF_DATETIMEMILLI_FRANCAISE
 	 * des dates-heures françaises avec millisecondes comme
 	 * '25/02/1961-12:27:07.251'.<br/>
@@ -537,6 +538,7 @@ public abstract class AbstractControle implements IControle {
 	/**
 	 * method fournirDateStringFormattee(
 	 * Date pDate) :<br/>
+	 * SERVICE ANNEXE.<br/>
 	 * Retourne la date pDate au format DF_DATETIMEMILLI_FRANCAISE 
 	 * des dates-heures françaises avec millisecondes comme
 	 * '25/02/1961-12:27:07.251'.<br/>
@@ -573,6 +575,7 @@ public abstract class AbstractControle implements IControle {
 	/**
 	 * method fournirDateAPartirDeStringFormattee(
 	 * String pDateFormattee) :<br/>
+	 * SERVICE ANNEXE.<br/>
 	 * Retourne une Java.util.Date à partir d'une String formattée 
 	 * selon le format DF_DATETIMEMILLI_FRANCAISE
 	 * des dates-heures françaises avec millisecondes comme
@@ -664,6 +667,7 @@ public abstract class AbstractControle implements IControle {
 	 * <br/>
 	 *
 	 * @param pDate : java.util.Date.<br/>
+	 * 
 	 * @return : Date : date système ou pDate.<br/>
 	 */
 	private Date fournirDate(
@@ -694,7 +698,8 @@ public abstract class AbstractControle implements IControle {
 	 * - retourne null si pDate == null.<br/>
 	 * <br/>
 	 *
-	 * @param pDate
+	 * @param pDate : java.util.Date.<br/>
+	 * 
 	 * @return : String : "dd/MM/yyyy-HH:mm:ss.SSS".<br/>
 	 */
 	private String fournirDateFormattee(
@@ -722,8 +727,9 @@ public abstract class AbstractControle implements IControle {
 	 * - retourne pUserName sinon.<br/>
 	 * <br/>
 	 *
-	 * @param pUserName
-	 * @return : String :  .<br/>
+	 * @param pUserName : String.<br/>
+	 * 
+	 * @return : String : pUserName si pas null ou 'Administrateur .<br/>
 	 */
 	private String fournirUserName(
 			final String pUserName) {
@@ -744,7 +750,7 @@ public abstract class AbstractControle implements IControle {
 	/**
 	 * method fournirNomFichier(
 	 * File pFile) :<br/>
-	 * retourne le nom de pFile.<br/>
+	 * retourne le nom court (sans tout le chemin) de pFile.<br/>
 	 * <br/>
 	 * - retourne null si pFile == null.<br/>
 	 * <br/>
@@ -761,7 +767,7 @@ public abstract class AbstractControle implements IControle {
 			return null;
 		}
 		
-		/* retourne le nom de pFile. */
+		/* retourne le nom court (sans tout le chemin) de pFile. */
 		return pFile.getName();
 		
 	} // Fin de fournirNomFichier(
@@ -1248,152 +1254,9 @@ public abstract class AbstractControle implements IControle {
 
 
 	
-	/**
-	 * method ajouterLigneRapport(
-	 * LigneRapport pLigneRapport) :<br/>
-	 * Ajoute une LigneRapport au rapport du contrôle.<br/>
-	 * <br/>
-	 * - retourne false si pLigneRapport == null.<br/>
-	 * - retourne false si rapport == null.<br/>
-	 * <br/>
-	 *
-	 * @param pLigneRapport : LigneRapport.<br/>
-	 * 
-	 * @return : boolean : true si la ligne de rapport 
-	 * a été ajoutée au rapport.<br/>
-	 */
-	protected final boolean ajouterLigneRapport(
-			final LigneRapport pLigneRapport) {
-		
-		/* retourne false si pLigneRapport == null. */
-		if (pLigneRapport == null) {
-			return false;
-		}
-		
-		/* retourne false si rapport == null. */
-		if (this.rapport == null) {
-			return false;
-		}
-		
-		/* Ajout de la ligne de rapport. */
-		return this.rapport.add(pLigneRapport);
-		
-	} // Fin de ajouterLigneRapport(
-	 // LigneRapport pLigneRapport)._______________________________________
-	
-
-	
-	/**
-	 * method retirerLigneRapport(
-	 * LigneRapport pLigneRapport) :<br/>
-	 * Retire une LigneRapport au rapport du contrôle.<br/>
-	 * <br/>
-	 * - retourne false si pLigneRapport == null.<br/>
-	 * - retourne false si rapport == null.<br/>
-	 * <br/>
-	 *
-	 * @param pLigneRapport : LigneRapport.<br/>
-	 * 
-	 * @return : boolean : true si la ligne de rapport
-	 *  a été retirée du rapport.<br/>
-	 */
-	protected final boolean retirerLigneRapport(
-			final LigneRapport pLigneRapport) {
-		
-		/* retourne false si pLigneRapport == null. */
-		if (pLigneRapport == null) {
-			return false;
-		}
-		
-		/* retourne false si rapport == null. */
-		if (this.rapport == null) {
-			return false;
-		}
-		
-		return this.rapport.remove(pLigneRapport);
-		
-	} // Fin de retirerLigneRapport(
-	 // LigneRapport pLigneRapport)._______________________________________
-	
-
-	
-	/**
-	 * method creerLigneRapport(
-	 * Integer pNumeroLigne
-	 * , String pMessageControle
-	 * , Integer pOrdreChamp
-	 * , String pPositionChamp
-	 * , String pValeurChamp
-	 * , String pAction) :<br/>
-	 * Crée et retourne une ligne de rapport LigneRapport 
-	 * avec des attributs pré-remplis et les valeurs passées en paramètre.<br/>
-	 * <br/>
-	 * Liste des attributs pré-remplis : <br/>
-	 * - Met automatiquement this.dateControleStringFormatee 
-	 * dans la date d'exécution du contrôle 'dateControle'.<br/>
-	 * - Met automatiquement this.userName dans le nom 
-	 * de l'utilisateur qui a déclenché le contrôle 'userName'.<br/>
-	 * - Met automatiquement this.nomFichier dans le nom du fichier 
-	 * objet du contrôle 'nomFichier'.<br/>
-	 * - Met automatiquement this.typeControle dans le type du contrôle 
-	 * ('contrôle de surface' par exemple) 'typeControle'.<br/>
-	 * - Met automatiquement this.nomControle dans le nom du contrôle 
-	 * ('contrôle fichier texte' par exemple) 'nomControle'.<br/>
-	 * - Met automatiquement this.nomCritere dans la désignation 
-	 * du critère vérifié par le contrôle 
-	 * ('une ligne ne doit pas être vide' par exemple) 'critere'.<br/>
-	 * - Met automatiquement this.gravite dans la désignation 
-	 * de la gravité de ce contrôle (par exemple '1 - bloquant') 'gravité'.<br/>
-	 * <br/>
-	 *
-	 * @param pNumeroLigne : Integer : numéro de la ligne dans le fichier 
-	 * qui déclenche le contrôle.<br/>
-	 * @param pMessageControle : String : message émis par le contrôle.<br/>
-	 * @param pOrdreChamp : Integer : ordre du champ contrôlé
-	 * (dans un fichier comportant une liste de champs comme un fichier 
-	 * ASCII HIT).<br/>
-	 * @param pPositionChamp : String : position du champ contrôlé 
-	 * dans une ligne du fichier comme 7 ou [7-12].<br/>
-	 * @param pValeurChamp : String : valeur prise par le champ contrôlé 
-	 * exprimée sous forme de String.<br/>
-	 * @param pAction : String : action menée après le contrôle 
-	 * comme "ligne éliminée" ou "ligne conservée".<br/>
-	 * <br/>
-	 * 
-	 * @return : LigneRapport : Une ligne de rapport.<br/>
-	 */
-	protected final LigneRapport creerLigneRapport(
-			final Integer pNumeroLigne
-			, final String pMessageControle
-			, final Integer pOrdreChamp
-			, final String pPositionChamp
-			, final String pValeurChamp
-			, final String pAction) {
-		
-		return new LigneRapport(
-				this.dateControleStringFormatee
-				, this.userName
-				, this.nomFichier
-				, this.typeControle
-				, this.nomControle
-				, this.nomCritere
-				, this.gravite
-				, pNumeroLigne
-				, pMessageControle
-				, pOrdreChamp
-				, pPositionChamp, pValeurChamp, pAction);
-		
-	} // Fin de creerLigneRapport(
-	 // Integer pNumeroLigne
-	 // , String pMessageControle
-	 // , Integer pOrdreChamp
-	 // , String pPositionChamp
-	 // , String pValeurChamp
-	 // , String pAction)._________________________________________________
-
-	
-	
 	 /**
+	  * SERVICE ANNEXE.<br/>
+	  * <br/>
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -1406,6 +1269,8 @@ public abstract class AbstractControle implements IControle {
 	
 	
 	/**
+	 * SERVICE ANNEXE.<br/>
+	 * <br/>
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -1418,6 +1283,8 @@ public abstract class AbstractControle implements IControle {
 
 	
 	/**
+	 * SERVICE ANNEXE.<br/>
+	 * <br/>
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -1430,6 +1297,8 @@ public abstract class AbstractControle implements IControle {
 
 	
 	/**
+	 * SERVICE ANNEXE.<br/>
+	 * <br/>
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -1442,6 +1311,8 @@ public abstract class AbstractControle implements IControle {
 
 	
 	/**
+	 * SERVICE ANNEXE.<br/>
+	 * <br/>
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -1454,6 +1325,8 @@ public abstract class AbstractControle implements IControle {
 
 	
 	/**
+	 * SERVICE ANNEXE.<br/>
+	 * <br/>
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -1466,6 +1339,8 @@ public abstract class AbstractControle implements IControle {
 
 	
 	/**
+	 * SERVICE ANNEXE.<br/>
+	 * <br/>
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -1478,6 +1353,8 @@ public abstract class AbstractControle implements IControle {
 	
 	
 	/**
+	 * SERVICE ANNEXE.<br/>
+	 * <br/>
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -1727,6 +1604,8 @@ public abstract class AbstractControle implements IControle {
 	
 	
 	/**
+	 * SERVICE ANNEXE.<br/>
+	 * <br/>
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -1741,6 +1620,8 @@ public abstract class AbstractControle implements IControle {
 	
 	
 	/**
+	 * SERVICE ANNEXE.<br/>
+	 * <br/>
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -1816,6 +1697,8 @@ public abstract class AbstractControle implements IControle {
 
 	
 	/**
+	 * SERVICE ANNEXE.<br/>
+	 * <br/>
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -1833,6 +1716,8 @@ public abstract class AbstractControle implements IControle {
 
 	
 	/**
+	 * SERVICE ANNEXE.<br/>
+	 * <br/>
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -1960,6 +1845,189 @@ public abstract class AbstractControle implements IControle {
 	
 	
 	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final String getEnTeteRapportJTable(final int pI) {
+		
+		final LigneRapport ligne 
+			= new LigneRapport();
+				
+		return ligne.getEnTeteColonne(pI);
+		
+	} // Fin de getEnTeteRapportJTable(
+	// int pI).____________________________________________________________
+	
+
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final Object getValeurRapportJTable(
+			final int pLigne
+				, final int pColonne) {
+		
+		/* retourne null si this.rapport == null. */
+		if (this.rapport == null) {
+			return null;
+		}
+		
+		return this.rapport.get(pLigne).getValeurColonne(pColonne);
+		
+	} // Fin de getValeurRapportJTable(
+	// int pLigne
+	// , int pColonne).____________________________________________________
+	
+
+	
+	/**
+	 * method ajouterLigneRapport(
+	 * LigneRapport pLigneRapport) :<br/>
+	 * Ajoute une LigneRapport au rapport du contrôle.<br/>
+	 * <br/>
+	 * - retourne false si pLigneRapport == null.<br/>
+	 * - retourne false si rapport == null.<br/>
+	 * <br/>
+	 *
+	 * @param pLigneRapport : LigneRapport.<br/>
+	 * 
+	 * @return : boolean : true si la ligne de rapport 
+	 * a été ajoutée au rapport.<br/>
+	 */
+	protected final boolean ajouterLigneRapport(
+			final LigneRapport pLigneRapport) {
+		
+		/* retourne false si pLigneRapport == null. */
+		if (pLigneRapport == null) {
+			return false;
+		}
+		
+		/* retourne false si rapport == null. */
+		if (this.rapport == null) {
+			return false;
+		}
+		
+		/* Ajout de la ligne de rapport. */
+		return this.rapport.add(pLigneRapport);
+		
+	} // Fin de ajouterLigneRapport(
+	 // LigneRapport pLigneRapport)._______________________________________
+	
+
+	
+	/**
+	 * method retirerLigneRapport(
+	 * LigneRapport pLigneRapport) :<br/>
+	 * Retire une LigneRapport au rapport du contrôle.<br/>
+	 * <br/>
+	 * - retourne false si pLigneRapport == null.<br/>
+	 * - retourne false si rapport == null.<br/>
+	 * <br/>
+	 *
+	 * @param pLigneRapport : LigneRapport.<br/>
+	 * 
+	 * @return : boolean : true si la ligne de rapport
+	 *  a été retirée du rapport.<br/>
+	 */
+	protected final boolean retirerLigneRapport(
+			final LigneRapport pLigneRapport) {
+		
+		/* retourne false si pLigneRapport == null. */
+		if (pLigneRapport == null) {
+			return false;
+		}
+		
+		/* retourne false si rapport == null. */
+		if (this.rapport == null) {
+			return false;
+		}
+		
+		/* retrait de la ligne de rapport. */
+		return this.rapport.remove(pLigneRapport);
+		
+	} // Fin de retirerLigneRapport(
+	 // LigneRapport pLigneRapport)._______________________________________
+	
+
+	
+	/**
+	 * method creerLigneRapport(
+	 * Integer pNumeroLigne
+	 * , String pMessageControle
+	 * , Integer pOrdreChamp
+	 * , String pPositionChamp
+	 * , String pValeurChamp
+	 * , String pAction) :<br/>
+	 * Crée et retourne une ligne de rapport LigneRapport 
+	 * avec des attributs pré-remplis et les valeurs passées en paramètre.<br/>
+	 * <br/>
+	 * Liste des attributs pré-remplis : <br/>
+	 * - Met automatiquement this.dateControleStringFormatee 
+	 * dans la date d'exécution du contrôle 'dateControle'.<br/>
+	 * - Met automatiquement this.userName dans le nom 
+	 * de l'utilisateur qui a déclenché le contrôle 'userName'.<br/>
+	 * - Met automatiquement this.nomFichier dans le nom du fichier 
+	 * objet du contrôle 'nomFichier'.<br/>
+	 * - Met automatiquement this.typeControle dans le type du contrôle 
+	 * ('contrôle de surface' par exemple) 'typeControle'.<br/>
+	 * - Met automatiquement this.nomControle dans le nom du contrôle 
+	 * ('contrôle fichier texte' par exemple) 'nomControle'.<br/>
+	 * - Met automatiquement this.nomCritere dans la désignation 
+	 * du critère vérifié par le contrôle 
+	 * ('une ligne ne doit pas être vide' par exemple) 'critere'.<br/>
+	 * - Met automatiquement this.gravite dans la désignation 
+	 * de la gravité de ce contrôle (par exemple '1 - bloquant') 'gravité'.<br/>
+	 * <br/>
+	 *
+	 * @param pNumeroLigne : Integer : numéro de la ligne dans le fichier 
+	 * qui déclenche le contrôle.<br/>
+	 * @param pMessageControle : String : message émis par le contrôle.<br/>
+	 * @param pOrdreChamp : Integer : ordre du champ contrôlé
+	 * (dans un fichier comportant une liste de champs comme un fichier 
+	 * ASCII HIT).<br/>
+	 * @param pPositionChamp : String : position du champ contrôlé 
+	 * dans une ligne du fichier comme 7 ou [7-12].<br/>
+	 * @param pValeurChamp : String : valeur prise par le champ contrôlé 
+	 * exprimée sous forme de String.<br/>
+	 * @param pAction : String : action menée après le contrôle 
+	 * comme "ligne éliminée" ou "ligne conservée".<br/>
+	 * <br/>
+	 * 
+	 * @return : LigneRapport : Une ligne de rapport.<br/>
+	 */
+	protected final LigneRapport creerLigneRapport(
+			final Integer pNumeroLigne
+			, final String pMessageControle
+			, final Integer pOrdreChamp
+			, final String pPositionChamp
+			, final String pValeurChamp
+			, final String pAction) {
+		
+		return new LigneRapport(
+				this.dateControleStringFormatee
+				, this.userName
+				, this.nomFichier
+				, this.typeControle
+				, this.nomControle
+				, this.nomCritere
+				, this.gravite
+				, pNumeroLigne
+				, pMessageControle
+				, pOrdreChamp
+				, pPositionChamp, pValeurChamp, pAction);
+		
+	} // Fin de creerLigneRapport(
+	 // Integer pNumeroLigne
+	 // , String pMessageControle
+	 // , Integer pOrdreChamp
+	 // , String pPositionChamp
+	 // , String pValeurChamp
+	 // , String pAction)._________________________________________________
+
+	
+
 	/**
 	 * {@inheritDoc}
 	 */

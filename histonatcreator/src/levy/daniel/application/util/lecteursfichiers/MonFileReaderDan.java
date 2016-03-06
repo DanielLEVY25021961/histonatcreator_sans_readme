@@ -343,7 +343,8 @@ public final class MonFileReaderDan {
 	 * s'agit d'un caractère humainement utilisable 
 	 * (que l'on peut taper au clavier).<br/>
 	 * <br/>
-	 * - retourne null si un caractère non humain est détecté.<br/>
+	 * - retourne null et génère un rapport 
+	 * si un caractère non humain est détecté.<br/>
 	 * <br/>
 	 * - retourne MESSAGE_FICHIER_NULL si le pFile est null.<br/>
 	 * - retourne MESSAGE_FICHIER_INEXISTANT si le pFile est inexistant.<br/>
@@ -444,7 +445,9 @@ public final class MonFileReaderDan {
 							final String message 
 							= "Le caractère lu à la position : " 
 							+ compteur 
-							+ " ne semble pas être un caractère humain : " 
+							+ " du fichier : '"
+							+ pFile.getName()
+							+ "' ne semble pas être un caractère humain : " 
 							+ character 
 							+ "\nNuméro du caractère : " 
 							+ characterEntier 

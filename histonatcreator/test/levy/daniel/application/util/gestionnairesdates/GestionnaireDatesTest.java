@@ -554,6 +554,7 @@ static {
 	 * method testExtraireGrandeurs() :<br/>
 	 * Teste la méthode extraireGrandeursDate(...).<br/>
 	 * <br/>
+	 * - vérifie que la méthode fournit les bonnes valeurs.<br/>
 	 */
 	@Test
 	public void testExtraireGrandeurs() {
@@ -570,6 +571,7 @@ static {
 		final int seconde = GestionnaireDates.extraireSeconde(date);
 		final int milliseconde = GestionnaireDates.extraireMilliseconde(date);
 		
+		/* vérifie que la méthode fournit les bonnes valeurs. */
 		assertEquals("jour == 25 : ", 25, jour);
 		assertEquals("mois == 2 : ", 2, mois);
 		assertEquals("annee == 1961 : ", 1961, annee);
