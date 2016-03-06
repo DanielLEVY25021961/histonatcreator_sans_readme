@@ -614,10 +614,6 @@
             <ruleset>Migration</ruleset>
         </rule>
         <rule>
-            <name>JUnit4TestShouldUseTestAnnotation</name>
-            <ruleset>Migration</ruleset>
-        </rule>
-        <rule>
             <name>JUnitUseExpected</name>
             <ruleset>Migration</ruleset>
         </rule>
