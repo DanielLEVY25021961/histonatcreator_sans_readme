@@ -23,12 +23,24 @@ import org.apache.commons.logging.LogFactory;
  * class AbstractEnregistreurFichiers :<br/>
  * Abstraction qui centralise les attributs et méthodes de toutes les classes 
  * qui fournissent des services d'enregistrement de fichiers sur disque.<br/>
+ * SERVICE CHARGE D'ENREGISTRER UNE STRING SUR DISQUE.<br/>
  * <br/>
  *
  * - Exemple d'utilisation :<br/>
+ * <code>
+ *  // Instanciation d'un EnregistreurFichier.<br/>
+ *  final IEnregistreurFichiers enregistreur 
+ *  = new EnregistreurFichiers(
+ *  pDateEnregistrement, pUserName, pObjet, pFichier);<br/>
+ *  // Enregistrement de la chaine aEcrire dans pFichier 
+ *  avec le Charset pCharset et en substituant éventuellement 
+ *  pSautLigne aux sauts de ligne existants dans la chaîne aEcrire.<br/>
+ *  final File resultat = enregistreur.ecrireStringDansFile(pFichier, aEcrire, pCharset, pSautLigne);<br/>
+ * </code>
  *<br/>
  * 
  * - Mots-clé :<br/>
+ * FileOutputStream, OutputStreamWriter, BufferedWriter, Charset,<br/>
  * <br/>
  *
  * - Dépendances :<br/>

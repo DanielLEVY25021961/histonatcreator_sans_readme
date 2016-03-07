@@ -12,6 +12,7 @@ import java.util.Locale;
  * class IEnregistreurFichiers :<br/>
  * Abstraction qui centralise les méthodes de toutes les classes 
  * qui fournissent des services d'enregistrement de fichiers sur disque.<br/>
+ * SERVICE CHARGE D'ENREGISTRER UNE STRING SUR DISQUE.<br/>
  * <br/>
  *
  * - Exemple d'utilisation :<br/>

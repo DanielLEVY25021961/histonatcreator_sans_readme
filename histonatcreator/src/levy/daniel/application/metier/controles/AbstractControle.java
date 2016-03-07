@@ -21,6 +21,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import levy.daniel.application.metier.controles.rapportscontroles.LigneRapport;
+import levy.daniel.application.metier.service.enregistreursfichiers.IEnregistreurFichiers;
 import levy.daniel.application.metier.service.enregistreursfichiers.impl.EnregistreurFichiers;
 import levy.daniel.application.metier.service.enregistreursfichiers.rapportsenregistrements.LigneRapportEnregistrement;
 
@@ -65,6 +66,32 @@ import levy.daniel.application.metier.service.enregistreursfichiers.rapportsenre
  * <br/>
  *
  * - Exemple d'utilisation :<br/>
+ *<code>
+ *  // Instanciation d'un ControleurTypeTexte.<br/>
+ *  final ControleurTypeTexte control = new ControleurTypeTexte();<br/>
+ *  // Invocation de la méthode controler(...) en demandant 
+ *  l'écriture des rapports textuels et csv sur disque.<br/>
+ *  final boolean resultat = control.controler(FILE_CHARETTE_ANSI, true);<br/>
+ *  // resultat = true FILE_CHARETTE_ANSI est un fichier textuel.<br/>
+ *  control.afficherRapportTextuel() // Pour voir le 
+ *  rapport de contrôle sous forme textuelles.<br/>
+ *  control.afficherRapportCsvAvecEntete() // Pour voir le 
+ *  rapport de contrôle sous forme csv.<br/>
+ *  // id;date du contrôle;utilisateur;Fichier;type de contrôle;Contrôle;
+ *  Critère du Contrôle;Gravité du Contrôle;Numéro de Ligne;
+ *  Message du Contrôle;Ordre du Champ;Position du Champ;
+ *  Valeur du Champ;Action;<br/>
+ *  // null;2016-03-06_19-08-55-259;Administrateur;
+ *  chaàâreéèêëtte_ANSI.txt;Contrôle de surface;Contrôle fichier texte;
+ *  Le fichier ne doit pas comporter de caractères indésirables 
+ *  (impossibles à écrire au clavier);1 - anomalie bloquante;
+ *  null;Le fichier 'chaàâreéèêëtte_ANSI.txt' est bien un fichier texte;
+ *  null;sans objet;sans objet;OK - Fichier accepté;<br/> 
+ *  control.afficherRapportEnregistrementTextuel() // Pour voir le compte-rendu 
+ *  de l'enregistrement du rapport de contrôle sous forme textuelle.<br/>
+ *  control.afficherRapportEnregistrementCsv() // Pour voir le compte-rendu 
+ *  de l'enregistrement du rapport de contrôle sous forme csv.<br/>
+ * </code>
  *<br/>
  * 
  * - Mots-clé :<br/>
@@ -114,9 +141,10 @@ public abstract class AbstractControle implements IControle {
 	/**
 	 * dateControleStringFormatee : String :<br/>
 	 * date du contrôle formattée au format dfDatetimemilliFrancaiseLexico.<br/>
-	 * Format des dates-heures françaises avec millisecondes comme
-	 * '25/02/1961-12:27:07.251'.<br/>
-	 * "dd/MM/yyyy-HH:mm:ss.SSS".<br/>
+	 * Format des dates-heures françaises lexicographique 
+	 * avec millisecondes comme
+	 * '1961-01-25_12-27-07-251'.<br/>
+	 * "yyyy-MM-dd_HH-mm-ss-SSS".<br/>
 	 */
 	protected transient String dateControleStringFormatee;
 	
@@ -745,16 +773,17 @@ public abstract class AbstractControle implements IControle {
 	 * Date pDate) :<br/>
 	 * Fournit une date sous forme de String formattée 
 	 * au format dfDatetimemilliFrancaiseLexico.<br/>
-	 * Format des dates-heures françaises avec millisecondes comme
-	 * '25/02/1961-12:27:07.251'.<br/>
-	 * "dd/MM/yyyy-HH:mm:ss.SSS".<br/>
+	 * Format des dates-heures françaises lexicographique 
+	 * avec millisecondes comme
+	 * '1961-01-25_12-27-07-251'.<br/>
+	 * "yyyy-MM-dd_HH-mm-ss-SSS".<br/>
 	 * <br/>
 	 * - retourne null si pDate == null.<br/>
 	 * <br/>
 	 *
 	 * @param pDate : java.util.Date.<br/>
 	 * 
-	 * @return : String : "dd/MM/yyyy-HH:mm:ss.SSS".<br/>
+	 * @return : String : "yyyy-MM-dd_HH-mm-ss-SSS".<br/>
 	 */
 	private String fournirDateFormattee(
 			final Date pDate) {
@@ -2305,7 +2334,9 @@ public abstract class AbstractControle implements IControle {
 			return null;
 		}
 		
-		final EnregistreurFichiers enregistreur 
+		/* Instanciation d'un service d'enregistrement 
+		 * des fichiers sur disque. */
+		final IEnregistreurFichiers enregistreur 
 			= new EnregistreurFichiers(
 					pDateEnregistrement, pUserName, pObjet, pFichier);
 		
@@ -2341,6 +2372,7 @@ public abstract class AbstractControle implements IControle {
 		
 		aEcrire = stb.toString();
 		
+		/* Ecriture du rapport de controle dans pFichier. */
 		final File resultat = enregistreur.ecrireStringDansFile(
 				pFichier, aEcrire, pCharset, pSautLigne);
 		

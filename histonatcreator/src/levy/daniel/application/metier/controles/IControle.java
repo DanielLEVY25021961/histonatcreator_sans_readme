@@ -50,6 +50,32 @@ import levy.daniel.application.IListeurDeCaracteresUnicode;
  * <br/>
  *
  * - Exemple d'utilisation :<br/>
+ *<code>
+ *  // Instanciation d'un ControleurTypeTexte.<br/>
+ *  final ControleurTypeTexte control = new ControleurTypeTexte();<br/>
+ *  // Invocation de la méthode controler(...) en demandant 
+ *  l'écriture des rapports textuels et csv sur disque.<br/>
+ *  final boolean resultat = control.controler(FILE_CHARETTE_ANSI, true);<br/>
+ *  // resultat = true FILE_CHARETTE_ANSI est un fichier textuel.<br/>
+ *  control.afficherRapportTextuel() // Pour voir le 
+ *  rapport de contrôle sous forme textuelles.<br/>
+ *  control.afficherRapportCsvAvecEntete() // Pour voir le 
+ *  rapport de contrôle sous forme csv.<br/>
+ *  // id;date du contrôle;utilisateur;Fichier;type de contrôle;Contrôle;
+ *  Critère du Contrôle;Gravité du Contrôle;Numéro de Ligne;
+ *  Message du Contrôle;Ordre du Champ;Position du Champ;
+ *  Valeur du Champ;Action;<br/>
+ *  // null;2016-03-06_19-08-55-259;Administrateur;
+ *  chaàâreéèêëtte_ANSI.txt;Contrôle de surface;Contrôle fichier texte;
+ *  Le fichier ne doit pas comporter de caractères indésirables 
+ *  (impossibles à écrire au clavier);1 - anomalie bloquante;
+ *  null;Le fichier 'chaàâreéèêëtte_ANSI.txt' est bien un fichier texte;
+ *  null;sans objet;sans objet;OK - Fichier accepté;<br/> 
+ *  control.afficherRapportEnregistrementTextuel() // Pour voir le compte-rendu 
+ *  de l'enregistrement du rapport de contrôle sous forme textuelle.<br/>
+ *  control.afficherRapportEnregistrementCsv() // Pour voir le compte-rendu 
+ *  de l'enregistrement du rapport de contrôle sous forme csv.<br/>
+ * </code>
  *<br/>
  * 
  * - Mots-clé :<br/>
@@ -485,7 +511,7 @@ public interface IControle extends IRapporteurControle
 	 *
 	 * @param pDateControle : Date : valeur à passer à dateControle.<br/>
 	 */
-	void setDateControle(Date pDateControle);
+	void setDateControle(final Date pDateControle);
 	
 	
 
@@ -493,9 +519,10 @@ public interface IControle extends IRapporteurControle
 	 * method getDateControleStringFormatee() :<br/>
 	 * Getter de la date du contrôle formattée 
 	 * au format dfDatetimemilliFrancaiseLexico.<br/>
-	 * Format des dates-heures françaises avec millisecondes comme
-	 * '25/02/1961-12:27:07.251'.<br/>
-	 * "dd/MM/yyyy-HH:mm:ss.SSS".<br/>
+	 * Format des dates-heures françaises lexicographique 
+	 * avec millisecondes comme
+	 * '1961-01-25_12-27-07-251'.<br/>
+	 * "yyyy-MM-dd_HH-mm-ss-SSS".<br/>
 	 * <br/>
 	 *
 	 * @return dateControleStringFormatee : String.<br/>
@@ -527,7 +554,7 @@ public interface IControle extends IRapporteurControle
 	 * @param pUserName : String : 
 	 * valeur à passer à userName.<br/>
 	 */
-	void setUserName(String pUserName);
+	void setUserName(final String pUserName);
 	
 	
 
@@ -552,7 +579,7 @@ public interface IControle extends IRapporteurControle
 	 *
 	 * @param pFichier : File : valeur à passer à fichier.<br/>
 	 */
-	void setFichier(File pFichier);
+	void setFichier(final File pFichier);
 	
 	
 
