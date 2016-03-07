@@ -355,6 +355,11 @@ public static final String STRING_REF_DIACRITIQUES_ISO_8859_2
 		/* test de la méthode afficherTout(). */
 //		System.out.println(DifferentiateurString.afficherTout());
 		
+		/* Destruction du répertoire créé pour le test. */
+		DifferentiateurString.detruireArborescence(".\\data\\temp\\rapports\\rapportsdifferentiateur");
+		
+		Thread.sleep(100);
+		
 	} // Fin de testDifferencier().________________________________________
 	
 

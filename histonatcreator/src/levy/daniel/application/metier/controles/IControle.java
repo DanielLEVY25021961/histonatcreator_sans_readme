@@ -1,6 +1,7 @@
 package levy.daniel.application.metier.controles;
 
 import java.io.File;
+import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -49,6 +50,32 @@ import levy.daniel.application.IListeurDeCaracteresUnicode;
  * <br/>
  *
  * - Exemple d'utilisation :<br/>
+ *<code>
+ *  // Instanciation d'un ControleurTypeTexte.<br/>
+ *  final ControleurTypeTexte control = new ControleurTypeTexte();<br/>
+ *  // Invocation de la méthode controler(...) en demandant 
+ *  l'écriture des rapports textuels et csv sur disque.<br/>
+ *  final boolean resultat = control.controler(FILE_CHARETTE_ANSI, true);<br/>
+ *  // resultat = true FILE_CHARETTE_ANSI est un fichier textuel.<br/>
+ *  control.afficherRapportTextuel() // Pour voir le 
+ *  rapport de contrôle sous forme textuelles.<br/>
+ *  control.afficherRapportCsvAvecEntete() // Pour voir le 
+ *  rapport de contrôle sous forme csv.<br/>
+ *  // id;date du contrôle;utilisateur;Fichier;type de contrôle;Contrôle;
+ *  Critère du Contrôle;Gravité du Contrôle;Numéro de Ligne;
+ *  Message du Contrôle;Ordre du Champ;Position du Champ;
+ *  Valeur du Champ;Action;<br/>
+ *  // null;2016-03-06_19-08-55-259;Administrateur;
+ *  chaàâreéèêëtte_ANSI.txt;Contrôle de surface;Contrôle fichier texte;
+ *  Le fichier ne doit pas comporter de caractères indésirables 
+ *  (impossibles à écrire au clavier);1 - anomalie bloquante;
+ *  null;Le fichier 'chaàâreéèêëtte_ANSI.txt' est bien un fichier texte;
+ *  null;sans objet;sans objet;OK - Fichier accepté;<br/> 
+ *  control.afficherRapportEnregistrementTextuel() // Pour voir le compte-rendu 
+ *  de l'enregistrement du rapport de contrôle sous forme textuelle.<br/>
+ *  control.afficherRapportEnregistrementCsv() // Pour voir le compte-rendu 
+ *  de l'enregistrement du rapport de contrôle sous forme csv.<br/>
+ * </code>
  *<br/>
  * 
  * - Mots-clé :<br/>
@@ -62,6 +89,8 @@ import levy.daniel.application.IListeurDeCaracteresUnicode;
  * levy.daniel.application.IExportateurJTable.<br/>
  * levy.daniel.application.IResetable.<br/>
  * levy.daniel.application.metier.controles.rapportscontroles.LigneRapport.<br/>
+ * levy.daniel.application.metier.service.enregistreursfichiers.rapportsenregistrements.LigneRapportEnregistrement.<br/>
+ * levy.daniel.application.metier.controles.IEnregistreurRapport.<br/>
  * levy.daniel.application.metier.controles.IRapporteurControle.<br/>
  * <br/>
  *
@@ -72,7 +101,8 @@ import levy.daniel.application.IListeurDeCaracteresUnicode;
  *
  */
 public interface IControle extends IRapporteurControle
-			, ILecteurDecodeurFile, IListeurDeCaracteresUnicode {
+			, ILecteurDecodeurFile, IListeurDeCaracteresUnicode
+				, IEnregistreurRapport {
 
 	/**
 	 * LOCALE_FR_FR : Locale :<br/>
@@ -90,7 +120,174 @@ public interface IControle extends IRapporteurControle
 	DateFormat DF_DATETIMEMILLI_FRANCAISE = new SimpleDateFormat(
 			"dd/MM/yyyy-HH:mm:ss.SSS", LOCALE_FR_FR);
 
+		
+	/**
+	 * CHARSET_UTF8 : Charset :<br/>
+	 * Charset.forName("UTF-8").<br/>
+	 * Eight-bit Unicode (or UCS) Transformation Format.<br/> 
+	 */
+	Charset CHARSET_UTF8 
+		= Charset.forName("UTF-8");
 	
+	
+	/**
+	 * CHARSET_US_ASCII : Charset :<br/>
+	 * Charset.forName("US-ASCII").<br/>
+	 * Seven-bit ASCII, a.k.a. ISO646-US, 
+	 * a.k.a. the Basic Latin block of the Unicode character set.<br/>
+	 * standard américain.<br/>
+	 * American Standard Code for Information Interchange.<br/> 
+	 * 128 caractères imprimables.<br/> 
+	 * Sert à écrire l’anglo-américain.<br/> 
+	 * Ne permet pas d’écrire les langues européennes 
+	 * qui utilisent des lettres avec diacritiques (accents, cédille, ...).<br/> 
+	 * On ne peut pas écrire en français avec de l’ASCII.<br/>
+	 */
+	Charset CHARSET_US_ASCII 
+		= Charset.forName("US-ASCII");
+	
+	
+	/**
+	 * CHARSET_ISO_8859_1 : Charset :<br/>
+	 * Charset.forName("ISO-8859-1").<br/>
+	 * Latin1.<br/>
+	 * 191 caractères imprimables.<br/> 
+	 * Permet d’écrire la plupart des langues d’Europe de l’Ouest.<br/> 
+	 * Presque tous les caractères du français y sont (manquent le œ et €).<br/>
+	 */
+	Charset CHARSET_ISO_8859_1 
+		= Charset.forName("ISO-8859-1");
+	
+	
+	/**
+	 * CHARSET_LATIN1 : Charset :<br/>
+	 * Charset.forName("ISO-8859-1").<br/>
+	 * Latin1.<br/>
+	 * 191 caractères imprimables.<br/> 
+	 * Permet d’écrire la plupart des langues d’Europe de l’Ouest.<br/> 
+	 * Presque tous les caractères du français y sont (manquent le œ et €).<br/>
+	 */
+	Charset CHARSET_LATIN1 
+		= Charset.forName("ISO-8859-1");
+	
+	
+	/**
+	 * CHARSET_ISO_8859_2 : Charset :<br/>
+	 * Charset.forName("ISO-8859-2").<br/>
+	 * <br/>
+	 */
+	Charset CHARSET_ISO_8859_2 
+		= Charset.forName("ISO-8859-2");
+	
+	
+	/**
+	 * CHARSET_ISO_8859_9 : Charset :<br/>
+	 * Charset.forName("ISO-8859-9").<br/>
+	 * Latin Alphabet No. 5<br/>
+	 */
+	Charset CHARSET_ISO_8859_9 
+		= Charset.forName("ISO-8859-9");
+	
+	
+	/**
+	 * CHARSET_ISO_8859_15 : Charset :<br/>
+	 * Charset.forName("ISO-8859-15").<br/>
+	 * Latin9, Latin Alphabet No. 9.<br/>
+	 * modifie légèrement ISO-8859-1.<br/> 
+	 * Ajout du caractère œ et du symbole monétaire € (Euro) entre autres.<br/>
+	 */
+	Charset CHARSET_ISO_8859_15 
+		= Charset.forName("ISO-8859-15");
+	
+	
+	/**
+	 * CHARSET_LATIN9 : Charset :<br/>
+	 * Charset.forName("ISO-8859-15").<br/>
+	 * Latin9, Latin Alphabet No. 9.<br/>
+	 * modifie légèrement ISO-8859-1.<br/> 
+	 * Ajout du caractère œ et du symbole monétaire € (Euro) entre autres.<br/>
+	 */
+	Charset CHARSET_LATIN9 
+		= Charset.forName("ISO-8859-15");
+	
+	
+	/**
+	 * CHARSET_WINDOWS_1252 : Charset :<br/>
+	 * Charset.forName("windows-1252").<br/>
+	 * ANSI, CP1252.<br/>
+	 * 218 caractères imprimables.<br/>
+	 * extension d’ISO-8859-1, qui rajoute quelques caractères: œ, € (euro), 
+	 * guillemets anglais (« »), points de suspension (...)
+	 * , signe «pour mille» (‰), 
+	 * tirets cadratin (— = \u2014 en unicode ) et demi-cadratin (–), ...<br/>
+	 */
+	Charset CHARSET_WINDOWS_1252 
+		= Charset.forName("windows-1252");
+	
+	
+	/**
+	 * CHARSET_ANSI : Charset :<br/>
+	 * Charset.forName("windows-1252").<br/>
+	 * ANSI, CP1252.<br/>
+	 * 218 caractères imprimables.<br/>
+	 * extension d’ISO-8859-1, qui rajoute quelques caractères: œ, € (euro), 
+	 * guillemets anglais (« »), points de suspension (...)
+	 * , signe «pour mille» (‰), 
+	 * tirets cadratin (— = \u2014 en unicode ) et demi-cadratin (–), ...<br/>
+	 */
+	Charset CHARSET_ANSI
+		= Charset.forName("windows-1252");
+	
+	
+	/**
+	 * CHARSET_CP1252 : Charset :<br/>
+	 * Charset.forName("windows-1252").<br/>
+	 * ANSI, CP1252.<br/>
+	 * 218 caractères imprimables.<br/>
+	 * extension d’ISO-8859-1, qui rajoute quelques caractères: œ, € (euro), 
+	 * guillemets anglais (« »), points de suspension (...)
+	 * , signe «pour mille» (‰), 
+	 * tirets cadratin (— = \u2014 en unicode ) et demi-cadratin (–), ...<br/>
+	 */
+	Charset CHARSET_CP1252
+		= Charset.forName("windows-1252");
+	
+	
+	/**
+	 * CHARSET_IBM850 : Charset :<br/>
+	 * Charset IBM-850.<br/>
+	 * Cp850, MS-DOS Latin-1.<br/>
+	 */
+	Charset CHARSET_IBM850
+		= Charset.forName("IBM-850");
+	
+	
+	
+	/**
+	 * SAUTDELIGNE_UNIX : String :<br/>
+	 * Saut de ligne généré par les éditeurs Unix.<br/>
+	 * "\n" (Retour Ligne = LINE FEED (LF)).
+	 */
+	String SAUTDELIGNE_UNIX = "\n";
+	
+	
+	/**
+	 * SAUTDELIGNE_MAC : String :<br/>
+	 * Saut de ligne généré par les éditeurs Mac.<br/>
+	 * "\r" (Retour Chariot RC = CARRIAGE RETURN (CR))
+	 */
+	String SAUTDELIGNE_MAC = "\r";
+	
+	
+	/**
+	 * SAUTDELIGNE_DOS_WINDOWS : String :<br/>
+	 * Saut de ligne généré par les éditeurs DOS/Windows.<br/>
+	 * "\r\n" (Retour Chariot RC + Retour Ligne LF).
+	 */
+	String SAUTDELIGNE_DOS_WINDOWS = "\r\n";
+	
+	
+
 	/**
 	 * NEWLINE : String :<br/>
 	 * Saut de ligne spécifique de la plateforme.<br/>
@@ -106,7 +303,14 @@ public interface IControle extends IRapporteurControle
 	 * REPLACEMENT CHARACTER."\\ufffd" '�'.<br/> 
 	 */
 	char CARACTERE_REMPLACEMENT = '\ufffd';
+
 	
+	/**
+	 * BOM_UTF : char :<br/>
+	 * BOM UTF-8 pour forcer Excel 2010 à lire en UTF-8.<br/>
+	 */
+	char BOM_UTF_8 = '\uFEFF';
+
 	
 	/**
 	 * SEP_MOINS : String :<br/>
@@ -115,6 +319,41 @@ public interface IControle extends IRapporteurControle
 	String SEP_MOINS = " - ";
 	
 	
+	/**
+	 * UNDERSCORE : char :<br/>
+	 * '_'.<br/>
+	 */
+	char UNDERSCORE = '_';
+	
+	
+	/**
+	 * POINT : char :<br/>
+	 * '.'.<br/>
+	 */
+	char POINT = '.';
+	
+	
+	/**
+	 * SEPARATEUR_FILE : String :<br/>
+	 * "\\".<br/>
+	 */
+	String SEPARATEUR_FILE = "\\";
+	
+	
+	/**
+	 * SEP_REP : String :<br/>
+	 * Séparateur Java pour les répertoires "\\".<br/>
+	 */
+	String SEP_REP = "\\";
+	
+
+	/**
+	 * SEP_POINTVIRGULE : String :<br/>
+	 * ";".<br/>
+	 */
+	String SEP_POINTVIRGULE = ";";
+
+
 	/**
 	 * NULL : String :<br/>
 	 * "null".<br/>
@@ -178,8 +417,14 @@ public interface IControle extends IRapporteurControle
 	 * ACTION_FICHIER_REFUSE : String :<br/>
 	 * "Fichier refusé".<br/>
 	 */
-	String ACTION_FICHIER_REFUSE = "Fichier refusé";
+	String ACTION_FICHIER_REFUSE = "KO - Fichier refusé";
 
+	
+	/**
+	 * ACTION_FICHIER_ACCEPTE : String :<br/>
+	 * "OK - Fichier accepté".<br/>
+	 */
+	String ACTION_FICHIER_ACCEPTE = "OK - Fichier accepté";
 	
 	
 	/**
@@ -189,20 +434,45 @@ public interface IControle extends IRapporteurControle
 	 * Contrôle d'un fichier.<br/>
 	 * Vérifie qu'un fichier passe un contrôle.<br/>
 	 * <br/>
+	 * - N'enregistre pas de rapport sur le disque.<br/>
+	 * <br/>
 	 *
 	 * @param pFile : File : fichier dont on veut savoir 
 	 * si il passe le contrôle.<br/>
+	 * @param pEnregistrerRapport : boolean : 
+	 * true si on veut enregistrer le rapport dans un fichier sur disque.<br/>
 	 * 
 	 * @return : boolean : true si pFile passe le contrôle.<br/>
 	 */
-	boolean controler(
-			final File pFile);
+	boolean controler(final File pFile);
 	
 	
 	
 	/**
 	 * method controler(
-	 * String pString) :<br/>
+	 * File pFile
+	 * , boolean pEnregistrerRapport) :<br/>
+	 * SERVICE PRINCIPAL.<br/>
+	 * Contrôle d'un fichier.<br/>
+	 * Vérifie qu'un fichier passe un contrôle.<br/>
+	 * <br/>
+	 *
+	 * @param pFile : File : fichier dont on veut savoir 
+	 * si il passe le contrôle.<br/>
+	 * @param pEnregistrerRapport : boolean : 
+	 * true si on veut enregistrer le rapport dans un fichier sur disque.<br/>
+	 * 
+	 * @return : boolean : true si pFile passe le contrôle.<br/>
+	 */
+	boolean controler(
+			final File pFile, final boolean pEnregistrerRapport);
+	
+	
+	
+	/**
+	 * method controler(
+	 * String pString
+	 * , boolean pEnregistrerRapport) :<br/>
 	 * SERVICE PRINCIPAL.<br/>
 	 * Contrôle d'une String.<br/>
 	 * Vérifie qu'une String passe un contrôle.<br/>
@@ -210,11 +480,13 @@ public interface IControle extends IRapporteurControle
 	 *
 	 * @param pString : String : chaîne de caractères dont on veut savoir 
 	 * si elle passe le contrôle.<br/>
+	 * @param pEnregistrerRapport : boolean : 
+	 * true si on veut enregistrer le rapport dans un fichier sur disque.<br/>
 	 * 
 	 * @return : boolean : true si pString passe le contrôle.<br/>
 	 */
 	boolean controler(
-			final String pString);
+			final String pString, final boolean pEnregistrerRapport);
 	
 
 	
@@ -239,17 +511,18 @@ public interface IControle extends IRapporteurControle
 	 *
 	 * @param pDateControle : Date : valeur à passer à dateControle.<br/>
 	 */
-	void setDateControle(Date pDateControle);
+	void setDateControle(final Date pDateControle);
 	
 	
 
 	/**
 	 * method getDateControleStringFormatee() :<br/>
 	 * Getter de la date du contrôle formattée 
-	 * au format dfDatetimemilliFrancaise.<br/>
-	 * Format des dates-heures françaises avec millisecondes comme
-	 * '25/02/1961-12:27:07.251'.<br/>
-	 * "dd/MM/yyyy-HH:mm:ss.SSS".<br/>
+	 * au format dfDatetimemilliFrancaiseLexico.<br/>
+	 * Format des dates-heures françaises lexicographique 
+	 * avec millisecondes comme
+	 * '1961-01-25_12-27-07-251'.<br/>
+	 * "yyyy-MM-dd_HH-mm-ss-SSS".<br/>
 	 * <br/>
 	 *
 	 * @return dateControleStringFormatee : String.<br/>
@@ -281,7 +554,7 @@ public interface IControle extends IRapporteurControle
 	 * @param pUserName : String : 
 	 * valeur à passer à userName.<br/>
 	 */
-	void setUserName(String pUserName);
+	void setUserName(final String pUserName);
 	
 	
 
@@ -306,7 +579,7 @@ public interface IControle extends IRapporteurControle
 	 *
 	 * @param pFichier : File : valeur à passer à fichier.<br/>
 	 */
-	void setFichier(File pFichier);
+	void setFichier(final File pFichier);
 	
 	
 

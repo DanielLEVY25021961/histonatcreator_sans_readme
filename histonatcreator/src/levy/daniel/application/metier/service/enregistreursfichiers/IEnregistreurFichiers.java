@@ -12,6 +12,7 @@ import java.util.Locale;
  * class IEnregistreurFichiers :<br/>
  * Abstraction qui centralise les méthodes de toutes les classes 
  * qui fournissent des services d'enregistrement de fichiers sur disque.<br/>
+ * SERVICE CHARGE D'ENREGISTRER UNE STRING SUR DISQUE.<br/>
  * <br/>
  *
  * - Exemple d'utilisation :<br/>
@@ -304,30 +305,196 @@ public interface IEnregistreurFichiers extends IRapporteurEnregistrement {
 
 	
 	/**
+	 * method ecrireStringDansFileLatin9(
+	 * File pFile
+	 * , String pString) :<br/>
+	 * SERVICE PRINCIPAL.<br/>
+	 * <ul>
+	 * <li>Ecrit la String pString dans le File pFile avec un encodage LATIN-9 
+	 * (ISO-8859-15) 
+	 * et génère un rapport d'enregistrement.<br/></li>
+	 * <li>Substitue automatiquement les sauts de ligne de la plateforme
+	 *  aux sauts de ligne 
+	 * dans pString si nécessaire.<br/></li>
+	 * <li>Utilise FileOutputStream, 
+	 * new OutputStreamWriter(fileOutputStream, charset) 
+	 * et BufferedWriter pour écrire.<br/></li>
+	 * </ul>
+	 * Ecriture dans un fichier, écriture sur disque.<br/>
+	 * <br/>
+	 * - passe pFile à this.fichier et 
+	 * rafraîchit automatiquement this.nomFichier.<br/>
+	 * - rafraîchit le rapport (en instancie un nouveau à chaque appel 
+	 * de la méthode ecrireStringDansFile(File pFile)).<br/>
+	 * <br/>
+	 * - Passe automatiquement le Charset à CHARSET_LATIN9.<br/>
+	 * - Passe automatiquement le saut de ligne à NEWLINE 
+	 * (saut de ligne de la plateforme).<br/>
+	 * <br/>
+	 * - retourne null, LOG de niveau INFO 
+	 * et rapport si pFile est null.<br/>
+	 * - retourne null, LOG de niveau INFO 
+	 * et rapport si pFile est inexistant.<br/>
+	 * - retourne null, LOG de niveau INFO 
+	 * et rapport si pFile est un répertoire.<br/>
+	 * - retourne null, LOG de niveau ERROR 
+	 * et rapport en cas d'Exception loggée 
+	 * (FileNotFoundException, IOException).<br/>
+	 * - retourne null, LOG de niveau INFO 
+	 * et rapport si pString est blank.<br/>
+	 * <br/>
+	 *
+	 * @param pFile : File : fichier dans lequel on écrit.<br/>
+	 * @param pString : String : String que l'on copie dans pFile.<br/>
+	 * 
+	 * @return : File : Le fichier dans lequel on a écrit pString.<br/>
+	 */
+	File ecrireStringDansFileLatin9(
+			final File pFile
+				, final String pString);
+	
+
+	
+	/**
+	 * method ecrireStringDansFileANSI(
+	 * File pFile
+	 * , String pString) :<br/>
+	 * SERVICE PRINCIPAL.<br/>
+	 * <ul>
+	 * <li>Ecrit la String pString dans le File pFile avec un encodage ANSI 
+	 * (Windows-1252 = CP1252) 
+	 * et génère un rapport d'enregistrement.<br/></li>
+	 * <li>Substitue automatiquement les sauts de ligne de la plateforme
+	 *  aux sauts de ligne 
+	 * dans pString si nécessaire.<br/></li>
+	 * <li>Utilise FileOutputStream, 
+	 * new OutputStreamWriter(fileOutputStream, charset) 
+	 * et BufferedWriter pour écrire.<br/></li>
+	 * </ul>
+	 * Ecriture dans un fichier, écriture sur disque.<br/>
+	 * <br/>
+	 * - passe pFile à this.fichier et 
+	 * rafraîchit automatiquement this.nomFichier.<br/>
+	 * - rafraîchit le rapport (en instancie un nouveau à chaque appel 
+	 * de la méthode ecrireStringDansFile(File pFile)).<br/>
+	 * <br/>
+	 * - Passe automatiquement le Charset à CHARSET_ANSI.<br/>
+	 * - Passe automatiquement le saut de ligne à NEWLINE 
+	 * (saut de ligne de la plateforme).<br/>
+	 * <br/>
+	 * - retourne null, LOG de niveau INFO 
+	 * et rapport si pFile est null.<br/>
+	 * - retourne null, LOG de niveau INFO 
+	 * et rapport si pFile est inexistant.<br/>
+	 * - retourne null, LOG de niveau INFO 
+	 * et rapport si pFile est un répertoire.<br/>
+	 * - retourne null, LOG de niveau ERROR 
+	 * et rapport en cas d'Exception loggée 
+	 * (FileNotFoundException, IOException).<br/>
+	 * - retourne null, LOG de niveau INFO 
+	 * et rapport si pString est blank.<br/>
+	 * <br/>
+	 *
+	 * @param pFile : File : fichier dans lequel on écrit.<br/>
+	 * @param pString : String : String que l'on copie dans pFile.<br/>
+	 * 
+	 * @return : File : Le fichier dans lequel on a écrit pString.<br/>
+	 */
+	File ecrireStringDansFileANSI(
+			final File pFile
+				, final String pString);
+	
+	
+	
+	/**
+	 * method ecrireStringDansFileUTF8(
+	 * File pFile
+	 * , String pString) :<br/>
+	 * SERVICE PRINCIPAL.<br/>
+	 * <ul>
+	 * <li>Ecrit la String pString dans le File pFile avec un encodage UTF-8 
+	 * et génère un rapport d'enregistrement.<br/></li>
+	 * <li>Substitue automatiquement les sauts de ligne de la plateforme
+	 *  aux sauts de ligne 
+	 * dans pString si nécessaire.<br/></li>
+	 * <li>Utilise FileOutputStream, 
+	 * new OutputStreamWriter(fileOutputStream, charset) 
+	 * et BufferedWriter pour écrire.<br/></li>
+	 * </ul>
+	 * Ecriture dans un fichier, écriture sur disque.<br/>
+	 * <br/>
+	 * - passe pFile à this.fichier et 
+	 * rafraîchit automatiquement this.nomFichier.<br/>
+	 * - rafraîchit le rapport (en instancie un nouveau à chaque appel 
+	 * de la méthode ecrireStringDansFile(File pFile)).<br/>
+	 * <br/>
+	 * - Passe automatiquement le Charset à CHARSET_UTF8.<br/>
+	 * - Passe automatiquement le saut de ligne à NEWLINE 
+	 * (saut de ligne de la plateforme).<br/>
+	 * <br/>
+	 * - retourne null, LOG de niveau INFO 
+	 * et rapport si pFile est null.<br/>
+	 * - retourne null, LOG de niveau INFO 
+	 * et rapport si pFile est inexistant.<br/>
+	 * - retourne null, LOG de niveau INFO 
+	 * et rapport si pFile est un répertoire.<br/>
+	 * - retourne null, LOG de niveau ERROR 
+	 * et rapport en cas d'Exception loggée 
+	 * (FileNotFoundException, IOException).<br/>
+	 * - retourne null, LOG de niveau INFO 
+	 * et rapport si pString est blank.<br/>
+	 * <br/>
+	 *
+	 * @param pFile : File : fichier dans lequel on écrit.<br/>
+	 * @param pString : String : String que l'on copie dans pFile.<br/>
+	 * 
+	 * @return : File : Le fichier dans lequel on a écrit pString.<br/>
+	 */
+	File ecrireStringDansFileUTF8(
+			final File pFile
+				, final String pString);
+	
+	
+	
+	/**
 	 * method ecrireStringDansFile(
 	 * File pFile
 	 * , String pString
 	 * , Charset pCharset
 	 * , String pSautLigne) :<br/>
-	 * Ecrit la String pString dans le File pFile avec un encodage pCharset.<br/>
-	 * Substitue automatiquement pSautLigne aux sauts de ligne 
-	 * dans pString si nécessaire.<br/>
-	 * Utilise FileOutputStream, 
+	 * SERVICE PRINCIPAL.<br/>
+	 * <ul>
+	 * <li>Ecrit la String pString dans le File pFile avec un encodage pCharset 
+	 * et génère un rapport d'enregistrement.<br/></li>
+	 * <li>Substitue automatiquement pSautLigne aux sauts de ligne 
+	 * dans pString si nécessaire.<br/></li>
+	 * <li>Utilise FileOutputStream, 
 	 * new OutputStreamWriter(fileOutputStream, charset) 
-	 * et BufferedWriter pour écrire.<br/>
+	 * et BufferedWriter pour écrire.<br/></li>
+	 * </ul>
 	 * Ecriture dans un fichier, écriture sur disque.<br/>
+	 * <br/>
+	 * - passe pFile à this.fichier et 
+	 * rafraîchit automatiquement this.nomFichier.<br/>
+	 * - rafraîchit le rapport (en instancie un nouveau à chaque appel 
+	 * de la méthode ecrireStringDansFile(File pFile)).<br/>
 	 * <br/>
 	 * - Passe automatiquement le Charset à CHARSET_UTF8 
 	 * si pCharset est null.<br/>
 	 * - Passe automatiquement le saut de ligne à NEWLINE 
 	 * (saut de ligne de la plateforme) si pSautLigne est blank.<br/>
 	 * <br/>
-	 * - retourne null si le pFile est null.<br/>
-	 * - retourne null si le pFile est inexistant.<br/>
-	 * - retourne null si le pFile est un répertoire.<br/>
-	 * - retourne null en cas d'Exception loggée 
+	 * - retourne null, LOG de niveau INFO 
+	 * et rapport si pFile est null.<br/>
+	 * - retourne null, LOG de niveau INFO 
+	 * et rapport si pFile est inexistant.<br/>
+	 * - retourne null, LOG de niveau INFO 
+	 * et rapport si pFile est un répertoire.<br/>
+	 * - retourne null, LOG de niveau ERROR 
+	 * et rapport en cas d'Exception loggée 
 	 * (FileNotFoundException, IOException).<br/>
-	 * - retourne null si pString est blank.<br/>
+	 * - retourne null, LOG de niveau INFO 
+	 * et rapport si pString est blank.<br/>
 	 * <br/>
 	 *
 	 * @param pFile : File : fichier dans lequel on écrit.<br/>
@@ -377,7 +544,7 @@ public interface IEnregistreurFichiers extends IRapporteurEnregistrement {
 	/**
 	 * method getDateEnregistrementStringFormatee() :<br/>
 	 * Getter de la date de l'enregistrement du fichier 
-	 * formattée au format dfDatetimemilliFrancaise.<br/>
+	 * formattée au format dfDatetimemilliFrancaiseLexico.<br/>
 	 * Format des dates-heures françaises avec millisecondes comme
 	 * '25/02/1961-12:27:07.251'.<br/>
 	 * "dd/MM/yyyy-HH:mm:ss.SSS".<br/>

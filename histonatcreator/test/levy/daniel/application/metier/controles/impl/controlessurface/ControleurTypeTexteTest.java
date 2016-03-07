@@ -15,19 +15,14 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Test;
 
-
-
-
-
 import levy.daniel.application.metier.controles.AbstractControle;
 import levy.daniel.application.metier.controles.IControle;
 import levy.daniel.application.metier.controles.rapportscontroles.LigneRapport;
 
 
-
 /**
  * class ControleurTypeTexteTest :<br/>
- * .<br/>
+ * Test JUnit de la classe ControleurTypeTexte.<br/>
  * <br/>
  *
  * - Exemple d'utilisation :<br/>
@@ -928,6 +923,7 @@ public class ControleurTypeTexteTest {
 	 * - vérifie que lireFichier(FILE_NULL, ...) retourne 
 	 * ControleurTypeTexte.MESSAGE_FICHIER_NULL.<br/>
 	 * - vérifie que le rapport n'est pas null.<br/>
+	 * - vérifie que le rapport n'est pas vide.<br/>
 	 * <br/>
 	 */
 	@Test
@@ -959,17 +955,19 @@ public class ControleurTypeTexteTest {
 	
 	/**
 	 * method testLireFichier() :<br/>
-	 * .<br/>
+	 * Utile pour tester la méthode lireFichier(File pFile, Charset pCharset).<br/>
+	 * (Réactiver l'annotation @Test).<br/>
 	 * <br/>
 	 */
-	@Test
+//	@Test
 	public void testLireFichier() {
 		
 		final ControleurTypeTexte control = new ControleurTypeTexte();
 		final String resultat = control.lireFichier(FILE_PROPERTIES, null);
 		final String listeCaract = control.listerChaineCarParCar(resultat);
 		System.out.println(listeCaract);
-	}
+		
+	} // Fin de testLireFichier()._________________________________________
 
 	
 
@@ -993,6 +991,15 @@ public class ControleurTypeTexteTest {
 		
 		/* invocation de la méthode controler(File pFile). */
 		final boolean resultat = control.controler(FILE_NULL);
+		
+		/* Avec enregistrement sur disque du rapport de contrôle. */
+//		final boolean resultat = control.controler(FILE_NULL, true);
+		
+		/* Affichage du rapport d'enregistrement des rapports. */
+//		System.out.println();
+//		System.out.println(control.afficherRapportEnregistrementTextuel());
+//		System.out.println();
+//		System.out.println(control.afficherRapportEnregistrementCsv());
 		
 		/* Vérifie que la méthode retourne false. */
 		assertFalse("controler(null) doit retourner false : "
@@ -1042,6 +1049,15 @@ public class ControleurTypeTexteTest {
 		/* invocation de la méthode controler(File pFile). */
 		final boolean resultat = control.controler(FILE_INEXISTANT);
 		
+		/* Avec enregistrement sur disque du rapport de contrôle. */
+//		final boolean resultat = control.controler(FILE_INEXISTANT, true);
+		
+		/* Affichage du rapport d'enregistrement des rapports. */
+//		System.out.println();
+//		System.out.println(control.afficherRapportEnregistrementTextuel());
+//		System.out.println();
+//		System.out.println(control.afficherRapportEnregistrementCsv());
+		
 		/* Vérifie que la méthode retourne false. */
 		assertFalse("controler(inexistant) doit retourner false : "
 				, resultat);
@@ -1090,6 +1106,15 @@ public class ControleurTypeTexteTest {
 		/* invocation de la méthode controler(File pFile). */
 		final boolean resultat = control.controler(FILE_REPERTOIRE);
 		
+		/* Avec enregistrement sur disque du rapport de contrôle. */
+//		final boolean resultat = control.controler(FILE_REPERTOIRE, true);
+		
+		/* Affichage du rapport d'enregistrement des rapports. */
+//		System.out.println();
+//		System.out.println(control.afficherRapportEnregistrementTextuel());
+//		System.out.println();
+//		System.out.println(control.afficherRapportEnregistrementCsv());
+		
 		/* Vérifie que la méthode retourne false. */
 		assertFalse("controler(repertoire) doit retourner false : "
 				, resultat);
@@ -1122,7 +1147,7 @@ public class ControleurTypeTexteTest {
 	 * Teste la méthode controler(File pFile ANSI).<br/>
 	 * <br/>
 	 * - Vérifie que controler(ANSI) retourne true.<br/>
-	 * - vérifie que le rapport est vide (non null).<br/>
+	 * - vérifie que le rapport est non vide.<br/>
 	 * <br/>
 	 */
 	@Test
@@ -1134,6 +1159,16 @@ public class ControleurTypeTexteTest {
 		
 		final boolean resultat = control.controler(FILE_CHARETTE_ANSI);
 		
+		
+		/* Avec enregistrement sur disque du rapport de contrôle. */
+//		final boolean resultat = control.controler(FILE_CHARETTE_ANSI, true);
+		
+		/* Affichage du rapport d'enregistrement des rapports. */
+//		System.out.println();
+//		System.out.println(control.afficherRapportEnregistrementTextuel());
+//		System.out.println();
+//		System.out.println(control.afficherRapportEnregistrementCsv());
+		
 		/* Vérifie que controler(ANSI) retourne true. */
 		assertTrue("La méthode controler(ANSI) doit retourner true : "
 					, resultat);
@@ -1141,8 +1176,8 @@ public class ControleurTypeTexteTest {
 		/* récupération du rapport. */
 		final List<LigneRapport> rapport = control.getRapport();
 		
-		/* vérifie que le rapport est vide (non null). */
-		assertTrue("Le rapport doit être vide (non null) : "
+		/* vérifie que le rapport est non vide. */
+		assertFalse("Le rapport doit être non vide : "
 				, rapport.isEmpty());
 		
 	} // Fin de testControlerFileAnsi().___________________________________
@@ -1154,7 +1189,7 @@ public class ControleurTypeTexteTest {
 	 * Teste la méthode controler(File pFile OEM).<br/>
 	 * <br/>
 	 * - Vérifie que controler(OEM) retourne true.<br/>
-	 * - vérifie que le rapport est vide (non null).<br/>
+	 * - vérifie que le rapport est non vide.<br/>
 	 * <br/>
 	 */
 	@Test
@@ -1166,6 +1201,15 @@ public class ControleurTypeTexteTest {
 		
 		final boolean resultat = control.controler(FILE_CHARETTE_OEM);
 		
+		/* Avec enregistrement sur disque du rapport de contrôle. */
+//		final boolean resultat = control.controler(FILE_CHARETTE_OEM, true);
+		
+		/* Affichage du rapport d'enregistrement des rapports. */
+//		System.out.println();
+//		System.out.println(control.afficherRapportEnregistrementTextuel());
+//		System.out.println();
+//		System.out.println(control.afficherRapportEnregistrementCsv());
+		
 		/* Vérifie que controler(OEM) retourne true. */
 		assertTrue("La méthode controler(OEM) doit retourner true : "
 					, resultat);
@@ -1173,8 +1217,8 @@ public class ControleurTypeTexteTest {
 		/* récupération du rapport. */
 		final List<LigneRapport> rapport = control.getRapport();
 		
-		/* vérifie que le rapport est vide (non null). */
-		assertTrue("Le rapport doit être vide (non null) : "
+		/* vérifie que le rapport est non vide. */
+		assertFalse("Le rapport doit être non vide : "
 				, rapport.isEmpty());
 		
 	} // Fin de testControlerFileOem().____________________________________
@@ -1186,7 +1230,7 @@ public class ControleurTypeTexteTest {
 	 * Teste la méthode controler(File pFile LATIN2).<br/>
 	 * <br/>
 	 * - Vérifie que controler(LATIN2) retourne true.<br/>
-	 * - vérifie que le rapport est vide (non null).<br/>
+	 * - vérifie que le rapport est non vide.<br/>
 	 * <br/>
 	 */
 	@Test
@@ -1198,6 +1242,15 @@ public class ControleurTypeTexteTest {
 		
 		final boolean resultat = control.controler(FILE_DIACRITIQUES_ISO_8859_2);
 		
+		/* Avec enregistrement sur disque du rapport de contrôle. */
+//		final boolean resultat = control.controler(FILE_DIACRITIQUES_ISO_8859_2, true);
+		
+		/* Affichage du rapport d'enregistrement des rapports. */
+//		System.out.println();
+//		System.out.println(control.afficherRapportEnregistrementTextuel());
+//		System.out.println();
+//		System.out.println(control.afficherRapportEnregistrementCsv());
+		
 		/* Vérifie que controler(LATIN2) retourne true. */
 		assertTrue("La méthode controler(LATIN2) doit retourner true : "
 					, resultat);
@@ -1205,8 +1258,8 @@ public class ControleurTypeTexteTest {
 		/* récupération du rapport. */
 		final List<LigneRapport> rapport = control.getRapport();
 		
-		/* vérifie que le rapport est vide (non null). */
-		assertTrue("Le rapport doit être vide (non null) : "
+		/* vérifie que le rapport est non vide. */
+		assertFalse("Le rapport doit être non vide : "
 				, rapport.isEmpty());
 		
 	} // Fin de testControlerFileLatin2()._________________________________
@@ -1218,7 +1271,7 @@ public class ControleurTypeTexteTest {
 	 * Teste la méthode controler(File pFile UTF-8).<br/>
 	 * <br/>
 	 * - Vérifie que controler(UTF-8) retourne true.<br/>
-	 * - vérifie que le rapport est vide (non null).<br/>
+	 * - vérifie que le rapport est non vide.<br/>
 	 * <br/>
 	 */
 	@Test
@@ -1230,6 +1283,14 @@ public class ControleurTypeTexteTest {
 		
 		final boolean resultat = control.controler(FILE_DIACRITIQUES_UTF8);
 		
+		/* Avec enregistrement sur disque du rapport de contrôle. */
+//		final boolean resultat = control.controler(FILE_DIACRITIQUES_UTF8, true);
+		
+//		System.out.println();
+//		System.out.println(control.afficherRapportEnregistrementTextuel());
+//		System.out.println();
+//		System.out.println(control.afficherRapportEnregistrementCsv());
+		
 		/* Vérifie que controler(UTF-8) retourne true. */
 		assertTrue("La méthode controler(UTF-8) doit retourner true : "
 					, resultat);
@@ -1237,8 +1298,8 @@ public class ControleurTypeTexteTest {
 		/* récupération du rapport. */
 		final List<LigneRapport> rapport = control.getRapport();
 		
-		/* vérifie que le rapport est vide (non null). */
-		assertTrue("Le rapport doit être vide (non null) : "
+		/* vérifie que le rapport est non vide. */
+		assertFalse("Le rapport doit être non vide : "
 				, rapport.isEmpty());
 		
 	} // Fin de testControlerFileUtf8().___________________________________
@@ -1266,18 +1327,34 @@ public class ControleurTypeTexteTest {
 			assertTrue(
 					"fichier texte doit retourner true : "
 						, control.controler(fichier));
+			
+//			System.out.println();
+//			System.out.println(control.afficherRapportEnregistrementTextuel());
+//			System.out.println();
+//			System.out.println(control.afficherRapportEnregistrementCsv());
+			
 		}
 		
 		for (final File fichier : LISTEFILES_NON_TXT) {
 			assertFalse(
 					"fichier non texte doit retourner false : "
 						, control.controler(fichier));
+			
+//			System.out.println();
+//			System.out.println(control.afficherRapportEnregistrementTextuel());
+//			System.out.println();
+//			System.out.println(control.afficherRapportEnregistrementCsv());
 		}
 		
 		for (final File fichier : LISTEFILES_TRAFIC) {
 			assertTrue(
 					"fichier texte doit retourner true : "
 						, control.controler(fichier));
+			
+//			System.out.println();
+//			System.out.println(control.afficherRapportEnregistrementTextuel());
+//			System.out.println();
+//			System.out.println(control.afficherRapportEnregistrementCsv());
 		}
 		
 	} // Fin de testControler().___________________________________________

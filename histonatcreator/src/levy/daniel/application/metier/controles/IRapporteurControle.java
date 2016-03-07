@@ -18,6 +18,9 @@ import levy.daniel.application.metier.controles.rapportscontroles.LigneRapport;
  * <br/>
  *
  * - Dépendances :<br/>
+ * levy.daniel.application.IExportateurCsv.<br/>
+ * levy.daniel.application.IExportateurJTable.<br/>
+ * levy.daniel.application.IResetable.<br/>
  * levy.daniel.application.metier.controles.rapportscontroles.LigneRapport.<br/>
  * <br/>
  *
@@ -125,6 +128,42 @@ public interface IRapporteurControle {
 				, final boolean pAjouterEntete);
 	
 	
+	
+	/**
+	 * method getEnTeteRapportJTable() :<br/>
+	 * Fournit l'en-tête de la pI-ème colonne 0-based 
+	 * pour l'affichage d'un rapport dans une JTable.<br/>
+	 * <br/>
+	 *
+	 * @param pI : int : colonne 0-based.<br/>
+	 * 
+	 * @return : String : En-tête de la pI-ème 
+	 * colonne 0-based d'une JTable.<br/>
+	 */
+	String getEnTeteRapportJTable(final int pI);
+	
+
+	
+	/**
+	 * method getValeurRapportJTable(
+	 * int pLigne
+	 * , int pColonne) :<br/>
+	 * Fournit la valeur de la cellule située 
+	 * à la pLigne-ème ligne 0-based 
+	 * et à la pColonne-ème colonne 0-based 
+	 * pour l'affichage d'un rapport dans une JTable.<br/>
+	 * <br/>
+	 * - retourne null si this.rapport == null.<br/>
+	 * <br/>
+	 *
+	 * @param pLigne : int : ligne 0-based.<br/>
+	 * @param pColonne : int : colonne 0-based.<br/>
+	 * 
+	 * @return : Object : Valeur du rapport dans la cellule.<br/>
+	 */
+	Object getValeurRapportJTable(final int pLigne, final int pColonne);
+	
+
 
 	/**
 	 * method getRapport() :<br/>

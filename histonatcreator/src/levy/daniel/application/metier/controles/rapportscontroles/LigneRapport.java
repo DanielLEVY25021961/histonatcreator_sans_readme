@@ -87,7 +87,7 @@ public class LigneRapport implements Serializable, Comparable<Object>
 	 * date d'exécution du contrôle.<br/>
 	 * doit être impérativement fournie au format 
 	 * des dates-heures françaises avec millisecondes 
-	 * (dfDatetimemilliFrancaise) comme
+	 * (dfDatetimemilliFrancaiseLexico) comme
 	 * '25/02/1961-12:27:07.251'.<br/>
 	 * "dd/MM/yyyy-HH:mm:ss.SSS".<br/>
 	 */
@@ -194,7 +194,7 @@ public class LigneRapport implements Serializable, Comparable<Object>
 
 
 	/**
-	 * dfDatetimemilliFrancaise : DateFormat :<br/>
+	 * dfDatetimemilliFrancaiseLexico : DateFormat :<br/>
 	 * Format des dates-heures françaises avec millisecondes comme
 	 * '25/02/1961-12:27:07.251'.<br/>
 	 * "dd/MM/yyyy-HH:mm:ss.SSS".<br/>
@@ -251,7 +251,7 @@ public class LigneRapport implements Serializable, Comparable<Object>
 	 * @param pDateControle : String : date d'exécution du contrôle.
 	 * doit être impérativement fournie au format 
 	 * des dates-heures françaises avec millisecondes 
-	 * (dfDatetimemilliFrancaise) comme
+	 * (dfDatetimemilliFrancaiseLexico) comme
 	 * '25/02/1961-12:27:07.251'.<br/>
 	 * "dd/MM/yyyy-HH:mm:ss.SSS".<br/>
 	 * @param pUserName : String : nom de l'utilisateur 
@@ -313,7 +313,7 @@ public class LigneRapport implements Serializable, Comparable<Object>
 	 * @param pDateControle : String : date d'exécution du contrôle.
 	 * doit être impérativement fournie au format 
 	 * des dates-heures françaises avec millisecondes 
-	 * (dfDatetimemilliFrancaise) comme
+	 * (dfDatetimemilliFrancaiseLexico) comme
 	 * '25/02/1961-12:27:07.251'.<br/>
 	 * "dd/MM/yyyy-HH:mm:ss.SSS".<br/>
 	 * @param pUserName : String : nom de l'utilisateur 
@@ -1099,8 +1099,8 @@ public class LigneRapport implements Serializable, Comparable<Object>
 		stb.append("Fichier;");
 		stb.append("type de contrôle;");
 		stb.append("Contrôle;");
-		stb.append("Critère;");
-		stb.append("Gravité;");
+		stb.append("Critère du Contrôle;");
+		stb.append("Gravité du Contrôle;");
 		stb.append("Numéro de Ligne;");
 		stb.append("Message du Contrôle;");
 		stb.append("Ordre du Champ;");
@@ -1205,11 +1205,11 @@ public class LigneRapport implements Serializable, Comparable<Object>
 			break;
 			
 		case 6:
-			entete = "Critère";
+			entete = "Critère du Contrôle";
 			break;
 			
 		case 7:
-			entete = "Gravité";
+			entete = "Gravité du Contrôle";
 			break;
 			
 		case 8:
@@ -1372,7 +1372,7 @@ public class LigneRapport implements Serializable, Comparable<Object>
 	 * @param pDateControle : String : date d'exécution du contrôle.
 	 * doit être impérativement fournie au format 
 	 * des dates-heures françaises avec millisecondes 
-	 * (dfDatetimemilliFrancaise) comme
+	 * (dfDatetimemilliFrancaiseLexico) comme
 	 * '25/02/1961-12:27:07.251'.<br/>
 	 * "dd/MM/yyyy-HH:mm:ss.SSS".<br/>
 	 * @param pUserName : String : nom de l'utilisateur 
@@ -1520,7 +1520,7 @@ public class LigneRapport implements Serializable, Comparable<Object>
 	 * Getter de la date d'exécution du contrôle.<br/>
 	 * doit être impérativement fournie au format 
 	 * des dates-heures françaises avec millisecondes 
-	 * (dfDatetimemilliFrancaise) comme
+	 * (dfDatetimemilliFrancaiseLexico) comme
 	 * '25/02/1961-12:27:07.251'.<br/>
 	 * "dd/MM/yyyy-HH:mm:ss.SSS".<br/>
 	 * <br/>
@@ -1539,7 +1539,7 @@ public class LigneRapport implements Serializable, Comparable<Object>
 	 * Setter de la date d'exécution du contrôle.<br/>
 	 * doit être impérativement fournie au format 
 	 * des dates-heures françaises avec millisecondes 
-	 * (dfDatetimemilliFrancaise) comme
+	 * (dfDatetimemilliFrancaiseLexico) comme
 	 * '25/02/1961-12:27:07.251'.<br/>
 	 * "dd/MM/yyyy-HH:mm:ss.SSS".<br/>
 	 * <br/>

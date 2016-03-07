@@ -132,6 +132,7 @@ public final class DifferentiateurString {
 	 */
 	public static final String METHODE_DETRUIRE_ARBORESCENCE 
 		= "méthode detruireArborescence(String pChemin)";
+
 	
 	/**
 	 * METHODE_VIDER_REPERTOIRE : String :<br/>
@@ -276,6 +277,13 @@ public final class DifferentiateurString {
 	public static final String SEP_REP = "\\";
 	
 	
+	/**
+	 * BOM_UTF : char :<br/>
+	 * BOM UTF-8 pour forcer Excel 2010 à lire en UTF-8.<br/>
+	 */
+	public static final char BOM_UTF_8 = '\uFEFF';
+	
+
 	/**
 	 * LOCALE_FR_FR : Locale :<br/>
 	 * new Locale("fr", "FR").<br/>
@@ -531,16 +539,18 @@ public final class DifferentiateurString {
 	 * method differencier(
 	 * String pString1
 	 * , String pString2) :<br/>
-	 * - Détermine les différences caractère par caractère 
-	 * entre 2 chaînes pString1 et pString2.<br/>
-	 * - Génère un rapport des différences 
-	 * aux formats textuel (rapportDiff) et csv (rapportDiffCsv).<br/>
-	 * - Ecrit dans des fichiers sur disque les rapports des différences 
-	 * aux formats textuel (fileRapportDiff) et csv (fileRapportDiffCsv).<br/>
-	 * - Crée des rapports de création du fichier textuel 
-	 * (rapportCreationFichierDiff) et csv (rapportCreationFichierDiffCsv).<br/>
-	 * - Retourne le rapport textuel.<br/>
-	 * - Alimente longueurChaine1 et longueurChaine2.<br/>
+	 * <ul>
+	 * <li>Détermine les différences caractère par caractère 
+	 * entre 2 chaînes pString1 et pString2.</li><br/>
+	 * <li>Génère un rapport des différences 
+	 * aux formats textuel (rapportDiff) et csv (rapportDiffCsv).</li><br/>
+	 * <li>Ecrit dans des fichiers sur disque les rapports des différences 
+	 * aux formats textuel (fileRapportDiff) et csv (fileRapportDiffCsv).</li><br/>
+	 * <li>Crée des rapports de création du fichier textuel 
+	 * (rapportCreationFichierDiff) et csv (rapportCreationFichierDiffCsv).</li><br/>
+	 * <li>Retourne le rapport textuel.</li><br/>
+	 * <li>Alimente longueurChaine1 et longueurChaine2.</li><br/>
+	 * </ul>
 	 * <br/>
 	 *
 	 * @param pString1 : String : 1ère chaîne à comparer.<br/>
@@ -566,22 +576,26 @@ public final class DifferentiateurString {
 	 * String pString1
 	 * , String pString2
 	 * , Boolean pRapportFichier) :<br/>
-	 * - Détermine les différences caractère par caractère 
-	 * entre 2 chaînes pString1 et pString2.<br/>
-	 * - Génère un rapport des différences 
-	 * aux formats textuel (rapportDiff) et csv (rapportDiffCsv).<br/>
-	 * - Ecrit dans des fichiers sur disque les rapports des différences 
+	 * <ul>
+	 * <li>Détermine les différences caractère par caractère 
+	 * entre 2 chaînes pString1 et pString2.</li><br/>
+	 * <li>Génère un rapport des différences 
+	 * aux formats textuel (rapportDiff) et csv (rapportDiffCsv).</li><br/>
+	 * <li>Ecrit dans des fichiers sur disque les rapports des différences 
 	 * aux formats textuel (fileRapportDiff) et csv (fileRapportDiffCsv) 
-	 * si pRapportFichier vaut true.<br/>
-	 * - Crée des rapports de création du fichier textuel 
-	 * (rapportCreationFichierDiff) et csv (rapportCreationFichierDiffCsv).<br/>
-	 * - Retourne le rapport textuel.<br/>
-	 * - Alimente longueurChaine1 et longueurChaine2.<br/>
+	 * si pRapportFichier vaut true.</li><br/>
+	 * <li>Crée des rapports de création du fichier textuel 
+	 * (rapportCreationFichierDiff) et csv (rapportCreationFichierDiffCsv).</li><br/>
+	 * <li>Ajout d'un caractère BOM-UTF-8 au début du rapport csv
+	 * pour forcer Excel 2010 à détecter l'UTF-8.</li><br/>
+	 * <li>Retourne le rapport textuel.</li><br/>
+	 * <li>Alimente longueurChaine1 et longueurChaine2.</li><br/>
+	 * </ul>
 	 * <br/>
 	 *
 	 * @param pString1 : String : 1ère chaîne à comparer.<br/>
 	 * @param pString2 : String : 2ème chaîne à comparer.<br/>
-	 * @param pRapportFichier : Boolean : stipule si les rapports 
+	 * @param pRapportFichier : Boolean : true si les rapports 
 	 * textuel et csv doivent être écrits dans des fichiers.<br/>
 	 * 
 	 * @return : String : rapportDiff : Rapport textuel en UTF-8 
@@ -686,11 +700,16 @@ public final class DifferentiateurString {
 					= c1.toCsv() + diff + ";" + c2.toCsv();
 				
 				/* Ajout dans les StringBuilders pour les rapports. */
-				/* rapport textuel. */
+				/* rapport textuel. ******/
 				stbDiff.append(comparaison);
 				stbDiff.append(NEWLINE);
 				
-				/* rapport csv. */
+				/* rapport csv. ******/				
+				/* Ajout d'un caractère BOM-UTF-8 au début du rapport csv
+				 * pour forcer Excel 2010 à détecter l'UTF-8. */				
+				stbDiffCsv.append(BOM_UTF_8);
+				
+								
 				/* Ajout de l'en-tête pour le rapport Csv. */
 				if (position == 1) {
 					stbDiffCsv.append(c1.getEnTeteCsv());

@@ -11,12 +11,12 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import levy.daniel.application.metier.controles.AbstractControle;
 import levy.daniel.application.metier.controles.CaractereDan;
 import levy.daniel.application.metier.controles.rapportscontroles.LigneRapport;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * class ControleurTypeTexte :<br/>
@@ -31,9 +31,10 @@ import levy.daniel.application.metier.controles.rapportscontroles.LigneRapport;
  * <br/>
  * - retourne false et rapporte si CARACTERES_INDESIRABLES_SET 
  * contient un des caractères de pFile.<br/>
- * - retourne true et ne génère pas de rapport si pFile 
- * ne contient pas de caractères indésirables. 
- * Le rapport est alors vide (pas null).<br/>
+ * - retourne true et génère un rapport favorable si pFile 
+ * ne contient pas de caractères indésirables.<br/>
+ * - Peut écrire le rapport de contrôle sous forme textuelle 
+ * et csv sur disque.<br/> 
  * <br/>
  * - typeControle = Contrôle de surface.<br/>
  * - nomControle = Contrôle fichier texte.<br/>
@@ -51,6 +52,32 @@ import levy.daniel.application.metier.controles.rapportscontroles.LigneRapport;
  * <br/>
  *
  * - Exemple d'utilisation :<br/>
+ * <code>
+ *  // Instanciation d'un ControleurTypeTexte.<br/>
+ *  final ControleurTypeTexte control = new ControleurTypeTexte();<br/>
+ *  // Invocation de la méthode controler(...) en demandant 
+ *  l'écriture des rapports textuels et csv sur disque.<br/>
+ *  final boolean resultat = control.controler(FILE_CHARETTE_ANSI, true);<br/>
+ *  // resultat = true FILE_CHARETTE_ANSI est un fichier textuel.<br/>
+ *  control.afficherRapportTextuel() // Pour voir le 
+ *  rapport de contrôle sous forme textuelles.<br/>
+ *  control.afficherRapportCsvAvecEntete() // Pour voir le 
+ *  rapport de contrôle sous forme csv.<br/>
+ *  // id;date du contrôle;utilisateur;Fichier;type de contrôle;Contrôle;
+ *  Critère du Contrôle;Gravité du Contrôle;Numéro de Ligne;
+ *  Message du Contrôle;Ordre du Champ;Position du Champ;
+ *  Valeur du Champ;Action;<br/>
+ *  // null;2016-03-06_19-08-55-259;Administrateur;
+ *  chaàâreéèêëtte_ANSI.txt;Contrôle de surface;Contrôle fichier texte;
+ *  Le fichier ne doit pas comporter de caractères indésirables 
+ *  (impossibles à écrire au clavier);1 - anomalie bloquante;
+ *  null;Le fichier 'chaàâreéèêëtte_ANSI.txt' est bien un fichier texte;
+ *  null;sans objet;sans objet;OK - Fichier accepté;<br/> 
+ *  control.afficherRapportEnregistrementTextuel() // Pour voir le compte-rendu 
+ *  de l'enregistrement du rapport de contrôle sous forme textuelle.<br/>
+ *  control.afficherRapportEnregistrementCsv() // Pour voir le compte-rendu 
+ *  de l'enregistrement du rapport de contrôle sous forme csv.<br/>
+ * </code>
  *<br/>
  * 
  * - Mots-clé :<br/>
@@ -68,10 +95,12 @@ import levy.daniel.application.metier.controles.rapportscontroles.LigneRapport;
  * levy.daniel.application.IExportateurJTable.<br/>
  * levy.daniel.application.IResetable.<br/>
  * levy.daniel.application.metier.controles.rapportscontroles.LigneRapport.<br/>
+ * levy.daniel.application.metier.service.enregistreursfichiers.rapportsenregistrements.LigneRapportEnregistrement.<br/>
+ * levy.daniel.application.metier.controles.IEnregistreurRapport.<br/>
  * levy.daniel.application.metier.controles.IRapporteurControle.<br/>
  * levy.daniel.application.metier.controles.IControle.<br/>
- * levy.daniel.application.metier.controles.AbstractControle.<br/>
  * levy.daniel.application.metier.controles.CaractereDan.<br/>
+ * levy.daniel.application.metier.controles.AbstractControle.<br/>
  * <br/>
  *
  *
@@ -342,7 +371,7 @@ public class ControleurTypeTexte extends AbstractControle {
 		
 	} // Fin de CONSTRUCTEUR COMPLET.______________________________________
 	
-	
+
 	
 	/**
 	 * method controler(
@@ -355,6 +384,8 @@ public class ControleurTypeTexte extends AbstractControle {
 	 * Lit le fichier caractère par caractère en UTF-8 en utilisant 
 	 * un BufferedReader(InputStreamReader(fileInputStream, CHARSET_UTF8)) 
 	 * et détecte les caractères indésirables.<br/> 
+	 * <br/>
+	 * - N'enregistre pas de rapport sur le disque.<br/>
 	 * <br/>
 	 * - retourne false et rapporte si CARACTERES_INDESIRABLES_SET 
 	 * contient un des caractères de pFile.<br/>
@@ -376,12 +407,59 @@ public class ControleurTypeTexte extends AbstractControle {
 	 *
 	 * @param pFile : File : fichier dont on veut savoir 
 	 * si il est un fichier texte.<br/>
+	 */
+	@Override
+	public final boolean controler(
+			final File pFile) {
+		
+		return this.controler(pFile, false);
+		
+	} // Fin de controler(
+	 // File pFile)._______________________________________________________
+	
+	
+	
+	/**
+	 * method controler(
+	 * File pFile
+	 * , boolean pEnregistrerRapport) :<br/>
+	 * Contrôle si le fichier pFile est de type texte 
+	 * et retourne true si c'est le cas.<br/>
+	 * Utilise pour celà le critère 'le fichier ne doit pas comporter de 
+	 * caractères indésirables' (aucun caractère du fichier ne 
+	 * doit être contenu dans CARACTERES_INDESIRABLES_SET).<br/>
+	 * Lit le fichier caractère par caractère en UTF-8 en utilisant 
+	 * un BufferedReader(InputStreamReader(fileInputStream, CHARSET_UTF8)) 
+	 * et détecte les caractères indésirables.<br/> 
+	 * <br/>
+	 * - retourne false et rapporte si CARACTERES_INDESIRABLES_SET 
+	 * contient un des caractères de pFile.<br/>
+	 * - retourne true et remplit un rapport favorable si pFile 
+	 * ne contient pas de caractères indésirables. <br/>
+	 * <br/>
+	 * - passe pFile à this.fichier et 
+	 * rafraîchit automatiquement this.nomFichier.<br/>
+	 * - rafraîchit le rapport (en instancie un nouveau 
+	 * à chaque appel de la méthode controler(File pFile)).<br/>
+	 * <br/>
+	 * - retourne false, LOG de niveau INFO et rapport si pFile == null.<br/>
+	 * - retourne false, LOG de niveau INFO et rapport si pFile 
+	 * est inexistant.<br/>
+	 * - retourne false, LOG de niveau INFO et rapport si pFile 
+	 * est un répertoire.<br/>
+	 * <br/>
+	 *
+	 * @param pFile : File : fichier dont on veut savoir 
+	 * si il est un fichier texte.<br/>
+	 * @param pEnregistrerRapport : boolean : 
+	 * true si on veut enregistrer le rapport dans un fichier sur disque.<br/>
 	 * 
 	 * @return : boolean : true si pFile est un fichier texte.<br/>
 	 */
 	@Override
 	public final boolean controler(
-			final File pFile) {
+			final File pFile
+				, final boolean pEnregistrerRapport) {
 		
 		/* retourne false, LOG de niveau INFO 
 		 * et rapport si pFile == null. */
@@ -404,6 +482,14 @@ public class ControleurTypeTexte extends AbstractControle {
 						, ACTION_FICHIER_REFUSE);
 			
 			this.ajouterLigneRapport(ligneRapport);
+			
+			/* Enregistrement du rapport sur disque. */
+			if (pEnregistrerRapport) {
+				
+				this.enregistrerRapportTextuelUTF8(this.fournirFileTxtUTF8());
+				this.enregistrerRapportCsvUTF8(this.fournirFileCsvUTF8());
+				
+			}
 			
 			/* retourne false, LOG de niveau INFO 
 			 * et rapport si pFile == null. */
@@ -434,6 +520,14 @@ public class ControleurTypeTexte extends AbstractControle {
 						
 			this.ajouterLigneRapport(ligneRapport);
 			
+			/* Enregistrement du rapport sur disque. */
+			if (pEnregistrerRapport) {
+				
+				this.enregistrerRapportTextuelUTF8(this.fournirFileTxtUTF8());
+				this.enregistrerRapportCsvUTF8(this.fournirFileCsvUTF8());
+				
+			}
+			
 			/* retourne false, LOG de niveau INFO 
 			 * et rapport si pFile est inexistant. */
 			return false;
@@ -462,6 +556,14 @@ public class ControleurTypeTexte extends AbstractControle {
 						, ACTION_FICHIER_REFUSE);
 						
 			this.ajouterLigneRapport(ligneRapport);
+			
+			/* Enregistrement du rapport sur disque. */
+			if (pEnregistrerRapport) {
+				
+				this.enregistrerRapportTextuelUTF8(this.fournirFileTxtUTF8());
+				this.enregistrerRapportCsvUTF8(this.fournirFileCsvUTF8());
+				
+			}
 			
 			/* retourne false, LOG de niveau INFO 
 			 * et rapport si pFile est un répertoire. */
@@ -547,6 +649,16 @@ public class ControleurTypeTexte extends AbstractControle {
 								
 					this.ajouterLigneRapport(ligneRapport);
 					
+					/* Enregistrement du rapport sur disque. */
+					if (pEnregistrerRapport) {
+						
+						this.enregistrerRapportTextuelUTF8(
+								this.fournirFileTxtUTF8());
+						this.enregistrerRapportCsvUTF8(
+								this.fournirFileCsvUTF8());
+						
+					}
+					
 					/* retourne false et rapporte si 
 					 * CARACTERES_INDESIRABLES_SET contient 
 					 * un des caractères de pFile. */
@@ -556,6 +668,35 @@ public class ControleurTypeTexte extends AbstractControle {
 				// .contains(character)).______________________
 
 			} // Fin du parcours du bufferedReader._________
+			
+			
+			/* rapport. */
+			
+			final String message 
+				= "Le fichier '" 
+						+ pFile.getName() 
+						+ "' est bien un fichier texte";
+			
+			final LigneRapport ligneRapport 
+				= creerLigneRapport(
+						null
+						, message
+						, null
+						, SANS_OBJET
+						, SANS_OBJET
+						, ACTION_FICHIER_ACCEPTE);
+						
+			this.ajouterLigneRapport(ligneRapport);
+			
+			/* Enregistrement du rapport sur disque. */
+			if (pEnregistrerRapport) {
+				
+				this.enregistrerRapportTextuelUTF8(
+						this.fournirFileTxtUTF8());
+				this.enregistrerRapportCsvUTF8(
+						this.fournirFileCsvUTF8());
+				
+			}
 
 		} catch (FileNotFoundException fnfe) {
 
@@ -631,25 +772,32 @@ public class ControleurTypeTexte extends AbstractControle {
 		return true;
 		
 	} // Fin de controler(
-	// File pFile).________________________________________________________
+	// File pFile
+	// , boolean pEnregistrerRapport)._____________________________________
 
 
 	
 	/**
 	 * method controler(
-	 * String pString) :<br/>
+	 * String pString
+	 * , boolean pEnregistrerRapport) :<br/>
 	 * .<br/>
 	 * <br/>
 	 *
-	 * @param pString
+	 * @param pString : String :
+	 * @param pEnregistrerRapport : boolean : 
+	 * true si on veut enregistrer le rapport dans un fichier sur disque.<br/>
+	 * 
 	 * @return : boolean :  .<br/>
 	 */
 	@Override
 	public final boolean controler(
-			final String pString) {
+			final String pString
+				, final boolean pEnregistrerRapport) {
 		return false;
 	} // Fin de controler(
-	 // String pString).___________________________________________________
+	 // String pString
+	// , boolean pEnregistrerRapport)._____________________________________
 	
 
 
@@ -725,6 +873,18 @@ public class ControleurTypeTexte extends AbstractControle {
 		return "1";
 	} // Fin de fournirNiveauAnomalieEnDur().______________________________
 
+	
+	
+	/**
+	 * "RAPPORT-CONTROLE-FICHIER-TEXTE".<br/>
+	 * <br/>
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected final String fournirBaseNomRapport() {
+		return "RAPPORT-CONTROLE-FICHIER-TEXTE";
+	} // Fin de fournirBaseNomRapport().___________________________________
+	
 	
 	
 } // FIN DE LA CLASSE ControleurTypeTexte.-----------------------------------

@@ -174,7 +174,6 @@ public interface ILecteurDecodeurFile {
 	/**
 	 * method lireFichierEnUTF8(
 	 * File pFile) :<br/>
-	 * SERVICE ANNEXE.<br/>
 	 * Lit un fichier pFile en UTF-8 et 
 	 * retourne son contenu dans une chaîne de caractères.<br/>
 	 * Lit le fichier en utilisant la méthode read() 
@@ -204,7 +203,6 @@ public interface ILecteurDecodeurFile {
 	/**
 	 * method lireFichierEnAscii(
 	 * File pFile) :<br/>
-	 * SERVICE ANNEXE.<br/>
 	 * Lit un fichier pFile en US-ASCII et 
 	 * retourne son contenu dans une chaîne de caractères.<br/>
 	 * Lit le fichier en utilisant la méthode read() 
@@ -234,7 +232,6 @@ public interface ILecteurDecodeurFile {
 	/**
 	 * method lireFichierEnLatin1(
 	 * File pFile) :<br/>
-	 * SERVICE ANNEXE.<br/>
 	 * Lit un fichier pFile en ISO-8859-1 (LATIN1) et 
 	 * retourne son contenu dans une chaîne de caractères.<br/>
 	 * Lit le fichier en utilisant la méthode read() 
@@ -293,7 +290,6 @@ public interface ILecteurDecodeurFile {
 	/**
 	 * method lireFichierEnLatin9(
 	 * File pFile) :<br/>
-	 * SERVICE ANNEXE.<br/>
 	 * Lit un fichier pFile en ISO-8859-15 (LATIN9) et 
 	 * retourne son contenu dans une chaîne de caractères.<br/>
 	 * Lit le fichier en utilisant la méthode read() 
@@ -323,7 +319,6 @@ public interface ILecteurDecodeurFile {
 	/**
 	 * method lireFichierEnAnsi(
 	 * File pFile) :<br/>
-	 * SERVICE ANNEXE.<br/>
 	 * Lit un fichier pFile en Windows-1252 (ANSI) et 
 	 * retourne son contenu dans une chaîne de caractères.<br/>
 	 * Lit le fichier en utilisant la méthode read() 
@@ -353,7 +348,6 @@ public interface ILecteurDecodeurFile {
 	/**
 	 * method lireFichierEnIbm850(
 	 * File pFile) :<br/>
-	 * SERVICE ANNEXE.<br/>
 	 * Lit un fichier pFile en IBM-850 (OEM) et 
 	 * retourne son contenu dans une chaîne de caractères.<br/>
 	 * Lit le fichier en utilisant la méthode read() 
@@ -384,7 +378,6 @@ public interface ILecteurDecodeurFile {
 	 * method lireFichier(
 	 * File pFile
 	 * , Charset pCharset) :<br/>
-	 * SERVICE ANNEXE.<br/>
 	 * Lit un fichier pFile et 
 	 * retourne son contenu dans une chaîne de caractères.<br/>
 	 * Lit le fichier en utilisant la méthode read() 

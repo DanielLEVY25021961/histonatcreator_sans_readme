@@ -967,7 +967,8 @@ public final class ConvertisseurEncodageTest {
 	
 	/**
 	 * method testLireDepuisFichierNull() :<br/>
-	 * vérifie que lireDepuisFichier(null, ...) retourne 
+	 * Teste la méthode lireDepuisFichier(File pFile, Charset pCharset).<br/>
+	 * - vérifie que lireDepuisFichier(null, ...) retourne 
 	 * ConvertisseurEncodage.MESSAGE_FICHIER_NULL.<br/>
 	 * "Le fichier passé en paramètre est null".<br/>
 	 * <br/>
@@ -991,7 +992,8 @@ public final class ConvertisseurEncodageTest {
 	
 	/**
 	 * method testLireDepuisFichierInexistant() :<br/>
-	 * vérifie que lireDepuisFichier(inexistant, ...) retourne 
+	 * Teste la méthode lireDepuisFichier(File pFile, Charset pCharset).<br/>
+	 * - vérifie que lireDepuisFichier(inexistant, ...) retourne 
 	 * ConvertisseurEncodage.MESSAGE_FICHIER_INEXISTANT.<br/>
 	 * "Le fichier passé en paramètre est inexistant : ".<br/>
 	 * <br/>
@@ -1014,7 +1016,8 @@ public final class ConvertisseurEncodageTest {
 	
 	/**
 	 * method testLireDepuisFichierRepertoire() :<br/>
-	 * vérifie que lireDepuisFichier(repertoire, ...) retourne 
+	 * Teste la méthode lireDepuisFichierEnUtf8(File pFile).<br/>
+	 * - vérifie que lireDepuisFichier(repertoire, ...) retourne 
 	 * ConvertisseurEncodage.MESSAGE_FICHIER_REPERTOIRE.<br/>
 	 * "Le fichier passé en paramètre est un répertoire : "
 	 * <br/>
@@ -1037,6 +1040,7 @@ public final class ConvertisseurEncodageTest {
 	
 	/**
 	 * method testLireDepuisFichierLatin9() :<br/>
+	 * Teste la méthode lireDepuisFichier(File pFile, Charset pCharset).<br/>
 	 * .<br/>
 	 * <br/>
 	 */
@@ -1068,7 +1072,7 @@ public final class ConvertisseurEncodageTest {
 	
 	/**
 	 * method testLireDepuisFichier() :<br/>
-	 * Teste la méthode lireDepuisFichier(...).<br/>
+	 * Teste la méthode lireDepuisFichier(File pFile, Charset pCharset).<br/>
 	 * <br/>
 	 */
 	@Test
@@ -1095,18 +1099,27 @@ public final class ConvertisseurEncodageTest {
 	
 	/**
 	 * method testEcrireStringDansFile() :<br/>
-	 * .<br/>
+	 * Teste la méthode lireDepuisFichier(File pFile, Charset pCharset).<br/>
 	 * <br/>
 	 * : void :  .<br/>
+	 * @throws InterruptedException 
 	 */
 	@Test
-	public void testEcrireStringDansFile() {
+	public void testEcrireStringDansFile() throws InterruptedException {
 		
 		final String charette = ConvertisseurEncodage.lireDepuisFichier(FILE_CHARETTE_ANSI, CHARSET_ANSI);
 		
 		final File resultat = ConvertisseurEncodage.ecrireStringDansFile(charette, CHARSET_ANSI, CHARSET_UTF8, NEWLINE);
 		
 		System.out.println(resultat);
-	}
+		
+		/* Destruction du répertoire créé pourle test. */
+		ConvertisseurEncodage.detruireArborescence(".\\data\\temp\\fichierstranscodes");
+		
+		Thread.sleep(100);
+		
+	} // Fin de testEcrireStringDansFile().________________________________
+	
+	
 
 } // FIN DE LA CLASSE ConvertisseurEncodageTest.-----------------------------
