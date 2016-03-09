@@ -132,6 +132,13 @@ public abstract class AbstractControle implements IControle {
 
 	
 	/**
+	 * ordreControle : Integer :<br/>
+	 * ordre d'exécution du contrôle dans un enchaînement de contrôles.<br/>
+	 */
+	protected Integer ordreControle;
+	
+	
+	/**
 	 * dateControle : Date :<br/>
 	 * java.util.Date du contrôle.<br/>
 	 */
@@ -214,8 +221,20 @@ public abstract class AbstractControle implements IControle {
 	 * estBloquant : boolean :<br/>
 	 * boolean qui stipule si le contrôle doit pouvoir 
 	 * bloquer le programme.<br/>
+	 * true si le contrôle doit pouvoir bloquer le programme.<br/>
 	 */
 	protected transient boolean estBloquant;
+	
+	
+	/**
+	 * aEffectuer : boolean :<br/>
+	 * boolean qui stipule si le contrôle doit être effectué 
+	 * dans un enchaînement de contrôles.<br/>
+	 * Cette valeur doit figurer dans le messagescontroles_fr_FR.properties 
+	 * ou être fournie en dur par les classes concrètes.<br/>
+	 * true si le contrôle doit être effectué.<br/>
+	 */
+	protected transient boolean aEffectuer;
 	
 	
 	/**
@@ -332,6 +351,7 @@ public abstract class AbstractControle implements IControle {
 	 * method CONSTRUCTEUR AbstractControle() :<br/>
 	 * CONSTRUCTEUR D'ARITE NULLE.<br/>
 	 * <br/>
+	 * - Met automatiquement 1 dans this.ordreControle.<br/>
 	 * - Met automatiquement dateControle à date système.<br/>
 	 * - Met automatiquement userName à "Administrateur".<br/>
 	 * - Met automatiquement fichier à null.<br/>
@@ -348,11 +368,13 @@ public abstract class AbstractControle implements IControle {
 	 * this.fournirNomCritere() dans la classe concrète.<br/>
 	 * - Remplit gravite (ce qui remplit également niveauAnomalie 
 	 * et estBloquant).<br/>
+	 * - Va chercher dans messagescontroles_fr_FR.properties 
+	 * si le contrôle doit être effectué et remplit this.aEffectuer.<br/>
 	 * <br/>
 	 */
 	public AbstractControle() {
 		
-		this(null, null, null);
+		this(1, null, null, null);
 		
 	} // Fin de CONSTRUCTEUR D'ARITE NULLE.________________________________
 
@@ -363,6 +385,7 @@ public abstract class AbstractControle implements IControle {
 	 * File pFichier) :<br/>
 	 * Constructeur avec fichier.<br/>
 	 * <br/>
+	 * - Met automatiquement 1 dans this.ordreControle.<br/>
 	 * - Met automatiquement dateControle à date système.<br/>
 	 * - Met automatiquement userName à "Administrateur".<br/>
 	 * <br/>
@@ -378,6 +401,8 @@ public abstract class AbstractControle implements IControle {
 	 * this.fournirNomCritere() dans la classe concrète.<br/>
 	 * - Remplit gravite (ce qui remplit également niveauAnomalie 
 	 * et estBloquant).<br/>
+	 * - Va chercher dans messagescontroles_fr_FR.properties 
+	 * si le contrôle doit être effectué et remplit this.aEffectuer.<br/>
 	 * <br/>
 	 *
 	 * @param pFichier : File : fichier sur lequel s'applique le contrôle.<br/>
@@ -385,7 +410,7 @@ public abstract class AbstractControle implements IControle {
 	public AbstractControle(
 			final File pFichier) {
 		
-		this(null, null, pFichier);
+		this(1, null, null, pFichier);
 		
 	} // Fin de AbstractControle(
 	 // File pFichier).____________________________________________________
@@ -398,6 +423,7 @@ public abstract class AbstractControle implements IControle {
 	 * , File pFichier) :<br/>
 	 * Constructeur avec user et fichier.<br/>
 	 * <br/>
+	 * - Met automatiquement 1 dans this.ordreControle.<br/>
 	 * - Met automatiquement dateControle à date système.<br/>
 	 * <br/>
 	 * - Remplit le nom de la classe concrète this.nomClasseConcrete 
@@ -414,6 +440,8 @@ public abstract class AbstractControle implements IControle {
 	 * this.fournirNomCritere() dans la classe concrète.<br/>
 	 * - Remplit gravite (ce qui remplit également niveauAnomalie 
 	 * et estBloquant).<br/>
+	 * - Va chercher dans messagescontroles_fr_FR.properties 
+	 * si le contrôle doit être effectué et remplit this.aEffectuer.<br/>
 	 * <br/>
 	 *
 	 * @param pUserName : String : nom de l'utilisateur 
@@ -424,7 +452,7 @@ public abstract class AbstractControle implements IControle {
 			final String pUserName
 					, final File pFichier) {
 		
-		this(null, pUserName, pFichier);
+		this(1, null, pUserName, pFichier);
 		
 	} // Fin de AbstractControle(
 	 // String pUserName
@@ -436,37 +464,48 @@ public abstract class AbstractControle implements IControle {
 	 * method CONSTRUCTEUR AbstractControle(COMPLET) :<br/>
 	 * CONSTRUCTEUR COMPLET.<br/>
 	 * <br/>
-	 * - Remplit le nom de la classe concrète this.nomClasseConcrete fourni 
-	 * par this.fournirNomClasseConcrete() dans la classe concrète.<br/>
-	 * - Remplit dateControle avec pDateControle si pDateControle != null 
-	 * ou la date système sinon.<br/>
-	 * - calcule automatiquement dateControleStringFormattee.<br/>
-	 * - remplit userName avec pUserName si pUserName != null 
-	 * ou 'Administrateur' sinon.<br/>
-	 * - calcule automatiquement nomFichier.<br/>
-	 * - Remplit le type du contrôle typeControle fourni par 
-	 * this.fournirTypeControle() dans la classe concrète.<br/>
-	 * - Remplit le nom du contrôle nomControle fourni par 
-	 * this.fournirNomControle() dans la classe concrète.<br/>
-	 * - Remplit le nom du critère nomCritere fourni par 
-	 * this.fournirNomCritere() dans la classe concrète.<br/>
-	 * - Remplit gravite (ce qui remplit également niveauAnomalie 
-	 * et estBloquant).<br/>
+	 * <ul>
+	 * <li>initialise éventuellement le bundleControles qui encapsule 
+	 * messagescontroles_fr_FR.properties.</li><br/>
+	 * <li>Remplit le nom de la classe concrète this.nomClasseConcrete fourni 
+	 * par this.fournirNomClasseConcrete() dans la classe concrète.</li><br/>
+	 * <li>passe pOrdreControle à this.ordreControle.</li><br/>
+	 * <li>Remplit dateControle avec pDateControle si pDateControle != null 
+	 * ou la date système sinon.</li><br/>
+	 * <li>calcule automatiquement dateControleStringFormattee.</li><br/>
+	 * <li>remplit userName avec pUserName si pUserName != null 
+	 * ou 'Administrateur' sinon.</li><br/>
+	 * <li>calcule automatiquement nomFichier.</li><br/>
+	 * <li>Remplit le type du contrôle typeControle fourni par 
+	 * this.fournirTypeControle() dans la classe concrète.</li><br/>
+	 * <li>Remplit le nom du contrôle nomControle fourni par 
+	 * this.fournirNomControle() dans la classe concrète.</li><br/>
+	 * <li>Remplit le nom du critère nomCritere fourni par 
+	 * this.fournirNomCritere() dans la classe concrète.</li><br/>
+	 * <li>Remplit gravite (ce qui remplit également niveauAnomalie 
+	 * et estBloquant).</li><br/>
+	 * <li>Va chercher dans messagescontroles_fr_FR.properties 
+	 * si le contrôle doit être effectué et remplit this.aEffectuer.</li><br/>
+	 * <ul>
 	 * <br/>
-	 *
+	 * 
+	 * @param pOrdreControle : Integer : ordre d'exécution du contrôle 
+	 * dans un enchaînement de contrôles.<br/>
 	 * @param pDateControle : Date : java.util.Date du contrôle.<br/>
 	 * @param pUserName : String : nom de l'utilisateur 
 	 * qui a déclenché le contrôle.<br/> 
 	 * @param pFichier : File : fichier sur lequel s'applique le contrôle.<br/>
 	 */
 	public AbstractControle(
-			final Date pDateControle
-				, final String pUserName
-					, final File pFichier) {
+			final Integer pOrdreControle
+				, final Date pDateControle
+					, final String pUserName
+						, final File pFichier) {
 		
+		/* Instancie la super-classe*/
 		super();
 		
-		/* initialise le bundleControles qui encapsule 
+		/* initialise éventuellement le bundleControles qui encapsule 
 		 * messagescontroles_fr_FR.properties. */
 		initialiserBundleControles();
 		
@@ -474,6 +513,9 @@ public abstract class AbstractControle implements IControle {
 		 * fourni par this.fournirNomClasseConcrete() 
 		 * dans la classe concrète. */
 		this.nomClasseConcrete = this.fournirNomClasseConcrete();
+		
+		/* passe pOrdreControle à this.ordreControle. */
+		this.ordreControle = pOrdreControle;
 		
 		/* Remplit dateControle avec pDateControle si pDateControle != null 
 		 * ou la date système sinon. */
@@ -508,10 +550,15 @@ public abstract class AbstractControle implements IControle {
 		/* Remplit gravite (ce qui remplit également niveauAnomalie 
 		 * et estBloquant). */
 		this.gravite = this.fournirGravite();
+		
+		/* Va chercher dans messagescontroles_fr_FR.properties 
+		 * si le contrôle doit être effectué. */
+		this.aEffectuer = this.fournirAEffectuer();
 				
 	} // Fin de CONSTRUCTEUR COMPLET.______________________________________
 
 
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -519,6 +566,7 @@ public abstract class AbstractControle implements IControle {
 	public abstract boolean controler(
 			final File pFile);
 	
+
 	
 	/**
 	 * {@inheritDoc}
@@ -1194,6 +1242,111 @@ public abstract class AbstractControle implements IControle {
 	 */
 	protected abstract String fournirNiveauAnomalieEnDur();
 	
+
+	
+	/**
+	 * method fournirAEffectuer() :<br/>
+	 * retourne true si un contrôle doit être effectué 
+	 * dans un enchaînement de contrôles.<br/>
+	 * <ul>
+	 * <li>Va chercher dans messagescontroles_fr_FR.properties 
+	 * si le contrôle doit être effectué dans un 
+	 * enchaînement de contrôles.</li><br/>
+	 * <li>Sinon, lit aEffectuer dans la méthode 
+	 * fournirAEffectuerEnDur() de la classe concrète.</li><br/>
+	 * </ul>
+	 * <br/>
+	 *
+	 * @return : boolean : this.aEffectuer.<br/>
+	 */
+	private boolean fournirAEffectuer() {
+		
+		if (bundleControles != null) {
+			
+			if (!StringUtils.isBlank(this.fournirCleAEffectuer())) {
+				
+				/* Récupération de la clé dans
+				 *  messagescontroles_fr_FR.properties. */
+				final String valeurAEffectuerDansProperties 
+					= bundleControles.getString(this.fournirCleAEffectuer());
+				
+				/* Si la clé existe. */
+				if (!StringUtils.isBlank(valeurAEffectuerDansProperties)) {
+					return fournirBooleanAPartirDeString(
+							valeurAEffectuerDansProperties);
+				}
+			}
+			
+		}
+		
+		return this.fournirAEffectuerEnDur();
+		
+	} // Fin de fournirAEffectuer()._______________________________________
+	
+
+	
+	/**
+	 * method fournirBooleanAPartirDeString(
+	 * String pString) :<br/>
+	 * Fournit un boolean à partir d'une String.<br/>
+	 * Retourne true si pString == "1" ou "true" quelle que soit a casse.<br/>
+	 * <br/>
+	 * <ul>
+	 * <li>nettoie pString (trim).</li><br/>
+	 * </ul>
+	 * <br/>
+	 *
+	 * @param pString : String : la String dont on veut extraire un Boolean.<br/>
+	 * 
+	 * @return : Boolean : Résultat de l'extraction.<br/>
+	 */
+	private Boolean fournirBooleanAPartirDeString(
+			final String pString) {
+		
+		/* nettoie pString (trim). */
+		final String maString = StringUtils.trim(pString);
+		
+		if (StringUtils.equals("1", maString)) {
+			return true;
+		}
+		else if (StringUtils.equalsIgnoreCase("true", maString)) {
+			return true;
+		}
+		
+		return false;
+		
+	} // Fin de fournirBooleanAPartirDeString(
+	 // String pString).___________________________________________________
+	
+	
+	
+	/**
+	 * method fournirCleAEffectuer() :<br/>
+	 * Retourne la clé de aEffectuer dans 
+	 * messagescontroles_fr_FR.properties.<br/>
+	 * A implémenter dans chaque classe concrète.<br/>
+	 * <br/>
+	 * "ControleurTypeTexte.aEffectuer" par exemple.<br/>
+	 *
+	 * @return : String : clé de aEffectuer dans 
+	 * messagescontroles_fr_FR.properties.<br/>
+	 */
+	protected abstract String fournirCleAEffectuer();
+	
+
+	
+	/**
+	 * method fournirAEffectuerEnDur() :<br/>
+	 * Retourne une valeur en dur pour aEffectuer.<br/>
+	 * A implémenter dans chaque classe concrète.<br/>
+	 * <br/>
+	 * <br/>
+	 *
+	 * @return : boolean : true si le contrôle doit être effectué 
+	 * dans un enchaînement de contrôles.<br/>
+	 */
+	protected abstract boolean fournirAEffectuerEnDur();
+	
 	
 	
 	/**
@@ -1463,6 +1616,7 @@ public abstract class AbstractControle implements IControle {
 						, null
 						, SANS_OBJET
 						, SANS_OBJET
+						, false
 						, ACTION_FICHIER_REFUSE);
 			
 			this.ajouterLigneRapport(ligneRapport);
@@ -1491,6 +1645,7 @@ public abstract class AbstractControle implements IControle {
 						, null
 						, SANS_OBJET
 						, SANS_OBJET
+						, false
 						, ACTION_FICHIER_REFUSE);
 			
 			this.ajouterLigneRapport(ligneRapport);
@@ -1520,6 +1675,7 @@ public abstract class AbstractControle implements IControle {
 						, null
 						, SANS_OBJET
 						, SANS_OBJET
+						, false
 						, ACTION_FICHIER_REFUSE);
 			
 			this.ajouterLigneRapport(ligneRapport);
@@ -1533,9 +1689,7 @@ public abstract class AbstractControle implements IControle {
 		/* passe pFile à this.fichier et 
 		 * rafraîchit automatiquement this.nomFichier. */
 		this.setFichier(pFile);
-		
-		/* rafraîchit le rapport. */
-		this.rapport = new ArrayList<LigneRapport>();
+	
 		
 		// LECTURE ***************
 		FileInputStream fileInputStream = null;
@@ -1835,6 +1989,7 @@ public abstract class AbstractControle implements IControle {
 		final StringBuilder stb = new StringBuilder();
 		
 		stb.append("id;");
+		stb.append("ordre d'execution du contrôle;");
 		stb.append("date du contrôle;");
 		stb.append("utilisateur;");
 		stb.append("Fichier;");
@@ -1909,6 +2064,10 @@ public abstract class AbstractControle implements IControle {
 		for (final LigneRapport ligne : pList) {
 			
 			compteur++;
+			
+			/* Ajout du caractère BOM_UTF-8 pour 
+			 * forcer Excel 2010 à détecter l'UTF-8. */
+			stb.append(BOM_UTF_8);
 			
 			/* Ajout de l'en-tête. */
 			if (compteur == 1 && pAjouterEntete) {
@@ -2047,21 +2206,25 @@ public abstract class AbstractControle implements IControle {
 	 * avec des attributs pré-remplis et les valeurs passées en paramètre.<br/>
 	 * <br/>
 	 * Liste des attributs pré-remplis : <br/>
-	 * - Met automatiquement this.dateControleStringFormatee 
-	 * dans la date d'exécution du contrôle 'dateControle'.<br/>
-	 * - Met automatiquement this.userName dans le nom 
-	 * de l'utilisateur qui a déclenché le contrôle 'userName'.<br/>
-	 * - Met automatiquement this.nomFichier dans le nom du fichier 
-	 * objet du contrôle 'nomFichier'.<br/>
-	 * - Met automatiquement this.typeControle dans le type du contrôle 
-	 * ('contrôle de surface' par exemple) 'typeControle'.<br/>
-	 * - Met automatiquement this.nomControle dans le nom du contrôle 
-	 * ('contrôle fichier texte' par exemple) 'nomControle'.<br/>
-	 * - Met automatiquement this.nomCritere dans la désignation 
+	 * <ul>
+	 * <li>Met automatiquement this.ordreControle dans 'ordreControle' 
+	 * de la ligne de rapport.</li><br/>
+	 * <li>Met automatiquement this.dateControleStringFormatee 
+	 * dans la date d'exécution du contrôle 'dateControle'.</li><br/>
+	 * <li>Met automatiquement this.userName dans le nom 
+	 * de l'utilisateur qui a déclenché le contrôle 'userName'.</li><br/>
+	 * <li>Met automatiquement this.nomFichier dans le nom du fichier 
+	 * objet du contrôle 'nomFichier'.</li><br/>
+	 * <li>Met automatiquement this.typeControle dans le type du contrôle 
+	 * ('contrôle de surface' par exemple) 'typeControle'.</li><br/>
+	 * <li>Met automatiquement this.nomControle dans le nom du contrôle 
+	 * ('contrôle fichier texte' par exemple) 'nomControle'.</li><br/>
+	 * <li>Met automatiquement this.nomCritere dans la désignation 
 	 * du critère vérifié par le contrôle 
-	 * ('une ligne ne doit pas être vide' par exemple) 'critere'.<br/>
-	 * - Met automatiquement this.gravite dans la désignation 
-	 * de la gravité de ce contrôle (par exemple '1 - bloquant') 'gravité'.<br/>
+	 * ('une ligne ne doit pas être vide' par exemple) 'critere'.</li><br/>
+	 * <li>Met automatiquement this.gravite dans la désignation 
+	 * de la gravité de ce contrôle (par exemple '1 - bloquant') 'gravité'.</li><br/>
+	 * </ul>
 	 * <br/>
 	 *
 	 * @param pNumeroLigne : Integer : numéro de la ligne dans le fichier 
@@ -2086,10 +2249,12 @@ public abstract class AbstractControle implements IControle {
 			, final Integer pOrdreChamp
 			, final String pPositionChamp
 			, final String pValeurChamp
+			, final Boolean pStatut
 			, final String pAction) {
 		
 		return new LigneRapport(
-				this.dateControleStringFormatee
+				this.ordreControle
+				, this.dateControleStringFormatee
 				, this.userName
 				, this.nomFichier
 				, this.typeControle
@@ -2099,7 +2264,10 @@ public abstract class AbstractControle implements IControle {
 				, pNumeroLigne
 				, pMessageControle
 				, pOrdreChamp
-				, pPositionChamp, pValeurChamp, pAction);
+				, pPositionChamp
+				, pValeurChamp
+				, pStatut
+				, pAction);
 		
 	} // Fin de creerLigneRapport(
 	 // Integer pNumeroLigne
@@ -2395,6 +2563,41 @@ public abstract class AbstractControle implements IControle {
 	} // Fin de getRapportEnregistrement().________________________________
 
 
+		
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final String getMessagesEnregistrementsRapports() {
+		
+		/* retourne null si this.rapportEnregistrement == null. */
+		if (this.rapportEnregistrement == null) {
+			return null;
+		}
+		
+		/* Instanciation d'un StringBuilder. */
+		final StringBuilder stb = new StringBuilder();
+		
+		/* Parcours de this.rapportEnregistrement. */
+		for (final LigneRapportEnregistrement ligne : this.rapportEnregistrement) {
+			
+			/* agrége les messages de création de rapport 
+			 * de contrôle sur disque. */
+			if (ligne != null) {
+				
+				stb.append(ligne.getMessage());
+				stb.append(NEWLINE);	
+				
+			} // Fin de if (ligne != null).__________________
+			
+		} // Fin de Parcours de this.rapportEnregistrement.___________
+		
+		/* retour du résultat. */
+		return stb.toString();
+		
+	} // Fin de getMessagesEnregistrementsRapports().______________________
+	
+
 	
 	/**
 	 * {@inheritDoc}
@@ -2484,6 +2687,8 @@ public abstract class AbstractControle implements IControle {
 	} // Fin de afficherRapportEnregistrementCsv(
 	 // List<LigneRapportEnregistrement> pList
 	 // , boolean pEnTete).________________________________________________
+
+	
 	
 	/**
 	 * method ajouterARapportEnregistrement(
@@ -3293,6 +3498,28 @@ public abstract class AbstractControle implements IControle {
 	 // File pRep).________________________________________________________
 	
 
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final Integer getOrdreControle() {
+		return this.ordreControle;
+	} // Fin de getOrdreControle().________________________________________
+
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final void setOrdreControle(
+			final Integer pOrdreControle) {
+		this.ordreControle = pOrdreControle;
+	} // Fin de setOrdreControle(
+	 // Integer pOrdreControle).___________________________________________
+
+	
 	
 	/**
 	 * {@inheritDoc}
@@ -3448,6 +3675,16 @@ public abstract class AbstractControle implements IControle {
 	public final boolean isEstBloquant() {
 		return this.estBloquant;
 	} // Fin de isEstBloquant().___________________________________________
+
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final boolean isaEffectuer() {
+		return this.aEffectuer;
+	} // Fin de isaEffectuer().____________________________________________
 
 
 

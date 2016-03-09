@@ -81,6 +81,12 @@ public class LigneRapport implements Serializable, Comparable<Object>
 	 */
 	private Long id;
 
+	/**
+	 * ordreControle : Integer :<br/>
+	 * ordre d'exécution du contrôle dans un enchaînement de contrôles.<br/>
+	 */
+	private Integer ordreControle;
+	
 
 	/**
 	 * dateControle : String :<br/>
@@ -176,6 +182,18 @@ public class LigneRapport implements Serializable, Comparable<Object>
 	 */
 	private String valeurChamp;
 
+		
+	/**
+	 * statut : Boolean :<br/>
+	 * Boolean qui vaut : <br/>
+	 * - true si le contrôle est favorable après un contrôle.<br/>
+	 * - false si le contrôle est défavorable après un contrôle.<br/>
+	 * Un contrôle doit retourner true si le contrôle s'effectue favorablement. 
+	 * Par exemple, un contrôle vérifiant qu'un fichier est un texte 
+	 * doit retourner true si c'est le cas.<br/>
+	 */
+	private Boolean statut;
+	
 	
 	/**
 	 * action : String :<br/>
@@ -195,12 +213,13 @@ public class LigneRapport implements Serializable, Comparable<Object>
 
 	/**
 	 * dfDatetimemilliFrancaiseLexico : DateFormat :<br/>
-	 * Format des dates-heures françaises avec millisecondes comme
-	 * '25/02/1961-12:27:07.251'.<br/>
-	 * "dd/MM/yyyy-HH:mm:ss.SSS".<br/>
+	 * Format des dates-heures françaises lexicographique 
+	 * avec millisecondes comme
+	 * '1961-01-25_12-27-07-251'.<br/>
+	 * "yyyy-MM-dd_HH-mm-ss-SSS".<br/>
 	 */
-	public final transient DateFormat dfDatetimemilliFrancaise 
-	= new SimpleDateFormat("dd/MM/yyyy-HH:mm:ss.SSS", LOCALE_FR_FR);
+	public final transient DateFormat dfDatetimemilliFrancaiseLexico 
+	= new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss-SSS", LOCALE_FR_FR);
 	
 	
 	/**
@@ -234,9 +253,9 @@ public class LigneRapport implements Serializable, Comparable<Object>
 	 */
 	public LigneRapport() {
 		
-		this(null
+		this(null, null
 				, null, null, null, null, null, null, null
-				, null, null, null, null, null, null);
+				, null, null, null, null, null, true, null);
 		
 	} // FIn de CONSTRUCTEUR D'ARITE NULLE.________________________________
 
@@ -246,14 +265,16 @@ public class LigneRapport implements Serializable, Comparable<Object>
 	 * method CONSTRUCTEUR LigneRapport(COMPLET) :<br/>
 	 * CONSTRUCTEUR COMPLET.<br/>
 	 * Sans id en base.<br/>
+	 * AVEC ordreControle = 1.<br/>
+	 * - Met automatiquement le satut du contrôle à true.<br/>
 	 * <br/>
 	 *
 	 * @param pDateControle : String : date d'exécution du contrôle.
-	 * doit être impérativement fournie au format 
-	 * des dates-heures françaises avec millisecondes 
-	 * (dfDatetimemilliFrancaiseLexico) comme
-	 * '25/02/1961-12:27:07.251'.<br/>
-	 * "dd/MM/yyyy-HH:mm:ss.SSS".<br/>
+	 * doit être impérativement fournie au Format des 
+	 * dates-heures françaises lexicographique 
+	 * avec millisecondes comme
+	 * '1961-01-25_12-27-07-251'.<br/>
+	 * "yyyy-MM-dd_HH-mm-ss-SSS".<br/>
 	 * @param pUserName : String : nom de l'utilisateur 
 	 * qui a déclenché le contrôle.<br/> 
 	 * @param pNomFichier : String : nom du fichier 
@@ -295,14 +316,89 @@ public class LigneRapport implements Serializable, Comparable<Object>
 			, final String pValeurChamp
 			, final String pAction) {
 		
-		this(null, pDateControle, pUserName, pNomFichier, pTypeControle
+		this(null, 1, pDateControle, pUserName, pNomFichier, pTypeControle
 				, pNomControle, pCritere, pGravite, pNumeroLigne
 				, pMessageControle, pOrdreChamp, pPositionChamp
-				, pValeurChamp, pAction);
+				, pValeurChamp, true, pAction);
 		
 	} // Fin de CONSTRUCTEUR COMPLET.______________________________________
 
 
+	
+	/**
+	 * method CONSTRUCTEUR LigneRapport(COMPLET NON PERSISTANT) :<br/>
+	 * CONSTRUCTEUR COMPLET NON PERSISTANT.<br/>
+	 * <br/>
+	 * - Sans id en base.<br/>
+	 * - Met automatiquement le satut du contrôle à true.<br/>
+	 * <br/>
+	 * 
+	 * @param pOrdreControle : Integer : ordre d'exécution du contrôle 
+	 * dans un enchaînement de contrôles.<br/>
+	 * @param pDateControle : String : date d'exécution du contrôle.
+	 * doit être impérativement fournie au Format 
+	 * des dates-heures françaises lexicographique 
+	 * avec millisecondes comme
+	 * '1961-01-25_12-27-07-251'.<br/>
+	 * "yyyy-MM-dd_HH-mm-ss-SSS".<br/>
+	 * @param pUserName : String : nom de l'utilisateur 
+	 * qui a déclenché le contrôle.<br/> 
+	 * @param pNomFichier : String : nom du fichier 
+	 * objet du contrôle.<br/>
+	 * @param pTypeControle : String : type du contrôle 
+	 * (contrôle de surface par exemple).<br/> 
+	 * @param pNomControle : String : nom du contrôle 
+	 * ('contrôle fichier texte' par exemple).<br/>
+	 * @param pCritere : String : désignation du critère vérifié par le contrôle 
+	 * comme "une ligne ne doit pas être vide" ou 
+	 * "une ligne doit contenir obligatoirement 520 caractères".<br/>
+	 * @param pGravite : String : désignation de la gravité de ce contrôle 
+	 * (par exemple 'bloquant').<br/>
+	 * @param pNumeroLigne : Integer : numéro de la ligne dans le fichier 
+	 * qui déclenche le contrôle.<br/>
+	 * @param pMessageControle : String : message émis par le contrôle.<br/>
+	 * @param pOrdreChamp : Integer : ordre du champ contrôlé
+	 * (dans un fichier 
+	 * comportant une liste de champs comme un fichier ASCII HIT).<br/>
+	 * @param pPositionChamp : String : position du champ contrôlé 
+	 * dans une ligne du fichier 
+	 * comme 7 ou [7-12].<br/>
+	 * @param pValeurChamp : String : valeur prise par le champ contrôlé.<br/>
+	 * @param pStatut : Boolean : Boolean qui vaut : <br/>
+	 * - true si le contrôle est favorable après un contrôle.<br/>
+	 * - false si le contrôle est défavorable après un contrôle.<br/>
+	 * Un contrôle doit retourner true si le contrôle s'effectue favorablement. 
+	 * Par exemple, un contrôle vérifiant qu'un fichier est un texte 
+	 * doit retourner true si c'est le cas.<br/> 
+	 * @param pAction : String : action menée après le contrôle 
+	 * comme "ligne éliminée" ou "ligne conservée".<br/>
+	 */
+	public LigneRapport(
+			 final Integer pOrdreControle
+			, final String pDateControle
+			, final String pUserName
+			, final String pNomFichier
+			, final String pTypeControle
+			, final String pNomControle
+			, final String pCritere
+			, final String pGravite
+			, final Integer pNumeroLigne
+			, final String pMessageControle
+			, final Integer pOrdreChamp
+			, final String pPositionChamp
+			, final String pValeurChamp
+			, final Boolean pStatut
+			, final String pAction) {
+		
+		this(null, pOrdreControle
+				, pDateControle, pUserName, pNomFichier, pTypeControle
+				, pNomControle, pCritere, pGravite, pNumeroLigne
+				, pMessageControle, pOrdreChamp, pPositionChamp
+				, pValeurChamp, pStatut, pAction);
+		
+	} // Fin du CONSTRUCTEUR COMPLET NON PERSISTANT._______________________
+	
+	
 	
 	 /**
 	 * method CONSTRUCTEUR LigneRapport(COMPLET PERSISTANT) :<br/>
@@ -310,12 +406,14 @@ public class LigneRapport implements Serializable, Comparable<Object>
 	 * <br/>
 	 * 
 	 * @param pId : Long : Identifiant en base de l'objet métier.<br/>
+	 * @param pOrdreControle : Integer : ordre d'exécution du contrôle 
+	 * dans un enchaînement de contrôles.<br/>
 	 * @param pDateControle : String : date d'exécution du contrôle.
-	 * doit être impérativement fournie au format 
-	 * des dates-heures françaises avec millisecondes 
-	 * (dfDatetimemilliFrancaiseLexico) comme
-	 * '25/02/1961-12:27:07.251'.<br/>
-	 * "dd/MM/yyyy-HH:mm:ss.SSS".<br/>
+	 * doit être impérativement fournie au Format 
+	 * des dates-heures françaises lexicographique 
+	 * avec millisecondes comme
+	 * '1961-01-25_12-27-07-251'.<br/>
+	 * "yyyy-MM-dd_HH-mm-ss-SSS".<br/>
 	 * @param pUserName : String : nom de l'utilisateur 
 	 * qui a déclenché le contrôle.<br/> 
 	 * @param pNomFichier : String : nom du fichier 
@@ -339,11 +437,18 @@ public class LigneRapport implements Serializable, Comparable<Object>
 	 * dans une ligne du fichier 
 	 * comme 7 ou [7-12].<br/>
 	 * @param pValeurChamp : String : valeur prise par le champ contrôlé.<br/> 
+	 * @param pStatut : Boolean : Boolean qui vaut : <br/>
+	 * - true si le contrôle est favorable après un contrôle.<br/>
+	 * - false si le contrôle est défavorable après un contrôle.<br/>
+	 * Un contrôle doit retourner true si le contrôle s'effectue favorablement. 
+	 * Par exemple, un contrôle vérifiant qu'un fichier est un texte 
+	 * doit retourner true si c'est le cas.<br/>
 	 * @param pAction : String : action menée après le contrôle 
 	 * comme "ligne éliminée" ou "ligne conservée".<br/>
 	 */
 	public LigneRapport(
 			final Long pId
+			, final Integer pOrdreControle
 			, final String pDateControle
 			, final String pUserName
 			, final String pNomFichier
@@ -356,11 +461,13 @@ public class LigneRapport implements Serializable, Comparable<Object>
 			, final Integer pOrdreChamp
 			, final String pPositionChamp
 			, final String pValeurChamp
+			, final Boolean pStatut
 			, final String pAction) {
 		
 		super();
 		
 		this.id = pId;
+		this.ordreControle = pOrdreControle;
 		this.dateControle = pDateControle;
 		this.userName = pUserName;
 		this.nomFichier = pNomFichier;
@@ -373,6 +480,7 @@ public class LigneRapport implements Serializable, Comparable<Object>
 		this.ordreChamp = pOrdreChamp;
 		this.positionChamp = pPositionChamp;
 		this.valeurChamp = pValeurChamp;
+		this.statut = pStatut;
 		this.action = pAction;
 		
 	} // Fin de CONSTRUCTEUR COMPLET PERSISTANT.___________________________
@@ -380,8 +488,8 @@ public class LigneRapport implements Serializable, Comparable<Object>
 
 
 	/**
-	 * Champs (13 attributs) : <br/>
-	 * [dateControle;userName;nomFichier;typeControle;
+	 * Champs (14 attributs) : <br/>
+	 * [ordreControle;dateControle;userName;nomFichier;typeControle;
 	 * nomControle;critere;gravite;
 	 * numeroLigne;messageControle;ordreChamp;positionChamp;
 	 * valeurChamp;action;]<br/>
@@ -395,6 +503,8 @@ public class LigneRapport implements Serializable, Comparable<Object>
 		
 		int result = 1;
 		
+		result = prime * result
+				+ ((this.ordreControle == null) ? 0 : this.ordreControle.hashCode());
 		result = prime * result
 				+ ((this.action == null) ? 0 : this.action.hashCode());
 		result = prime * result
@@ -441,8 +551,8 @@ public class LigneRapport implements Serializable, Comparable<Object>
 
 
 	/**
-	 * Champs (13 attributs) : <br/>
-	 * [dateControle;userName;nomFichier;typeControle;
+	 * Champs (14 attributs) : <br/>
+	 * [ordreControle;dateControle;userName;nomFichier;typeControle;
 	 * nomControle;critere;gravite;
 	 * numeroLigne;messageControle;ordreChamp;positionChamp;
 	 * valeurChamp;action;]<br/>
@@ -466,6 +576,14 @@ public class LigneRapport implements Serializable, Comparable<Object>
 		}
 		
 		final LigneRapport other = (LigneRapport) pObj;
+		
+		if (this.ordreControle == null) {
+			if (other.ordreControle != null) {
+				return false;
+			}
+		} else if (!this.ordreControle.equals(other.ordreControle)) {
+			return false;
+		}
 		
 		if (this.action == null) {
 			if (other.action != null) {
@@ -578,8 +696,8 @@ public class LigneRapport implements Serializable, Comparable<Object>
 
 
 	/**
-	 *  champs (13 attributs dans un ordre différent du equals) :<br/>
-	 * [dateControle;userName;nomFichier;typeControle;
+	 *  champs (14 attributs dans un ordre différent du equals) :<br/>
+	 * [ordreControle;dateControle;userName;nomFichier;typeControle;
 	 * nomControle;critere;gravite;
 	 * numeroLigne;ordreChamp;positionChamp;
 	 * valeurChamp;action;messageControle;]<br/>
@@ -620,14 +738,14 @@ public class LigneRapport implements Serializable, Comparable<Object>
 			
 			if (maDateString != null) {
 				maDate 
-					= this.dfDatetimemilliFrancaise.parse(maDateString);
+					= this.dfDatetimemilliFrancaiseLexico.parse(maDateString);
 			}
 		} catch (ParseException parseExc1) {
 			
 			final String message 
 			= "la date " 
 			+ maDateString 
-			+ " n'est pas conforme au pattern 'dd/MM/yyyy-HH:mm:ss.SSS' : ";
+			+ " n'est pas conforme au pattern 'yyyy-MM-dd_HH-mm-ss-SSS' : ";
 			
 			/* LOG de niveau INFO. */
 			loggerInfo(
@@ -639,7 +757,7 @@ public class LigneRapport implements Serializable, Comparable<Object>
 			
 			if (otherDateString != null) {
 				otherDate 
-					= this.dfDatetimemilliFrancaise.parse(otherDateString);
+					= this.dfDatetimemilliFrancaiseLexico.parse(otherDateString);
 			}
 			
 		} catch (ParseException parseExc2) {
@@ -647,7 +765,7 @@ public class LigneRapport implements Serializable, Comparable<Object>
 			final String message 
 			= "la date " 
 			+ otherDateString 
-			+ " n'est pas conforme au pattern 'dd/MM/yyyy-HH:mm:ss.SSS' : ";
+			+ " n'est pas conforme au pattern 'yyyy-MM-dd_HH-mm-ss-SSS' : ";
 			
 			/* LOG de niveau INFO. */
 			loggerInfo(
@@ -655,6 +773,7 @@ public class LigneRapport implements Serializable, Comparable<Object>
 					, METHODE_COMPARE, message, parseExc2.getMessage());
 		}
 		
+		int compareOrdreControle = 0;
 		int compareDateControle = 0;
 		int compareUserName = 0;
 		int compareNomFichier = 0;
@@ -669,7 +788,29 @@ public class LigneRapport implements Serializable, Comparable<Object>
 		int compareAction = 0;
 		int compareMessageControle = 0;
 		
-		/* 1 - dateControle. */
+		/* 1 - ordreControle. */
+		if (this.ordreControle == null) {
+			
+			if (other.ordreControle != null) {
+				return +1;
+			}
+		}
+		else {
+			
+			if (other.ordreControle == null) {
+				return -1;
+			}
+			
+			compareOrdreControle 
+				= this.ordreControle.compareTo(other.ordreControle);
+			
+			if (compareOrdreControle != 0) {
+				return compareOrdreControle;
+			}
+			
+		} // Fin de ordreControle.________________
+		
+		/* 2 - dateControle. */
 		if (maDate == null) {
 			
 			if (otherDate != null) {
@@ -690,7 +831,7 @@ public class LigneRapport implements Serializable, Comparable<Object>
 			
 		} // Fin de dateControle.______
 		
-		/* 2 - userName. */
+		/* 3 - userName. */
 		if (this.getUserName() == null) {
 			
 			if (other.getUserName() != null) {
@@ -711,7 +852,7 @@ public class LigneRapport implements Serializable, Comparable<Object>
 			}
 		} // Fin de userName._______________________
 		
-		/* 3 - nomFichier. */
+		/* 4 - nomFichier. */
 		if (this.getNomFichier() == null) {
 			
 			if (other.getNomFichier() != null) {
@@ -732,7 +873,7 @@ public class LigneRapport implements Serializable, Comparable<Object>
 			}
 		} // Fin de nomFichier.______________________
 		
-		/* 4 - typeControle. */
+		/* 5 - typeControle. */
 		if (this.getTypeControle() == null) {
 			
 			if (other.getTypeControle() != null) {
@@ -753,7 +894,7 @@ public class LigneRapport implements Serializable, Comparable<Object>
 			}
 		} // Fin de typeControle.___________________
 		
-		/* 5 - nomControle. */
+		/* 6 - nomControle. */
 		if (this.getNomControle() == null) {
 			
 			if (other.getNomControle() != null) {
@@ -774,7 +915,7 @@ public class LigneRapport implements Serializable, Comparable<Object>
 			}
 		} // Fin de nomControle.___________________
 		
-		/* 6 - critere. */
+		/* 7 - critere. */
 		if (this.getCritere() == null) {
 			
 			if (other.getCritere() != null) {
@@ -795,7 +936,7 @@ public class LigneRapport implements Serializable, Comparable<Object>
 		} // Fin de critere._____________________
 		
 		
-		/* 7 - gravite. */
+		/* 8 - gravite. */
 		if (this.getGravite() == null) {
 			
 			if (other.getGravite() != null) {
@@ -816,7 +957,7 @@ public class LigneRapport implements Serializable, Comparable<Object>
 			}
 		} // Fin de gravite.____________________
 		
-		/* 8 - numeroLigne. */
+		/* 9 - numeroLigne. */
 		if (this.getNumeroLigne() == null) {
 			
 			if (other.getNumeroLigne() != null) {
@@ -837,7 +978,7 @@ public class LigneRapport implements Serializable, Comparable<Object>
 			}
 		} // Fin de numeroLigne.__________________
 		
-		/* 9 - ordreChamp. */
+		/* 10 - ordreChamp. */
 		if (this.getOrdreChamp() == null) {
 			
 			if (other.getOrdreChamp() != null) {
@@ -858,7 +999,7 @@ public class LigneRapport implements Serializable, Comparable<Object>
 			}
 		} // Fin de ordreChamp._______________________
 		
-		/* 10 - positionChamp. */
+		/* 11 - positionChamp. */
 		if (this.getPositionChamp() == null) {
 			
 			if (other.getPositionChamp() != null) {
@@ -879,7 +1020,7 @@ public class LigneRapport implements Serializable, Comparable<Object>
 			}
 		} // Fin de positionChamp._____________________
 		
-		/* 11 - valeurChamp. */
+		/* 12 - valeurChamp. */
 		if (this.getValeurChamp() == null) {
 			
 			if (other.getValeurChamp() != null) {
@@ -900,7 +1041,7 @@ public class LigneRapport implements Serializable, Comparable<Object>
 			}
 		} // Fin de valeurChamp.__________________________
 		
-		/* 12 - action. */
+		/* 13 - action. */
 		if (this.getAction() == null) {
 			
 			if (other.getAction() != null) {
@@ -921,7 +1062,7 @@ public class LigneRapport implements Serializable, Comparable<Object>
 			}
 		} //Fin de action.__________________________________
 		
-		/* 13 - messageControle. */
+		/* 14 - messageControle. */
 		if (this.getMessageControle() == null) {
 			
 			if (other.getMessageControle() != null) {
@@ -959,6 +1100,7 @@ public class LigneRapport implements Serializable, Comparable<Object>
 		final LigneRapport clone = (LigneRapport) super.clone();
 		
 		clone.setId(this.id);
+		clone.setOrdreControle(this.ordreControle);
 		clone.setDateControle(this.dateControle);
 		clone.setUserName(this.userName);
 		clone.setNomFichier(this.nomFichier);
@@ -971,6 +1113,7 @@ public class LigneRapport implements Serializable, Comparable<Object>
 		clone.setOrdreChamp(this.ordreChamp);
 		clone.setPositionChamp(this.positionChamp);
 		clone.setValeurChamp(this.valeurChamp);
+		clone.setStatut(this.statut);
 		clone.setAction(this.action);
 		
 		return clone;
@@ -982,11 +1125,11 @@ public class LigneRapport implements Serializable, Comparable<Object>
 	/**
 	 * Sert à afficher à la console un LigneRapport.<br/>
 	 * <br/>
-	 * Champs (13 attributs + id) : <br/>
-	 * [id;dateControle;userName;nomFichier;typeControle;
+	 * Champs (15 attributs + id) : <br/>
+	 * [id;ordreControle;dateControle;userName;nomFichier;typeControle;
 	 * nomControle;critere;gravite;
 	 * numeroLigne;messageControle;ordreChamp;positionChamp;
-	 * valeurChamp;action;].<br/>
+	 * valeurChamp;statut;action;].<br/>
 	 * <br/>
 	 * {@inheritDoc}
 	 */
@@ -1002,72 +1145,90 @@ public class LigneRapport implements Serializable, Comparable<Object>
 							, "id : %-7d", this.id));
 		}
 		
-		/* 1 - dateControle. */		
+		/* 1 - ordreControle. */
+		builder.append(
+				String.format(LOCALE_FR_FR
+						, "Ordre du contrôle : %-5d", this.ordreControle));
+		
+		/* 2 - dateControle. */		
 		builder.append(
 					String.format(LOCALE_FR_FR
-							, "Date du contrôle : %-25s", this.dateControle));
-		
-		
-		/* 2 - userName */
+							, "Date du contrôle : %-27s", this.dateControle));
+				
+		/* 3 - userName */
 		builder.append(
 				String.format(LOCALE_FR_FR
 						, "User : %-30s", this.userName));
 		
-		/* 3 - nomFichier. */
+		/* 4 - nomFichier. */
 		builder.append(
 				String.format(LOCALE_FR_FR
-						, "Fichier contrôlé : %-100s", this.nomFichier));
+						, "Fichier contrôlé : %-50s", this.nomFichier));
 		
-		/* 4 - typeControle. */
+		/* 5 - typeControle. */
 		builder.append(
 				String.format(LOCALE_FR_FR
-						, "Type de Contrôle : %-50s", this.typeControle));
+						, "Type de Contrôle : %-30s", this.typeControle));
 		
-		/* 5 - nomControle. */
+		/* 6 - nomControle. */
 		builder.append(
 				String.format(LOCALE_FR_FR
-						, "Nom du Contrôle : %-50s", this.nomControle));
+						, "Nom du Contrôle : %-30s", this.nomControle));
 		
-		/* 6 - critere. */
+		/* 7 - critere. */
 		builder.append(
 				String.format(LOCALE_FR_FR
-						, "Critère de Contrôle : %-50s", this.critere));
+						, "Critère de Contrôle : %-110s", this.critere));
 		
-		/* 7 - gravite. */
+		/* 8 - gravite. */
 		builder.append(
 				String.format(LOCALE_FR_FR
 						, "Gravité du Contrôle : %-30s", this.gravite));
 		
-		/* 8 - numeroLigne. */
+		/* 9 - numeroLigne. */
 		builder.append(
 				String.format(LOCALE_FR_FR
 						, "Numéro de ligne : %-10d", this.numeroLigne));
 		
-		/* 9 - messageControle. */
+		/* 10 - messageControle. */
 		builder.append(
 				String.format(LOCALE_FR_FR
 						, "Message du Contrôle : %-200s"
 							, this.messageControle));
 		
-		/* 10 - ordreChamp. */
+		/* 11 - ordreChamp. */
 		builder.append(
 				String.format(LOCALE_FR_FR
 						, "Ordre du champ contrôlé dans une ligne  : %-10d"
 							, this.ordreChamp));
 		
-		/* 11 - positionChamp. */
+		/* 12 - positionChamp. */
 		builder.append(
 				String.format(LOCALE_FR_FR
 						, "Position du champ dans la ligne : %-20s"
 							, this.positionChamp));
 		
-		/* 12 - valeurChamp. */
+		/* 13 - valeurChamp. */
 		builder.append(
 				String.format(LOCALE_FR_FR
 						, "Valeur du champ : %-20s"
 							, this.valeurChamp));
 		
-		/* 13 - action. */
+		/* 14 - statut. */
+		if (this.statut) {
+			builder.append(
+					String.format(LOCALE_FR_FR
+							, "Staut du contrôle : %-5s"
+								, "OK"));			
+		}
+		else {
+			builder.append(
+					String.format(LOCALE_FR_FR
+							, "Staut du contrôle : %-5s"
+								, "KO"));
+		}
+		
+		/* 15 - action. */
 		builder.append(
 				String.format(LOCALE_FR_FR
 						, "Action réalisée : %-20s"
@@ -1081,10 +1242,10 @@ public class LigneRapport implements Serializable, Comparable<Object>
 
 	/**
 	 * retourne : <br/>
-	 * "id;date du contrôle;utilisateur;Fichier;type de contrôle;
-	 * Contrôle;Critère;Gravité;
+	 * "id;ordre d'execution du contrôle;date du contrôle;utilisateur;
+	 * Fichier;type de contrôle;Contrôle;Critère;Gravité;
 	 * Numéro de Ligne;Message du Contrôle;Ordre du Champ;Position du Champ;
-	 * Valeur du Champ;Action;"<br/>
+	 * Valeur du Champ;Statut du Contrôle;Action;"<br/>
 	 * <br/>
 	 * {@inheritDoc}
 	 */
@@ -1094,6 +1255,7 @@ public class LigneRapport implements Serializable, Comparable<Object>
 		final StringBuilder stb = new StringBuilder();
 		
 		stb.append("id;");
+		stb.append("ordre d'execution du contrôle;");
 		stb.append("date du contrôle;");
 		stb.append("utilisateur;");
 		stb.append("Fichier;");
@@ -1106,6 +1268,7 @@ public class LigneRapport implements Serializable, Comparable<Object>
 		stb.append("Ordre du Champ;");
 		stb.append("Position du Champ;");
 		stb.append("Valeur du Champ;");
+		stb.append("Statut du Contrôle;");
 		stb.append("Action;");
 		
 		return stb.toString();
@@ -1117,10 +1280,10 @@ public class LigneRapport implements Serializable, Comparable<Object>
 	/**
 	 * Fournit le ValueObject sous forme de ligne Csv.<br/>
 	 * <br/>
-	 * "id;dateControle;userName;nomFichier;typeControle;
+	 * "id;ordreControle;dateControle;userName;nomFichier;typeControle;
 	 * nomControle;critere;gravite;
 	 * numeroLigne;messageControle;ordreChamp;
-	 * positionChamp;valeurChamp;action;".<br/>
+	 * positionChamp;valeurChamp;statut;action;".<br/>
 	 * <br/>
 	 * {@inheritDoc}
 	 */
@@ -1129,32 +1292,82 @@ public class LigneRapport implements Serializable, Comparable<Object>
 		
 		final StringBuilder stb = new StringBuilder();
 		
+		/* id. */
 		stb.append(this.id);
 		stb.append(SEP_POINTVIRGULE);
+		
+		/* ordreControle. */
+		stb.append(this.ordreControle);
+		stb.append(SEP_POINTVIRGULE);
+		
+		/* dateControle. */
 		stb.append(this.dateControle);
 		stb.append(SEP_POINTVIRGULE);
+		
+		/* userName. */
 		stb.append(this.userName);
 		stb.append(SEP_POINTVIRGULE);
+		
+		/* nomFichier. */
 		stb.append(this.nomFichier);
 		stb.append(SEP_POINTVIRGULE);
+		
+		/* typeControle. */
 		stb.append(this.typeControle);
 		stb.append(SEP_POINTVIRGULE);
+		
+		/* nomControle. */
 		stb.append(this.nomControle);
 		stb.append(SEP_POINTVIRGULE);
+		
+		/* critere. */
 		stb.append(this.critere);
 		stb.append(SEP_POINTVIRGULE);
+		
+		/* gravite. */
 		stb.append(this.gravite);
 		stb.append(SEP_POINTVIRGULE);
-		stb.append(this.numeroLigne);
+		
+		/* numeroLigne. */
+		if (this.numeroLigne == null) {
+			stb.append("sans objet");
+		}
+		else {
+			stb.append(this.numeroLigne);
+		}		
 		stb.append(SEP_POINTVIRGULE);
+		
+		/* messageControle. */
 		stb.append(this.messageControle);
 		stb.append(SEP_POINTVIRGULE);
-		stb.append(this.ordreChamp);
+		
+		/* ordreChamp. */
+		if (this.ordreChamp == null) {
+			stb.append("sans objet");
+		}
+		else {
+			stb.append(this.ordreChamp);
+		}		
 		stb.append(SEP_POINTVIRGULE);
+		
+		/* positionChamp. */
 		stb.append(this.positionChamp);
 		stb.append(SEP_POINTVIRGULE);
+		
+		/* valeurChamp. */
 		stb.append(this.valeurChamp);
 		stb.append(SEP_POINTVIRGULE);
+		
+		/* statut. */
+		if (this.statut) {
+			stb.append("OK");
+		}
+		else {
+			stb.append("KO");
+		}		
+		stb.append(SEP_POINTVIRGULE);
+		
+		/* action. */
 		stb.append(this.action);
 		stb.append(SEP_POINTVIRGULE);
 		
@@ -1165,10 +1378,10 @@ public class LigneRapport implements Serializable, Comparable<Object>
 	
 
 	/**
-	 * "id;date du contrôle;utilisateur;Fichier;type de contrôle;
-	 * Contrôle;Critère;Gravité;
+	 * "id;ordre d'execution du contrôle;date du contrôle;utilisateur;
+	 * Fichier;type de contrôle;Contrôle;Critère;Gravité;
 	 * Numéro de Ligne;Message du Contrôle;Ordre du Champ;Position du Champ;
-	 * Valeur du Champ;Action;"<br/>
+	 * Valeur du Champ;Statut du Contrôle;Action;"<br/>
 	 * <br/>
 	 * {@inheritDoc}
 	 */
@@ -1185,54 +1398,62 @@ public class LigneRapport implements Serializable, Comparable<Object>
 			break;
 
 		case 1:
+			entete = "ordre d'execution du contrôle";
+			break;
+			
+		case 2:
 			entete = "date du contrôle";
 			break;
 
-		case 2:
+		case 3:
 			entete = "utilisateur";
 			break;
 
-		case 3:
+		case 4:
 			entete = "Fichier";
 			break;
 			
-		case 4:
+		case 5:
 			entete = "type de contrôle";
 			break;
 			
-		case 5:
+		case 6:
 			entete = "Contrôle";
 			break;
 			
-		case 6:
+		case 7:
 			entete = "Critère du Contrôle";
 			break;
 			
-		case 7:
+		case 8:
 			entete = "Gravité du Contrôle";
 			break;
 			
-		case 8:
+		case 9:
 			entete = "Numéro de Ligne";
 			break;
 			
-		case 9:
+		case 10:
 			entete = "Message du Contrôle";
 			break;
 			
-		case 10:
+		case 11:
 			entete = "Ordre du Champ";
 			break;
 			
-		case 11:
+		case 12:
 			entete = "Position du Champ";
 			break;
 			
-		case 12:
+		case 13:
 			entete = "Valeur du Champ";
 			break;
 			
-		case 13:
+		case 14:
+			entete = "Statut du Contrôle";
+			break;
+			
+		case 15:
 			entete = "Action";
 			break;
 			
@@ -1249,10 +1470,10 @@ public class LigneRapport implements Serializable, Comparable<Object>
 
 
 	/**
-	 * "id;dateControle;userName;nomFichier;typeControle;
+	 * "id;ordreControle;dateControle;userName;nomFichier;typeControle;
 	 * nomControle;critere;gravite;
 	 * numeroLigne;messageControle;ordreChamp;
-	 * positionChamp;valeurChamp;action;".<br/>
+	 * positionChamp;valeurChamp;statut;action;".<br/>
 	 * <br/>
 	 * {@inheritDoc}
 	 */
@@ -1269,54 +1490,72 @@ public class LigneRapport implements Serializable, Comparable<Object>
 			break;
 
 		case 1:
+			valeur = this.ordreControle;
+			break;
+			
+		case 2:
 			valeur = this.dateControle;
 			break;
 
-		case 2:
+		case 3:
 			valeur = this.userName;
 			break;
 
-		case 3:
+		case 4:
 			valeur = this.nomFichier;
 			break;
 			
-		case 4:
+		case 5:
 			valeur = this.typeControle;
 			break;
 			
-		case 5:
+		case 6:
 			valeur = this.nomControle;
 			break;
 			
-		case 6:
+		case 7:
 			valeur = this.critere;
 			break;
 			
-		case 7:
+		case 8:
 			valeur = this.gravite;
 			break;
 			
-		case 8:
-			valeur = this.numeroLigne;
-			break;
-			
 		case 9:
-			valeur = this.messageControle;
+			if (this.numeroLigne == null) {
+				valeur = "sans objet";
+			}
+			else {
+				valeur = this.numeroLigne;
+			}			
 			break;
 			
 		case 10:
-			valeur = this.ordreChamp;
+			valeur = this.messageControle;
 			break;
 			
 		case 11:
-			valeur = this.positionChamp;
+			if (this.ordreChamp == null) {
+				valeur = "sans objet";
+			}
+			else {
+				valeur = this.ordreChamp;
+			}			
 			break;
 			
 		case 12:
-			valeur = this.valeurChamp;
+			valeur = this.positionChamp;
 			break;
 			
 		case 13:
+			valeur = this.valeurChamp;
+			break;
+		
+		case 14:
+			valeur = this.statut;
+			break;
+			
+		case 15:
 			valeur = this.action;
 			break;
 			
@@ -1333,10 +1572,10 @@ public class LigneRapport implements Serializable, Comparable<Object>
 
 	
 	/**
-	 * "id;dateControle;userName;nomFichier;typeControle;
+	 * "id;ordreControle;dateControle;userName;nomFichier;typeControle;
 	 * nomControle;critere;gravite;
 	 * numeroLigne;messageControle;ordreChamp;
-	 * positionChamp;valeurChamp;action;".<br/>
+	 * positionChamp;valeurChamp;statut;action;".<br/>
 	 * <br/>
 	 * {@inheritDoc}
 	 */
@@ -1344,6 +1583,7 @@ public class LigneRapport implements Serializable, Comparable<Object>
 	public final void reset() {
 		
 		this.id = null;
+		this.ordreControle = null;
 		this.dateControle = null;
 		this.userName = null;
 		this.nomFichier = null;
@@ -1356,6 +1596,7 @@ public class LigneRapport implements Serializable, Comparable<Object>
 		this.ordreChamp = null;
 		this.positionChamp = null;
 		this.valeurChamp = null;
+		this.statut = null;
 		this.action = null;
 		
 	} // Fin de reset().___________________________________________________
@@ -1369,12 +1610,14 @@ public class LigneRapport implements Serializable, Comparable<Object>
 	 * <br/>
 	 *
 	 * @param pId : Long : Identifiant en base de l'objet métier.<br/>
+	 * @param pOrdreControle : Integer : ordre d'exécution 
+	 * du contrôle dans un enchaînement de contrôles.<br/>
 	 * @param pDateControle : String : date d'exécution du contrôle.
-	 * doit être impérativement fournie au format 
-	 * des dates-heures françaises avec millisecondes 
-	 * (dfDatetimemilliFrancaiseLexico) comme
-	 * '25/02/1961-12:27:07.251'.<br/>
-	 * "dd/MM/yyyy-HH:mm:ss.SSS".<br/>
+	 * doit être impérativement fournie au 
+	 * Format des dates-heures françaises lexicographique 
+	 * avec millisecondes comme
+	 * '1961-01-25_12-27-07-251'.<br/>
+	 * "yyyy-MM-dd_HH-mm-ss-SSS".<br/>
 	 * @param pUserName : String : nom de l'utilisateur 
 	 * qui a déclenché le contrôle.<br/> 
 	 * @param pNomFichier : String : nom du fichier 
@@ -1398,11 +1641,18 @@ public class LigneRapport implements Serializable, Comparable<Object>
 	 * dans une ligne du fichier 
 	 * comme 7 ou [7-12].<br/>
 	 * @param pValeurChamp : String : valeur prise par le champ contrôlé.<br/> 
+	 * @param pStatut : Boolean : Boolean qui vaut : <br/>
+	 * - true si le contrôle est favorable après un contrôle.<br/>
+	 * - false si le contrôle est défavorable après un contrôle.<br/>
+	 * Un contrôle doit retourner true si le contrôle s'effectue favorablement. 
+	 * Par exemple, un contrôle vérifiant qu'un fichier est un texte 
+	 * doit retourner true si c'est le cas.<br/>
 	 * @param pAction : String : action menée après le contrôle 
 	 * comme "ligne éliminée" ou "ligne conservée".<br/>
 	 */
 	public final void remplir(
 			final Long pId
+			, final Integer pOrdreControle
 			, final String pDateControle
 			, final String pUserName
 			, final String pNomFichier
@@ -1415,9 +1665,11 @@ public class LigneRapport implements Serializable, Comparable<Object>
 			, final Integer pOrdreChamp
 			, final String pPositionChamp
 			, final String pValeurChamp
+			, final Boolean pStatut
 			, final String pAction) {
 		
 		this.id = pId;
+		this.ordreControle = pOrdreControle;
 		this.dateControle = pDateControle;
 		this.userName = pUserName;
 		this.nomFichier = pNomFichier;
@@ -1430,6 +1682,7 @@ public class LigneRapport implements Serializable, Comparable<Object>
 		this.ordreChamp = pOrdreChamp;
 		this.positionChamp = pPositionChamp;
 		this.valeurChamp = pValeurChamp;
+		this.statut = pStatut;
 		this.action = pAction;
 		
 	} // Fin de remplir(...).______________________________________________
@@ -1516,13 +1769,45 @@ public class LigneRapport implements Serializable, Comparable<Object>
 
 
 	/**
+	 * method getOrdreControle() :<br/>
+	 * Getter de l' ordre d'exécution du contrôle 
+	 * dans un enchaînement de contrôles.<br/>
+	 * <br/>
+	 *
+	 * @return ordreControle : Integer.<br/>
+	 */
+	public final Integer getOrdreControle() {
+		return this.ordreControle;
+	} // Fin de getOrdreControle().________________________________________
+
+
+
+	/**
+	 * method setOrdreControle(
+	 * Integer pOrdreControle) :<br/>
+	 * Setter de l' ordre d'exécution du contrôle 
+	 * dans un enchaînement de contrôles.<br/>
+	 * <br/>
+	 *
+	 * @param pOrdreControle : Integer : 
+	 * valeur à passer à ordreControle.<br/>
+	 */
+	public final void setOrdreControle(
+			final Integer pOrdreControle) {
+		this.ordreControle = pOrdreControle;
+	} // Fin de setOrdreControle(
+	 // Integer pOrdreControle).___________________________________________
+
+
+	
+	/**
 	 * method getDateControle() :<br/>
 	 * Getter de la date d'exécution du contrôle.<br/>
-	 * doit être impérativement fournie au format 
-	 * des dates-heures françaises avec millisecondes 
-	 * (dfDatetimemilliFrancaiseLexico) comme
-	 * '25/02/1961-12:27:07.251'.<br/>
-	 * "dd/MM/yyyy-HH:mm:ss.SSS".<br/>
+	 * doit être impérativement fournie au 
+	 * Format des dates-heures françaises lexicographique 
+	 * avec millisecondes comme
+	 * '1961-01-25_12-27-07-251'.<br/>
+	 * "yyyy-MM-dd_HH-mm-ss-SSS".<br/>
 	 * <br/>
 	 *
 	 * @return dateControle : String.<br/>
@@ -1537,11 +1822,11 @@ public class LigneRapport implements Serializable, Comparable<Object>
 	 * method setDateControle(
 	 * String pDateControle) :<br/>
 	 * Setter de la date d'exécution du contrôle.<br/>
-	 * doit être impérativement fournie au format 
-	 * des dates-heures françaises avec millisecondes 
-	 * (dfDatetimemilliFrancaiseLexico) comme
-	 * '25/02/1961-12:27:07.251'.<br/>
-	 * "dd/MM/yyyy-HH:mm:ss.SSS".<br/>
+	 * doit être impérativement fournie au 
+	 * Format des dates-heures françaises lexicographique 
+	 * avec millisecondes comme
+	 * '1961-01-25_12-27-07-251'.<br/>
+	 * "yyyy-MM-dd_HH-mm-ss-SSS".<br/>
 	 * <br/>
 	 *
 	 * @param pDateControle : String : 
@@ -1891,6 +2176,45 @@ public class LigneRapport implements Serializable, Comparable<Object>
 		this.valeurChamp = pValeurChamp;
 	} // Fin de setValeurChamp(
 	 // String pValeurChamp).______________________________________________
+
+
+
+	/**
+	 * method getStatut() :<br/>
+	 * Getter du Boolean qui vaut : <br/>
+	 * - true si le contrôle est favorable après un contrôle.<br/>
+	 * - false si le contrôle est défavorable après un contrôle.<br/>
+	 * Un contrôle doit retourner true si le contrôle s'effectue favorablement. 
+	 * Par exemple, un contrôle vérifiant qu'un fichier est un texte 
+	 * doit retourner true si c'est le cas.<br/>
+	 * <br/>
+	 *
+	 * @return statut : Boolean.<br/>
+	 */
+	public final Boolean getStatut() {
+		return this.statut;
+	} // Fin de getStatut().________________________________________________
+
+
+
+	/**
+	 * method setStatut(
+	 * Boolean pStatut) :<br/>
+	 * Setter du Boolean qui vaut : <br/>
+	 * - true si le contrôle est favorable après un contrôle.<br/>
+	 * - false si le contrôle est défavorable après un contrôle.<br/>
+	 * Un contrôle doit retourner true si le contrôle s'effectue favorablement. 
+	 * Par exemple, un contrôle vérifiant qu'un fichier est un texte 
+	 * doit retourner true si c'est le cas.<br/>
+	 * <br/>
+	 *
+	 * @param pStatut : Boolean : valeur à passer à statut.<br/>
+	 */
+	public final void setStatut(
+			final Boolean pStatut) {
+		this.statut = pStatut;
+	} // Fin de setStatut(
+	 // Boolean pStatut).__________________________________________________
 
 
 

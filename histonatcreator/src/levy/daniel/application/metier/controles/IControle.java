@@ -426,6 +426,7 @@ public interface IControle extends IRapporteurControle
 	 */
 	String ACTION_FICHIER_ACCEPTE = "OK - Fichier accepté";
 	
+
 	
 	/**
 	 * method controler(
@@ -433,14 +434,16 @@ public interface IControle extends IRapporteurControle
 	 * SERVICE PRINCIPAL.<br/>
 	 * Contrôle d'un fichier.<br/>
 	 * Vérifie qu'un fichier passe un contrôle.<br/>
+	 * Doit retourner true si le contrôle s'effectue favorablement. 
+	 * Par exemple, un contrôle vérifiant qu'un fichier est un texte 
+	 * doit retourner true si c'est le cas.<br/>
 	 * <br/>
+	 * - Met automatiquement le boolean pEnregistrerRapport à false.<br/>
 	 * - N'enregistre pas de rapport sur le disque.<br/>
 	 * <br/>
 	 *
 	 * @param pFile : File : fichier dont on veut savoir 
 	 * si il passe le contrôle.<br/>
-	 * @param pEnregistrerRapport : boolean : 
-	 * true si on veut enregistrer le rapport dans un fichier sur disque.<br/>
 	 * 
 	 * @return : boolean : true si pFile passe le contrôle.<br/>
 	 */
@@ -455,6 +458,9 @@ public interface IControle extends IRapporteurControle
 	 * SERVICE PRINCIPAL.<br/>
 	 * Contrôle d'un fichier.<br/>
 	 * Vérifie qu'un fichier passe un contrôle.<br/>
+	 * Doit retourner true si le contrôle s'effectue favorablement. 
+	 * Par exemple, un contrôle vérifiant qu'un fichier est un texte 
+	 * doit retourner true si c'est le cas.<br/>
 	 * <br/>
 	 *
 	 * @param pFile : File : fichier dont on veut savoir 
@@ -476,6 +482,9 @@ public interface IControle extends IRapporteurControle
 	 * SERVICE PRINCIPAL.<br/>
 	 * Contrôle d'une String.<br/>
 	 * Vérifie qu'une String passe un contrôle.<br/>
+	 * Doit retourner true si le contrôle s'effectue favorablement. 
+	 * Par exemple, un contrôle vérifiant qu'un fichier est un texte 
+	 * doit retourner true si c'est le cas.<br/>
 	 * <br/>
 	 *
 	 * @param pString : String : chaîne de caractères dont on veut savoir 
@@ -489,6 +498,33 @@ public interface IControle extends IRapporteurControle
 			final String pString, final boolean pEnregistrerRapport);
 	
 
+	
+	/**
+	 * method getOrdreControle() :<br/>
+	 * Getter de l' ordre d'exécution du contrôle 
+	 * dans un enchaînement de contrôles.<br/>
+	 * <br/>
+	 *
+	 * @return ordreControle : Integer.<br/>
+	 */
+	Integer getOrdreControle();
+	
+	
+
+	/**
+	 * method setOrdreControle(
+	 * Integer pOrdreControle) :<br/>
+	 * Setter de l' ordre d'exécution du contrôle 
+	 * dans un enchaînement de contrôles.<br/>
+	 * <br/>
+	 *
+	 * @param pOrdreControle : Integer : 
+	 * valeur à passer à ordreControle.<br/>
+	 */
+	void setOrdreControle(
+			final Integer pOrdreControle);
+	
+	
 	
 	/**
 	 * method getDateControle() :<br/>
@@ -658,11 +694,27 @@ public interface IControle extends IRapporteurControle
 	 * method isEstBloquant() :<br/>
 	 * Getter du boolean qui stipule si le contrôle doit pouvoir 
 	 * bloquer le programme.<br/>
+	 * true si le contrôle doit pouvoir bloquer le programme.<br/>
 	 * <br/>
 	 *
 	 * @return estBloquant : boolean.<br/>
 	 */
 	boolean isEstBloquant();
+
+	
+	
+	/**
+	 * method isaEffectuer() :<br/>
+	 * Getter du boolean qui stipule si le contrôle doit être effectué 
+	 * dans un enchaînement de contrôles.<br/>
+	 * Cette valeur doit figurer dans le messagescontroles_fr_FR.properties 
+	 * ou être fournie en dur par les classes concrètes.<br/>
+	 * true si le contrôle doit être effectué.<br/>
+	 * <br/>
+	 *
+	 * @return aEffectuer : boolean.<br/>
+	 */
+	boolean isaEffectuer();
 	
 	
 
