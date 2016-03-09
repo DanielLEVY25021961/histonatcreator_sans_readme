@@ -1,0 +1,2 @@
+TagValue_ordreControle;TagValue_typeControle;TagValue_nomControle;TagValue_critere;TagValue_gravite;TagValue_niveauAnomalie;TagValue_estBloquant;TagValue_aEffectuer;TagValue_descriptionControle;TagValue_exigence;GUID
+1;Contrôle de surface;Contrôle fichier texte;Le fichier ne doit pas comporter de caractères indésirables (impossibles à écrire au clavier);1 - Bloquant;1;true;true;l'application ne doit accepter en entrée que des fichiers de type texte (HIT ou DARWIN). L'application ne doit pas accepter de fichiers .mp3, .wav, .gif, …;;

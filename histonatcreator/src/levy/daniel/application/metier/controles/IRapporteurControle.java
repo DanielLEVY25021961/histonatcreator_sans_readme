@@ -66,8 +66,8 @@ public interface IRapporteurControle {
 
 	/**
 	 * retourne : <br/>
-	 * "id;date du contrôle;utilisateur;Fichier;type de contrôle;
-	 * Contrôle;Critère;Gravité;
+	 * "id;ordre d'execution du contrôle;date du contrôle;utilisateur;Fichier;
+	 * type de contrôle;Contrôle;Critère;Gravité;
 	 * Numéro de Ligne;Message du Contrôle;Ordre du Champ;Position du Champ;
 	 * Valeur du Champ;Action;"<br/>
 	 * <br/>

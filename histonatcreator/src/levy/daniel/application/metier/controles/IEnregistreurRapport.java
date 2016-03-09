@@ -340,6 +340,20 @@ public interface IEnregistreurRapport {
 
 	
 	/**
+	 * method getMessagesEnregistrementsRapports() :<br/>
+	 * agrége les messages de création de rapport de contrôle sur disque 
+	 * et retourne une String pour l'affichage des messages 
+	 * de création/refus de création des rapports de contrôle uniquement 
+	 * (pas de tout this.rapportEnregistrement).<br/>
+	 * <br/>
+	 *
+	 * @return : String : Affichage à la console.<br/>
+	 */
+	String getMessagesEnregistrementsRapports();
+	
+	
+	
+	/**
 	 * method afficherRapportEnregistrementTextuel() :<br/>
 	 * Retourne une String pour afficher à la console au format textuel 
 	 * this.rapportEnregistrement.<br/>

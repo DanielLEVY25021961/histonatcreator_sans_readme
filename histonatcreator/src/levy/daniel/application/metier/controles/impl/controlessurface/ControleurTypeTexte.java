@@ -239,6 +239,7 @@ public class ControleurTypeTexte extends AbstractControle {
 	 * method CONSTRUCTEUR ControleurTypeTexte() :<br/>
 	 * CONSTRUCTEUR D'ARITE NULLE.<br/>
 	 * <br/>
+	 * - Met automatiquement 1 dans this.ordreControle.<br/>
 	 * - Met automatiquement dateControle à date système.<br/>
 	 * - Met automatiquement userName à "Administrateur".<br/>
 	 * - Met automatiquement fichier à null.<br/>
@@ -254,11 +255,13 @@ public class ControleurTypeTexte extends AbstractControle {
 	 * - Remplit le nom du critère nomCritere fourni par 
 	 * this.fournirNomCritere() dans la classe concrète.<br/>
 	 * - Remplit gravite (ce qui remplit également niveauAnomalie).<br/>
+	 * - Va chercher dans messagescontroles_fr_FR.properties 
+	 * si le contrôle doit être effectué et remplit this.aEffectuer.<br/>
 	 * <br/>
 	 */
 	public ControleurTypeTexte() {
 		
-		this(null, null, null);
+		this(1, null, null, null);
 		
 	} // Fin de CONSTRUCTEUR D'ARITE NULLE.________________________________
 	
@@ -269,6 +272,7 @@ public class ControleurTypeTexte extends AbstractControle {
 	 * File pFichier) :<br/>
 	 * Constructeur avec fichier.<br/>
 	 * <br/>
+	 * - Met automatiquement 1 dans this.ordreControle.<br/>
 	 * - Met automatiquement dateControle à date système.<br/>
 	 * - Met automatiquement userName à "Administrateur".<br/>
 	 * <br/>
@@ -283,6 +287,8 @@ public class ControleurTypeTexte extends AbstractControle {
 	 * - Remplit le nom du critère nomCritere fourni par 
 	 * this.fournirNomCritere() dans la classe concrète.<br/>
 	 * - Remplit gravite (ce qui remplit également niveauAnomalie).<br/>
+	 * - Va chercher dans messagescontroles_fr_FR.properties 
+	 * si le contrôle doit être effectué et remplit this.aEffectuer.<br/>
 	 * <br/>
 	 *
 	 * @param pFichier : File : fichier sur lequel s'applique le contrôle.<br/>
@@ -290,7 +296,7 @@ public class ControleurTypeTexte extends AbstractControle {
 	public ControleurTypeTexte(
 			final File pFichier) {
 		
-		this(null, null, pFichier);
+		this(1, null, null, pFichier);
 		
 	} // Fin de ControleurTypeTexte(
 	 // File pFichier).____________________________________________________
@@ -303,6 +309,7 @@ public class ControleurTypeTexte extends AbstractControle {
 	 * , File pFichier) :<br/>
 	 * Constructeur avec user et fichier.<br/>
 	 * <br/>
+	 * - Met automatiquement 1 dans this.ordreControle.<br/>
 	 * - Met automatiquement dateControle à date système.<br/>
 	 * <br/>
 	 * - Remplit le nom de la classe concrète this.nomClasseConcrete 
@@ -318,6 +325,8 @@ public class ControleurTypeTexte extends AbstractControle {
 	 * - Remplit le nom du critère nomCritere fourni par 
 	 * this.fournirNomCritere() dans la classe concrète.<br/>
 	 * - Remplit gravite (ce qui remplit également niveauAnomalie).<br/>
+	 * - Va chercher dans messagescontroles_fr_FR.properties 
+	 * si le contrôle doit être effectué et remplit this.aEffectuer.<br/>
 	 * <br/>
 	 *
 	 * @param pUserName : String : nom de l'utilisateur 
@@ -328,7 +337,7 @@ public class ControleurTypeTexte extends AbstractControle {
 			final String pUserName
 					, final File pFichier) {
 		
-		this(null, pUserName, pFichier);
+		this(1, null, pUserName, pFichier);
 		
 	} // Fin de ControleurTypeTexte(
 	 // String pUserName
@@ -340,34 +349,44 @@ public class ControleurTypeTexte extends AbstractControle {
 	 * method CONSTRUCTEUR ControleurTypeTexte(COMPLET) :<br/>
 	 * CONSTRUCTEUR COMPLET.<br/>
 	 * <br/>
-	 * - Remplit le nom de la classe concrète this.nomClasseConcrete fourni 
-	 * par this.fournirNomClasseConcrete() dans la classe concrète.<br/>
-	 * - Remplit dateControle avec pDateControle si pDateControle != null 
-	 * ou la date système sinon.<br/>
-	 * - calcule automatiquement dateControleStringFormattee.<br/>
-	 * - remplit userName avec pUserName si pUserName != null 
-	 * ou 'Administrateur' sinon.<br/>
-	 * - calcule automatiquement nomFichier.<br/>
-	 * - Remplit le type du contrôle typeControle fourni par 
-	 * this.fournirTypeControle() dans la classe concrète.<br/>
-	 * - Remplit le nom du contrôle nomControle fourni par 
-	 * this.fournirNomControle() dans la classe concrète.<br/>
-	 * - Remplit le nom du critère nomCritere fourni par 
-	 * this.fournirNomCritere() dans la classe concrète.<br/>
-	 * - Remplit gravite (ce qui remplit également niveauAnomalie).<br/>
+	 * <ul>
+	 * <li>initialise éventuellement le bundleControles qui encapsule 
+	 * messagescontroles_fr_FR.properties.</li><br/>
+	 * <li>Remplit le nom de la classe concrète this.nomClasseConcrete fourni 
+	 * par this.fournirNomClasseConcrete() dans la classe concrète.</li><br/>
+	 * <li>passe pOrdreControle à this.ordreControle.</li><br/>
+	 * <li>Remplit dateControle avec pDateControle si pDateControle != null 
+	 * ou la date système sinon.</li><br/>
+	 * <li>calcule automatiquement dateControleStringFormattee.</li><br/>
+	 * <li>remplit userName avec pUserName si pUserName != null 
+	 * ou 'Administrateur' sinon.</li><br/>
+	 * <li>calcule automatiquement nomFichier.</li><br/>
+	 * <li>Remplit le type du contrôle typeControle fourni par 
+	 * this.fournirTypeControle() dans la classe concrète.</li><br/>
+	 * <li>Remplit le nom du contrôle nomControle fourni par 
+	 * this.fournirNomControle() dans la classe concrète.</li><br/>
+	 * <li>Remplit le nom du critère nomCritere fourni par 
+	 * this.fournirNomCritere() dans la classe concrète.</li><br/>
+	 * <li>Remplit gravite (ce qui remplit également niveauAnomalie 
+	 * et estBloquant).</li><br/>
+	 * <li>Va chercher dans messagescontroles_fr_FR.properties 
+	 * si le contrôle doit être effectué et remplit this.aEffectuer.</li><br/>
+	 * <ul>
 	 * <br/>
 	 *
+	 * @param pOrdreControle : Integer : ordre d'exécution du contrôle
 	 * @param pDateControle : Date : java.util.Date du contrôle.<br/>
 	 * @param pUserName : String : nom de l'utilisateur 
 	 * qui a déclenché le contrôle.<br/> 
 	 * @param pFichier : File : fichier sur lequel s'applique le contrôle.<br/>
 	 */
 	public ControleurTypeTexte(
-			final Date pDateControle
+			final Integer pOrdreControle
+			, final Date pDateControle
 				, final String pUserName
 					, final File pFichier) {
 		
-		super(pDateControle, pUserName, pFichier);
+		super(pOrdreControle, pDateControle, pUserName, pFichier);
 		
 	} // Fin de CONSTRUCTEUR COMPLET.______________________________________
 	
@@ -479,6 +498,7 @@ public class ControleurTypeTexte extends AbstractControle {
 						, null
 						, SANS_OBJET
 						, SANS_OBJET
+						, false
 						, ACTION_FICHIER_REFUSE);
 			
 			this.ajouterLigneRapport(ligneRapport);
@@ -516,6 +536,7 @@ public class ControleurTypeTexte extends AbstractControle {
 						, null
 						, SANS_OBJET
 						, SANS_OBJET
+						, false
 						, ACTION_FICHIER_REFUSE);
 						
 			this.ajouterLigneRapport(ligneRapport);
@@ -553,6 +574,7 @@ public class ControleurTypeTexte extends AbstractControle {
 						, null
 						, SANS_OBJET
 						, SANS_OBJET
+						, false
 						, ACTION_FICHIER_REFUSE);
 						
 			this.ajouterLigneRapport(ligneRapport);
@@ -645,6 +667,7 @@ public class ControleurTypeTexte extends AbstractControle {
 								, position
 								, String.valueOf(position)
 								, String.valueOf(character)
+								, false
 								, ACTION_FICHIER_REFUSE);
 								
 					this.ajouterLigneRapport(ligneRapport);
@@ -684,6 +707,7 @@ public class ControleurTypeTexte extends AbstractControle {
 						, null
 						, SANS_OBJET
 						, SANS_OBJET
+						, true
 						, ACTION_FICHIER_ACCEPTE);
 						
 			this.ajouterLigneRapport(ligneRapport);
@@ -884,6 +908,28 @@ public class ControleurTypeTexte extends AbstractControle {
 	protected final String fournirBaseNomRapport() {
 		return "RAPPORT-CONTROLE-FICHIER-TEXTE";
 	} // Fin de fournirBaseNomRapport().___________________________________
+
+
+
+	/**
+	 * "ControleurTypeTexte.aEffectuer".<br/>
+	 * <br/>
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected String fournirCleAEffectuer() {
+		return "ControleurTypeTexte.aEffectuer";
+	} // Fin de fournirCleAEffectuer().____________________________________
+
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected boolean fournirAEffectuerEnDur() {
+		return true;
+	} // Fin de fournirAEffectuerEnDur().__________________________________
 	
 	
 	
