@@ -103,6 +103,8 @@ import org.apache.commons.logging.LogFactory;
  * levy.daniel.application.metier.controles.AbstractControle.<br/>
  * <br/>
  *
+ * - Identifiant Enterprise Architect : CONTROLE_SURFACE_01.<br/>
+ * <br/>
  *
  * @author dan Lévy
  * @version 1.0
