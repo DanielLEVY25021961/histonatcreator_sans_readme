@@ -613,6 +613,7 @@ public abstract class AbstractEnregistreurFichiers implements
 			 * pString si nécessaire.
 			 */
 			bufferedWriter.write(substituerSautLigne(pString, sautLigne));
+			bufferedWriter.flush();
 			
 			/* rapport. */
 			final LigneRapportEnregistrement ligne 

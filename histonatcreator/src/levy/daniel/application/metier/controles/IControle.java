@@ -376,42 +376,11 @@ public interface IControle extends IRapporteurControle
 	
 	
 	/**
-	 * METHODE_LIREFICHIER : String :<br/>
-	 * "Méthode lireFichier(File pFile, Charset pCharset)".<br/>
+	 * MESSAGE_EXCEPTION : String :<br/>
+	 * "Exception GRAVE : ".<br/>
 	 */
-	String METHODE_LIREFICHIER 
-		= "Méthode lireFichier(File pFile, Charset pCharset)";
-
+	String MESSAGE_EXCEPTION = "Exception GRAVE : ";
 	
-	/**
-	 * MESSAGE_FICHIER_NULL : String :<br/>
-	 * Message retourné par la méthode lireFichier(File pFile) 
-	 * si le fichier est null.<br/>
-	 * "Le fichier passé en paramètre est null".<br/>
-	 */
-	String MESSAGE_FICHIER_NULL 
-		= "Le fichier passé en paramètre est null";
-
-	
-	/**
-	 * MESSAGE_FICHIER_INEXISTANT : String :<br/>
-	 * Message retourné par la méthode lireFichier(File pFile) 
-	 * si le fichier est inexistant.<br/>
-	 * "Le fichier passé en paramètre est inexistant : "
-	 */
-	String MESSAGE_FICHIER_INEXISTANT 
-		= "Le fichier passé en paramètre est inexistant : ";
-
-	
-	/**
-	 * MESSAGE_FICHIER_REPERTOIRE : String :<br/>
-	 * Message retourné par la méthode lireFichier(File pFile) 
-	 * si le fichier est un répertoire.<br/>
-	 * "Le fichier passé en paramètre est un répertoire : ".<br/>
-	 */
-	String MESSAGE_FICHIER_REPERTOIRE 
-		= "Le fichier passé en paramètre est un répertoire : ";
-
 
 	/**
 	 * ACTION_FICHIER_REFUSE : String :<br/>
@@ -457,10 +426,23 @@ public interface IControle extends IRapporteurControle
 	 * , boolean pEnregistrerRapport) :<br/>
 	 * SERVICE PRINCIPAL.<br/>
 	 * Contrôle d'un fichier.<br/>
-	 * Vérifie qu'un fichier passe un contrôle.<br/>
-	 * Doit retourner true si le contrôle s'effectue favorablement. 
+	 * - Enregistre le rapport de contrôle sur disque 
+	 * si pEnregistrerRapport == true.<br/>
+	 * <ul>
+	 * <li>Vérifie qu'un fichier passe un contrôle.</li><br/>
+	 * <li>Doit retourner true si le contrôle s'effectue favorablement. 
 	 * Par exemple, un contrôle vérifiant qu'un fichier est un texte 
-	 * doit retourner true si c'est le cas.<br/>
+	 * doit retourner true si c'est le cas.</li><br/>
+	 * </ul>
+	 * <br/>
+	 * - retourne false, LOG de niveau INFO et rapport 
+	 * si pFile == null.<br/>
+	 * - retourne false, LOG de niveau INFO et rapport 
+	 * si pFile est inexistant.<br/>
+	 * - retourne false, LOG de niveau INFO et rapport 
+	 * si pFile est un répertoire.<br/>
+	 * - retourne false, LOG de niveau INFO et rapport 
+	 * si pFile est vide.<br/>
 	 * <br/>
 	 *
 	 * @param pFile : File : fichier dont on veut savoir 
