@@ -6,35 +6,42 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import levy.daniel.application.metier.controles.AbstractControle;
 import levy.daniel.application.metier.controles.CaractereDan;
 import levy.daniel.application.metier.controles.rapportscontroles.LigneRapport;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
- * class ControleurTypeTexte :<br/>
- * Classe chargée de DETECTER SI UN FICHIER PEUT ETRE UN FICHIER TEXTE 
- * (donc pas un .wav, .mp3, ...).<br/>
+ * class ControleurEncodage :<br/>
+ * Classe chargée de détecter si un fichier texte est encodé 
+ * avec this.charset.<br/>
  * Contrôle dans sa méthode controler(File pFile) 
- * si le fichier pFile est de type texte 
+ * si le fichier pFile est encodé avec this.charset 
  * et retourne true si c'est le cas.<br/>
- * Utilise pour cela le critère : 'le fichier ne doit pas comporter de 
- * caractères indésirables' (aucun caractère du fichier ne 
- * doit être contenu dans CARACTERES_INDESIRABLES_SET).<br/> 
+ * Utilise pour celà le critère ' ' ( ).<br/> 
  * <br/>
- * - retourne false et rapporte défavorablement si CARACTERES_INDESIRABLES_SET 
- * contient un des caractères de pFile.<br/>
+ * - retourne false et rapporte si .<br/>
  * - retourne true et génère un rapport favorable si pFile 
- * ne contient pas de caractères indésirables.<br/>
+ * a été encodé avec this.charset.<br/>
  * - Peut écrire le rapport de contrôle sous forme textuelle 
  * et csv sur disque.<br/> 
+ * <br/>
+ * - typeControle = Contrôle de surface.<br/>
+ * - nomControle = Contrôle d'encodage du fichier.<br/>
+ * - critere =  .<br/>
+ * - gravite = '1 - Bloquant'.<br/>
+ * - niveauAnomalie = "1".<br/>
+ * - estBloquant = true.<br/>
+ * <br/>
  * <br/>
  * Attributs hérités de AbstractControle : <br/>
  * [nomClasseConcrete;ordreControle;dateControle
@@ -42,93 +49,43 @@ import org.apache.commons.logging.LogFactory;
  * fichier;nomFichier;typeControle;nomControle;nomCritere;gravite;
  * niveauAnomalie;estBloquant;aEffectuer;rapport;rapportEnregistrement;].<br/>
  * <br/>
- * <ul>
- * <li>nomClasseConcrete = "Classe ControleurTypeTexte".</li><br/>
- * <li>ordreControle = 1.</li><br/>
- * <li>dateControle = this.date.</li><br/>
- * <li>dateControleStringFormatee = this.dateControleStringFormattee.</li><br/>
- * <li>typeControle = Contrôle de surface.</li><br/>
- * <li>nomControle = Contrôle fichier texte.</li><br/>
- * <li>critere = Le fichier ne doit pas comporter de caractères indésirables 
- * (impossibles à écrire au clavier).</li><br/>
- * <li>gravite = '1 - Bloquant'.</li><br/>
- * <li>niveauAnomalie = "1".</li><br/>
- * <li>estBloquant = true.</li><br/>
- * </ul>
+ * Attributs de la classe :<br/>
+ * charset<br/>
  * <br/>
- * 
  *
  * - Exemple d'utilisation :<br/>
- * <code>
- *  // Instanciation d'un ControleurTypeTexte.<br/>
- *  final ControleurTypeTexte control = new ControleurTypeTexte();<br/>
- *  // Invocation de la méthode controler(...) en demandant 
- *  l'écriture des rapports textuels et csv sur disque.<br/>
- *  final boolean resultat = control.controler(FILE_CHARETTE_ANSI, true);<br/>
- *  // resultat = true FILE_CHARETTE_ANSI est un fichier textuel.<br/>
- *  control.afficherRapportTextuel() // Pour voir le 
- *  rapport de contrôle sous forme textuelles.<br/>
- *  control.afficherRapportCsvAvecEntete() // Pour voir le 
- *  rapport de contrôle sous forme csv.<br/>
- *  // id;date du contrôle;utilisateur;Fichier;type de contrôle;Contrôle;
- *  Critère du Contrôle;Gravité du Contrôle;Numéro de Ligne;
- *  Message du Contrôle;Ordre du Champ;Position du Champ;
- *  Valeur du Champ;Action;<br/>
- *  // null;2016-03-06_19-08-55-259;Administrateur;
- *  chaàâreéèêëtte_ANSI.txt;Contrôle de surface;Contrôle fichier texte;
- *  Le fichier ne doit pas comporter de caractères indésirables 
- *  (impossibles à écrire au clavier);1 - anomalie bloquante;
- *  null;Le fichier 'chaàâreéèêëtte_ANSI.txt' est bien un fichier texte;
- *  null;sans objet;sans objet;OK - Fichier accepté;<br/> 
- *  control.afficherRapportEnregistrementTextuel() // Pour voir le compte-rendu 
- *  de l'enregistrement du rapport de contrôle sous forme textuelle.<br/>
- *  control.afficherRapportEnregistrementCsv() // Pour voir le compte-rendu 
- *  de l'enregistrement du rapport de contrôle sous forme csv.<br/>
- * </code>
  *<br/>
  * 
- * 
  * - Mots-clé :<br/>
- * rapport, FileInputStream, rafraîchir le rapport, rafraichir le rapport<br/>
- * InputStreamReader, lecture caractère par caractère,<br/>
- * BufferedReader, <br/>
- * Conversion entier en caractère, cast entier en caractère, <br/>
- * boucle while (true),<br/> 
  * <br/>
  *
  * - Dépendances :<br/>
- * levy.daniel.application.ILecteurDecodeurFile.<br/>
- * levy.daniel.application.IListeurDeCaracteresUnicode.<br/>
- * levy.daniel.application.IExportateurCsv.<br/>
- * levy.daniel.application.IExportateurJTable.<br/>
- * levy.daniel.application.IResetable.<br/>
- * levy.daniel.application.metier.controles.rapportscontroles.LigneRapport.<br/>
- * levy.daniel.application.metier.service.enregistreursfichiers.rapportsenregistrements.LigneRapportEnregistrement.<br/>
- * levy.daniel.application.metier.controles.IEnregistreurRapport.<br/>
- * levy.daniel.application.metier.controles.IRapporteurControle.<br/>
- * levy.daniel.application.metier.controles.IControle.<br/>
- * levy.daniel.application.metier.controles.CaractereDan.<br/>
- * levy.daniel.application.metier.controles.AbstractControle.<br/>
  * <br/>
  *
- * - Identifiant Enterprise Architect : CONTROLE_SURFACE_01.<br/>
- * <br/>
  *
  * @author dan Lévy
  * @version 1.0
- * @since 27 févr. 2016
+ * @since 11 mars 2016
  *
  */
-public class ControleurTypeTexte extends AbstractControle {
+public class ControleurEncodage extends AbstractControle {
 
 	// ************************ATTRIBUTS************************************/
 	
 	/**
-	 * CLASSE_CONTROLEURTYPETEXTE : String :<br/>
-	 * "Classe ControleurTypeTexte".<br/>
+	 * CLASSE_CONTROLEURENCODAGE : String :<br/>
+	 * "Classe ControleurEncodage".<br/>
 	 */
-	public static final String CLASSE_CONTROLEURTYPETEXTE 
-		= "Classe ControleurTypeTexte";
+	public static final String CLASSE_CONTROLEURENCODAGE 
+		= "Classe ControleurEncodage";
+	
+	
+	/**
+	 * charset : Charset :<br/>
+	 * Charset à tester sur le fichier 
+	 * pour savoir si il a été encodé avec ce Charset.<br/>
+	 */
+	private Charset charset;
 	
 	
 	/**
@@ -177,7 +134,9 @@ public class ControleurTypeTexte extends AbstractControle {
 		/* LATIN CAPITAL LETTER O WITH CIRCUMFLEX 'Ô' */
 		CARACTERES_INDESIRABLES_SET.add('\u00d4');
 		/* LATIN CAPITAL LETTER THORN 'Þ' */
-		CARACTERES_INDESIRABLES_SET.add('\u00de');		
+		CARACTERES_INDESIRABLES_SET.add('\u00de');
+		/* LATIN CAPITAL LETTER U WITH CIRCUMFLEX 'Û' */
+		CARACTERES_INDESIRABLES_SET.add('\u00db');
 		/* LATIN CAPITAL LETTER U WITH GRAVE 'Ù' */
 		CARACTERES_INDESIRABLES_SET.add('\u00d9');
 		/* LATIN CAPITAL LETTER C WITH CEDILLA 'Ç' */
@@ -223,7 +182,27 @@ public class ControleurTypeTexte extends AbstractControle {
 		CARACTERES_INDESIRABLES_SET.add('\u0007');
 		/* CANCEL '' */
 		CARACTERES_INDESIRABLES_SET.add('\u0018');
-				
+		
+		/* REPLACEMENT CHARACTER '�' */
+		CARACTERES_INDESIRABLES_SET.add('\ufffd');
+		/* LATIN CAPITAL LETTER A WITH TILDE 'Ã' */
+		CARACTERES_INDESIRABLES_SET.add('\u00c3');
+		/* COPYRIGHT SIGN '©' */
+		CARACTERES_INDESIRABLES_SET.add('\u00a9');
+		/* DIAERESIS '¨' */
+		CARACTERES_INDESIRABLES_SET.add('\u00a8');
+		/* CHARACTER TABULATION WITH JUSTIFICATION ' ' */
+		CARACTERES_INDESIRABLES_SET.add('\u0089');
+		/* LINE TABULATION SET ' ' */
+		CARACTERES_INDESIRABLES_SET.add('\u008a');
+		/* PER MILLE SIGN '‰' */
+		CARACTERES_INDESIRABLES_SET.add('\u2030');
+		/* LATIN CAPITAL LETTER S WITH CARON 'Š' */
+		CARACTERES_INDESIRABLES_SET.add('\u0160');
+		/* SINGLE LOW-9 QUOTATION MARK '‚' */
+		CARACTERES_INDESIRABLES_SET.add('\u201a');
+		/* BREAK PERMITTED HERE ' ' */
+		CARACTERES_INDESIRABLES_SET.add('\u0082');
 	}
 	
 
@@ -232,56 +211,73 @@ public class ControleurTypeTexte extends AbstractControle {
 	 * Logger pour Log4j (utilisant commons-logging).
 	 */
 	@SuppressWarnings("unused")
-	private static final Log LOG = LogFactory.getLog(ControleurTypeTexte.class);
+	private static final Log LOG = LogFactory.getLog(ControleurEncodage.class);
 
+	
+	
 	// *************************METHODES************************************/
 	
 	
+	
 	 /**
-	 * method CONSTRUCTEUR ControleurTypeTexte() :<br/>
+	 * method CONSTRUCTEUR ControleurEncodage() :<br/>
 	 * CONSTRUCTEUR D'ARITE NULLE.<br/>
 	 * <br/>
-	 * - Met automatiquement 1 dans this.ordreControle.<br/>
+	 * - Met automatiquement 3 dans this.ordreControle.<br/>
 	 * - Met automatiquement dateControle à date système.<br/>
 	 * - Met automatiquement userName à "Administrateur".<br/>
-	 * - Met automatiquement fichier à null.<br/>
+	 * - Met automatiquement this.file à null.<br/>
+	 * - Met automatiquement this.charset à CHARSET_UTF8.<br/>
 	 * <br/>
-	 * - Remplit le nom de la classe concrète this.nomClasseConcrete fourni 
-	 * par this.fournirNomClasseConcrete() dans la classe concrète.<br/>
-	 * - calcule automatiquement dateControleStringFormattee.<br/>
-	 * - calcule automatiquement nomFichier.<br/>
-	 * - Remplit le type du contrôle typeControle fourni par 
-	 * this.fournirTypeControle() dans la classe concrète.<br/>
-	 * - Remplit le nom du contrôle nomControle fourni par 
-	 * this.fournirNomControle() dans la classe concrète.<br/>
-	 * - Remplit le nom du critère nomCritere fourni par 
-	 * this.fournirNomCritere() dans la classe concrète.<br/>
-	 * - Remplit gravite (ce qui remplit également niveauAnomalie).<br/>
-	 * - Va chercher dans messagescontroles_fr_FR.properties 
-	 * si le contrôle doit être effectué et remplit this.aEffectuer.<br/>
+	 * <ul>
+	 * <li>initialise éventuellement le bundleControles qui encapsule 
+	 * messagescontroles_fr_FR.properties.</li><br/>
+	 * <li>Remplit le nom de la classe concrète this.nomClasseConcrete 
+	 * fourni par this.fournirNomClasseConcrete() dans la classe concrète.</li><br/>
+	 * <li>calcule automatiquement dateControleStringFormattee.</li><br/>
+	 * <li>remplit userName avec pUserName si pUserName != null 
+	 * ou 'Administrateur' sinon.</li><br/>
+	 * <li>passe null à this.fichier.</li><br/>
+	 * <li>calcule automatiquement nomFichier.</li><br/>
+	 * <li>Remplit le type du contrôle typeControle fourni par 
+	 * this.fournirTypeControle() dans la classe concrète.</li><br/>
+	 * <li>Remplit le nom du contrôle nomControle fourni par 
+	 * this.fournirNomControle() dans la classe concrète.</li><br/>
+	 * <li>Remplit le nom du critère nomCritere fourni par 
+	 * this.fournirNomCritere() dans la classe concrète.</li><br/>
+	 * <li>Remplit gravite (ce qui remplit également niveauAnomalie).</li><br/>
+	 * <li>Va chercher dans messagescontroles_fr_FR.properties 
+	 * si le contrôle doit être effectué et remplit this.aEffectuer.</li><br/>
+	 * <li>passe CHARSET_UTF8 à this.charset.</li><br/>
+	 * </ul>
 	 * <br/>
 	 */
-	public ControleurTypeTexte() {
+	public ControleurEncodage() {
 		
-		this(1, null, null, null);
+		this(3, null, null, null, null);
 		
 	} // Fin de CONSTRUCTEUR D'ARITE NULLE.________________________________
-	
 
 	
-	/**
-	 * method CONSTRUCTEUR ControleurTypeTexte(
-	 * File pFichier) :<br/>
-	 * Constructeur avec fichier.<br/>
+	
+	 /**
+	 * method CONSTRUCTEUR ControleurEncodage(
+	 * File pFichier
+	 * , Charset pCharset) :<br/>
+	 * Constructeur avec fichier et charset.<br/>
 	 * <br/>
-	 * - Met automatiquement 1 dans this.ordreControle.<br/>
+	 * - Met automatiquement 3 dans this.ordreControle.<br/>
 	 * - Met automatiquement dateControle à date système.<br/>
 	 * - Met automatiquement userName à "Administrateur".<br/>
 	 * <br/>
 	 * <ul>
+	 * <li>initialise éventuellement le bundleControles qui encapsule 
+	 * messagescontroles_fr_FR.properties.</li><br/>
 	 * <li>Remplit le nom de la classe concrète this.nomClasseConcrete 
 	 * fourni par this.fournirNomClasseConcrete() dans la classe concrète.</li><br/>
 	 * <li>calcule automatiquement dateControleStringFormattee.</li><br/>
+	 * <li>remplit userName avec pUserName si pUserName != null 
+	 * ou 'Administrateur' sinon.</li><br/>
 	 * <li>passe pFichier à this.fichier.</li><br/>
 	 * <li>calcule automatiquement nomFichier.</li><br/>
 	 * <li>Remplit le type du contrôle typeControle fourni par 
@@ -293,28 +289,35 @@ public class ControleurTypeTexte extends AbstractControle {
 	 * <li>Remplit gravite (ce qui remplit également niveauAnomalie).</li><br/>
 	 * <li>Va chercher dans messagescontroles_fr_FR.properties 
 	 * si le contrôle doit être effectué et remplit this.aEffectuer.</li><br/>
+	 * <li>passe pCharset à this.charset si pCharset n'est pas null. 
+	 * CHARSET_UTF8 sinon.</li><br/>
 	 * </ul>
 	 * <br/>
 	 *
 	 * @param pFichier : File : fichier sur lequel s'applique le contrôle.<br/>
+	 * @param pCharset : Charset : Charset à tester sur le fichier 
+	 * pour savoir si il a été encodé avec ce Charset.<br/>
 	 */
-	public ControleurTypeTexte(
-			final File pFichier) {
-		
-		this(1, null, null, pFichier);
-		
-	} // Fin de ControleurTypeTexte(
-	 // File pFichier).____________________________________________________
-
+	public ControleurEncodage(
+				final File pFichier
+					, final Charset pCharset) {
+	
+		this(3, null, null, pFichier, pCharset);
+	
+	} // Fin de ControleurEncodage(
+	 // File pFichier
+	 // , Charset pCharset)._______________________________________________
+	
 	
 	
 	 /**
-	 * method CONSTRUCTEUR ControleurTypeTexte(
+	 * method CONSTRUCTEUR ControleurEncodage(
 	 * String pUserName
-	 * , File pFichier) :<br/>
-	 * Constructeur avec user et fichier.<br/>
+	 * , File pFichier
+	 * , Charset pCharset) :<br/>
+	 * Constructeur avec user, fichier et charset.<br/>
 	 * <br/>
-	 * - Met automatiquement 1 dans this.ordreControle.<br/>
+	 * - Met automatiquement 3 dans this.ordreControle.<br/>
 	 * - Met automatiquement dateControle à date système.<br/>
 	 * <br/>
 	 * <ul>
@@ -336,27 +339,33 @@ public class ControleurTypeTexte extends AbstractControle {
 	 * <li>Remplit gravite (ce qui remplit également niveauAnomalie).</li><br/>
 	 * <li>Va chercher dans messagescontroles_fr_FR.properties 
 	 * si le contrôle doit être effectué et remplit this.aEffectuer.</li><br/>
+	 * <li>passe pCharset à this.charset si pCharset n'est pas null. 
+	 * CHARSET_UTF8 sinon.</li><br/>
 	 * </ul>
 	 * <br/>
 	 *
 	 * @param pUserName : String : nom de l'utilisateur 
 	 * qui a déclenché le contrôle.<br/> 
 	 * @param pFichier : File : fichier sur lequel s'applique le contrôle.<br/>
+	 * @param pCharset : Charset : Charset à tester sur le fichier 
+	 * pour savoir si il a été encodé avec ce Charset.<br/>
 	 */
-	public ControleurTypeTexte(
-			final String pUserName
-					, final File pFichier) {
+	public ControleurEncodage(
+				final String pUserName
+					, final File pFichier
+						, final Charset pCharset) {
 		
-		this(1, null, pUserName, pFichier);
+		this(3, null, pUserName, pFichier, pCharset);
 		
-	} // Fin de ControleurTypeTexte(
+	} // Fin de ControleurEncodage(
 	 // String pUserName
-	 // , File pFichier).__________________________________________________
+	 // , File pFichier
+	 // , Charset pCharset)._______________________________________________
 	
 	
-
-	/**
-	 * method CONSTRUCTEUR ControleurTypeTexte(COMPLET) :<br/>
+	
+	 /**
+	 * method CONSTRUCTEUR ControleurEncodage() :<br/>
 	 * CONSTRUCTEUR COMPLET.<br/>
 	 * <br/>
 	 * <ul>
@@ -382,6 +391,8 @@ public class ControleurTypeTexte extends AbstractControle {
 	 * et estBloquant).</li><br/>
 	 * <li>Va chercher dans messagescontroles_fr_FR.properties 
 	 * si le contrôle doit être effectué et remplit this.aEffectuer.</li><br/>
+	 * <li>passe pCharset à this.charset si pCharset n'est pas null. 
+	 * CHARSET_UTF8 sinon.</li><br/>
 	 * </ul>
 	 * <br/>
 	 *
@@ -390,53 +401,54 @@ public class ControleurTypeTexte extends AbstractControle {
 	 * @param pUserName : String : nom de l'utilisateur 
 	 * qui a déclenché le contrôle.<br/> 
 	 * @param pFichier : File : fichier sur lequel s'applique le contrôle.<br/>
+	 * @param pCharset : Charset : Charset à tester sur le fichier 
+	 * pour savoir si il a été encodé avec ce Charset.<br/>
 	 */
-	public ControleurTypeTexte(
+	public ControleurEncodage(
 			final Integer pOrdreControle
 			, final Date pDateControle
 				, final String pUserName
-					, final File pFichier) {
+					, final File pFichier
+						, final Charset pCharset) {
 		
 		super(pOrdreControle, pDateControle, pUserName, pFichier);
+		
+		/* passe pCharset à this.charset si pCharset n'est pas null. 
+		 * CHARSET_UTF8 sinon. */
+		this.charset = this.fournirCharset(pCharset);
 		
 	} // Fin de CONSTRUCTEUR COMPLET.______________________________________
 	
 
 	
 	/**
-	 * method controler(
-	 * File pFile) :<br/>
-	 * Contrôle si le fichier pFile est de type texte 
-	 * et retourne true si c'est le cas.<br/>
-	 * Utilise pour celà le critère 'le fichier ne doit pas comporter de 
-	 * caractères indésirables' (aucun caractère du fichier ne 
-	 * doit être contenu dans CARACTERES_INDESIRABLES_SET).<br/>
-	 * Lit le fichier caractère par caractère en UTF-8 en utilisant 
-	 * un BufferedReader(InputStreamReader(fileInputStream, CHARSET_UTF8)) 
-	 * et détecte les caractères indésirables.<br/> 
-	 * <br/>
-	 * - N'enregistre pas de rapport sur le disque.<br/>
-	 * <br/>
-	 * - retourne false et rapporte si CARACTERES_INDESIRABLES_SET 
-	 * contient un des caractères de pFile.<br/>
-	 * - retourne true et ne remplit pas de rapport si pFile 
-	 * ne contient pas de caractères indésirables. 
-	 * Le rapport est alors vide (pas null).<br/>
-	 * <br/>
-	 * - passe pFile à this.fichier et 
-	 * rafraîchit automatiquement this.nomFichier.<br/>
-	 * - rafraîchit le rapport (en instancie un nouveau 
-	 * à chaque appel de la méthode controler(File pFile)).<br/>
-	 * <br/>
-	 * - retourne false, LOG de niveau INFO et rapport si pFile == null.<br/>
-	 * - retourne false, LOG de niveau INFO et rapport si pFile 
-	 * est inexistant.<br/>
-	 * - retourne false, LOG de niveau INFO et rapport si pFile 
-	 * est un répertoire.<br/>
+	 * method fournirCharset(
+	 * Charset pCharset) :<br/>
+	 * - retourne pCharset si pCharset n'est pas null.<br/>
+	 * - retourne CHARSET_UTF8 si pCharset est null.<br/>
 	 * <br/>
 	 *
-	 * @param pFile : File : fichier dont on veut savoir 
-	 * si il est un fichier texte.<br/>
+	 * @param pCharset : Charset.<br/>
+	 * 
+	 * @return : Charset : pCharset ou CHARSET_UTF8.<br/>
+	 */
+	private Charset fournirCharset(
+			final Charset pCharset) {
+
+		/* retourne CHARSET_UTF8 si pCharset est null. */
+		if (pCharset == null) {
+			return CHARSET_UTF8;
+		}
+
+		return pCharset;
+
+	} // Fin de fournirCharset(
+	 // Charset pCharset)._________________________________________________
+	
+	
+	
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public final boolean controler(
@@ -448,58 +460,16 @@ public class ControleurTypeTexte extends AbstractControle {
 	 // File pFile)._______________________________________________________
 	
 	
-	
+
 	/**
-	 * method controler(
-	 * File pFile
-	 * , boolean pEnregistrerRapport) :<br/>
-	 * Contrôle si le fichier pFile est de type texte 
-	 * et retourne true si c'est le cas.<br/>
-	 * <ul>
-	 * <li>Utilise pour celà le critère 'le fichier ne doit pas comporter de 
-	 * caractères indésirables' (aucun caractère du fichier ne 
-	 * doit être contenu dans CARACTERES_INDESIRABLES_SET).</li><br/>
-	 * <li>Lit le fichier caractère par caractère en UTF-8 en utilisant 
-	 * un BufferedReader(InputStreamReader(fileInputStream, CHARSET_UTF8)) 
-	 * et détecte les caractères indésirables.</li><br/>
-	 * <li>Enregistre le rapport de contrôle sur disque 
-	 * si pEnregistrerRapport == true.</li><br/>
-	 * </ul> 
-	 * <br/>
-	 * <ul>
-	 * <li>retourne false et rapporte si CARACTERES_INDESIRABLES_SET 
-	 * contient un des caractères de pFile.</li><br/>
-	 * <li>retourne true et remplit un rapport favorable si pFile 
-	 * ne contient pas de caractères indésirables.</li><br/>
-	 * <br/>
-	 * <li>passe pFile à this.fichier et 
-	 * rafraîchit automatiquement this.nomFichier.</li><br/>
-	 * <li>rafraîchit le rapport (en instancie un nouveau 
-	 * à chaque appel de la méthode controler(File pFile)).</li><br/>
-	 * </ul>
-	 * <br/>
-	 * - retourne false, LOG de niveau INFO et rapport si pFile == null.<br/>
-	 * - retourne false, LOG de niveau INFO et rapport si pFile 
-	 * est inexistant.<br/>
-	 * - retourne false, LOG de niveau INFO et rapport si pFile 
-	 * est un répertoire.<br/>
-	 * - retourne false, LOG de niveau INFO et rapport si pFile 
-	 * est vide.<br/>
-	 * <br/>
-	 *
-	 * @param pFile : File : fichier dont on veut savoir 
-	 * si il est un fichier texte.<br/>
-	 * @param pEnregistrerRapport : boolean : 
-	 * true si on veut enregistrer le rapport dans un fichier sur disque.<br/>
-	 * 
-	 * @return : boolean : true si pFile est un fichier texte.<br/>
+	 * {@inheritDoc}
 	 */
 	@Override
 	public final boolean controler(
 			final File pFile
 				, final boolean pEnregistrerRapport) {
 		
-		// Traitement des mauvais fichiers.
+		// Traitement des mauvais fichiers.************
 		final boolean resultatTraitementMauvaisFichier 
 			= this.traiterMauvaisFile(
 					pFile, pEnregistrerRapport, METHODE_CONTROLER);
@@ -508,8 +478,6 @@ public class ControleurTypeTexte extends AbstractControle {
 		if (!resultatTraitementMauvaisFichier) {
 			return false;
 		}
-		
-
 
 		/* passe pFile à this.fichier et 
 		 * rafraîchit automatiquement this.nomFichier. */
@@ -525,13 +493,14 @@ public class ControleurTypeTexte extends AbstractControle {
 		InputStreamReader inputStreamReader = null;
 		BufferedReader bufferedReader = null;
 
-		int characterEntier = 0;
-		Character character = null;
-		int position = 0;
+		Character caractere = null;
+		int numeroLigne = 0;
+		boolean resultat = true;
+		
 
 		try {
 
-			// LECTURE DU FICHIER CARACTERE PAR CARACTERE **************.
+			// LECTURE DU FICHIER LIGNE PAR LIGNE. *******************.
 			/*
 			 * Instancie un flux en lecture fileInputStream en lui passant
 			 * pFile.
@@ -539,11 +508,11 @@ public class ControleurTypeTexte extends AbstractControle {
 			fileInputStream = new FileInputStream(pFile);
 
 			/*
-			 * Instancie un InputStreamReader en lui passant le FileReader et le
-			 * Charset UTF-8.
+			 * Instancie un InputStreamReader en lui passant le FileReader 
+			 * et this.charset
 			 */
 			inputStreamReader = new InputStreamReader(fileInputStream,
-					CHARSET_UTF8);
+					this.charset);
 
 			/*
 			 * Instancie un tampon de flux de caractères en lecture en lui
@@ -551,83 +520,122 @@ public class ControleurTypeTexte extends AbstractControle {
 			 */
 			bufferedReader = new BufferedReader(inputStreamReader);
 
+			// LECTURE LIGNE PAR LIGNE.*******************************
 			/* Parcours du bufferedReader. */
 			while (true) {
 				
-				position++;
+				/* incrémente le numéro de la ligne lue. */
+				numeroLigne ++;
 				
-				/* Lecture de chaque caractère. */
-				characterEntier = bufferedReader.read();
-
+				/* Lecture ligne par ligne. */
+				final String ligneLue = bufferedReader.readLine();
+				
 				/* Arrêt de la lecture si fin de fichier. */
-				if (characterEntier < 0) {
+				if (ligneLue == null) {
 					break;
 				}
-
-				/* Conversion de l'entier en caractère. */
-				character = (char) characterEntier;
-
-				// TEST DU CRITERE ****************************************
-				/* Teste si le fichier contient un caractère indésirable 
-				 * et retourne false si c'est le cas. */
-				if (CARACTERES_INDESIRABLES_SET.contains(character)) {
+				
+				int positionCarDansLigne = 0;
+				
+				// LECTURE DES CARACTERES DE LA LIGNE.******************
+				final int longueurLigne = ligneLue.length();
+				
+				/* Parcours de la ligne. */
+				for (int i = 0; i < longueurLigne; i++) {
 					
-					/* Constitution du message pour le rapport. */
-					final String message 
-						= new CaractereDan(position, character).toString();
+					/* incrémente la position du caractère 
+					 * dans la ligne lue. */
+					positionCarDansLigne++;
 					
-					/* rapport. */
-					final LigneRapport ligneRapport 
-						= creerLigneRapport(
-								null
-								, message
-								, position
-								, String.valueOf(position)
-								, String.valueOf(character)
-								, false
-								, ACTION_FICHIER_REFUSE);
+					/* Lecture du caractère à la i-ème position 
+					 * dans la ligneLue. */
+					caractere = ligneLue.charAt(i);
+					
+					// TEST DU CRITERE ****************************************
+					/* Teste si le fichier contient un caractère indésirable 
+					 * et met le réesultat à false si c'est le cas. */
+					if (CARACTERES_INDESIRABLES_SET.contains(caractere)) {
+						
+						/* Constitution du message pour le rapport. */
+						final String message 
+							= new CaractereDan(
+									positionCarDansLigne, caractere).toString();
+						
+						/* rapport. */
+						final LigneRapport ligneRapport 
+							= creerLigneRapport(
+									numeroLigne
+									, message
+									, null
+									, String.valueOf(positionCarDansLigne)
+									, String.valueOf(caractere)
+									, false
+									, ACTION_FICHIER_REFUSE);
+						
+						/* Ajoute une ligne au rapport 
+						 * pour le caractère déficient. */
+						this.ajouterLigneRapport(ligneRapport);
+						
+						/* Passe le resultat à false. */
+						resultat = false;
+						
+					} // Fin de if (CARACTERES_INDESIRABLES_SET
+					// .contains(character)).______________________
+					
+				} // Fin du Parcours de la ligne.__________________________
 								
-					this.ajouterLigneRapport(ligneRapport);
-					
-					/* Enregistrement du rapport sur disque. */
-					if (pEnregistrerRapport) {
-						
-						this.enregistrerRapportTextuelUTF8(
-								this.fournirFileTxtUTF8());
-						this.enregistrerRapportCsvUTF8(
-								this.fournirFileCsvUTF8());
-						
-					}
-					
-					/* retourne false et rapporte si 
-					 * CARACTERES_INDESIRABLES_SET contient 
-					 * un des caractères de pFile. */
-					return false;
-					
-				} // Fin de if (CARACTERES_INDESIRABLES_SET
-				// .contains(character)).______________________
-
-			} // Fin du parcours du bufferedReader._________
+			} // Fin du parcours du bufferedReader.__________________________
 			
+			if (resultat) {	
+				
+				/* rapport. ********/
+				/* Création du message du rapport de contrôle. */
+				final String message 
+					= "Le fichier '" 
+							+ pFile.getName() 
+							+ "' est bien un fichier texte encodé en " 
+							+ this.charset.name();
+				
+				/* Création d'une ligne de rapport. */
+				final LigneRapport ligneRapport 
+					= creerLigneRapport(
+							null
+							, message
+							, null
+							, SANS_OBJET
+							, SANS_OBJET
+							, true
+							, ACTION_FICHIER_ACCEPTE);
+				
+				/* Ajout de la ligne de rapport au rapport de contrôle. */
+				this.ajouterLigneRapport(ligneRapport);
+			}
+			else {
+				
+				/* rapport. ********/
+				/* Création du message du rapport de contrôle. */
+				final String message 
+					= "Le fichier '" 
+							+ pFile.getName() 
+							+ "' n'est pas un fichier texte encodé en " 
+							+ this.charset.name();
+				
+				/* Création d'une ligne de rapport. */
+				final LigneRapport ligneRapport 
+					= creerLigneRapport(
+							null
+							, message
+							, null
+							, SANS_OBJET
+							, SANS_OBJET
+							, false
+							, ACTION_FICHIER_REFUSE);
+				
+				/* Ajout de la ligne de rapport au rapport de contrôle. */
+				this.ajouterLigneRapport(ligneRapport);
+				
+			}
 			
-			/* rapport. */
-			
-			final String message 
-				= "Le fichier '" 
-						+ pFile.getName() 
-						+ "' est bien un fichier texte";
-			
-			final LigneRapport ligneRapport 
-				= creerLigneRapport(
-						null
-						, message
-						, null
-						, SANS_OBJET
-						, SANS_OBJET
-						, true
-						, ACTION_FICHIER_ACCEPTE);
-						
-			this.ajouterLigneRapport(ligneRapport);
 			
 			/* Enregistrement du rapport sur disque. */
 			if (pEnregistrerRapport) {
@@ -637,12 +645,20 @@ public class ControleurTypeTexte extends AbstractControle {
 				this.enregistrerRapportCsvUTF8(
 						this.fournirFileCsvUTF8());
 				
-			}
+			} // Fin de if (pEnregistrerRapport).________________
+						
+			/* retourne false et rapporte si 
+			 * CARACTERES_INDESIRABLES_SET contient 
+			 * un des caractères de pFile. */
+			/* retourne true et rapporte si 
+			 * le fichier a bien été encodé avec this.charset. */
+			return resultat;
 
 		} catch (FileNotFoundException fnfe) {
 
 			/* LOG de niveau ERROR. */
-			loggerError(CLASSE_CONTROLEURTYPETEXTE, METHODE_LIREFICHIER, fnfe);
+			loggerError(
+					this.fournirNomClasseConcrete(), METHODE_CONTROLER, fnfe);
 
 			/* retourne false si exception. */
 			return false;
@@ -650,7 +666,8 @@ public class ControleurTypeTexte extends AbstractControle {
 		} catch (IOException ioe) {
 
 			/* LOG de niveau ERROR. */
-			loggerError(CLASSE_CONTROLEURTYPETEXTE, METHODE_LIREFICHIER, ioe);
+			loggerError(
+					this.fournirNomClasseConcrete(), METHODE_CONTROLER, ioe);
 
 			/* retourne false si exception. */
 			return false;
@@ -668,8 +685,9 @@ public class ControleurTypeTexte extends AbstractControle {
 				} catch (IOException ioe2) {
 
 					/* LOG de niveau ERROR. */
-					loggerError(CLASSE_CONTROLEURTYPETEXTE,
-							METHODE_LIREFICHIER, ioe2);
+					loggerError(
+							this.fournirNomClasseConcrete()
+								, METHODE_CONTROLER, ioe2);
 
 				}
 
@@ -685,8 +703,8 @@ public class ControleurTypeTexte extends AbstractControle {
 				} catch (IOException ioe4) {
 
 					/* LOG de niveau ERROR. */
-					loggerError(CLASSE_CONTROLEURTYPETEXTE,
-							METHODE_LIREFICHIER, ioe4);
+					loggerError(this.fournirNomClasseConcrete(),
+							METHODE_CONTROLER, ioe4);
 				}
 
 			} // Fin de if (inputStreamReader != null).______
@@ -701,8 +719,8 @@ public class ControleurTypeTexte extends AbstractControle {
 				} catch (IOException ioe3) {
 
 					/* LOG de niveau ERROR. */
-					loggerError(CLASSE_CONTROLEURTYPETEXTE,
-							METHODE_LIREFICHIER, ioe3);
+					loggerError(this.fournirNomClasseConcrete(),
+							METHODE_CONTROLER, ioe3);
 
 				}
 
@@ -710,8 +728,6 @@ public class ControleurTypeTexte extends AbstractControle {
 
 		} // Fin du finally._____________________________
 
-		return true;
-		
 	} // Fin de controler(
 	// File pFile
 	// , boolean pEnregistrerRapport)._____________________________________
@@ -739,18 +755,17 @@ public class ControleurTypeTexte extends AbstractControle {
 	} // Fin de controler(
 	 // String pString
 	// , boolean pEnregistrerRapport)._____________________________________
+
+		
 	
-
-
-
 	/**
-	 * "Classe ControleurTypeTexte".<br/>
+	 * "Classe ControleurEncodage".<br/>
 	 * <br/>
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected final String fournirNomClasseConcrete() {
-		return CLASSE_CONTROLEURTYPETEXTE;
+	protected String fournirNomClasseConcrete() {
+		return CLASSE_CONTROLEURENCODAGE;
 	} // Fin de fournirNomClasseConcrete().________________________________
 	
 	
@@ -761,85 +776,84 @@ public class ControleurTypeTexte extends AbstractControle {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected final String fournirTypeControle() {
+	protected String fournirTypeControle() {
 		return "Contrôle de surface";
 	} // Fin de fournirTypeControle()._____________________________________
-
+	
+	
 
 	/**
-	 * "Contrôle fichier texte".<br/>
+	 * "Contrôle d'encodage du fichier".<br/>
 	 * <br/>
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected final String fournirNomControle() {
-		return "Contrôle fichier texte";
+	protected String fournirNomControle() {
+		return "Contrôle d'encodage du fichier";
 	} // Fin de fournirNomControle().______________________________________
 
-
-
+	
+	
 	/**
-	 * "Le fichier ne doit pas comporter de caractères 
-	 * indésirables (impossibles à écrire au clavier)".<br/>
+	 * "Un fichier doit être uniformément encodé avec un même charset".<br/>
 	 * <br/>
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected final String fournirNomCritere() {
-		return "Le fichier ne doit pas comporter de caractères "
-				+ "indésirables (impossibles à écrire au clavier)";
+	protected String fournirNomCritere() {
+		return "Un fichier doit être uniformément encodé avec un même charset";
 	} // Fin de fournirNomCritere()._______________________________________
 
-
-
+	
+	
 	/**
-	 * "ControleurTypeTexte.niveau.anomalie".<br/>
+	 * "ControleurEncodage.niveau.anomalie".<br/>
 	 * <br/>
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected final String fournirCleNiveauAnomalie() {
-		return "ControleurTypeTexte.niveau.anomalie";
+	protected String fournirCleNiveauAnomalie() {
+		return "ControleurEncodage.niveau.anomalie";
 	} // Fin de fournirCleNiveauAnomalie().________________________________
 
-
-
+	
+	
 	/**
 	 * "1".<br/>
 	 * <br/>
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected final String fournirNiveauAnomalieEnDur() {
+	protected String fournirNiveauAnomalieEnDur() {
 		return "1";
 	} // Fin de fournirNiveauAnomalieEnDur().______________________________
-
+	
 	
 	
 	/**
-	 * "RAPPORT-CONTROLE-FICHIER-TEXTE".<br/>
+	 * "RAPPORT-CONTROLE-ENCODAGE-EN-" + this.charset.name()<br/>
 	 * <br/>
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected final String fournirBaseNomRapport() {
-		return "RAPPORT-CONTROLE-FICHIER-TEXTE";
+	protected String fournirBaseNomRapport() {
+		return "RAPPORT-CONTROLE-ENCODAGE-EN-" + this.charset.name();
 	} // Fin de fournirBaseNomRapport().___________________________________
 
-
-
+	
+	
 	/**
-	 * "ControleurTypeTexte.aEffectuer".<br/>
+	 * "ControleurEncodage.aEffectuer".<br/>
 	 * <br/>
 	 * {@inheritDoc}
 	 */
 	@Override
 	protected String fournirCleAEffectuer() {
-		return "ControleurTypeTexte.aEffectuer";
+		return "ControleurEncodage.aEffectuer";
 	} // Fin de fournirCleAEffectuer().____________________________________
 
-
-
+	
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -847,7 +861,43 @@ public class ControleurTypeTexte extends AbstractControle {
 	protected boolean fournirAEffectuerEnDur() {
 		return true;
 	} // Fin de fournirAEffectuerEnDur().__________________________________
+
+
+
+	/**
+	 * method getCharset() :<br/>
+	 * Getter du Charset à tester sur le fichier 
+	 * pour savoir si il a été encodé avec ce Charset.<br/>
+	 * <br/>
+	 *
+	 * @return charset : Charset.<br/>
+	 */
+	public final Charset getCharset() {
+		return this.charset;
+	} // Fin de getCharset().______________________________________________
+
+
+
+	/**
+	 * method setCharset(
+	 * Charset pCharset) :<br/>
+	 * Setter du Charset à tester sur le fichier 
+	 * pour savoir si il a été encodé avec ce Charset.<br/>
+	 * <br/>
+	 * - Remplit automatiquement this.charset avec pCharset 
+	 * si pCharset n'est pas null. CHARSET_UTF8 sinon.<br/>
+	 * <br/>
+	 *
+	 * @param pCharset : Charset : valeur à passer à charset.<br/>
+	 */
+	public final void setCharset(
+			final Charset pCharset) {
+		
+		this.charset = this.fournirCharset(pCharset);
+		
+	} // Fin de setCharset(
+	 // Charset pCharset)._________________________________________________
+
+
 	
-	
-	
-} // FIN DE LA CLASSE ControleurTypeTexte.-----------------------------------
+} // FIN DE LA CLASSE ControleurEncodage.------------------------------------

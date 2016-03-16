@@ -1042,6 +1042,7 @@ public final class ConvertisseurEncodage {
 				/* Substitue automatiquement sautLigne aux sauts de ligne 
 				 * dans pString si nécessaire. */
 				bufferedWriter.write(substituerSautLigne(pString, sautLigne));
+				bufferedWriter.flush();
 				
 				// Retour du fichier. 
 				return pFile;

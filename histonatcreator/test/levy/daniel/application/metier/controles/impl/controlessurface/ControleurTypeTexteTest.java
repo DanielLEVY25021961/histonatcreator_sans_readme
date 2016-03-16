@@ -11,13 +11,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import levy.daniel.application.ILecteurDecodeurFile;
+import levy.daniel.application.metier.controles.AbstractControle;
+import levy.daniel.application.metier.controles.rapportscontroles.LigneRapport;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Test;
-
-import levy.daniel.application.metier.controles.AbstractControle;
-import levy.daniel.application.metier.controles.IControle;
-import levy.daniel.application.metier.controles.rapportscontroles.LigneRapport;
 
 
 /**
@@ -761,7 +761,9 @@ public class ControleurTypeTexteTest {
 	
 	 /**
 	 * method CONSTRUCTEUR ControleurTypeTexteTest() :<br/>
+	 * CONSTRUCTEUR D'ARITE NULLE.<br/>
 	 * <br/>
+	 * - Remplit LISTEFILES_TRAFIC.<br/>
 	 * <br/>
 	 */
 	public ControleurTypeTexteTest() {
@@ -937,7 +939,7 @@ public class ControleurTypeTexteTest {
 		/* vérifie que lireFichier(FILE_NULL, ...) retourne 
 		 * ControleurTypeTexte.MESSAGE_FICHIER_NULL. */
 		assertEquals("doit retourner MESSAGE_FICHIER_NULL : "
-				, IControle.MESSAGE_FICHIER_NULL
+				, ILecteurDecodeurFile.MESSAGE_FICHIER_NULL
 					, resultat);
 		
 		/* récupération du rapport. */

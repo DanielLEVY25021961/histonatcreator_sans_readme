@@ -32,7 +32,7 @@ public interface IListeurDeCaracteresUnicode {
 	 * String pString) :<br/>
 	 * SERVICE ANNEXE.<br/>
 	 * - Retourne une String permettant l'affichage 
-	 * des 1000 premiers caractères
+	 * de min(longueurChaine, 1000) premiers caractères
 	 * (caractère par caractère sur des lignes distinctes) 
 	 * d'une chaine de caractères pString 
 	 * avec les informations 
@@ -72,7 +72,7 @@ public interface IListeurDeCaracteresUnicode {
 	 * Unicode concernant chaque caractères.<br/>
 	 * <br/>
 	 * - si pNombreMaxiCaracteres == null, 
-	 * lit les 1000 premiers caractères.<br/>
+	 * lit le min(longueurChaine, 1000) premiers caractères.<br/>
 	 * - si pNombreMaxiCaracteres == 0, lit toute la chaîne. 
 	 * ATTENTION à la mémoire et à l'affichage.<br/>
 	 * - si la longueur de pString <= pNombreMaxiCaracteres

@@ -12,18 +12,24 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import levy.daniel.application.metier.controles.rapportscontroles.LigneRapport;
 import levy.daniel.application.metier.service.enregistreursfichiers.IEnregistreurFichiers;
 import levy.daniel.application.metier.service.enregistreursfichiers.impl.EnregistreurFichiers;
 import levy.daniel.application.metier.service.enregistreursfichiers.rapportsenregistrements.LigneRapportEnregistrement;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 
 /**
@@ -60,9 +66,10 @@ import levy.daniel.application.metier.service.enregistreursfichiers.rapportsenre
  * <br/>
  * <br/>
  * Attributs : <br/>
- * [nomClasseConcrete;dateControle;dateControleStringFormatee;userName;
+ * [nomClasseConcrete;ordreControle;dateControle
+ * ;dateControleStringFormatee;userName;
  * fichier;nomFichier;typeControle;nomControle;nomCritere;gravite;
- * niveauAnomalie;estBloquant;rapport].<br/>
+ * niveauAnomalie;estBloquant;aEffectuer;rapport;rapportEnregistrement;].<br/>
  * <br/>
  *
  * - Exemple d'utilisation :<br/>
@@ -255,6 +262,17 @@ public abstract class AbstractControle implements IControle {
 		= new ArrayList<LigneRapportEnregistrement>();
 
 	
+	/**
+	 * fichierEnMap : SortedMap<Integer,String> :<br/>
+	 * SortedMap&lt;Integer,String&gt; encapsulant un Fichier texte avec :<br/>
+	 * <ul>
+	 * <li>Integer : le numéro de la ligne.</li><br/>
+	 * <li>String : la ligne.</li><br/>
+	 * </ul>
+	 */
+	protected transient SortedMap<Integer, String> fichierEnMap 
+		= new TreeMap<Integer, String>();
+	
 	
 	/**
 	 * CLASSE_ABSTRACTCONTROLE : String :<br/>
@@ -319,6 +337,14 @@ public abstract class AbstractControle implements IControle {
 
 
 	/**
+	 * METHODE_CONTROLER : String :<br/>
+	 * "Méthode controler(File pFile)".<br/>
+	 */
+	public static final String METHODE_CONTROLER 
+		= "Méthode controler(File pFile)";
+
+	
+	/**
 	 * dfDatetimemilliFrancaiseLexico : DateFormat :<br/>
 	 * Format des dates-heures françaises lexicographique 
 	 * avec millisecondes comme
@@ -335,7 +361,125 @@ public abstract class AbstractControle implements IControle {
 	 */
 	public static ResourceBundle bundleControles;
 	
+		
+	/**
+	 * CARACTERES_INDESIRABLES_SET : Set&lt;Character&gt; :<br/>
+	 * Set contenant des caractères indésirables 
+	 * (impossibles à écrire simplement au clavier).<br/>
+	 */
+	public static final Set<Character> CARACTERES_INDESIRABLES_SET 
+		= new HashSet<Character>();
 	
+	
+	static {
+		
+		/* ACUTE ACCENT '´' */
+		CARACTERES_INDESIRABLES_SET.add('\u00b4');
+		/* ACUTE ACCENT '`' */
+		CARACTERES_INDESIRABLES_SET.add('\u0060');
+		/* CIRCUMFLEX ACCENT '^' */
+		CARACTERES_INDESIRABLES_SET.add('\u005e');
+		/* BOX DRAWINGS DOUBLE DOWN AND LEFT '╗' */
+		CARACTERES_INDESIRABLES_SET.add('\u2557');
+		/* BOX DRAWINGS LIGHT DOWN AND LEFT '┐' */
+		CARACTERES_INDESIRABLES_SET.add('\u2510');
+		/* LATIN CAPITAL LETTER U WITH ACUTE 'Ú' */
+		CARACTERES_INDESIRABLES_SET.add('\u00da');
+		/* RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK '»' */
+		CARACTERES_INDESIRABLES_SET.add('\u00bb');
+		/* INVERTED QUESTION MARK '¿' */
+		CARACTERES_INDESIRABLES_SET.add('\u00bf');		
+		/* LATIN SMALL LETTER D WITH CARON 'ď' */
+		CARACTERES_INDESIRABLES_SET.add('\u010f');
+		/* LATIN SMALL LETTER T WITH CARON 'ť' */
+		CARACTERES_INDESIRABLES_SET.add('\u0165');
+		/* LATIN SMALL LETTER Z WITH DOT ABOVE 'ż' */
+		CARACTERES_INDESIRABLES_SET.add('\u017c');
+		/* LATIN 1 SUPPLEMENT 80 ' ' */
+		CARACTERES_INDESIRABLES_SET.add('\u0080');		
+		/* LATIN SMALL LETTER R WITH ACUTE 'ŕ' */
+		CARACTERES_INDESIRABLES_SET.add('\u0155');
+		/* LATIN SMALL LETTER C WITH CARON 'č' */
+		CARACTERES_INDESIRABLES_SET.add('\u010d');
+		/* LATIN SMALL LETTER E WITH OGONEK 'ę' */
+		CARACTERES_INDESIRABLES_SET.add('\u0119');		
+		/* LATIN CAPITAL LETTER O WITH ACUTE 'Ó' */
+		CARACTERES_INDESIRABLES_SET.add('\u00d3');
+		/* LATIN CAPITAL LETTER O WITH CIRCUMFLEX 'Ô' */
+		CARACTERES_INDESIRABLES_SET.add('\u00d4');
+		/* LATIN CAPITAL LETTER THORN 'Þ' */
+		CARACTERES_INDESIRABLES_SET.add('\u00de');
+		/* LATIN CAPITAL LETTER U WITH CIRCUMFLEX 'Û' */
+		CARACTERES_INDESIRABLES_SET.add('\u00db');
+		/* LATIN CAPITAL LETTER U WITH GRAVE 'Ù' */
+		CARACTERES_INDESIRABLES_SET.add('\u00d9');
+		/* LATIN CAPITAL LETTER C WITH CEDILLA 'Ç' */
+		CARACTERES_INDESIRABLES_SET.add('\u00c7');
+		/* NKO LETTER HA 'ߤ' */
+		CARACTERES_INDESIRABLES_SET.add('\u07e4');
+		/* SYNCHRONOUS IDLE '' */
+		CARACTERES_INDESIRABLES_SET.add('\u0016');
+		/* INFORMATION SEPARATOR THREE ' ' */
+		CARACTERES_INDESIRABLES_SET.add('\u001d');
+		/* SYRIAC END OF PARAGRAPH '܀' */
+		CARACTERES_INDESIRABLES_SET.add('\u0700');
+		/* HEBREW LETTER HE 'ה' */
+		CARACTERES_INDESIRABLES_SET.add('\u05d4');
+		/* ARABIC LETTER REH WITH SMALL V BELOW 'ה' */
+		CARACTERES_INDESIRABLES_SET.add('\u0695');
+		/* ARABIC KASRATAN ' ٍ' */
+		CARACTERES_INDESIRABLES_SET.add('\u064d');
+		/* COPTIC SMALL LETTER GANGIA 'ϫ' */
+		CARACTERES_INDESIRABLES_SET.add('\u03eb');
+		
+		/* NULL ' ' */
+		CARACTERES_INDESIRABLES_SET.add('\u0000');
+		/* null '޷' */
+		CARACTERES_INDESIRABLES_SET.add('\u07b7');
+		/* ACKNOWLEDGE '' */
+		CARACTERES_INDESIRABLES_SET.add('\u0006');
+		/* END OF TEXT '' */
+		CARACTERES_INDESIRABLES_SET.add('\u0003');
+		/* START OF HEADING '' */
+		CARACTERES_INDESIRABLES_SET.add('\u0001');
+		/* DEVICE CONTROL TWO '' */
+		CARACTERES_INDESIRABLES_SET.add('\u0012');
+		/* END OF TRANSMISSION '' */
+		CARACTERES_INDESIRABLES_SET.add('\u0004');
+		/* DEVICE CONTROL FOUR '' */
+		CARACTERES_INDESIRABLES_SET.add('\u0014');
+		/* BACKSPACE '' */
+		CARACTERES_INDESIRABLES_SET.add('\u0008');
+		/* ENQUIRY '' */
+		CARACTERES_INDESIRABLES_SET.add('\u0005');
+		/* BELL '' */
+		CARACTERES_INDESIRABLES_SET.add('\u0007');
+		/* CANCEL '' */
+		CARACTERES_INDESIRABLES_SET.add('\u0018');
+		
+		/* REPLACEMENT CHARACTER '�' */
+		CARACTERES_INDESIRABLES_SET.add('\ufffd');
+		/* LATIN CAPITAL LETTER A WITH TILDE 'Ã' */
+		CARACTERES_INDESIRABLES_SET.add('\u00c3');
+		/* COPYRIGHT SIGN '©' */
+		CARACTERES_INDESIRABLES_SET.add('\u00a9');
+		/* DIAERESIS '¨' */
+		CARACTERES_INDESIRABLES_SET.add('\u00a8');
+		/* CHARACTER TABULATION WITH JUSTIFICATION ' ' */
+		CARACTERES_INDESIRABLES_SET.add('\u0089');
+		/* LINE TABULATION SET ' ' */
+		CARACTERES_INDESIRABLES_SET.add('\u008a');
+		/* PER MILLE SIGN '‰' */
+		CARACTERES_INDESIRABLES_SET.add('\u2030');
+		/* LATIN CAPITAL LETTER S WITH CARON 'Š' */
+		CARACTERES_INDESIRABLES_SET.add('\u0160');
+		/* SINGLE LOW-9 QUOTATION MARK '‚' */
+		CARACTERES_INDESIRABLES_SET.add('\u201a');
+		/* BREAK PERMITTED HERE ' ' */
+		CARACTERES_INDESIRABLES_SET.add('\u0082');
+	}
+	
+
 
 	/**
 	 * LOG : Log : 
@@ -644,6 +788,367 @@ public abstract class AbstractControle implements IControle {
 	} // Fin de initialiserBundleControles().______________________________
 
 
+	
+	/**
+	 * method traiterMauvaisFile(
+	 * File pFile
+	 * , boolean pEnregistrerRapport
+	 * , String pMethode) :<br/>
+	 * Centralise le traitement des fichiers incorrects.<br/>
+	 * <br/>
+	 * <ul>
+	 * <li>retourne false, LOG de niveau INFO et rapport 
+	 * si pFile == null.</li><br/>
+	 * <li>retourne false, LOG de niveau INFO et rapport 
+	 * si pFile est inexistant.</li><br/>
+	 * <li>retourne false, LOG de niveau INFO et rapport 
+	 * si pFile est un répertoire.</li><br/>
+	 * <li>retourne false, LOG de niveau INFO et rapport 
+	 * si pFile est vide.</li><br/>
+	 * </ul>
+	 * <br/>
+	 *  Retourne true si le fichier n'est pas :<br/>
+	 * - null.<br/>
+	 * - inexistant.<br/>
+	 * - répertoire.<br/>
+	 * - vide.<br/>
+	 * <br/>
+	 *
+	 * @param pFile : File.<br/>
+	 * @param pEnregistrerRapport : boolean : 
+	 * true si on veut enregistrer le rapport dans un fichier sur disque.<br/>
+	 * @param pMethode : String : Méthode qui appelle la présente.<br/>
+	 * 
+	 * @return : boolean : false si pFile est mauvais.<br/>
+	 */
+	protected final boolean traiterMauvaisFile(
+			final File pFile
+				, final boolean pEnregistrerRapport
+					, final String pMethode) {
+		
+		
+		/* retourne false, LOG de niveau INFO 
+		 * et rapport si pFile == null. */
+		if (pFile == null) {
+			
+			/* LOG de niveau INFO. */
+			loggerInfo(
+					this.fournirNomClasseConcrete()
+						, pMethode
+							, MESSAGE_FICHIER_NULL);
+			
+			/* rapport. */
+			final LigneRapport ligneRapport 
+				= creerLigneRapport(
+						null
+						, MESSAGE_FICHIER_NULL
+						, null
+						, SANS_OBJET
+						, SANS_OBJET
+						, false
+						, ACTION_FICHIER_REFUSE);
+			
+			this.ajouterLigneRapport(ligneRapport);
+			
+			/* Enregistrement du rapport sur disque. */
+			if (pEnregistrerRapport) {
+				
+				this.enregistrerRapportTextuelUTF8(this.fournirFileTxtUTF8());
+				this.enregistrerRapportCsvUTF8(this.fournirFileCsvUTF8());
+				
+			}
+			
+			/* retourne false, LOG de niveau INFO 
+			 * et rapport si pFile == null. */
+			return false;
+			
+		} // Fin de if (pFile == null)._______________
+		
+		/* retourne false, LOG de niveau INFO 
+		 * et rapport si pFile est inexistant. */
+		if (!pFile.exists()) {
+			
+			/* LOG de niveau INFO. */
+			loggerInfo(
+					this.fournirNomClasseConcrete()
+						, pMethode
+							, MESSAGE_FICHIER_INEXISTANT
+								, pFile.getAbsolutePath());
+			
+			/* rapport. */
+			final LigneRapport ligneRapport 
+				= creerLigneRapport(
+						null
+						, MESSAGE_FICHIER_INEXISTANT + pFile.getAbsolutePath()
+						, null
+						, SANS_OBJET
+						, SANS_OBJET
+						, false
+						, ACTION_FICHIER_REFUSE);
+						
+			this.ajouterLigneRapport(ligneRapport);
+			
+			/* Enregistrement du rapport sur disque. */
+			if (pEnregistrerRapport) {
+				
+				this.enregistrerRapportTextuelUTF8(this.fournirFileTxtUTF8());
+				this.enregistrerRapportCsvUTF8(this.fournirFileCsvUTF8());
+				
+			}
+			
+			/* retourne false, LOG de niveau INFO 
+			 * et rapport si pFile est inexistant. */
+			return false;
+			
+		} // Fin de if (!pFile.exists())._________________________
+		
+		/* retourne false, LOG de niveau INFO 
+		 * et rapport si pFile est un répertoire. */
+		if (pFile.isDirectory()) {
+			
+			/* LOG de niveau INFO. */
+			loggerInfo(
+					this.fournirNomClasseConcrete()
+						, pMethode
+							, MESSAGE_FICHIER_REPERTOIRE
+								, pFile.getAbsolutePath());
+			
+			/* rapport. */
+			final LigneRapport ligneRapport 
+				= creerLigneRapport(
+						null
+						, MESSAGE_FICHIER_REPERTOIRE + pFile.getAbsolutePath()
+						, null
+						, SANS_OBJET
+						, SANS_OBJET
+						, false
+						, ACTION_FICHIER_REFUSE);
+						
+			this.ajouterLigneRapport(ligneRapport);
+			
+			/* Enregistrement du rapport sur disque. */
+			if (pEnregistrerRapport) {
+				
+				this.enregistrerRapportTextuelUTF8(this.fournirFileTxtUTF8());
+				this.enregistrerRapportCsvUTF8(this.fournirFileCsvUTF8());
+				
+			}
+			
+			/* retourne false, LOG de niveau INFO 
+			 * et rapport si pFile est un répertoire. */
+			return false;
+			
+		} // Fin de if (pFile.isDirectory())._______________________
+
+		
+		/* retourne false, LOG de niveau INFO 
+		 * et rapport si pFile est vide. */
+		if (pFile.length() == 0) {
+			
+			/* LOG de niveau INFO. */
+			loggerInfo(
+					this.fournirNomClasseConcrete()
+						, pMethode
+							, MESSAGE_FICHIER_VIDE
+								, pFile.getAbsolutePath());
+			
+			/* rapport. */
+			final LigneRapport ligneRapport 
+				= creerLigneRapport(
+						null
+						, MESSAGE_FICHIER_VIDE + pFile.getAbsolutePath()
+						, null
+						, SANS_OBJET
+						, SANS_OBJET
+						, false
+						, ACTION_FICHIER_REFUSE);
+						
+			this.ajouterLigneRapport(ligneRapport);
+			
+			/* Enregistrement du rapport sur disque. */
+			if (pEnregistrerRapport) {
+				
+				this.enregistrerRapportTextuelUTF8(this.fournirFileTxtUTF8());
+				this.enregistrerRapportCsvUTF8(this.fournirFileCsvUTF8());
+				
+			}
+			
+			/* retourne false, LOG de niveau INFO 
+			 * et rapport si pFile est vide. */
+			return false;
+			
+		} // Fin de if (pFile.length() == 0)._______________________
+		
+		return true;
+		
+	} // Fin de traiterMauvaisFile(
+	 // File pFile
+	// , boolean pEnregistrerRapport
+	// , String pMethode)._________________________________________________
+	
+
+	
+	/**
+	 * method traiterMauvaisFile(
+	 * File pFile
+	 * , String pMethode) :<br/>
+	 * Centralise le traitement des fichiers incorrects.<br/>
+	 * <br/>
+	 * <ul>
+	 * <li>retourne MESSAGE_FICHIER_NULL, LOG de niveau INFO et rapport 
+	 * si pFile == null.</li><br/>
+	 * <li>retourne MESSAGE_FICHIER_INEXISTANT, LOG de niveau INFO et rapport 
+	 * si pFile est inexistant.</li><br/>
+	 * <li>retourne MESSAGE_FICHIER_REPERTOIRE, LOG de niveau INFO et rapport 
+	 * si pFile est un répertoire.</li><br/>
+	 * <li>retourne MESSAGE_FICHIER_VIDE, LOG de niveau INFO et rapport 
+	 * si pFile est vide.</li><br/>
+	 * </ul>
+	 * <br/>
+	 *  Retourne null si le fichier n'est pas :<br/>
+	 * - null.<br/>
+	 * - inexistant.<br/>
+	 * - répertoire.<br/>
+	 * - vide.<br/>
+	 * <br/>
+	 *
+	 * @param pFile : File.<br/>
+	 * @param pMethode : String : Méthode qui appelle la présente.<br/>
+	 * 
+	 * @return : String : null si le fichier est bon 
+	 * et un message d'erreur si le fichier est mauvais.<br/>
+	 */
+	protected final String traiterMauvaisFile(
+			final File pFile
+				, final String pMethode) {
+		
+		/* retourne MESSAGE_FICHIER_NULL 
+		 * , LOG de niveau INFO et rapport 
+		 * si pFile est null. */
+		if (pFile == null) {
+			
+			/* LOG de niveau INFO. */
+			loggerInfo(
+					this.fournirNomClasseConcrete()
+						, pMethode
+							, MESSAGE_FICHIER_NULL);
+			
+			/* rapport. */
+			final LigneRapport ligneRapport 
+				= creerLigneRapport(
+						null
+						, MESSAGE_FICHIER_NULL
+						, null
+						, SANS_OBJET
+						, SANS_OBJET
+						, false
+						, ACTION_FICHIER_REFUSE);
+			
+			this.ajouterLigneRapport(ligneRapport);
+			
+			/* retour de MESSAGE_FICHIER_NULL. */
+			return MESSAGE_FICHIER_NULL;
+			
+		} // Fin de if (pFile == null).__________________________
+		
+		/* retourne MESSAGE_FICHIER_INEXISTANT
+		 * , LOG de niveau INFO et rapport 
+		 * si pFile est inexistant. */
+		if (!pFile.exists()) {
+							
+			/* LOG de niveau INFO. */
+			loggerInfo(
+					this.fournirNomClasseConcrete()
+						, pMethode
+							, MESSAGE_FICHIER_INEXISTANT
+								, pFile.getAbsolutePath());
+			
+			/* rapport. */
+			final LigneRapport ligneRapport 
+				= creerLigneRapport(
+						null
+						, MESSAGE_FICHIER_INEXISTANT + pFile.getAbsolutePath()
+						, null
+						, SANS_OBJET
+						, SANS_OBJET
+						, false
+						, ACTION_FICHIER_REFUSE);
+			
+			this.ajouterLigneRapport(ligneRapport);
+			
+			/* retour de MESSAGE_FICHIER_INEXISTANT. */
+			return MESSAGE_FICHIER_INEXISTANT;
+			
+		} // Fin de if (!pFile.exists()).___________________________
+		
+		
+		/* retourne MESSAGE_FICHIER_REPERTOIRE
+		 * , LOG de niveau INFO et rapport 
+		 * si pFile est un répertoire. */
+		if (pFile.isDirectory()) {
+			
+			/* LOG de niveau INFO. */
+			loggerInfo(
+					this.fournirNomClasseConcrete()
+						, pMethode
+							, MESSAGE_FICHIER_REPERTOIRE
+								, pFile.getAbsolutePath());
+			
+			/* rapport. */
+			final LigneRapport ligneRapport 
+				= creerLigneRapport(
+						null
+						, MESSAGE_FICHIER_REPERTOIRE + pFile.getAbsolutePath()
+						, null
+						, SANS_OBJET
+						, SANS_OBJET
+						, false
+						, ACTION_FICHIER_REFUSE);
+			
+			this.ajouterLigneRapport(ligneRapport);
+			
+			/* retour de MESSAGE_FICHIER_REPERTOIRE. */
+			return MESSAGE_FICHIER_REPERTOIRE;
+			
+		} // Fin de if (pFile.isDirectory())._______________________
+
+		/* retourne MESSAGE_FICHIER_VIDE
+		 * , LOG de niveau INFO et rapport 
+		 * si pFile est vide. */
+		if (pFile.length() == 0) {
+			
+			/* LOG de niveau INFO. */
+			loggerInfo(
+					this.fournirNomClasseConcrete()
+						, pMethode
+							, MESSAGE_FICHIER_VIDE
+								, pFile.getAbsolutePath());
+			
+			/* rapport. */
+			final LigneRapport ligneRapport 
+				= creerLigneRapport(
+						null
+						, MESSAGE_FICHIER_VIDE + pFile.getAbsolutePath()
+						, null
+						, SANS_OBJET
+						, SANS_OBJET
+						, false
+						, ACTION_FICHIER_REFUSE);
+			
+			this.ajouterLigneRapport(ligneRapport);
+			
+			/* retour de MESSAGE_FICHIER_VIDE. */
+			return MESSAGE_FICHIER_VIDE;
+			
+		} // Fin de if (pFile.length() == 0).____________________
+		
+		return null;
+		
+	} // Fin de traiterMauvaisFile(
+	 // File pFile
+	// , String pMethode)._________________________________________________
+	
+	
 	
 	/**
 	 * method fournirDateSystemeFormattee() :<br/>
@@ -1598,93 +2103,13 @@ public abstract class AbstractControle implements IControle {
 			final File pFile
 				, final Charset pCharset) {
 		
-		/* retourne MESSAGE_FICHIER_NULL 
-		 * si le pFile est null. */
-		if (pFile == null) {
-			
-			/* LOG de niveau INFO. */
-			loggerInfo(
-					this.fournirNomClasseConcrete()
-						, METHODE_LIREFICHIER
-							, MESSAGE_FICHIER_NULL);
-			
-			/* rapport. */
-			final LigneRapport ligneRapport 
-				= creerLigneRapport(
-						null
-						, MESSAGE_FICHIER_NULL
-						, null
-						, SANS_OBJET
-						, SANS_OBJET
-						, false
-						, ACTION_FICHIER_REFUSE);
-			
-			this.ajouterLigneRapport(ligneRapport);
-			
-			/* retour de MESSAGE_FICHIER_NULL. */
-			return MESSAGE_FICHIER_NULL;
-			
-		} // Fin de if (pFile == null).__________________________
+		// Traitement des mauvais fichiers.*********
+		final String resultatTraitementFichier 
+			= this.traiterMauvaisFile(pFile, METHODE_LIREFICHIER);
 		
-		/* retourne MESSAGE_FICHIER_INEXISTANT 
-		 * si le pFile est inexistant. */
-		if (!pFile.exists()) {
-							
-			/* LOG de niveau INFO. */
-			loggerInfo(
-					this.fournirNomClasseConcrete()
-						, METHODE_LIREFICHIER
-							, MESSAGE_FICHIER_INEXISTANT
-								, pFile.getAbsolutePath());
-			
-			/* rapport. */
-			final LigneRapport ligneRapport 
-				= creerLigneRapport(
-						null
-						, MESSAGE_FICHIER_INEXISTANT + pFile.getAbsolutePath()
-						, null
-						, SANS_OBJET
-						, SANS_OBJET
-						, false
-						, ACTION_FICHIER_REFUSE);
-			
-			this.ajouterLigneRapport(ligneRapport);
-			
-			/* retour de MESSAGE_FICHIER_INEXISTANT. */
-			return MESSAGE_FICHIER_INEXISTANT;
-			
-		} // Fin de if (!pFile.exists()).___________________________
-		
-		
-		/* retourne MESSAGE_FICHIER_REPERTOIRE 
-		 * si le pFile est un répertoire. */
-		if (pFile.isDirectory()) {
-			
-			/* LOG de niveau INFO. */
-			loggerInfo(
-					this.fournirNomClasseConcrete()
-						, METHODE_LIREFICHIER
-							, MESSAGE_FICHIER_REPERTOIRE
-								, pFile.getAbsolutePath());
-			
-			/* rapport. */
-			final LigneRapport ligneRapport 
-				= creerLigneRapport(
-						null
-						, MESSAGE_FICHIER_REPERTOIRE + pFile.getAbsolutePath()
-						, null
-						, SANS_OBJET
-						, SANS_OBJET
-						, false
-						, ACTION_FICHIER_REFUSE);
-			
-			this.ajouterLigneRapport(ligneRapport);
-			
-			/* retour de MESSAGE_FICHIER_REPERTOIRE. */
-			return MESSAGE_FICHIER_REPERTOIRE;
-			
-		} // Fin de if (pFile.isDirectory())._______________________
-
+		if (resultatTraitementFichier != null) {
+			return resultatTraitementFichier;
+		}
 		
 		/* passe pFile à this.fichier et 
 		 * rafraîchit automatiquement this.nomFichier. */
@@ -1838,7 +2263,843 @@ public abstract class AbstractControle implements IControle {
 	 // File pFile
 	 // , Charset pCharset)._______________________________________________
 
+
 	
+	/**
+	 * SERVICE ANNEXE.<br/>
+	 * <br/>
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final String lireFichierLigneParLigne(
+			final File pFile
+				, final Charset pCharset) {
+		
+		// Traitement des mauvais fichiers.*********
+		final String resultatTraitementFichier 
+			= this.traiterMauvaisFile(
+					pFile, METHODE_LIREFICHIERLIGNE_PAR_LIGNE);
+		
+		if (resultatTraitementFichier != null) {
+			return resultatTraitementFichier;
+		}
+		
+		/* rafraîchit this.fichierEnMap. */
+		this.fichierEnMap.clear();
+		
+		/* passe pFile à this.fichier et 
+		 * rafraîchit automatiquement this.nomFichier. */
+		this.setFichier(pFile);
+	
+		
+		// LECTURE LIGNE PAR LIGNE ***************
+		FileInputStream fileInputStream = null;
+		InputStreamReader inputStreamReader = null;
+		BufferedReader bufferedReader = null;
+
+		final StringBuilder stb = new StringBuilder();
+		
+		String ligneLue = null;
+		int numerolLigneLue = 0;
+
+		Charset charset = null;
+
+		/* Choisit automatiquement le CHARSET_UTF8 si pCharset == null. */
+		if (pCharset == null) {
+			charset = CHARSET_UTF8;
+		} else {
+			charset = pCharset;
+		}
+
+		try {
+
+			/*
+			 * Instancie un flux en lecture fileInputStream en lui passant
+			 * pFile.
+			 */
+			fileInputStream = new FileInputStream(pFile);
+
+			/*
+			 * Instancie un InputStreamReader en lui passant le FileReader et le
+			 * Charset.
+			 */
+			inputStreamReader = new InputStreamReader(fileInputStream, charset);
+
+			/*
+			 * Instancie un tampon de flux de caractères en lecture en lui
+			 * passant le flux inputStreamReader.
+			 */
+			bufferedReader = new BufferedReader(inputStreamReader);
+			
+			/* Parcours du bufferedReader. */
+			while (true) {
+				
+				/* Incrémentation du numéro de la ligne lue. */
+				numerolLigneLue++;
+				
+				/* Lecture de chaque caractère. */
+				ligneLue = bufferedReader.readLine();
+								
+				/* Arrêt de la lecture si fin de fichier. */
+				if (ligneLue == null) {
+					break;
+				}
+				
+				/* - remplit this.fichierEnMap. */
+				this.fichierEnMap.put(numerolLigneLue, ligneLue);
+				
+				/* Ajout de la ligne au StringBuilder. */
+				stb.append(
+						String.format(LOCALE_FR_FR
+								, "Ligne : %-5d", numerolLigneLue));
+				
+				stb.append(
+						String.format(LOCALE_FR_FR
+								, "%-520s", ligneLue));
+								
+				
+				stb.append(NEWLINE);
+				
+			} // Fin du parcours du bufferedReader._________
+
+		} catch (FileNotFoundException fnfe) {
+			
+			/* LOG de niveau ERROR. */
+			loggerError(
+					this.fournirNomClasseConcrete()
+						, METHODE_LIREFICHIERLIGNE_PAR_LIGNE
+							, fnfe);
+			
+			/* retourne le message de l'exception. */
+			return fnfe.getMessage();
+			
+		} catch (IOException ioe) {
+			
+			/* LOG de niveau ERROR. */
+			loggerError(
+					this.fournirNomClasseConcrete()
+						, METHODE_LIREFICHIERLIGNE_PAR_LIGNE
+							, ioe);
+			
+			/* retourne le message de l'exception. */
+			return ioe.getMessage();
+		}
+		
+		finally {
+			
+			/* fermeture du flux BufferedReader. */
+			if (bufferedReader != null) {
+				
+				try {
+					
+					bufferedReader.close();
+					
+				} catch (IOException ioe2) {
+					
+					/* LOG de niveau ERROR. */
+					loggerError(
+							this.fournirNomClasseConcrete()
+								, METHODE_LIREFICHIERLIGNE_PAR_LIGNE
+									, ioe2);
+					
+				}
+				
+			} // Fin de if (bufferedReader != null).____
+			
+			/* fermeture du flux inputStreamReader. */
+			if (inputStreamReader != null) {
+				
+				try {
+					
+					inputStreamReader.close();
+					
+				} catch (IOException ioe4) {
+					
+					/* LOG de niveau ERROR. */
+					loggerError(
+							this.fournirNomClasseConcrete()
+								, METHODE_LIREFICHIERLIGNE_PAR_LIGNE
+									, ioe4);
+				}
+				
+			} // Fin de if (inputStreamReader != null).______
+			
+			/* fermeture du flux fileInputStream. */
+			if (fileInputStream != null) {
+				
+				try {
+					
+					fileInputStream.close();
+					
+				} catch (IOException ioe3) {
+					
+					/* LOG de niveau ERROR. */
+					loggerError(
+							this.fournirNomClasseConcrete()
+								, METHODE_LIREFICHIERLIGNE_PAR_LIGNE
+									, ioe3);
+					
+				}
+				
+			} // Fin de if (fileInputStream != null).________
+			
+		} // Fin du finally._____________________________
+		
+		return stb.toString();
+		
+	} // Fin de lireFichierLigneParLigne(
+	 // File pFile
+	 // , Charset pCharset)._______________________________________________
+
+
+		
+	/**
+	 * SERVICE ANNEXE.<br/>
+	 * <br/>
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final String lireLigneFichier(
+			final int pNumeroLigne
+				, final File pFile
+					, final Charset pCharset) {
+		
+		
+		// Traitement des mauvais fichiers.*********
+		final String resultatTraitementFichier 
+			= this.traiterMauvaisFile(pFile, METHODE_LIRELIGNEFICHIER);
+		
+		if (resultatTraitementFichier != null) {
+			return resultatTraitementFichier;
+		}
+		
+		/* passe pFile à this.fichier et 
+		 * rafraîchit automatiquement this.nomFichier. */
+		this.setFichier(pFile);
+	
+		
+		// LECTURE LIGNE PAR LIGNE ***************
+		FileInputStream fileInputStream = null;
+		InputStreamReader inputStreamReader = null;
+		BufferedReader bufferedReader = null;
+
+		String ligneLue = null;
+		int numeroLigneLue = 0;
+		
+		Charset charset = null;
+
+		/* Choisit automatiquement le CHARSET_UTF8 si pCharset == null. */
+		if (pCharset == null) {
+			charset = CHARSET_UTF8;
+		} else {
+			charset = pCharset;
+		}
+
+		try {
+
+			/*
+			 * Instancie un flux en lecture fileInputStream en lui passant
+			 * pFile.
+			 */
+			fileInputStream = new FileInputStream(pFile);
+
+			/*
+			 * Instancie un InputStreamReader en lui passant le FileReader et le
+			 * Charset.
+			 */
+			inputStreamReader = new InputStreamReader(fileInputStream, charset);
+
+			/*
+			 * Instancie un tampon de flux de caractères en lecture en lui
+			 * passant le flux inputStreamReader.
+			 */
+			bufferedReader = new BufferedReader(inputStreamReader);
+			
+			/* Parcours du bufferedReader. */
+			while (true) {
+				
+				/* Incrémentation du numéro de la ligne lue. */
+				numeroLigneLue++;
+				
+				/* Lecture de chaque ligne. */
+				ligneLue = bufferedReader.readLine();
+				
+				/* Arrêt de la lecture si fin de fichier. */
+				if (ligneLue == null) {
+					break;
+				}
+				
+				/* Retourne la ligneLue si c'est la pNumeroLigne-ème ligne. */
+				if (numeroLigneLue == pNumeroLigne) {
+					return ligneLue;
+				}
+				
+			} // Fin du parcours du bufferedReader._________
+
+		} catch (FileNotFoundException fnfe) {
+			
+			/* LOG de niveau ERROR. */
+			loggerError(
+					this.fournirNomClasseConcrete()
+						, METHODE_LIRELIGNEFICHIER
+							, fnfe);
+			
+			/* retourne le message de l'exception. */
+			return fnfe.getMessage();
+			
+		} catch (IOException ioe) {
+			
+			/* LOG de niveau ERROR. */
+			loggerError(
+					this.fournirNomClasseConcrete()
+						, METHODE_LIRELIGNEFICHIER
+							, ioe);
+			
+			/* retourne le message de l'exception. */
+			return ioe.getMessage();
+		}
+		
+		finally {
+			
+			/* fermeture du flux BufferedReader. */
+			if (bufferedReader != null) {
+				
+				try {
+					
+					bufferedReader.close();
+					
+				} catch (IOException ioe2) {
+					
+					/* LOG de niveau ERROR. */
+					loggerError(
+							this.fournirNomClasseConcrete()
+								, METHODE_LIRELIGNEFICHIER
+									, ioe2);
+					
+				}
+				
+			} // Fin de if (bufferedReader != null).____
+			
+			/* fermeture du flux inputStreamReader. */
+			if (inputStreamReader != null) {
+				
+				try {
+					
+					inputStreamReader.close();
+					
+				} catch (IOException ioe4) {
+					
+					/* LOG de niveau ERROR. */
+					loggerError(
+							this.fournirNomClasseConcrete()
+								, METHODE_LIRELIGNEFICHIER
+									, ioe4);
+				}
+				
+			} // Fin de if (inputStreamReader != null).______
+			
+			/* fermeture du flux fileInputStream. */
+			if (fileInputStream != null) {
+				
+				try {
+					
+					fileInputStream.close();
+					
+				} catch (IOException ioe3) {
+					
+					/* LOG de niveau ERROR. */
+					loggerError(
+							this.fournirNomClasseConcrete()
+								, METHODE_LIRELIGNEFICHIER
+									, ioe3);
+					
+				}
+				
+			} // Fin de if (fileInputStream != null).________
+			
+		} // Fin du finally._____________________________
+		
+		return null;
+				
+	} // Fin de lireLigneFichier(
+	 // int pNumeroLigne
+	 // , File pFile
+	 // , Charset pCharset)._______________________________________________
+	
+
+	
+	/**
+	 * SERVICE ANNEXE.<br/>
+	 * <br/>
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final String afficherFichierEnMap() {
+		return this.afficherMapIntegerString(this.fichierEnMap);
+	} // Fin de afficherFichierEnMap().____________________________________
+
+	
+	
+	/**
+	 * SERVICE ANNEXE.<br/>
+	 * <br/>
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final String afficherLigneDeFichierEnMap(
+			final int pNumeroLigne) {
+		
+		return this.afficherLignedeMapIntegerString(
+				this.fichierEnMap, pNumeroLigne);
+		
+	} // Fin de afficherLigneDeFichierEnMap(
+	 // int pNumeroLigne)._________________________________________________
+
+	
+	
+	/**
+	 * SERVICE ANNEXE.<br/>
+	 * <br/>
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final String afficherMapIntegerString(
+			final SortedMap<Integer, String> pMap) {
+		
+		/* retourne null si pMap == null. */
+		if (pMap == null) {
+			return null;
+		}
+		
+		final Set<Entry<Integer, String>> set = pMap.entrySet();
+		
+		if (set == null) {
+			return null;
+		}
+		
+		final Iterator<Entry<Integer, String>> ite = set.iterator();
+		
+		if (ite == null) {
+			return null;
+		}
+		
+		final StringBuilder stb = new StringBuilder();
+		
+		/* Parcours de l'iterator. */
+		while (ite.hasNext()) {
+			
+			final Entry<Integer, String> entry = ite.next();
+			
+			if (entry == null) {
+				return null;
+			}
+			
+			final int numerolLigneLue = entry.getKey();
+			final String ligneLue = entry.getValue();
+							
+			/* Ajout de la ligne au StringBuilder. */
+			stb.append(
+					String.format(LOCALE_FR_FR
+							, "Ligne : %-5d", numerolLigneLue));
+			
+			stb.append(
+					String.format(LOCALE_FR_FR
+							, "%-520s", ligneLue));
+										
+			stb.append(NEWLINE);
+														
+		} // Fin de Parcours de l'iterator.______________________
+		
+		/* Retour de la ligne. */
+		return stb.toString();
+		
+	} // Fin de afficherMapIntegerString(
+	 // SortedMap<Integer, String> pMap).__________________________________
+	
+
+	
+	/**
+	 * SERVICE ANNEXE.<br/>
+	 * <br/>
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final String afficherLignedeMapIntegerString(
+			final SortedMap<Integer, String> pMap
+				, final int pNumeroLigne) {
+		
+		/* retourne null si pMap == null. */
+		if (pMap == null) {
+			return null;
+		}
+		
+		final Set<Entry<Integer, String>> set = pMap.entrySet();
+		
+		if (set == null) {
+			return null;
+		}
+		
+		final Iterator<Entry<Integer, String>> ite = set.iterator();
+		
+		if (ite == null) {
+			return null;
+		}
+		
+		/* Parcours de l'iterator. */
+		while (ite.hasNext()) {
+			
+			final Entry<Integer, String> entry = ite.next();
+			
+			if (entry == null) {
+				return null;
+			}
+			
+			final int numerolLigneLue = entry.getKey();
+			final String ligneLue = entry.getValue();
+			
+			/* Test du numéro de la ligne. */
+			if (numerolLigneLue == pNumeroLigne) {
+				
+				final StringBuilder stb = new StringBuilder();
+				
+				/* Ajout de la ligne au StringBuilder. */
+				stb.append(
+						String.format(LOCALE_FR_FR
+								, "Ligne : %-5d", numerolLigneLue));
+				
+				stb.append(
+						String.format(LOCALE_FR_FR
+								, "%-520s", ligneLue));
+								
+				
+				stb.append(NEWLINE);
+				
+				/* Retour de la ligne. */
+				return stb.toString();
+				
+			} // Fin de if (numerolLigneLue == pNumeroLigne).________
+						
+		} // Fin de Parcours de l'iterator.______________________
+		
+		/* retourne null si la ligne n'existe pas. */
+		return null;
+		
+	} // Fin de afficherLignedeMapIntegerString(
+	 // SortedMap<Integer, String> pMap
+	 // , int pNumeroLigne)._______________________________________________
+	
+	
+	
+	/**
+	 * SERVICE ANNEXE.<br/>
+	 * <br/>
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final String listerFichierEnMap() {
+		return this.listerMapIntegerString(this.fichierEnMap);
+	} // Fin de listerFichierEnMap().______________________________________
+
+	
+	
+	/**
+	 * SERVICE ANNEXE.<br/>
+	 * <br/>
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final String listerLigneDeFichierEnMap(
+			final int pNumeroLigne) {
+		
+		return this.listerLignedeMapIntegerString(
+				this.fichierEnMap, pNumeroLigne);
+		
+	} // Fin de listerLigneDeFichierEnMap(
+	 // int pNumeroLigne)._________________________________________________
+
+	
+	
+	/**
+	 * SERVICE ANNEXE.<br/>
+	 * <br/>
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final String listerMapIntegerString(
+			final SortedMap<Integer, String> pMap) {
+		
+		/* retourne null si pMap == null. */
+		if (pMap == null) {
+			return null;
+		}
+		
+		final Set<Entry<Integer, String>> set = pMap.entrySet();
+		
+		if (set == null) {
+			return null;
+		}
+		
+		final Iterator<Entry<Integer, String>> ite = set.iterator();
+		
+		if (ite == null) {
+			return null;
+		}
+		
+		final StringBuilder stb = new StringBuilder();
+		
+		/* Parcours de l'iterator. */
+		while (ite.hasNext()) {
+			
+			final Entry<Integer, String> entry = ite.next();
+			
+			if (entry == null) {
+				return null;
+			}
+			
+			final String ligneLue = entry.getValue();
+									
+			stb.append(ligneLue);										
+			stb.append(NEWLINE);
+														
+		} // Fin de Parcours de l'iterator.______________________
+		
+		/* Retour de la ligne. */
+		return stb.toString();
+		
+	} // Fin de listerMapIntegerString(
+	 // SortedMap<Integer, String> pMap).__________________________________
+	
+
+	
+	/**
+	 * SERVICE ANNEXE.<br/>
+	 * <br/>
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final String listerLignedeMapIntegerString(
+			final SortedMap<Integer, String> pMap
+				, final int pNumeroLigne) {
+		
+		/* retourne null si pMap == null. */
+		if (pMap == null) {
+			return null;
+		}
+		
+		final Set<Entry<Integer, String>> set = pMap.entrySet();
+		
+		if (set == null) {
+			return null;
+		}
+		
+		final Iterator<Entry<Integer, String>> ite = set.iterator();
+		
+		if (ite == null) {
+			return null;
+		}
+		
+		/* Parcours de l'iterator. */
+		while (ite.hasNext()) {
+			
+			final Entry<Integer, String> entry = ite.next();
+			
+			if (entry == null) {
+				return null;
+			}
+			
+			final int numerolLigneLue = entry.getKey();
+			final String ligneLue = entry.getValue();
+			
+			/* Test du numéro de la ligne. */
+			if (numerolLigneLue == pNumeroLigne) {
+				
+				final StringBuilder stb = new StringBuilder();
+				
+				/* Ajout de la ligne au StringBuilder. */
+				stb.append(ligneLue);				
+				stb.append(NEWLINE);
+				
+				/* Retour de la ligne. */
+				return stb.toString();
+				
+			} // Fin de if (numerolLigneLue == pNumeroLigne).________
+						
+		} // Fin de Parcours de l'iterator.______________________
+		
+		/* retourne null si la ligne n'existe pas. */
+		return null;
+		
+	} // Fin de listerLignedeMapIntegerString(
+	 // SortedMap<Integer, String> pMap
+	 // , int pNumeroLigne)._______________________________________________
+	
+
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final String transcoder(
+			final String pString
+				, final Charset pCharsetEncodage
+					, final Charset pCharsetDecodage
+						, final boolean pRapporte
+							, final Integer pNumeroLigne) {
+		
+		/* retourne null si pString == null. */
+		if (pString == null) {
+			return null;
+		}
+		
+		Charset charsetEncodage = null;
+		Charset charsetDecodage = null;
+		
+		/* passe automatiquement le charsetEncodage à CHARSET_ANSI 
+		 * si pCharsetEncodage == null. */
+		if (pCharsetEncodage == null) {
+			charsetEncodage = CHARSET_ANSI;
+		}
+		else {
+			charsetEncodage = pCharsetEncodage;
+		}
+		
+		/* passe automatiquement le charsetDecodage à CHARSET_IBM850 
+		 * si pCharsetDecodage == null. */
+		if (pCharsetDecodage == null) {
+			charsetDecodage = CHARSET_IBM850;
+		}
+		else {
+			charsetDecodage = pCharsetDecodage;
+		}
+		
+		/* Réencode la ligne en charsetDecodage. */
+//		final byte[] byteOriginal = pString.getBytes();
+//		final ByteBuffer byteBufferOriginal = ByteBuffer.wrap(byteOriginal);
+//		final CharBuffer charBuffer = charsetEncodage.decode(byteBufferOriginal);
+//		final ByteBuffer bytebufferFinal = charsetEncodage.encode(charBuffer);
+//		final byte[] byteFinal = bytebufferFinal.array();
+		
+//		final String resultat 
+//			= new String(byteFinal, charsetDecodage);
+		
+		final String resultat 
+		= new String(pString.getBytes(charsetEncodage), charsetDecodage);
+		
+		// RAPPORT ********
+		if (pRapporte) {
+			
+			/* message du rapport. */
+			final String message 
+			= "La ligne n° " 
+			+ pNumeroLigne 
+			+ " : '" 
+			+ StringUtils.abbreviate(pString, 100)
+			+ "' a été transcodée en " 
+			+ charsetDecodage.name() 
+			+ " : '" 
+			+ StringUtils.abbreviate(resultat, 100) + "'";
+			
+			/* Création d'une ligne de rapport. */
+			final LigneRapport ligneRapport 
+			= this.creerLigneRapport(
+					pNumeroLigne
+					, message
+					, null
+					, SANS_OBJET
+					, SANS_OBJET
+					, true
+					, "LIGNE_TRANSCODEE en " 
+					+ charsetDecodage.name());
+			
+			/* Ajout au rapport. */
+			this.ajouterLigneRapport(ligneRapport);
+			
+		} // Fin de if (pRapporte).____________________
+		
+		return resultat;
+		
+	} // Fin de transcoder(
+	 // String pString
+	 // , Charset pCharsetEncodage
+	 // , Charset pCharsetDecodage
+	 // , boolean pRapporte
+	// , Integer pNumeroLigne).____________________________________________
+	
+	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final boolean determinerSiEncodagePossible(
+			final String pString
+				, final Charset pCharset
+					, final int pNumeroLigne) {
+		
+		/* retourne false si pString == null. */
+		if (pString == null) {
+			return false;
+		}
+		
+		/* retourne false si pCharset est null. */
+		if (pCharset == null) {
+			return false;
+		}
+		
+		boolean resultat = true;
+				
+		/* calcule la longueur de la chaine. */
+		final int longueurChaine = pString.length();
+		int position = 0;
+		
+		// LECTURE CARACTERE PAR CARACTERE ***************
+		for (int i = 0; i < longueurChaine; i++) {
+			
+			/* Incrémentation de la position. */
+			position ++;
+			
+			/* Extraction du caractère. */
+			final char caractere = pString.charAt(i);
+			
+			/* Teste si le caractère est indésirable. */
+			if (CARACTERES_INDESIRABLES_SET.contains(caractere)) {
+				
+				/* Constitution du message pour le rapport. */
+				final String message 
+					= new CaractereDan(
+							position, caractere).toString();
+				
+				/* Création de la ligne de rapport. */
+				final LigneRapport ligneRapport 
+					= this.creerLigneRapport(
+							pNumeroLigne
+							, message + " NON ENCODE AVEC " + pCharset
+							, null
+							, String.valueOf(position)
+							, String.valueOf(caractere)
+							, false
+							, ACTION_LIGNE_A_TRANSCODER);
+				
+				/* Ajoute une ligne au rapport 
+				 * pour le caractère déficient. */
+				this.ajouterLigneRapport(ligneRapport);
+				
+				/* Passe le resultat à false. */				
+				resultat = false;
+				
+			}  // Fin de if (CARACTERES_INDESIRABLES_SET
+			// .contains(character)).______________________
+			
+		} // Fin du Parcours de la ligne.__________________________
+			
+		return resultat;
+		
+	} // Fin de determinerSiEncodagePossible(
+	 // String pString
+	 // , Charset pCharset
+	// , int pNumeroLigne).________________________________________________
+	
+
 	
 	/**
 	 * SERVICE ANNEXE.<br/>
@@ -1882,9 +3143,14 @@ public abstract class AbstractControle implements IControle {
 			
 			/* Calcul de longueurALire. */
 			/* si pNombreMaxiCaracteres == null, 
-			 * lit les 1000 premiers caractères. */
+			 * lit le min(longueurChaine, 1000) premiers caractères. */
 			if (pNombreMaxiCaracteres == null) {
-				longueurALire = 1000;
+				if (longueurChaine < 1000) {
+					longueurALire = longueurChaine;
+				}
+				else {
+					longueurALire = 1000;
+				}				
 			}
 			/* si pNombreMaxiCaracteres == 0, lit toute la chaîne. */
 			else if (pNombreMaxiCaracteres == 0) {
@@ -2237,6 +3503,8 @@ public abstract class AbstractControle implements IControle {
 	 * dans une ligne du fichier comme 7 ou [7-12].<br/>
 	 * @param pValeurChamp : String : valeur prise par le champ contrôlé 
 	 * exprimée sous forme de String.<br/>
+	 * @param pStatut : Boolean : true si le contrôle 
+	 * est passé favorablement.<br/>
 	 * @param pAction : String : action menée après le contrôle 
 	 * comme "ligne éliminée" ou "ligne conservée".<br/>
 	 * <br/>
@@ -3061,7 +4329,7 @@ public abstract class AbstractControle implements IControle {
 	 * 
 	 * @return : File : Le File créé.<br/>
 	 */
-	private File fournirFile(
+	protected File fournirFile(
 			final String pChemin
 				, final Date pDate
 					, final String pNomFichier
@@ -3698,4 +4966,14 @@ public abstract class AbstractControle implements IControle {
 
 
 	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final SortedMap<Integer, String> getFichierEnMap() {
+		return this.fichierEnMap;
+	} // Fin de getFichierEnMap()._________________________________________
+
+
+		
 } // FIN DE LA CLASSE AbstractControle.--------------------------------------
