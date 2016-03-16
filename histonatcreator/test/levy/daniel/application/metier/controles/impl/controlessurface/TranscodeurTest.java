@@ -317,6 +317,13 @@ public class TranscodeurTest {
 	public static final String CHEMIN_HIT_DIRSO_2014 
 	= "texte\\trafics\\trafics_2014\\HITDIRSO2014.txt";
 	
+	/**
+	 * CHEMIN_DARWIN_2014 : String :<br/>
+	 * "texte\\trafics\\trafics_2014\\darwin2014.csv".<br/>
+	 */
+	public static final String CHEMIN_DARWIN_2014 
+		= "texte\\trafics\\trafics_2014\\darwin2014.csv";
+	
 	
 	//*****************************************************************/
 	//**************************FICHIERS ******************************/
@@ -547,6 +554,14 @@ public class TranscodeurTest {
 	 */
 	public static final File FILE_HITDIRSO2014 
 	= new File(CHEMIN_FICHIERS_TEST + CHEMIN_HIT_DIRSO_2014);
+	
+	/**
+	 * FILE_DARWIN2014 : File :<br/>
+	 * "darwin2014.csv".<br/>
+	 */
+	public static final File FILE_DARWIN2014 
+	= new File(CHEMIN_FICHIERS_TEST + CHEMIN_DARWIN_2014);
+	
 	
 	/**
 	 * LISTEFILES_TXT : List<File> :<br/>
@@ -835,7 +850,7 @@ public class TranscodeurTest {
 		
 		/* ******************************************************************/
 		/* Détermination du fichier, du charset et de la ligna à lire. ******/
-		final File fichier = FILE_HITDIRO2014;
+		final File fichier = FILE_HITDIRA2014;
 		/* ******************************************************************/
 		
 		final boolean resultatControle =transcodeur.controler(fichier, false);
@@ -846,12 +861,12 @@ public class TranscodeurTest {
 //			= transcodeur.afficherLigneDeFichierEnMap(numeroLigne);
 //		System.out.println(ligneNumeroteeLue);
 		
-		final String ligneLue = 
-				transcodeur.listerLigneDeFichierEnMap(361);
-		System.out.println("ligneLue              : " + ligneLue);
+//		final String ligneLue = 
+//				transcodeur.listerLigneDeFichierEnMap(361);
+//		System.out.println("ligneLue              : " + ligneLue);
 		
-		final String ligneTranscodeeEnUtf8 = transcodeur.transcoder(ligneLue, CHARSET_IBM850, CHARSET_UTF8, false, 361);
-		System.out.println("ligneTranscodeeEnUtf8 : " + ligneTranscodeeEnUtf8);
+//		final String ligneTranscodeeEnUtf8 = transcodeur.transcoder(ligneLue, CHARSET_IBM850, CHARSET_UTF8, false, 361);
+//		System.out.println("ligneTranscodeeEnUtf8 : " + ligneTranscodeeEnUtf8);
 		
 //		final String parCaract = transcodeur.listerChaineCarParCar(ligneLue);
 //		System.out.println(parCaract);
@@ -863,7 +878,7 @@ public class TranscodeurTest {
 //		System.out.println(resultat);
 		
 		System.out.println("resultatControle : " + resultatControle);
-		System.out.println(transcodeur.afficherRapportCsv());
+		System.out.println("RAPPORT : \n" + transcodeur.afficherRapportCsv());
 		
 	} // Fin de testControler().___________________________________________
 

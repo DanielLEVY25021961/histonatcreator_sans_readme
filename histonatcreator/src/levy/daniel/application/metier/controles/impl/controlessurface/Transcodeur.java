@@ -423,7 +423,7 @@ public class Transcodeur extends AbstractControle {
 						if (numeroLigne == 1) {
 							/* Ajout du caractère BOM_UTF-8 pour 
 							 * forcer Excel 2010 à détecter l'UTF-8. */
-							bufferedWriterAnsi.write(BOM_UTF_8);
+							bufferedWriterUtf8.write(BOM_UTF_8);
 						}
 						bufferedWriterUtf8.write(ligneLueEnIBM850);
 						bufferedWriterUtf8.write(NEWLINE);
@@ -459,7 +459,7 @@ public class Transcodeur extends AbstractControle {
 							if (numeroLigne == 1) {
 								/* Ajout du caractère BOM_UTF-8 pour 
 								 * forcer Excel 2010 à détecter l'UTF-8. */
-								bufferedWriterAnsi.write(BOM_UTF_8);
+								bufferedWriterUtf8.write(BOM_UTF_8);
 							}
 							bufferedWriterUtf8.write(ligneLueEnUTF8);
 							bufferedWriterUtf8.write(NEWLINE);
@@ -501,7 +501,7 @@ public class Transcodeur extends AbstractControle {
 					if (numeroLigne == 1) {
 						/* Ajout du caractère BOM_UTF-8 pour 
 						 * forcer Excel 2010 à détecter l'UTF-8. */
-						bufferedWriterAnsi.write(BOM_UTF_8);
+						bufferedWriterUtf8.write(BOM_UTF_8);
 					}
 					bufferedWriterUtf8.write(ligneLueEnAnsi);
 					bufferedWriterUtf8.write(NEWLINE);
@@ -511,27 +511,56 @@ public class Transcodeur extends AbstractControle {
 				
 			} // Fin de Parcours de l'iterator.___________
 			
+			if (this.rapport.isEmpty()) {
+				
+				/* Création d'une ligne de rapport 
+				 * si le fichier était encodé en ANSI. */
+				final LigneRapport ligneRapport = 
+						this.creerLigneRapport(null
+						, "Le fichier " + pFile.getName() + " est encodé entièrement en ANSI"
+						, null
+						, SANS_OBJET
+						, SANS_OBJET
+						, true
+						, ACTION_FICHIER_ACCEPTE);
+				
+				/* Ajout de  la ligne de rapport. */
+				this.ajouterLigneRapport(ligneRapport);
+				
+			} // Fin de if (this.rapport.isEmpty()).____________
+			
+			/* Création d'une ligne de rapport 
+			 * pour informer de la création du fichier encodé en ANSI. */
+			final LigneRapport ligneRapportAnsi = 
+					this.creerLigneRapport(null
+					, "Le fichier " + this.fileEnAnsi.getAbsolutePath() + " a été créé et encodé entièrement en ANSI"
+					, null
+					, SANS_OBJET
+					, SANS_OBJET
+					, true
+					, ACTION_FICHIER_ACCEPTE);
+			
+			/* Ajout de  la ligne de rapport. */
+			this.ajouterLigneRapport(ligneRapportAnsi);
+			
+			/* Création d'une ligne de rapport 
+			 * pour informer de la création du fichier encodé en UTF-8. */
+			final LigneRapport ligneRapportUtf8 = 
+					this.creerLigneRapport(null
+					, "Le fichier " + this.fileEnUtf8.getAbsolutePath() + " a été créé et encodé entièrement en UTF-8"
+					, null
+					, SANS_OBJET
+					, SANS_OBJET
+					, true
+					, ACTION_FICHIER_ACCEPTE);
+			
+			/* Ajout de  la ligne de rapport. */
+			this.ajouterLigneRapport(ligneRapportUtf8);
+			
+			
 			/* Enregistrement du rapport sur disque. */
 			if (pEnregistrerRapport) {
-				
-				if (this.rapport.isEmpty()) {
-					
-					/* Création d'une ligne de rapport 
-					 * si le fichier était encodé en ANSI. */
-					final LigneRapport ligneRapport = 
-							this.creerLigneRapport(null
-							, "Le fichier " + pFile.getName() + " est encodé entièrement en ANSI"
-							, null
-							, SANS_OBJET
-							, SANS_OBJET
-							, true
-							, ACTION_FICHIER_ACCEPTE);
-					
-					/* Ajout de  la ligne de rapport. */
-					this.ajouterLigneRapport(ligneRapport);
-					
-				} // Fin de if (this.rapport.isEmpty()).____________
-				
+								
 				this.enregistrerRapportTextuelUTF8(
 						this.fournirFileTxtUTF8());
 				this.enregistrerRapportCsvUTF8(
