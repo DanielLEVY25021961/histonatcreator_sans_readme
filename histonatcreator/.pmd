@@ -178,6 +178,10 @@
             <ruleset>Basic Velocity</ruleset>
         </rule>
         <rule>
+            <name>EmptyIfStmt</name>
+            <ruleset>Basic Velocity</ruleset>
+        </rule>
+        <rule>
             <name>MistypedCDATASection</name>
             <ruleset>Basic XML</ruleset>
         </rule>
@@ -259,6 +263,10 @@
         </rule>
         <rule>
             <name>SuspiciousOctalEscape</name>
+            <ruleset>Controversial</ruleset>
+        </rule>
+        <rule>
+            <name>UnnecessaryParentheses</name>
             <ruleset>Controversial</ruleset>
         </rule>
         <rule>
@@ -415,10 +423,6 @@
         </rule>
         <rule>
             <name>EmptyFinallyBlock</name>
-            <ruleset>Empty Code</ruleset>
-        </rule>
-        <rule>
-            <name>EmptyIfStmt</name>
             <ruleset>Empty Code</ruleset>
         </rule>
         <rule>
@@ -819,10 +823,6 @@
         </rule>
         <rule>
             <name>UnnecessaryFinalModifier</name>
-            <ruleset>Unnecessary</ruleset>
-        </rule>
-        <rule>
-            <name>UnnecessaryParentheses</name>
             <ruleset>Unnecessary</ruleset>
         </rule>
         <rule>
