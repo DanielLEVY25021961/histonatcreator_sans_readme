@@ -502,6 +502,12 @@ public final class DifferentiateurFichiers {
 							= ajouterString(rapportDiffTxt, messageTxt);
 						
 						/* Injection dans le rapport Csv. */
+						final String ligneCsv 
+							= creerLigneDiffCsv(
+									numeroLigne, "Les lignes sont EGALES");
+						ajouterEnTeteCsv();
+						rapportDiffCsv 
+							= ajouterString(rapportDiffCsv, ligneCsv);
 						
 												
 					}
@@ -524,8 +530,15 @@ public final class DifferentiateurFichiers {
 								messageTxt);
 
 						/* Injection dans le rapport Csv. */
+						final String ligneCsv 
+							= creerLigneDiffCsv(
+									numeroLigne, "Les lignes sont DIFFERENTES");
+						ajouterEnTeteCsv();
+						rapportDiffCsv 
+							= ajouterString(rapportDiffCsv, ligneCsv);
 						
 						
+						// DIFF ENTRE LIGNES *****************
 						/* Calcul de la différence entre les lignes. */
 						resultat = differencier(ligneLue1, ligneLue2,
 								pEnregistrerRapport, numeroLigne);
@@ -606,6 +619,13 @@ public final class DifferentiateurFichiers {
 
 				/* Injection dans le rapport textuel. */
 				rapportDiffTxt = ajouterString(rapportDiffTxt, messageTxt);
+				
+				/* Injection dans le rapport Csv. */
+				final String ligneCsv 
+					= creerLigneDiffCsv(
+							null, "LES FICHIERS SONT EGAUX");
+				ajouterEnTeteCsv();
+				rapportDiffCsv = ajouterString(rapportDiffCsv, ligneCsv);
 
 			}
 			
@@ -638,6 +658,13 @@ public final class DifferentiateurFichiers {
 				/* Injection dans le rapport textuel. */
 				rapportDiffTxt = ajouterString(rapportDiffTxt, messageTxt);
 				
+				/* Injection dans le rapport Csv. */
+				final String ligneCsv 
+					= creerLigneDiffCsv(
+							null, "LES FICHIERS SONT DIFFERENTS");
+				ajouterEnTeteCsv();
+				rapportDiffCsv = ajouterString(rapportDiffCsv, ligneCsv);
+				
 			}
 						
 			return resultat;
@@ -652,6 +679,7 @@ public final class DifferentiateurFichiers {
 	 // , boolean pEnregistrerRapports).___________________________________
 	
 
+	
 	/**
 	 * method differencier() :<br/>
 	 * .<br/>
@@ -794,7 +822,6 @@ public final class DifferentiateurFichiers {
 					}
 					
 					stbDiffCsv.append(comparaisonCsv);
-					stbDiffCsv.append(NEWLINE);
 					
 				}
 				
@@ -804,10 +831,12 @@ public final class DifferentiateurFichiers {
 			
 			// INJECTION DANS LES RAPPORTS.***************
 			/* Injection dans le rapport textuel. */
-			rapportDiffTxt = ajouterString(rapportDiffTxt, stbDiffTxt.toString());
+			rapportDiffTxt 
+				= ajouterString(rapportDiffTxt, stbDiffTxt.toString());
 			
 			/* Injection dans le rapport csv. */
-			rapportDiffCsv = ajouterString(rapportDiffCsv, stbDiffCsv.toString());
+			rapportDiffCsv 
+				= ajouterString(rapportDiffCsv, stbDiffCsv.toString());
 			
 			
 			
@@ -1076,58 +1105,63 @@ public final class DifferentiateurFichiers {
 					, final String pLigneLue1
 						, final String pLigneLue2) {
 		
-		final StringBuilder stb = new StringBuilder();
-		
-		stb.append(String.format(LOCALE_FR_FR,
-				"Ligne : %-8d", pNumeroLigne));
-		stb.append(pMessage);
-		
-		stb.append(NEWLINE);
-		
-		stb.append("Ligne du fichier1 : ");
-		if (pLigneLue1 != null) {
-			stb.append(StringUtils.abbreviate(pLigneLue1, 600));
+		/* bloc static synchronized. */
+		synchronized (DifferentiateurFichiers.class) {
+			
+			final StringBuilder stb = new StringBuilder();
+			
+			stb.append(String.format(LOCALE_FR_FR,
+					"Ligne : %-8d", pNumeroLigne));
+			stb.append(pMessage);
+			
 			stb.append(NEWLINE);
-		}
-		else {
-			stb.append("null");
+			
+			stb.append("Ligne du fichier1 : ");
+			if (pLigneLue1 != null) {
+				stb.append(StringUtils.abbreviate(pLigneLue1, 600));
+				stb.append(NEWLINE);
+			}
+			else {
+				stb.append("null");
+				stb.append(NEWLINE);
+			}
+			
+			stb.append("Ligne du fichier2 : ");
+			if (pLigneLue1 != null) {
+				stb.append(StringUtils.abbreviate(pLigneLue2, 600));
+				stb.append(NEWLINE);
+			}
+			else {
+				stb.append("null");
+				stb.append(NEWLINE);
+			}
+			
 			stb.append(NEWLINE);
-		}
-		
-		stb.append("Ligne du fichier2 : ");
-		if (pLigneLue1 != null) {
-			stb.append(StringUtils.abbreviate(pLigneLue2, 600));
-			stb.append(NEWLINE);
-		}
-		else {
-			stb.append("null");
-			stb.append(NEWLINE);
-		}
-		
-		stb.append(NEWLINE);
-		
-		stb.append("Longueur de la ligne1 : ");
-		if (pLigneLue1 != null) {
-			stb.append(pLigneLue1.length());
-			stb.append(NEWLINE);
-		}
-		else {
-			stb.append(0);
-			stb.append(NEWLINE);
-		}
-		
-		stb.append("Longueur de la ligne2 : ");
-		if (pLigneLue2 != null) {
-			stb.append(pLigneLue2.length());
-			stb.append(NEWLINE);
-		}
-		else {
-			stb.append(0);
-			stb.append(NEWLINE);
-		}
-		
-		return stb;
-		
+			
+			stb.append("Longueur de la ligne1 : ");
+			if (pLigneLue1 != null) {
+				stb.append(pLigneLue1.length());
+				stb.append(NEWLINE);
+			}
+			else {
+				stb.append(0);
+				stb.append(NEWLINE);
+			}
+			
+			stb.append("Longueur de la ligne2 : ");
+			if (pLigneLue2 != null) {
+				stb.append(pLigneLue2.length());
+				stb.append(NEWLINE);
+			}
+			else {
+				stb.append(0);
+				stb.append(NEWLINE);
+			}
+			
+			return stb;
+			
+		} // Fin du bloc static synchronized.________________________
+				
 	} // Fin de fournirMessageLignes(
 	 // int pNumeroLigne
 	 // , String pMessage
@@ -1170,19 +1204,24 @@ public final class DifferentiateurFichiers {
 						, final File pFile2
 							, final Charset pCharset2) {
 		
-		final StringBuilder stb = new StringBuilder();
-		
-		stb.append(pMessage);
-		stb.append(pFile1.getAbsolutePath());
-		stb.append("' Lu en ");
-		stb.append(pCharset1.name());
-		stb.append(" ET '");
-		stb.append(pFile2.getAbsolutePath());
-		stb.append("' Lu en ");
-		stb.append(pCharset2.name());
-		
-		return stb;
-		
+		/* bloc static synchronized. */
+		synchronized (DifferentiateurFichiers.class) {
+			
+			final StringBuilder stb = new StringBuilder();
+			
+			stb.append(pMessage);
+			stb.append(pFile1.getAbsolutePath());
+			stb.append("' Lu en ");
+			stb.append(pCharset1.name());
+			stb.append(" ET '");
+			stb.append(pFile2.getAbsolutePath());
+			stb.append("' Lu en ");
+			stb.append(pCharset2.name());
+			
+			return stb;
+			
+		} // Fin du bloc static synchronized.________________________
+				
 	} // Fin de fournirMessageFichiers(
 	// String pMessage
 	 // File pFile1
@@ -1193,34 +1232,124 @@ public final class DifferentiateurFichiers {
 
 	
 	/**
-	 * method getEnTeteCsv() :<br/>
-	 * Fournit l'en-tête Csv pour rapportDiffCsv.<br/>
+	 * method ajouterEnTeteCsv() :<br/>
+	 * Ajoute l'entête csv au rapportDiffCsv.<br/>
+	 * <br/>
+	 * - ajoute l'entete csv au  rapportDiffCsv 
+	 * si rapportDiffCsv == null.<br/>
+	 * - ajoute l'entete csv au  rapportDiffCsv 
+	 * si rapportDiffCsv est vide.<br/>
+	 * <br/>
+	 * entête csv :<br/>
 	 * [Ligne numéro;id;Position;Caractère;Unicode;numericValue;
 	 * Type de Caractère; Valeur Entière;Point de Code Décimal;
 	 * Point de Code HexaDécimal;Nom Unicode;DIFFERENCE;id;Position;
 	 * Caractère;Unicode;numericValue;Type de Caractère; Valeur Entière;
-	 * Point de Code Décimal;Point de Code HexaDécimal;Nom Unicode;".
+	 * Point de Code Décimal;Point de Code HexaDécimal;Nom Unicode;".<br/>
+	 * <br/>
+	 */
+	private static void ajouterEnTeteCsv() {
+		
+		/* bloc static synchronized. */
+		synchronized (DifferentiateurFichiers.class) {
+			
+			/* ajoute l'entete csv au  rapportDiffCsv si rapportDiffCsv == null. */
+			if (rapportDiffCsv == null) {
+				rapportDiffCsv = ajouterString(rapportDiffCsv, getEnTeteCsv());
+			}
+			
+			/* ajoute l'entete csv au  rapportDiffCsv si rapportDiffCsv est vide. */
+			if (rapportDiffCsv.isEmpty()) {
+				rapportDiffCsv = ajouterString(rapportDiffCsv, getEnTeteCsv());
+			}
+			
+		} // Fin du bloc static synchronized.________________________
+				
+	} // Fin de ajouterEnTeteCsv().________________________________________
+	
+	
+	
+	/**
+	 * method getEnTeteCsv() :<br/>
+	 * Fournit l'en-tête Csv pour rapportDiffCsv.<br/>
+	 * - Ajoute le BOM_UTF_8 pour forcer Excel à détecter l'UTF-8.<br/>
+	 * <br/>
+	 * entête csv :<br/>
+	 * [Ligne numéro;id;Position;Caractère;Unicode;numericValue;
+	 * Type de Caractère; Valeur Entière;Point de Code Décimal;
+	 * Point de Code HexaDécimal;Nom Unicode;DIFFERENCE;id;Position;
+	 * Caractère;Unicode;numericValue;Type de Caractère; Valeur Entière;
+	 * Point de Code Décimal;Point de Code HexaDécimal;Nom Unicode;".<br/>
 	 * <br/>
 	 *
 	 * @return : String : En tête pour le rapport csv.<br/>
 	 */
 	public static String getEnTeteCsv() {
 		
-		final StringBuilder stb = new StringBuilder();
-		final CaractereDan caractereDan = new CaractereDan();
-		
-		stb.append("Numéro de la Ligne");
-		stb.append(SEP_POINTVIRGULE);
-		stb.append(caractereDan.getEnTeteCsv());
-		stb.append("DIFFERENCE");
-		stb.append(SEP_POINTVIRGULE);
-		stb.append(caractereDan.getEnTeteCsv());
-		
-		return stb.toString();
-		
+		/* bloc static synchronized. */
+		synchronized (DifferentiateurFichiers.class) {
+			
+			final StringBuilder stb = new StringBuilder();
+			final CaractereDan caractereDan = new CaractereDan();
+			
+			/* Ajoute le BOM_UTF_8 pour forcer Excel à détecter l'UTF-8. */
+			stb.append(BOM_UTF_8);
+			
+			stb.append("Numéro de la Ligne");
+			stb.append(SEP_POINTVIRGULE);
+			stb.append(caractereDan.getEnTeteCsv());
+			stb.append("DIFFERENCE");
+			stb.append(SEP_POINTVIRGULE);
+			stb.append(caractereDan.getEnTeteCsv());
+			
+			return stb.toString();
+			
+		} // Fin du bloc static synchronized.________________________
+				
 	} // Fin de getEnTeteCsv().____________________________________________
 	
+
 	
+	/**
+	 * method creerLigneDiffCsv(
+	 * Integer pNumeroLigne
+	 * , String pMessage) :<br/>
+	 * Retourne une ligne csv avec un simple 
+	 * message pMessage pour le rapportDiffCsv.<br/>
+	 * <br/>
+	 * "pNumeroLigne;null;;;;;;;;;;pMessage;null;;;;;;;;;;".<br/>
+	 * <br/>
+	 * Les champs sont : <br/>
+	 * [Ligne numéro;id;Position;Caractère;Unicode;numericValue;
+	 * Type de Caractère; Valeur Entière;Point de Code Décimal;
+	 * Point de Code HexaDécimal;Nom Unicode;DIFFERENCE;id;Position;
+	 * Caractère;Unicode;numericValue;Type de Caractère; Valeur Entière;
+	 * Point de Code Décimal;Point de Code HexaDécimal;Nom Unicode;".<br/>
+	 * <br/>
+	 * 
+	 * @param pNumeroLigne : Integer : numéro de la ligne.<br/>
+	 * @param pMessage : String : message simple 
+	 * à afficher dans rapportDiffCsv.<br/>
+	 * 
+	 * @return : String : 
+	 * "pNumeroLigne;null;;;;;;;;;;pMessage;null;;;;;;;;;;".<br/>
+	 */
+	public static String creerLigneDiffCsv(
+			final Integer pNumeroLigne
+				, final String pMessage) {
+		
+		/* bloc static synchronized. */
+		synchronized (DifferentiateurFichiers.class) {
+			
+			return pNumeroLigne + ";null;;;;;;;;;;" + pMessage +";null;;;;;;;;;;";
+			
+		} // Fin du bloc static synchronized.________________________
+		
+	} // Fin de creerLigneDiffCsv(
+	 // Integer pNumeroLigne
+	// , String pMessage)._________________________________________________
+	
+
 	
 	/**
 	 * method loggerInfo(
