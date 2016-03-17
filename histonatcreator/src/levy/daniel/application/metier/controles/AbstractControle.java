@@ -795,6 +795,10 @@ public abstract class AbstractControle implements IControle {
 	 * , boolean pEnregistrerRapport
 	 * , String pMethode) :<br/>
 	 * Centralise le traitement des fichiers incorrects.<br/>
+	 * Traite le cas des fichiers null, inexistants, répertoires ou vide.<br/>
+	 * - retourne false si c'est le cas.<br/>
+	 * - Génère un rapport en cas de mauvais fichier.<br/>
+	 * - Ecrit le rapport sur disque si pEnregistrerRapport vaut true.<br/>
 	 * <br/>
 	 * <ul>
 	 * <li>retourne false, LOG de niveau INFO et rapport 

@@ -628,7 +628,7 @@ public class Transcodeur extends AbstractControle {
 
 				} catch (IOException ioe2) {
 
-					/* LOG de niveau ERROR et rapport. */
+					/* LOG de niveau ERROR. */
 					loggerError(
 							this.fournirNomClasseConcrete()
 								, MESSAGE_EXCEPTION
@@ -644,7 +644,7 @@ public class Transcodeur extends AbstractControle {
 
 				} catch (IOException ioe3) {
 
-					/* LOG de niveau ERROR et rapport. */
+					/* LOG de niveau ERROR. */
 					loggerError(
 							this.fournirNomClasseConcrete()
 								, MESSAGE_EXCEPTION
