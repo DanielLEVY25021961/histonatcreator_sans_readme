@@ -4333,7 +4333,7 @@ public abstract class AbstractControle implements IControle {
 	 * 
 	 * @return : File : Le File créé.<br/>
 	 */
-	protected File fournirFile(
+	protected final File fournirFile(
 			final String pChemin
 				, final Date pDate
 					, final String pNomFichier
@@ -4770,7 +4770,97 @@ public abstract class AbstractControle implements IControle {
 	 // File pRep).________________________________________________________
 	
 
+	
+	/**
+	 * method fournirRepertoireParent(
+	 * File pFile) :<br/>
+	 * Retourne le répertoire parent d'un File pFile.<br/>
+	 * pFile n'a pas besoin d'être un file existant.<br/> 
+	 * En revanche, le répertoire parent retourné doit exister.<br/> 
+	 * La méthode retourne le parent dans le chemin abstrait de pFile.<br/>
+	 * <br/>
+	 * - retourne null si pFile == null.<br/>
+	 * - retourne null si le parent de pFile 
+	 * n'est pas un répertoire existant.<br/>
+	 * <br/>
+	 *
+	 * @param pFile : File.<br/>
+	 * @return : File : Répertoire parent existant.<br/>
+	 */
+	protected final File fournirRepertoireParent(
+			final File pFile) {
+		
+		/* retourne null si pFile == null. */
+		if (pFile == null) {
+			return null;
+		}
+		
+		final File resultat = pFile.getParentFile();
+		
+		/* retourne null si le parent de pFile 
+		 * n'est pas un répertoire existant. */
+		if (!resultat.isDirectory()) {
+			return null;
+		}
+		
+		return resultat;
+		
+	} // Fin de fournirRepertoireParent(
+	 // File pFile)._______________________________________________________
+	
 
+	
+	/**
+	 * method fournirRepertoireGrandParent(
+	 * File pFile) :<br/>
+	 * Retourne le répertoire grand-parent d'un File pFile.<br/>
+	 * pFile n'a pas besoin d'être un file existant.<br/> 
+	 * En revanche, le répertoire parent 
+	 * et le répertoire grand-parent retourné doivent exister.<br/> 
+	 * La méthode retourne le grand-parent 
+	 * dans le chemin abstrait de pFile.<br/>
+	 * <br/>
+	 * - retourne null si pFile == null.<br/>
+	 * - retourne null si le parent de pFile 
+	 * n'est pas un répertoire existant.<br/>
+	 * - retourne null si le grand-parent de pFile 
+	 * n'est pas un répertoire existant.<br/>
+	 * <br/>
+	 *
+	 * @param pFile : File.<br/>
+	 * @return : File : Répertoire grand-parent existant.<br/>
+	 */
+	protected final File fournirRepertoireGrandParent(
+			final File pFile) {
+		
+		/* retourne null si pFile == null. */
+		if (pFile == null) {
+			return null;
+		}
+		
+		final File fileParent = this.fournirRepertoireParent(pFile);
+		
+		/* retourne null si le parent de pFile 
+		 * n'est pas un répertoire existant.*/
+		if (!fileParent.isDirectory()) {
+			return null;
+		}
+		
+		final File resultat = this.fournirRepertoireParent(fileParent);
+		
+		/* retourne null si le grand-parent de pFile 
+		 * n'est pas un répertoire existant. */
+		if (!resultat.isDirectory()) {
+			return null;
+		}
+		
+		return resultat;
+		
+	} // Fin de fournirRepertoireGrandParent(
+	 // File pFile)._______________________________________________________
+	
+	
+	
 	/**
 	 * {@inheritDoc}
 	 */
