@@ -48,6 +48,7 @@ import org.junit.runners.Suite.SuiteClasses;
 	, levy.daniel.application.util.convertisseursencodage.ConvertisseurEncodageTest.class
 	, levy.daniel.application.util.detecteurstypefichier.DetecteurTypeMimeTest.class
 	, levy.daniel.application.util.differentiateurs.differentiateursstrings.CaractereDanTest.class
+	, levy.daniel.application.util.differentiateurs.differentiateursfichiers.DifferentiateurFichiersTest.class
 	, levy.daniel.application.util.differentiateurs.differentiateursstrings.DifferentiateurStringTest.class
 	, levy.daniel.application.util.gestionnairesdates.GestionnaireDatesTest.class
 	, levy.daniel.application.util.gestionnairesiofichiers.GestionnaireFichiersTest.class

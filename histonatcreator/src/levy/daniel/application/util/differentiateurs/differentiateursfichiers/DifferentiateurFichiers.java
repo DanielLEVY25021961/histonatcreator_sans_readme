@@ -36,6 +36,7 @@ import org.apache.commons.logging.LogFactory;
  *<br/>
  * 
  * - Mots-clé :<br/>
+ * nom court d'unfichier, fichier sans extension, <br/>
  * <br/>
  *
  * - Dépendances :<br/>
@@ -301,27 +302,64 @@ public final class DifferentiateurFichiers {
 	
 	/**
 	 * rapportDiffTxt : String :<br/>
-	 * .<br/>
+	 * rapport du contrôle d'égalité entre deux fichiers 
+	 * sous forme textuelle.<br/>
 	 */
 	private static transient String rapportDiffTxt;
 	
 	
 	/**
+	 * fileRapportDiffTxt : File :<br/>
+	 * fichier sur disque contenant le 
+	 * rapport du contrôle d'égalité entre deux fichiers 
+	 * sous forme textuelle.<br/>
+	 */
+	private static transient File fileRapportDiffTxt;
+	
+
+	/**
 	 * rapportDiffCsv : String :<br/>
-	 * .<br/>
+	 * rapport du contrôle d'égalité entre deux fichiers 
+	 * sous forme csv.<br/>
+	 * entête csv :<br/>
+	 * [Ligne numéro;id;Position;Caractère;Unicode;numericValue;
+	 * Type de Caractère; Valeur Entière;Point de Code Décimal;
+	 * Point de Code HexaDécimal;Nom Unicode;DIFFERENCE;id;Position;
+	 * Caractère;Unicode;numericValue;Type de Caractère; Valeur Entière;
+	 * Point de Code Décimal;Point de Code HexaDécimal;Nom Unicode;".<br/>
+	 * <br/>
 	 */
 	private static transient String rapportDiffCsv;
 
+	
+	/**
+	 * fileRapportDiffCsv : File :<br/>
+	 * fichier sur disque contenant le 
+	 * rapport du contrôle d'égalité entre deux fichiers 
+	 * sous forme csv.<br/>
+	 * entête csv :<br/>
+	 * [Ligne numéro;id;Position;Caractère;Unicode;numericValue;
+	 * Type de Caractère; Valeur Entière;Point de Code Décimal;
+	 * Point de Code HexaDécimal;Nom Unicode;DIFFERENCE;id;Position;
+	 * Caractère;Unicode;numericValue;Type de Caractère; Valeur Entière;
+	 * Point de Code Décimal;Point de Code HexaDécimal;Nom Unicode;".<br/>
+	 */
+	private static transient File fileRapportDiffCsv;
+	
+	
 	/**
 	 * rapportExecutionControle : String :<br/>
-	 * .<br/>
+	 * rapport sur l'exécution du contrôle d'égalité entre deux fichiers 
+	 * sous forme textuelle.<br/>
 	 */
 	private static transient String rapportExecutionControle;
 
 	
 	/**
 	 * fileRapportExecutionControle : File :<br/>
-	 * .<br/>
+	 * fichier sur disque contenant le
+	 * rapport sur l'exécution du contrôle d'égalité entre deux fichiers 
+	 * sous forme textuelle.<br/>
 	 */
 	private static transient File fileRapportExecutionControle; 
 
@@ -384,6 +422,49 @@ public final class DifferentiateurFichiers {
 		
 		/* bloc static synchronized. */
 		synchronized (DifferentiateurFichiers.class) {
+			
+			
+			if (pEnregistrerRapport) {
+				
+				/* Crée fileRapportExecutionControle si pEnregistrerRapport. */
+				fileRapportExecutionControle 
+				= fournirFileRapportExecutionControle(
+						pFile1, pCharset1, pFile2, pCharset2);
+				
+				final StringBuilder stbIntitule = new StringBuilder();
+				
+				stbIntitule.append("RAPPORT D'EXECUTION DU CONTROLE");
+				stbIntitule.append(" D'EGALITE ENTRE LES FICHIERS '");
+				stbIntitule.append(fournirNomSansExtension(pFile1));
+				stbIntitule.append("' lu en ");
+				stbIntitule.append(pCharset1.name());
+				stbIntitule.append(" et '");
+				stbIntitule.append(fournirNomSansExtension(pFile2));
+				stbIntitule.append("' lu en ");
+				stbIntitule.append(pCharset2.name());
+				
+				final String intitule = stbIntitule.toString();
+				
+				ajouterAFile(fileRapportExecutionControle, intitule);
+				
+				/* Instanciation éventuelle du fileRapportDiffTxt.*/
+				fileRapportDiffTxt 
+					= fournirFileRapportDiffTxt(
+							pFile1, pCharset1, pFile2, pCharset2);
+				
+				/* Instanciation éventuelle du fileRapportDiffCsv.*/
+				fileRapportDiffCsv 
+					= fournirFileRapportDiffCsv(
+							pFile1, pCharset1, pFile2, pCharset2);
+				
+				/* Ajout éventuel de l'entete csv au fichier 
+				 * avec BOM_UTF-8. */
+				if (fileRapportDiffCsv.length() == 0) {
+					ajouterAFile(fileRapportDiffCsv, getEnTeteCsv());
+				}
+								
+			} // Fin de if (pEnregistrerRapport).______________________
+			
 			
 			// Traitement des mauvais fichiers.************
 			final boolean resultatTraitementMauvaisFichier1 
@@ -491,7 +572,7 @@ public final class DifferentiateurFichiers {
 						final StringBuilder stbEgales 
 							= fournirMessageLignes(
 									numeroLigne
-									, "Les lignes sont EGALES : "
+									, "Les lignes " +  numeroLigne + " sont EGALES : "
 									, ligneLue1
 									, ligneLue2);
 												
@@ -501,13 +582,29 @@ public final class DifferentiateurFichiers {
 						rapportDiffTxt 
 							= ajouterString(rapportDiffTxt, messageTxt);
 						
+						/* Enregistrement dans le rapport textuel. */
+						if (pEnregistrerRapport) {
+														
+							/* Ajout de la ligne. */
+							ajouterAFile(fileRapportDiffTxt, messageTxt);
+							
+						} // Fin de if (pEnregistrerRapport).__________
+						
 						/* Injection dans le rapport Csv. */
 						final String ligneCsv 
 							= creerLigneDiffCsv(
-									numeroLigne, "Les lignes sont EGALES");
+									numeroLigne, "Les lignes " +  numeroLigne + " sont EGALES");
 						ajouterEnTeteCsv();
 						rapportDiffCsv 
 							= ajouterString(rapportDiffCsv, ligneCsv);
+						
+						/* Enregistrement dans le rapport csv. */
+						if (pEnregistrerRapport) {
+							
+							/* Ajout de la ligne. */
+							ajouterAFile(fileRapportDiffCsv, ligneCsv);
+							
+						} // Fin de if (pEnregistrerRapport).__________
 						
 												
 					}
@@ -519,7 +616,7 @@ public final class DifferentiateurFichiers {
 						/* Message pour le rapport textuel. */
 						final StringBuilder stbDifferentes 
 							= fournirMessageLignes(numeroLigne
-									, "Les lignes sont DIFFERENTES : "
+									, "Les lignes " +  numeroLigne + " sont DIFFERENTES : "
 									, ligneLue1
 									, ligneLue2);
 						
@@ -528,14 +625,31 @@ public final class DifferentiateurFichiers {
 						/* Injection dans le rapport textuel. */
 						rapportDiffTxt = ajouterString(rapportDiffTxt,
 								messageTxt);
+						
+						/* Enregistrement dans le rapport textuel. */
+						if (pEnregistrerRapport) {
+														
+							/* Ajout de la ligne. */
+							ajouterAFile(fileRapportDiffTxt, messageTxt);
+							
+						} // Fin de if (pEnregistrerRapport).__________
 
 						/* Injection dans le rapport Csv. */
 						final String ligneCsv 
 							= creerLigneDiffCsv(
-									numeroLigne, "Les lignes sont DIFFERENTES");
+									numeroLigne, "Les lignes " +  numeroLigne + " sont DIFFERENTES");
 						ajouterEnTeteCsv();
 						rapportDiffCsv 
 							= ajouterString(rapportDiffCsv, ligneCsv);
+						
+						/* Enregistrement dans le rapport csv. */
+						if (pEnregistrerRapport) {
+							
+							/* Ajout de la ligne. */
+							ajouterAFile(fileRapportDiffCsv, ligneCsv);
+							
+						} // Fin de if (pEnregistrerRapport).__________
+						
 						
 						
 						// DIFF ENTRE LIGNES *****************
@@ -606,6 +720,41 @@ public final class DifferentiateurFichiers {
 					= ajouterString(rapportExecutionControle
 							, messageExecutionControle);
 				
+				/* Enregistrement dans le rapport de controle. */
+				if (pEnregistrerRapport) {
+												
+					/* Ajout de la ligne. */
+					ajouterAFile(
+							fileRapportExecutionControle
+								, messageExecutionControle);
+					
+					/* Ajout d'un message de création des fichiers de rapport 
+					 * de contrôle dans rapportExecutionControle 
+					 * et dans fileRapportExecutionControle. */
+					final String messageCreationDifftxt 
+						= "Le rapport de comparaison des fichiers au format textuel a été créé sur disque : " 
+					+ fileRapportDiffTxt.getAbsolutePath();
+					
+					final String messageCreationDiffcsv 
+					= "Le rapport de comparaison des fichiers au format csv a été créé sur disque : " 
+					+ fileRapportDiffCsv.getAbsolutePath();
+					
+					rapportExecutionControle 
+					= ajouterString(rapportExecutionControle
+							, messageCreationDifftxt);
+					rapportExecutionControle 
+					= ajouterString(rapportExecutionControle
+							, messageCreationDiffcsv);
+					
+					ajouterAFile(
+							fileRapportExecutionControle
+								, messageCreationDifftxt);					
+					ajouterAFile(
+							fileRapportExecutionControle
+								, messageCreationDiffcsv);
+					
+				} // Fin de if (pEnregistrerRapport).__________
+				
 				/* RAPPORT DE CONTROLE. */
 				final StringBuilder stbEgaux 
 					= fournirMessageFichiers(
@@ -617,8 +766,18 @@ public final class DifferentiateurFichiers {
 								
 				final String messageTxt = stbEgaux.toString();
 
+				
 				/* Injection dans le rapport textuel. */
 				rapportDiffTxt = ajouterString(rapportDiffTxt, messageTxt);
+				
+				/* Enregistrement dans le rapport textuel. */
+				if (pEnregistrerRapport) {
+												
+					/* Ajout de la ligne. */
+					ajouterAFile(fileRapportDiffTxt, messageTxt);
+					
+				} // Fin de if (pEnregistrerRapport).__________
+
 				
 				/* Injection dans le rapport Csv. */
 				final String ligneCsv 
@@ -626,6 +785,14 @@ public final class DifferentiateurFichiers {
 							null, "LES FICHIERS SONT EGAUX");
 				ajouterEnTeteCsv();
 				rapportDiffCsv = ajouterString(rapportDiffCsv, ligneCsv);
+				
+				/* Enregistrement dans le rapport csv. */
+				if (pEnregistrerRapport) {
+												
+					/* Ajout de la ligne. */
+					ajouterAFile(fileRapportDiffCsv, ligneCsv);
+					
+				} // Fin de if (pEnregistrerRapport).__________
 
 			}
 			
@@ -638,11 +805,55 @@ public final class DifferentiateurFichiers {
 				+ SEP_MOINS
 				+ METHODE_DIFFERENCIER 
 				+ SEP_MOINS
-				+ "le contrôle s'est bien déroulé et est négatif (fichiers inégaux).";
+				+ "le contrôle de comparaison entre '" 
+				+ pFile1.getName() 
+				+ "' lu en " 
+				+ charset1.name() 
+				+ " et '" 
+				+ pFile2.getName() 
+				+ "' lu en " 
+				+ charset2.name() 
+				+ " s'est bien déroulé et est négatif (fichiers inégaux).";
 				
 				rapportExecutionControle 
 					= ajouterString(rapportExecutionControle
 							, messageExecutionControle);
+				
+				/* Enregistrement dans le rapport de controle. */
+				if (pEnregistrerRapport) {
+												
+					/* Ajout de la ligne. */
+					ajouterAFile(
+							fileRapportExecutionControle
+								, messageExecutionControle);
+					
+					/* Ajout d'un message de création des fichiers de rapport 
+					 * de contrôle dans rapportExecutionControle 
+					 * et dans fileRapportExecutionControle. */
+					final String messageCreationDifftxt 
+						= "Le rapport de comparaison des fichiers au format textuel a été créé sur disque : " 
+					+ fileRapportDiffTxt.getAbsolutePath();
+					
+					final String messageCreationDiffcsv 
+					= "Le rapport de comparaison des fichiers au format csv a été créé sur disque : " 
+					+ fileRapportDiffCsv.getAbsolutePath();
+					
+					rapportExecutionControle 
+					= ajouterString(rapportExecutionControle
+							, messageCreationDifftxt);
+					rapportExecutionControle 
+					= ajouterString(rapportExecutionControle
+							, messageCreationDiffcsv);
+					
+					ajouterAFile(
+							fileRapportExecutionControle
+								, messageCreationDifftxt);					
+					ajouterAFile(
+							fileRapportExecutionControle
+								, messageCreationDiffcsv);
+					
+				} // Fin de if (pEnregistrerRapport).__________
+				
 				
 				/* RAPPORT DE CONTROLE. */
 				final StringBuilder stbInegaux 
@@ -655,8 +866,19 @@ public final class DifferentiateurFichiers {
 				
 				final String messageTxt = stbInegaux.toString();
 
+				
 				/* Injection dans le rapport textuel. */
 				rapportDiffTxt = ajouterString(rapportDiffTxt, messageTxt);
+				
+				/* Enregistrement dans le rapport textuel. */
+				if (pEnregistrerRapport) {
+												
+					/* Ajout de la ligne. */
+					ajouterAFile(fileRapportDiffTxt, messageTxt);
+					
+				} // Fin de if (pEnregistrerRapport).__________
+				
+				
 				
 				/* Injection dans le rapport Csv. */
 				final String ligneCsv 
@@ -664,6 +886,14 @@ public final class DifferentiateurFichiers {
 							null, "LES FICHIERS SONT DIFFERENTS");
 				ajouterEnTeteCsv();
 				rapportDiffCsv = ajouterString(rapportDiffCsv, ligneCsv);
+				
+				/* Enregistrement dans le rapport csv. */
+				if (pEnregistrerRapport) {
+												
+					/* Ajout de la ligne. */
+					ajouterAFile(fileRapportDiffCsv, ligneCsv);
+					
+				} // Fin de if (pEnregistrerRapport).__________
 				
 			}
 						
@@ -712,8 +942,7 @@ public final class DifferentiateurFichiers {
 			String diff = null;
 						
 			final StringBuilder stbDiffTxt = new StringBuilder();
-			final StringBuilder stbDiffCsv = new StringBuilder();
-			
+
 			/* Détermine la longueur de la plus longue chaîne. */
 			/* Alimente longueurChaine1 et longueurChaine2. */
 			longueurChaine1 = pString1.length();
@@ -792,40 +1021,33 @@ public final class DifferentiateurFichiers {
 				final String comparaisonCsv 
 					= pNumeroLigne + ";" + c1.toCsv() + diff + ";" + c2.toCsv();
 				
-				/* Ajout dans les StringBuilders pour les rapports. */
-				/* rapport textuel. ******/
+				/* Ajout dans les les rapports. */				
 				/* N'ajoute que les différences. */
 				if (StringUtils.equals("DIFF", diff)) {
+					
+					/* rapport textuel. ******/
 					stbDiffTxt.append(comparaisonTxt);
 					stbDiffTxt.append(NEWLINE);
-				}
-				
-				
-				/* rapport csv. ******/				
-				/* Ajout d'un caractère BOM-UTF-8 au début du rapport csv
-				 * pour forcer Excel 2010 à détecter l'UTF-8. */				
-				stbDiffCsv.append(BOM_UTF_8);
-				
-								
-				/* Ajout de l'en-tête pour le rapport Csv. */
-				/* N'ajoute que les différences. */
-				if (StringUtils.equals("DIFF", diff)) {
 					
-					if (position == 1) {
-						stbDiffCsv.append("Ligne numéro");
-						stbDiffCsv.append(SEP_POINTVIRGULE);
-						stbDiffCsv.append(c1.getEnTeteCsv());
-						stbDiffCsv.append("DIFFERENCE");
-						stbDiffCsv.append(SEP_POINTVIRGULE);
-						stbDiffCsv.append(c1.getEnTeteCsv());
-						stbDiffCsv.append(NEWLINE);
-					}
+					/* rapport csv. ******/	
+					/* Ajout éventuel de l'en-tête avec BOM_UTF-8 
+					 * pour le rapport Csv. */
+					ajouterEnTeteCsv();
+
+					/* Injection dans le rapport csv. */
+					rapportDiffCsv 
+						= ajouterString(rapportDiffCsv, comparaisonCsv);
 					
-					stbDiffCsv.append(comparaisonCsv);
+					/* Enregistrement éventuel dans fileRapportDiffCsv. */
+					if (pEnregistrerRapportDiff) {
+						
+						/* Ajout de la ligne. */
+						ajouterAFile(fileRapportDiffCsv, comparaisonCsv);
+						
+					} // Fin de if (pEnregistrerRapportDiff)._____
 					
-				}
-				
-								
+				} // Fin if (StringUtils.equals("DIFF", diff))._____
+												
 			} // Fin de la boucle sur les caractères._______________
 			
 			
@@ -835,18 +1057,18 @@ public final class DifferentiateurFichiers {
 				= ajouterString(rapportDiffTxt, stbDiffTxt.toString());
 			
 			/* Injection dans le rapport csv. */
-			rapportDiffCsv 
-				= ajouterString(rapportDiffCsv, stbDiffCsv.toString());
+			// Déjà réalisée dans la boucle sur la ligne.
 			
-			
-			
+						
 			/* Ecriture des rapports dans les 
 			 * fileRapportDiffTxt et fileRapportDiffCsv 
 			 * en UTF_8. */
 			if (pEnregistrerRapportDiff) {
-				/**/
-												
-			}
+				
+					/* Ajout des lignes dans le rapportTxt. */
+					ajouterAFile(fileRapportDiffTxt, stbDiffTxt.toString());
+																	
+			} // Fin de if (pEnregistrerRapportDiff)._____________
 									
 			/* retourne le boolean. */
 			return resultat;
@@ -931,7 +1153,7 @@ public final class DifferentiateurFichiers {
 					
 					/* Ajout de la ligne au fichier sur disque. */
 					ajouterAFile(
-							fournirFileRapportExecutionControle(), message);
+							fileRapportExecutionControle, message);
 										
 				}
 				
@@ -969,7 +1191,7 @@ public final class DifferentiateurFichiers {
 				if (pEnregistrerRapport) {
 					
 					ajouterAFile(
-							fournirFileRapportExecutionControle(), message);
+							fileRapportExecutionControle, message);
 					
 				}
 				
@@ -1007,7 +1229,7 @@ public final class DifferentiateurFichiers {
 				if (pEnregistrerRapport) {
 					
 					ajouterAFile(
-							fournirFileRapportExecutionControle(), message);
+							fileRapportExecutionControle, message);
 					
 				}
 				
@@ -1045,7 +1267,7 @@ public final class DifferentiateurFichiers {
 				if (pEnregistrerRapport) {
 					
 					ajouterAFile(
-							fournirFileRapportExecutionControle(), message);
+							fileRapportExecutionControle, message);
 					
 				}
 				
@@ -1233,7 +1455,8 @@ public final class DifferentiateurFichiers {
 	
 	/**
 	 * method ajouterEnTeteCsv() :<br/>
-	 * Ajoute l'entête csv au rapportDiffCsv.<br/>
+	 * Ajoute l'entête csv au rapportDiffCsv si celui-ci est null ou vide.<br/>
+	 * - Ajoute le BOM_UTF-8 pour forcer Excel à détecter l'encodage UTF-8.<br/>
 	 * <br/>
 	 * - ajoute l'entete csv au  rapportDiffCsv 
 	 * si rapportDiffCsv == null.<br/>
@@ -1556,6 +1779,13 @@ public final class DifferentiateurFichiers {
 	 * , String pString) :<br/>
 	 * Ajoute pString à la fin du fichier pFile.<br/>
 	 * <br/>
+	 * - retourne false, LOG de niveau INFO et rapport 
+	 * si pFile == null.<br/>
+	 * - retourne false, LOG de niveau INFO et rapport 
+	 * si pFile n'existe pas.<br/>
+	 * - retourne false, LOG de niveau INFO et rapport 
+	 * si pFile est un répertoire.<br/>
+	 * <br/>
 	 *
 	 * @param pFile : File.<br/>
 	 * @param pString : String.<br/>
@@ -1571,16 +1801,89 @@ public final class DifferentiateurFichiers {
 		synchronized (DifferentiateurFichiers.class) {
 			
 			// Traitement des mauvais fichiers.************
-			final boolean resultatTraitementMauvaisFichier 
-				= traiterMauvaisFile(
-						pFile, true, METHODE_AJOUTER_A_FILE);
-			
-			/*
-			 * Sort de la méthode et retourne false si le fichier est mauvais.
-			 */
-			if (!resultatTraitementMauvaisFichier) {
+			/* retourne false, LOG de niveau INFO 
+			 * et rapport si pFile == null. */
+			if (pFile == null) {
+				
+				final String message 
+				= fournirNomClasseConcrete() 
+				+ SEP_MOINS 
+				+ METHODE_AJOUTER_A_FILE 
+				+ SEP_MOINS 
+				+ MESSAGE_FICHIER_NULL;
+				
+				/* LOG de niveau INFO. */
+				loggerInfo(
+						fournirNomClasseConcrete()
+							, METHODE_AJOUTER_A_FILE
+								, MESSAGE_FICHIER_NULL);
+				
+				/* rapport. */
+				rapportExecutionControle 
+					= ajouterString(rapportExecutionControle, message);
+								
+				/* retourne false, LOG de niveau INFO 
+				 * et rapport si pFile == null. */
 				return false;
-			}
+				
+			} // Fin de if (pFile == null).___________________________
+			
+			/* retourne false, LOG de niveau INFO 
+			 * et rapport si pFile n'existe pas. */
+			if (!pFile.exists()) {
+				
+				final String message 
+				= fournirNomClasseConcrete() 
+				+ SEP_MOINS 
+				+ METHODE_AJOUTER_A_FILE 
+				+ SEP_MOINS 
+				+ MESSAGE_FICHIER_INEXISTANT + pFile.getAbsolutePath();
+				
+				/* LOG de niveau INFO. */
+				loggerInfo(
+						fournirNomClasseConcrete()
+							, METHODE_AJOUTER_A_FILE
+								, MESSAGE_FICHIER_INEXISTANT 
+								+ pFile.getAbsolutePath());
+				
+				/* rapport. */
+				rapportExecutionControle 
+					= ajouterString(rapportExecutionControle, message);
+								
+				/* retourne false, LOG de niveau INFO 
+				 * et rapport si pFile n'existe pas. */
+				return false;
+				
+			} // Fin de if (!pFile.exists()).______________________
+			
+			/* retourne false, LOG de niveau INFO 
+			 * et rapport si pFile est un répertoire. */
+			if (pFile.isDirectory()) {
+				
+				final String message 
+				= fournirNomClasseConcrete() 
+				+ SEP_MOINS 
+				+ METHODE_AJOUTER_A_FILE 
+				+ SEP_MOINS 
+				+ MESSAGE_FICHIER_REPERTOIRE + pFile.getAbsolutePath();
+				
+				/* LOG de niveau INFO. */
+				loggerInfo(
+						fournirNomClasseConcrete()
+							, METHODE_AJOUTER_A_FILE
+								, MESSAGE_FICHIER_REPERTOIRE 
+								+ pFile.getAbsolutePath());
+				
+				/* rapport. */
+				rapportExecutionControle 
+					= ajouterString(rapportExecutionControle, message);
+								
+				/* retourne false, LOG de niveau INFO 
+				 * et rapport si pFile est un répertoire. */
+				return false;
+				
+			} // Fin de if (pFile.isDirectory())._________________________
+			
 			
 			// ECRITURE SUR DISQUE ***************
 			FileOutputStream fileOutputStreamUtf8 = null;
@@ -1664,33 +1967,189 @@ public final class DifferentiateurFichiers {
 	} // Fin de ajouterAFile(
 	 // File pFile
 	 // , String pString)._________________________________________________
-	
+
 	
 	
 	/**
-	 * method fournirFileRapportExecutionControle() :<br/>
+	 * method fournirFileRapportDiffTxt(
+	 * File pFile1, Charset pCharset1
+	 * , File pFile2, Charset pCharset2) :<br/>
 	 * Fournit un File pour le stockage sur 
-	 * disque de rapportExecutionControle.<br/>
+	 * disque de rapportDiffTxt.<br/>
 	 * <br/>
+	 * 
+	 * @param pFile1 : File.<br/>
+	 * @param pCharset1 : Charset.<br/>
+	 * @param pFile2 : File.<br/>
+	 * @param pCharset2 : Charset.<br/>
 	 *
 	 * @return : File : File pour le stockage sur 
-	 * disque de rapportExecutionControle.<br/>
+	 * disque de rapportDiffTxt.<br/>
 	 */
-	private static File fournirFileRapportExecutionControle() {
+	private static File fournirFileRapportDiffTxt(
+			final File pFile1, final Charset pCharset1
+				, final File pFile2, final Charset pCharset2) {
 		
 		/* bloc static synchronized. */
 		synchronized (DifferentiateurFichiers.class) {
 			
+			final StringBuilder stb = new StringBuilder();
+			stb.append("RAPPORT-DIFF");
+			
+			if (pFile1 != null) {
+				stb.append('-');
+				stb.append(fournirNomSansExtension(pFile1));
+			}
+			if (pCharset1 != null) {
+				stb.append('-');
+				stb.append(pCharset1.name());
+			}
+			
+			if (pFile2 != null) {
+				stb.append('-');
+				stb.append(fournirNomSansExtension(pFile2));
+			}
+			if (pCharset2 != null) {
+				stb.append('-');
+				stb.append(pCharset2.name());
+			}
+			
+			final String nomBase = stb.toString();
+					
 			return fournirFile(
 					fournirCheminFichiers()
 					, new Date()
-					, "RAPPORT-EXECUTION-DIFFERENTIATEUR-FICHIERS"
+					, nomBase
 					, "UTF8"
 					, "txt");
 			
 		} // Fin du bloc static synchronized.________________________
 		
-	} // Fin de fournirFileRapportExecutionControle()._____________________
+	} // Fin de fournirFileRapportDiffTxt(
+	 // File pFile1, Charset pCharset1
+	 // , File pFile2, Charset pCharset2)._________________________________
+	
+
+
+	/**
+	 * method fournirFileRapportDiffCsv(
+	 * File pFile1, Charset pCharset1
+	 * , File pFile2, Charset pCharset2) :<br/>
+	 * Fournit un File pour le stockage sur 
+	 * disque de rapportDiffCsv.<br/>
+	 * <br/>
+	 * 
+	 * @param pFile1 : File.<br/>
+	 * @param pCharset1 : Charset.<br/>
+	 * @param pFile2 : File.<br/>
+	 * @param pCharset2 : Charset.<br/>
+	 *
+	 * @return : File : File pour le stockage sur 
+	 * disque de rapportDiffCsv.<br/>
+	 */
+	private static File fournirFileRapportDiffCsv(
+			final File pFile1, final Charset pCharset1
+			, final File pFile2, final Charset pCharset2) {
+		
+		/* bloc static synchronized. */
+		synchronized (DifferentiateurFichiers.class) {
+			
+			final StringBuilder stb = new StringBuilder();
+			stb.append("RAPPORT-DIFF");
+			
+			if (pFile1 != null) {
+				stb.append('-');
+				stb.append(fournirNomSansExtension(pFile1));
+			}
+			if (pCharset1 != null) {
+				stb.append('-');
+				stb.append(pCharset1.name());
+			}
+			
+			if (pFile2 != null) {
+				stb.append('-');
+				stb.append(fournirNomSansExtension(pFile2));
+			}
+			if (pCharset2 != null) {
+				stb.append('-');
+				stb.append(pCharset2.name());
+			}
+			
+			final String nomBase = stb.toString();
+			
+			return fournirFile(
+					fournirCheminFichiers()
+					, new Date()
+					, nomBase
+					, "UTF8"
+					, "csv");
+			
+		} // Fin du bloc static synchronized.________________________
+		
+	} // Fin de fournirFileRapportDiffCsv(
+	 // File pFile1, Charset pCharset1
+	 // , File pFile2, Charset pCharset2)._________________________________
+	
+	
+	
+	/**
+	 * method fournirFileRapportExecutionControle(
+	 * File pFile1, Charset pCharset1
+	 * , File pFile2, Charset pCharset2) :<br/>
+	 * Fournit un File pour le stockage sur 
+	 * disque de rapportExecutionControle.<br/>
+	 * <br/>
+	 * 
+	 * @param pFile1 : File.<br/>
+	 * @param pCharset1 : Charset.<br/>
+	 * @param pFile2 : File.<br/>
+	 * @param pCharset2 : Charset.<br/>
+	 *
+	 * @return : File : File pour le stockage sur 
+	 * disque de rapportExecutionControle.<br/>
+	 */
+	private static File fournirFileRapportExecutionControle(
+			final File pFile1, final Charset pCharset1
+			, final File pFile2, final Charset pCharset2) {
+		
+		/* bloc static synchronized. */
+		synchronized (DifferentiateurFichiers.class) {
+			
+			final StringBuilder stb = new StringBuilder();
+			stb.append("RAPPORT-EXECUTION-DIFF");
+			
+			if (pFile1 != null) {
+				stb.append('-');
+				stb.append(fournirNomSansExtension(pFile1));
+			}
+			if (pCharset1 != null) {
+				stb.append('-');
+				stb.append(pCharset1.name());
+			}
+			
+			if (pFile2 != null) {
+				stb.append('-');
+				stb.append(fournirNomSansExtension(pFile2));
+			}
+			if (pCharset2 != null) {
+				stb.append('-');
+				stb.append(pCharset2.name());
+			}
+			
+			final String nomBase = stb.toString();
+			
+			return fournirFile(
+					fournirCheminFichiers()
+					, new Date()
+					, nomBase
+					, "UTF8"
+					, "txt");
+			
+		} // Fin du bloc static synchronized.________________________
+		
+	} // Fin de fournirFileRapportExecutionControle(
+	 // File pFile1, Charset pCharset1
+	 // , File pFile2, Charset pCharset2)._________________________________
 	
 	
 	
@@ -2128,7 +2587,36 @@ public final class DifferentiateurFichiers {
 	 // DateFormat pDateFormat).___________________________________________
 	
 
-
+	/**
+	 * method fournirNomSansExtension(
+	 * File pFile) :<br/>
+	 * Fournit le nom court d'un fichier sans son extension.<br/>
+	 * <br/>
+	 * - retourne null si pFile est null.<br/>
+	 * <br/>
+	 *
+	 * @param pFile : File.<br/>
+	 * @return : String : nom court sans extension.<br/>
+	 */
+	public static String fournirNomSansExtension(
+			final File pFile) {
+		
+		/* retourne null si pFile est null. */
+		if (pFile == null) {
+			return null;
+		}
+		
+		final String filename = pFile.getName();
+		
+		final String nomSansExtension = StringUtils.split(filename, '.')[0];
+		
+		return nomSansExtension;
+		
+	} // Fin de fournirNomSansExtension(
+	 // File pFile)._______________________________________________________
+	 
+	 
+	 
 	/**
 	 * method creerArborescence(
 	 * String pChemin) :<br/>
@@ -2403,55 +2891,102 @@ public final class DifferentiateurFichiers {
 
 	/**
 	 * method getRapportDiffTxt() :<br/>
-	 * Getter .<br/>
+	 * Getter du rapport du contrôle d'égalité entre deux fichiers 
+	 * sous forme textuelle.<br/>
 	 * <br/>
 	 *
 	 * @return rapportDiffTxt : String.<br/>
 	 */
 	public static String getRapportDiffTxt() {
 		return rapportDiffTxt;
-	}
+	} // Fin de getRapportDiffTxt()._______________________________________
+
+
+
+	/**
+	 * method getFileRapportDiffTxt() :<br/>
+	 * Getter fichier sur disque contenant le 
+	 * rapport du contrôle d'égalité entre deux fichiers 
+	 * sous forme textuelle.<br/>
+	 * <br/>
+	 *
+	 * @return fileRapportDiffTxt : File.<br/>
+	 */
+	public static File getFileRapportDiffTxt() {
+		return fileRapportDiffTxt;
+	} // Fin de getFileRapportDiffTxt().___________________________________
 
 
 
 	/**
 	 * method getRapportDiffCsv() :<br/>
-	 * Getter .<br/>
+	 * Getter du rapport du contrôle d'égalité entre deux fichiers 
+	 * sous forme csv.<br/>
+	 * entête csv :<br/>
+	 * [Ligne numéro;id;Position;Caractère;Unicode;numericValue;
+	 * Type de Caractère; Valeur Entière;Point de Code Décimal;
+	 * Point de Code HexaDécimal;Nom Unicode;DIFFERENCE;id;Position;
+	 * Caractère;Unicode;numericValue;Type de Caractère; Valeur Entière;
+	 * Point de Code Décimal;Point de Code HexaDécimal;Nom Unicode;".<br/>
 	 * <br/>
 	 *
 	 * @return rapportDiffCsv : String.<br/>
 	 */
 	public static String getRapportDiffCsv() {
 		return rapportDiffCsv;
-	}
+	} // Fin de getRapportDiffCsv()._______________________________________
+
+
+
+	/**
+	 * method getFileRapportDiffCsv() :<br/>
+	 * Getter du fichier sur disque contenant le 
+	 * rapport du contrôle d'égalité entre deux fichiers 
+	 * sous forme csv.<br/>
+	 * entête csv :<br/>
+	 * [Ligne numéro;id;Position;Caractère;Unicode;numericValue;
+	 * Type de Caractère; Valeur Entière;Point de Code Décimal;
+	 * Point de Code HexaDécimal;Nom Unicode;DIFFERENCE;id;Position;
+	 * Caractère;Unicode;numericValue;Type de Caractère; Valeur Entière;
+	 * Point de Code Décimal;Point de Code HexaDécimal;Nom Unicode;".<br/>
+	 * <br/>
+	 *
+	 * @return fileRapportDiffCsv : File.<br/>
+	 */
+	public static File getFileRapportDiffCsv() {
+		return fileRapportDiffCsv;
+	} // Fin de getFileRapportDiffCsv().___________________________________
 
 
 
 	/**
 	 * method getRapportExecutionControle() :<br/>
-	 * Getter .<br/>
+	 * Getter du rapport sur l'exécution du contrôle 
+	 * d'égalité entre deux fichiers 
+	 * sous forme textuelle.<br/>
 	 * <br/>
 	 *
 	 * @return rapportExecutionControle : String.<br/>
 	 */
 	public static String getRapportExecutionControle() {
 		return rapportExecutionControle;
-	}
+	} // Fin de getRapportExecutionControle()._____________________________
 
 
 
 	/**
 	 * method getFileRapportExecutionControle() :<br/>
-	 * Getter .<br/>
+	 * Getter du fichier sur disque contenant le
+	 * rapport sur l'exécution du contrôle d'égalité entre deux fichiers 
+	 * sous forme textuelle.<br/>
 	 * <br/>
 	 *
 	 * @return fileRapportExecutionControle : File.<br/>
 	 */
 	public static File getFileRapportExecutionControle() {
 		return fileRapportExecutionControle;
-	}
+	} // Fin de getFileRapportExecutionControle()._________________________
 	
-
 	
 
 } // FIN DE LA CLASSE DifferentiateurFichiers.-------------------------------

@@ -792,11 +792,15 @@ public class DifferentiateurFichiersTest {
 	public void testDifferencier() {
 		final boolean resultat 
 		= DifferentiateurFichiers.differencier(
-				FILE_CHARETTE_ANSI, CHARSET_ANSI
-				, FILE_CHARETTE_ANSI, CHARSET_UTF8
+				FILE_DIACRITIQUES_UTF8, CHARSET_UTF8
+				, FILE_DIACRITIQUES_UTF8, CHARSET_ANSI
 				, false);
 		
 		System.out.println("resultat CONTROLE - FICHIERS SIMILAIRES ? : " + resultat);
+		System.out.println();
+		
+		final String rapportDiffTxt 
+		= DifferentiateurFichiers.getRapportDiffTxt();
 		
 		final String rapportDiffCsv 
 			= DifferentiateurFichiers.getRapportDiffCsv();
@@ -804,11 +808,14 @@ public class DifferentiateurFichiersTest {
 		final String rapportExecution 
 			= DifferentiateurFichiers.getRapportExecutionControle();
 		
-		System.out.println("rapportDiffCsv : \n" + rapportDiffCsv);
+		System.out.println("rapportDiffTxt : \n" + rapportDiffTxt);
+		System.out.println();
 		
+		System.out.println("rapportDiffCsv : \n" + rapportDiffCsv);
+		System.out.println();
 		
 		System.out.println("rapportExecution : \n" + rapportExecution);
-		
+		System.out.println();
 	}
 
 
