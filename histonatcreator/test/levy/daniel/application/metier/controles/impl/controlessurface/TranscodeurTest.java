@@ -236,6 +236,14 @@ public class TranscodeurTest {
 
 	
 	/**
+	 * CHEMIN_DARWIN_2012 : String :<br/>
+	 * "texte\\trafics\\trafics_2012\\2014-08-19_darwin2012_UTF-8.csv".<br/>
+	 */
+	public static final String CHEMIN_DARWIN_2012 
+		= "texte\\trafics\\trafics_2012\\2014-08-19_darwin2012_UTF-8.csv";
+	
+
+	/**
 	 * CHEMIN_HIT_DIRA_2014 : String :<br/>
 	 * "texte\\trafics\\trafics_2014\\HITDIRA2014.txt".<br/>
 	 */
@@ -474,6 +482,14 @@ public class TranscodeurTest {
 		= new File(CHEMIN_FICHIERS_TEST + CHEMIN_HIT_DIRA_2012);
 
 	
+	/**
+	 * FILE_DARWIN2012 : File :<br/>
+	 * "2014-08-19_darwin2012_UTF-8.csv".<br/>
+	 */
+	public static final File FILE_DARWIN2012 
+	= new File(CHEMIN_FICHIERS_TEST + CHEMIN_DARWIN_2012);
+
+
 	/**
 	 * FILE_HITDIRA2014 : File :<br/>
 	 * HITDIRA2014.txt.<br/>
@@ -838,6 +854,37 @@ public class TranscodeurTest {
 
 	
 	/**
+	 * method testControlerDarwin2012() :<br/>
+	 * .<br/>
+	 * <br/>
+	 */
+	@Test
+	public void testControlerDarwin2012() {
+		
+		final Transcodeur transcodeur = new Transcodeur();
+		
+		/* ******************************************************************/
+		/* Détermination du fichier, du charset et de la ligne à lire. ******/
+		final File fichier = FILE_DARWIN2012;
+		final int numeroLigne = 1;
+		/* ******************************************************************/
+		
+		final boolean resultatControle =transcodeur.controler(fichier, false);
+		
+		System.out.println("resultatControle : " + resultatControle);
+		System.out.println("RAPPORT : \n" + transcodeur.afficherRapportCsv());
+		
+		final String ligneLue = transcodeur.lireLigneFichier(numeroLigne, fichier, CHARSET_UTF8);
+		
+		final String ligneLueCarParCar = transcodeur.listerChaineCarParCar(ligneLue);
+		
+		System.out.println(ligneLueCarParCar);
+		
+	} // Fin de testControlerDarwin2012()._________________________________
+	
+	
+	
+	/**
 	 * method testControler() :<br/>
 	 * .<br/>
 	 * <br/>
@@ -849,7 +896,7 @@ public class TranscodeurTest {
 		final Transcodeur transcodeur = new Transcodeur();
 		
 		/* ******************************************************************/
-		/* Détermination du fichier, du charset et de la ligna à lire. ******/
+		/* Détermination du fichier, du charset et de la ligne à lire. ******/
 		final File fichier = FILE_HITDIRA2014;
 		/* ******************************************************************/
 		

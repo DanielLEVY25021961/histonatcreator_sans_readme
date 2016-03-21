@@ -11,6 +11,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Test;
 
+import static org.junit.Assert.*;
+
+
 
 /**
  * class EnchaineurControlesTest :<br/>
@@ -363,6 +366,113 @@ public final class EnchaineurControlesTest {
 	public static final String CHEMIN_CHARETTE_OEM 
 		= "encodages\\chaàâreéèêëtte_OEM.txt";
 	
+
+	/**
+	 * CHEMIN_HIT_DIRA_2012 : String :<br/>
+	 * "texte\\trafics\\trafics_2012\\2014-08-07_HITDIRA2012".<br/>
+	 */
+	public static final String CHEMIN_HIT_DIRA_2012 
+		= "texte\\trafics\\trafics_2012\\2014-08-07_HITDIRA2012";
+
+	
+	/**
+	 * CHEMIN_HIT_DIRO_2012 : String :<br/>
+	 * "texte\\trafics\\trafics_2012\\2014-08-07_HITDIRO2012".<br/>
+	 */
+	public static final String CHEMIN_HIT_DIRO_2012 
+		= "texte\\trafics\\trafics_2012\\2014-08-07_HITDIRO2012";
+	
+	
+	/**
+	 * CHEMIN_HIT_DIRA_2014 : String :<br/>
+	 * "texte\\trafics\\trafics_2014\\HITDIRA2014.txt".<br/>
+	 */
+	public static final String CHEMIN_HIT_DIRA_2014 
+	= "texte\\trafics\\trafics_2014\\HITDIRA2014.txt";
+	
+	
+	/**
+	 * CHEMIN_HIT_DIRCE_2014 : String :<br/>
+	 * "texte\\trafics\\trafics_2014\\HITDIRCE2014.txt".<br/>
+	 */
+	public static final String CHEMIN_HIT_DIRCE_2014 
+	= "texte\\trafics\\trafics_2014\\HITDIRCE2014.txt";
+
+	
+	/**
+	 * CHEMIN_HIT_DIRCO_2014 : String :<br/>
+	 * "texte\\trafics\\trafics_2014\\HITDIRCO2014.txt".<br/>
+	 */
+	public static final String CHEMIN_HIT_DIRCO_2014 
+	= "texte\\trafics\\trafics_2014\\HITDIRCO2014.txt";
+	
+	/**
+	 * CHEMIN_HIT_DIRE_2014 : String :<br/>
+	 * "texte\\trafics\\trafics_2014\\HITDIRE2014.txt".<br/>
+	 */
+	public static final String CHEMIN_HIT_DIRE_2014 
+	= "texte\\trafics\\trafics_2014\\HITDIRE2014.txt";
+
+	
+	/**
+	 * CHEMIN_HIT_DIRIF_2014 : String :<br/>
+	 * "texte\\trafics\\trafics_2014\\HITDIRIF2014.txt".<br/>
+	 */
+	public static final String CHEMIN_HIT_DIRIF_2014 
+	= "texte\\trafics\\trafics_2014\\HITDIRIF2014.txt";
+
+	
+	/**
+	 * CHEMIN_HIT_DIRMC_2014 : String :<br/>
+	 * "texte\\trafics\\trafics_2014\\HITDIRMC2014.txt".<br/>
+	 */
+	public static final String CHEMIN_HIT_DIRMC_2014 
+	= "texte\\trafics\\trafics_2014\\HITDIRMC2014.txt";
+
+	
+	/**
+	 * CHEMIN_HIT_DIRMED_2014 : String :<br/>
+	 * "texte\\trafics\\trafics_2014\\HITDIRMED2014.txt".<br/>
+	 */
+	public static final String CHEMIN_HIT_DIRMED_2014 
+	= "texte\\trafics\\trafics_2014\\HITDIRMED2014.txt";
+
+	/**
+	 * CHEMIN_HIT_DIRN_2014 : String :<br/>
+	 * "texte\\trafics\\trafics_2014\\HITDIRN2014.txt".<br/>
+	 */
+	public static final String CHEMIN_HIT_DIRN_2014 
+	= "texte\\trafics\\trafics_2014\\HITDIRN2014.txt";
+	
+	/**
+	 * CHEMIN_HIT_DIRNO_2014 : String :<br/>
+	 * "texte\\trafics\\trafics_2014\\HITDIRNO2014.txt".<br/>
+	 */
+	public static final String CHEMIN_HIT_DIRNO_2014 
+	= "texte\\trafics\\trafics_2014\\HITDIRNO2014.txt";
+	
+	/**
+	 * CHEMIN_HIT_DIRO_2014 : String :<br/>
+	 * "texte\\trafics\\trafics2014\\HITDIRO2014.txt".<br/>
+	 */
+	public static final String CHEMIN_HIT_DIRO_2014 
+		= "texte\\trafics\\trafics_2014\\HITDIRO2014.txt";
+	
+	/**
+	 * CHEMIN_HIT_DIRSO_2014 : String :<br/>
+	 * "texte\\trafics\\trafics_2014\\HITDIRSO2014.txt".<br/>
+	 */
+	public static final String CHEMIN_HIT_DIRSO_2014 
+	= "texte\\trafics\\trafics_2014\\HITDIRSO2014.txt";
+	
+	/**
+	 * CHEMIN_DARWIN_2014 : String :<br/>
+	 * "texte\\trafics\\trafics_2014\\darwin2014.csv".<br/>
+	 */
+	public static final String CHEMIN_DARWIN_2014 
+		= "texte\\trafics\\trafics_2014\\darwin2014.csv";
+	
+
 	
 	//*****************************************************************/
 	//**************************FICHIERS ******************************/
@@ -627,6 +737,110 @@ public final class EnchaineurControlesTest {
 	public static final File FILE_DIACRITIQUES_UTF8 
 	= new File(CHEMIN_FICHIERS_TEST + CHEMIN_DIACRITIQUES_UTF8);
 	
+	
+	/**
+	 * FILE_HITDIRA2012 : File :<br/>
+	 * "2014-08-07_HITDIRA2012".<br/>
+	 */
+	public static final File FILE_HITDIRA2012 
+		= new File(CHEMIN_FICHIERS_TEST + CHEMIN_HIT_DIRA_2012);
+	
+	/**
+	 * FILE_HITDIRO2012 : File :<br/>
+	 * "2014-08-07_HITDIRO2012".<br/>
+	 */
+	public static final File FILE_HITDIRO2012 
+		= new File(CHEMIN_FICHIERS_TEST + CHEMIN_HIT_DIRO_2012);
+
+	
+	/**
+	 * FILE_HITDIRA2014 : File :<br/>
+	 * HITDIRA2014.txt.<br/>
+	 */
+	public static final File FILE_HITDIRA2014 
+	= new File(CHEMIN_FICHIERS_TEST + CHEMIN_HIT_DIRA_2014);
+	
+	/**
+	 * FILE_HITDIRCE2014 : File :<br/>
+	 * HITDIRCE2014.txt.<br/>
+	 */
+	public static final File FILE_HITDIRCE2014 
+	= new File(CHEMIN_FICHIERS_TEST + CHEMIN_HIT_DIRCE_2014);
+	
+	/**
+	 * FILE_HITDIRCO2014 : File :<br/>
+	 * HITDIRCO2014.txt.<br/>
+	 */
+	public static final File FILE_HITDIRCO2014 
+	= new File(CHEMIN_FICHIERS_TEST + CHEMIN_HIT_DIRCO_2014);
+
+	/**
+	 * FILE_HITDIRE2014 : File :<br/>
+	 * HITDIRE2014.txt.<br/>
+	 */
+	public static final File FILE_HITDIRE2014 
+	= new File(CHEMIN_FICHIERS_TEST + CHEMIN_HIT_DIRE_2014);
+	
+	/**
+	 * FILE_HITDIRIF2014 : File :<br/>
+	 * HITDIRIF2014.txt.<br/>
+	 */
+	public static final File FILE_HITDIRIF2014 
+	= new File(CHEMIN_FICHIERS_TEST + CHEMIN_HIT_DIRIF_2014);
+	
+	
+	/**
+	 * FILE_HITDIRMC2014 : File :<br/>
+	 * HITDIRMC2014.txt.<br/>
+	 */
+	public static final File FILE_HITDIRMC2014 
+	= new File(CHEMIN_FICHIERS_TEST + CHEMIN_HIT_DIRMC_2014);
+	
+	/**
+	 * FILE_HITDIRMED2014 : File :<br/>
+	 * HITDIRMED2014.txt.<br/>	 
+	 * */
+	public static final File FILE_HITDIRMED2014 
+	= new File(CHEMIN_FICHIERS_TEST + CHEMIN_HIT_DIRMED_2014);
+
+	
+	/**
+	 * FILE_HITDIRN2014 : File :<br/>
+	 * HITDIRN2014.txt.<br/>	 
+	 */
+	public static final File FILE_HITDIRN2014 
+	= new File(CHEMIN_FICHIERS_TEST + CHEMIN_HIT_DIRN_2014);
+
+	
+	/**
+	 * FILE_HITDIRNO2014 : File :<br/>
+	 * HITDIRNO2014.txt.<br/>
+	 */
+	public static final File FILE_HITDIRNO2014 
+	= new File(CHEMIN_FICHIERS_TEST + CHEMIN_HIT_DIRNO_2014);
+
+	
+	/**
+	 * FILE_HITDIRO2014 : File :<br/>
+	 * HITDIRO2014.txt.<br/>
+	 */
+	public static final File FILE_HITDIRO2014 
+		= new File(CHEMIN_FICHIERS_TEST + CHEMIN_HIT_DIRO_2014);
+	
+	/**
+	 * FILE_HITDIRSO2014 : File :<br/>
+	 * HITDIRSO2014.txt.<br/>
+	 */
+	public static final File FILE_HITDIRSO2014 
+	= new File(CHEMIN_FICHIERS_TEST + CHEMIN_HIT_DIRSO_2014);
+	
+	/**
+	 * FILE_DARWIN2014 : File :<br/>
+	 * "darwin2014.csv".<br/>
+	 */
+	public static final File FILE_DARWIN2014 
+	= new File(CHEMIN_FICHIERS_TEST + CHEMIN_DARWIN_2014);
+	
 
 	/**
 	 * LISTEFILES : List<File> :<br/>
@@ -816,6 +1030,120 @@ public final class EnchaineurControlesTest {
 	} // Fin de remplirListeTrafics()._____________________________________
 	
 
+	/**
+	 * method testControlerDIRA2012() :<br/>
+	 * .<br/>
+	 * <br/>
+	 * : void :  .<br/>
+	 */
+	@Test
+	public void testControlerDIRA2012() {
+		
+		/* Instanciation d'un EnchaineurControles. */
+		final IEnchaineurControles enchaineurControles 
+			= new EnchaineurControles();
+		
+		// Fichier testé ************************
+		final File fichierTeste = FILE_HITDIRA2012;
+		
+		/* Exécution de l'enchaînement des contrôles. */
+		final boolean resultat 
+			= enchaineurControles.controler(fichierTeste, true);
+		
+		System.out.println("RESULTAT CONTROLES = " + resultat);
+		System.out.println("BLOQUE ? : " + enchaineurControles.isEstBloquant());
+		System.out.println();
+		System.out.println("RAPPORT DE CONTROLE TEXTUEL : \n");
+		System.out.println(enchaineurControles.afficherRapportTextuel());
+		System.out.println();
+		System.out.println("RAPPORT DE CONTROLE CSV : \n");
+		System.out.println(enchaineurControles.afficherRapportCsvAvecEntete());
+		System.out.println();
+		System.out.println("MESSAGES D'ENREGISTREMENT DES RAPPORTS : \n");
+		System.out.println(enchaineurControles.getMessagesEnregistrementsRapports());
+		System.out.println();
+		System.out.println("RAPPORT D'ENREGISTREMENT SUR DISQUE DES RAPPORTS DE CONTROLE TEXTUEL : \n");
+		System.out.println(enchaineurControles.afficherRapportEnregistrementTextuel());
+		System.out.println();
+		System.out.println("RAPPORT D'ENREGISTREMENT SUR DISQUE DES RAPPORTS DE CONTROLE CSV : \n");
+		System.out.println(enchaineurControles.afficherRapportEnregistrementCsv());
+		
+	} // Fin de testControlerDIRA2012().___________________________________
+	
+
+	
+	/**
+	 * method testControlerDIRO2012() :<br/>
+	 * .<br/>
+	 * <br/>
+	 * : void :  .<br/>
+	 */
+	@Test
+	public void testControlerDIRO2012() {
+		
+		/* Instanciation d'un EnchaineurControles. */
+		final IEnchaineurControles enchaineurControles 
+			= new EnchaineurControles();
+		
+		// Fichier testé ************************
+		final File fichierTeste = FILE_HITDIRO2012;
+		
+		/* Exécution de l'enchaînement des contrôles. */
+		final boolean resultat 
+			= enchaineurControles.controler(fichierTeste, true);
+		
+		System.out.println("RESULTAT CONTROLES = " + resultat);
+		System.out.println("BLOQUE ? : " + enchaineurControles.isEstBloquant());
+		System.out.println();
+		System.out.println("RAPPORT DE CONTROLE TEXTUEL : \n");
+		System.out.println(enchaineurControles.afficherRapportTextuel());
+		System.out.println();
+		System.out.println("RAPPORT DE CONTROLE CSV : \n");
+		System.out.println(enchaineurControles.afficherRapportCsvAvecEntete());
+		System.out.println();
+		System.out.println("MESSAGES D'ENREGISTREMENT DES RAPPORTS : \n");
+		System.out.println(enchaineurControles.getMessagesEnregistrementsRapports());
+		System.out.println();
+		System.out.println("RAPPORT D'ENREGISTREMENT SUR DISQUE DES RAPPORTS DE CONTROLE TEXTUEL : \n");
+		System.out.println(enchaineurControles.afficherRapportEnregistrementTextuel());
+		System.out.println();
+		System.out.println("RAPPORT D'ENREGISTREMENT SUR DISQUE DES RAPPORTS DE CONTROLE CSV : \n");
+		System.out.println(enchaineurControles.afficherRapportEnregistrementCsv());
+		
+	} // Fin de testControlerDIRO2012().___________________________________
+	
+	
+	
+	/**
+	 * method testControlerTousTrafics2014() :<br/>
+	 * .<br/>
+	 * <br/>
+	 */
+	@Test
+	public void testControlerTousTrafics() {
+		
+		/* Instanciation d'un EnchaineurControles. */
+		final IEnchaineurControles enchaineurControles 
+			= new EnchaineurControles();
+		
+		for (final File fichierTeste : LISTEFILES_TRAFIC) {
+			
+			/* Exécution de l'enchaînement des contrôles. */
+			final boolean resultat 
+				= enchaineurControles.controler(fichierTeste, true);
+			
+			if (!resultat) {
+				System.out.println("FICHIER QUI PLANTE : " + fichierTeste.getName());
+			}
+			
+			assertTrue(
+					"Le controle doit retourner true : "
+						, resultat);
+		}
+		
+	} // Fin de testControlerTousTrafics().________________________________
+
+	
 	
 	/**
 	 * method testControler() :<br/>
@@ -825,18 +1153,33 @@ public final class EnchaineurControlesTest {
 	@Test
 	public void testControler() {
 		
-		final IEnchaineurControles enchaineurControles = new EnchaineurControles();
+		/* Instanciation d'un EnchaineurControles. */
+		final IEnchaineurControles enchaineurControles 
+			= new EnchaineurControles();
 		
-		final boolean resultat = enchaineurControles.controler(FILE_CHARETTE_OEM, true);
+		// Fichier testé ************************
+		final File fichierTeste = FILE_CHARETTE_OEM;
+				
+		/* Exécution de l'enchaînement des contrôles. */
+		final boolean resultat 
+			= enchaineurControles.controler(fichierTeste, true);
 		
 		System.out.println("RESULTAT CONTROLES = " + resultat);
 		System.out.println("BLOQUE ? : " + enchaineurControles.isEstBloquant());
 		System.out.println();
+		System.out.println("RAPPORT DE CONTROLE TEXTUEL : \n");
 		System.out.println(enchaineurControles.afficherRapportTextuel());
+		System.out.println();
+		System.out.println("RAPPORT DE CONTROLE CSV : \n");
 		System.out.println(enchaineurControles.afficherRapportCsvAvecEntete());
 		System.out.println();
+		System.out.println("MESSAGES D'ENREGISTREMENT DES RAPPORTS : \n");
 		System.out.println(enchaineurControles.getMessagesEnregistrementsRapports());
+		System.out.println();
+		System.out.println("RAPPORT D'ENREGISTREMENT SUR DISQUE DES RAPPORTS DE CONTROLE TEXTUEL : \n");
 		System.out.println(enchaineurControles.afficherRapportEnregistrementTextuel());
+		System.out.println();
+		System.out.println("RAPPORT D'ENREGISTREMENT SUR DISQUE DES RAPPORTS DE CONTROLE CSV : \n");
 		System.out.println(enchaineurControles.afficherRapportEnregistrementCsv());
 		
 	} // Fin de testControler().___________________________________________

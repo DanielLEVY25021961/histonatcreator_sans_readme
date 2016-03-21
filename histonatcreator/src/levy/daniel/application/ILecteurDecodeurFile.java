@@ -485,6 +485,45 @@ public interface ILecteurDecodeurFile {
 				, final Charset pCharset);
 	
 
+	/**
+	 * method lireFichierLigneParLigne(
+	 * File pFile
+	 * , Charset pCharset) :<br/>
+	 * <ul>
+	 * <li>Lit ligne par ligne un fichier pFile en UTF-8 et 
+	 * retourne son contenu dans une chaîne de caractères.</li><br/>
+	 * <li>Lit le fichier en utilisant la méthode readLine() 
+	 * de BufferedReader appliqué à un InputStreamReader 
+	 * avec le Charset de décodage UTF-8.</li><br/>
+	 * <li>remplit this.fichierEnMap.</li><br/>
+	 * <li>Lit chaque caractère quoi qu'il arrive 
+	 * (même si le fichier n'est pas un fichier texte).</li><br/>
+	 * <li>Ajoute le numéro de ligne devant chaque ligne.</li><br/>
+	 * <li>Remplace les sauts de ligne par NEWLINE.</li><br/>
+	 * </ul>
+	 * <br/>
+	 * - rafraîchit this.fichierEnMap.<br/>
+	 * - passe pFile à this.fichier et 
+	 * rafraîchit automatiquement this.nomFichier.<br/>
+	 * <br/>
+	 * - retourne MESSAGE_FICHIER_NULL, LOG de niveau INFO et rapport 
+	 * si pFile est null.<br/>
+	 * - retourne MESSAGE_FICHIER_INEXISTANT, LOG de niveau INFO et rapport 
+	 * si pFile est inexistant.<br/>
+	 * - retourne MESSAGE_FICHIER_REPERTOIRE, LOG de niveau INFO et rapport 
+	 * si pFile est un répertoire.<br/>
+	 * - retourne MESSAGE_FICHIER_VIDE, LOG de niveau INFO et rapport 
+	 * si pFile est vide.<br/>
+	 * <br/>
+	 *
+	 * @param pFile : File : fichier à lire.<br/>
+	 * 
+	 * @return : String : Chaine de caractères avec le contenu du fichier.<br/>
+	 */
+	String lireFichierLigneParLigne(
+			final File pFile);
+	
+	
 	
 	/**
 	 * method lireFichierLigneParLigne(
@@ -719,9 +758,13 @@ public interface ILecteurDecodeurFile {
 	 * , Charset pCharsetDecodage
 	 * , boolean pRapporte
 	 * , Integer pNumeroLigne) :<br/>
-	 * Transcode la ligne pString initialement encodée 
-	 * en pCharsetEncodage en pCharsetDecodage.<br/>
-	 * - Crée un rapport de transcodage si pRapporte vaut true.<br/>
+	 * <ul>
+	 * <li>Transcode la ligne pString initialement encodée 
+	 * en pCharsetEncodage en pCharsetDecodage.</li><br/>
+	 * <li>Retire le BOM_UTF-8 en début de ligne 
+	 * si l'encodage cible n'est pas CHARSET_UTF8.</li><br/>
+	 * <li>Crée un rapport de transcodage si pRapporte vaut true.</li><br/>
+	 * </ul>
 	 * <br/>
 	 * - retourne null si pString == null.<br/>
 	 * - passe automatiquement le charsetEncodage à CHARSET_ANSI 
@@ -737,7 +780,7 @@ public interface ILecteurDecodeurFile {
 	 * on veut transcoder pString.<br/>
 	 * @param pRapporte : boolean : true si on veut que 
 	 * la méthode rapporte.<br/>
-	 * @param pNumeroLigne  : Integer : NUméro de la ligne dans un fichier.<br/>
+	 * @param pNumeroLigne  : Integer : Numéro de la ligne dans un fichier.<br/>
 	 * 
 	 * @return : String : String transcodée en pCharsetDecodage.<br/>
 	 */

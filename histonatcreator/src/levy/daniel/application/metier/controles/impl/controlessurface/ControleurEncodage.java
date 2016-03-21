@@ -900,4 +900,16 @@ public class ControleurEncodage extends AbstractControle {
 
 
 	
+	/**
+	 * this.fichier.<br/>
+	 * <br/>
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final File getFichierTraite() {
+		return this.fichier;
+	} // Fin de getFichierTraite().________________________________________
+	
+	
+	
 } // FIN DE LA CLASSE ControleurEncodage.------------------------------------

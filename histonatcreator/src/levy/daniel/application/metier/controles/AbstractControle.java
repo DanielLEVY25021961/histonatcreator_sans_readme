@@ -22,47 +22,73 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import levy.daniel.application.metier.controles.rapportscontroles.LigneRapport;
 import levy.daniel.application.metier.service.enregistreursfichiers.IEnregistreurFichiers;
 import levy.daniel.application.metier.service.enregistreursfichiers.impl.EnregistreurFichiers;
 import levy.daniel.application.metier.service.enregistreursfichiers.rapportsenregistrements.LigneRapportEnregistrement;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-
 /**
  * class AbstractControle :<br/>
  * Abstraction qui garantit que :<br/>
- * - Tout contrôle est effectué à une 'dateContrôle'. 
- * La classe calcule automatiquement 'dateControleStringFormatee' 
- * connaissant dateControle.<br/>
- * - Tout contrôle est effectué par un utilisateur (user) 
+ * <ul>
+ * <li>Tout contrôle connait le nom de la classe concrète 
+ * qui l'exécute 'nomClasseConcrete'.</li><br/>
+ * <li>Tout contrôle connait son ordre d'exécution 'ordreControle' dans un enchaînement de contrôles.</li><br/>
+ * <li>Tout contrôle est effectué à une 'dateContrôle'.</li><br/> 
+ * <li>La classe calcule automatiquement 'dateControleStringFormatee' 
+ * connaissant dateControle.</li><br/>
+ * <li>Tout contrôle est effectué par un utilisateur (user) 
  * dont on connait le nom 'userName'. La classe remplit automatiquement 
- * userName avec 'Administrateur' si on ne lui fournit pas de userName.<br/>
- * - Tout contrôle s'applique sur un File 'fichier'. 
- * La classe calcule automatiquement 'nomFichier' connaissant fichier.<br/>
- * - Tout contrôle appartient à un type de contrôle 'typeControle' 
+ * userName avec 'Administrateur' si on ne lui fournit pas de userName.</li><br/>
+ * <li>Tout contrôle s'applique sur un File 'fichier'.</li><br/> 
+ * <li>La classe calcule automatiquement 'nomFichier' connaissant fichier.</li><br/>
+ * <li>Tout contrôle appartient à un type de contrôle 'typeControle' 
  * comme "contrôle de surface". 
- * 'typeControle' est fourni par chaque classe concrète.<br/>
- * - Tout contrôle a un nom 'nomControle' comme 'contrôle fichier texte'. 
- * 'nomControle' est fourni par chaque classe concrète.<br/>
- * - Tout contrôle vérifie un critère 'nomCritere' comme 
+ * 'typeControle' est fourni par chaque classe concrète.</li><br/>
+ * <li>Tout contrôle a un nom 'nomControle' comme 'contrôle fichier texte'. 
+ * 'nomControle' est fourni par chaque classe concrète.</li><br/>
+ * <li>Tout contrôle vérifie un critère 'nomCritere' comme 
  * 'le fichier ne doit pas comporter de caractères indésirables'. 
- * 'nomCritere' est fourni par chaque classe concrète.<br/>
- * - Tout contrôle a une gravité 'gravite' comme '1 - bloquant'. 
+ * 'nomCritere' est fourni par chaque classe concrète.</li><br/>
+ * <li>Tout contrôle a une gravité 'gravite' comme '1 - bloquant'.
  * Cette gravité est directement liée au niveau d'anomalie du contrôle 
- * 'niveauAnomalie' comme "1" pour bloquant. 
- * Chaque classe concrète fournit le 'niveauAnomalie' du contrôle 
+ * 'niveauAnomalie' comme "1" pour bloquant.</li><br/> 
+ * <li>Chaque classe concrète fournit le 'niveauAnomalie' du contrôle 
  * via sa méthode fournirCleNiveauAnomalie() qui permet d'aller 
  * chercher la valeur dans messagescontroles_fr_FR.properties 
- * ou via fournirNiveauAnomalieEnDur().<br/>
- * - Tout contrôle sait si il est bloquant via 'estBloquant'. 
+ * ou via fournirNiveauAnomalieEnDur().</li><br/>
+ * <li>Tout contrôle sait si il est bloquant via 'estBloquant'. 
  * La classe remplit automatiquement 'estBloquant' 
- * connaissant niveauAnomalie.<br/>
- * - Tout contrôle fournit un rapport de contrôle 
- * sous forme de List&lt;LigneRapport&gt; 'rapport'.<br/>
+ * connaissant niveauAnomalie.</li><br/>
+ * <li>Tout contrôle sait si il doit être effectué via 'aEffectuer' 
+ * (contrôle paramétrable). 
+ * Chaque classe concrète fournit le 'aEffectuer' du contrôle 
+ * via sa méthode fournirCleAEffectuer() qui permet d'aller 
+ * chercher la valeur dans messagescontroles_fr_FR.properties 
+ * ou via fournirAEffectuerEnDur().</li><br/>
+ * <li>Tout contrôle fournit un rapport de contrôle 'rapport' 
+ * sous forme de List&lt;LigneRapport&gt;.</li><br/>
+ * <li>Tout contrôle peut fournir un compte-rendu 
+ * d'enregistrement sur disque 'rapportEnregistrement' 
+ * sous forme de List&lt;LigneRapportEnregistrement&gt; 
+ * si on décide d'enregistrer le rapport de contrôle 
+ * ou n'importe quel artefact sur disque.</li><br/>
+ * <li>Tout contrôle peut fournir le fichier à contrôler 
+ * sous forme de SortedMap&lt;Integer,String&gt; 'fichierEnMap' avec :<br/>
+ * <ul>
+ * <li>Integer : le numéro de la ligne.</li><br/>
+ * <li>String : la ligne.</li><br/>
+ * Il suffit d'utiliser la méthode lireFichierLigneParLigne(File pFile) 
+ * pour remplir la Map.
+ * </ul>
+ * </li>
+ * <li>Tout contrôle ou traitement sait fournir le fichier résultant 
+ * de son traitement via sa méthode getFichierTraite().</li><br/>
+ * </ul>
  * <br/>
  * <br/>
  * Attributs : <br/>
@@ -2276,6 +2302,22 @@ public abstract class AbstractControle implements IControle {
 	 */
 	@Override
 	public final String lireFichierLigneParLigne(
+			final File pFile) {
+		
+		return this.lireFichierLigneParLigne(pFile, CHARSET_UTF8);
+		
+	} // Fin de lireFichierLigneParLigne(
+	// File pFile).________________________________________________________
+	
+	
+	
+	/**
+	 * SERVICE ANNEXE.<br/>
+	 * <br/>
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final String lireFichierLigneParLigne(
 			final File pFile
 				, final Charset pCharset) {
 		
@@ -2976,18 +3018,51 @@ public abstract class AbstractControle implements IControle {
 			charsetDecodage = pCharsetDecodage;
 		}
 		
-		/* Réencode la ligne en charsetDecodage. */
-//		final byte[] byteOriginal = pString.getBytes();
-//		final ByteBuffer byteBufferOriginal = ByteBuffer.wrap(byteOriginal);
-//		final CharBuffer charBuffer = charsetEncodage.decode(byteBufferOriginal);
-//		final ByteBuffer bytebufferFinal = charsetEncodage.encode(charBuffer);
-//		final byte[] byteFinal = bytebufferFinal.array();
+		String chaineATranscoder = null;
 		
-//		final String resultat 
-//			= new String(byteFinal, charsetDecodage);
+		/* Retire le BOM_UTF-8 en début de ligne 
+		 * si l'encodage cible n'est pas CHARSET_UTF8. */
+		if (pString.charAt(0) == BOM_UTF_8 
+				&& charsetEncodage == CHARSET_UTF8 
+					&& charsetDecodage != CHARSET_UTF8) {
+			
+			chaineATranscoder = pString.substring(1);
+			
+			// RAPPORT ********
+			if (pRapporte) {
+				
+				/* message du rapport. */
+				final String message 
+				= "La ligne n° " 
+				+ pNumeroLigne 
+				+ " : '" 
+				+ StringUtils.abbreviate(pString, 100)
+				+ "' comportait un caractère invisible BOM_UTF-8 au début. Il a été retiré.";
+				
+				/* Création d'une ligne de rapport. */
+				final LigneRapport ligneRapport 
+				= this.creerLigneRapport(
+						pNumeroLigne
+						, message
+						, null
+						, SANS_OBJET
+						, SANS_OBJET
+						, true
+						, "CARACTERE BOM_UTF-8 retiré");
+				
+				/* Ajout au rapport. */
+				this.ajouterLigneRapport(ligneRapport);
+				
+			} // Fin de if (pRapporte).____________________
+		}
+		else {
+			chaineATranscoder = pString;
+		}
 		
+		// TRANSCODAGE ************************
 		final String resultat 
-		= new String(pString.getBytes(charsetEncodage), charsetDecodage);
+		= new String(
+				chaineATranscoder.getBytes(charsetEncodage), charsetDecodage);
 		
 		// RAPPORT ********
 		if (pRapporte) {
@@ -5069,5 +5144,12 @@ public abstract class AbstractControle implements IControle {
 	} // Fin de getFichierEnMap()._________________________________________
 
 
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public abstract File getFichierTraite();
+	
 		
 } // FIN DE LA CLASSE AbstractControle.--------------------------------------

@@ -13,26 +13,85 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import levy.daniel.application.metier.controles.AbstractControle;
-import levy.daniel.application.metier.controles.rapportscontroles.LigneRapport;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 
+
+
+import levy.daniel.application.metier.controles.AbstractControle;
+import levy.daniel.application.metier.controles.rapportscontroles.LigneRapport;
+
+
+
 /**
  * class Transcodeur :<br/>
- * .<br/>
+ * Classe chargée de TRANSCODER UN FICHIER TEXTE EN UTF-8.<br/>
+ * Génère dans sa méthode controler(File pFile) 
+ * le fichier transcodé en UTF-8 
+ * et retourne true si le transcodage a pu se dérouler normalement.<br/>
+ * Utilise pour cela le critère : 
+ * 'Le fichier doit pouvoir être transcodé en UTF-8'.<br/> 
+ * <br/>
+ * - retourne false et rapporte défavorablement 
+ * si le fichier n'a pas pu être transcodé en UTF-8.<br/>
+ * - retourne true et génère un rapport favorable si pFile 
+ * a pu être transcodé en UTF-8.<br/>
+ * - Peut écrire le rapport de contrôle sous forme textuelle 
+ * et csv sur disque.<br/> 
+ * <br/>
+ * Attributs hérités de AbstractControle : <br/>
+ * [nomClasseConcrete;ordreControle;dateControle
+ * ;dateControleStringFormatee;userName;
+ * fichier;nomFichier;typeControle;nomControle;nomCritere;gravite;
+ * niveauAnomalie;estBloquant;aEffectuer;rapport;rapportEnregistrement;].<br/>
+ * <br/>
+ * <ul>
+ * <li>nomClasseConcrete = "Classe Transcodeur".</li><br/>
+ * <li>ordreControle = 1.</li><br/>
+ * <li>dateControle = this.date.</li><br/>
+ * <li>dateControleStringFormatee = this.dateControleStringFormattee.</li><br/>
+ * <li>typeControle = Contrôle de surface.</li><br/>
+ * <li>nomControle = Traitement de transcodage du fichier en UTF-8 et ANSI.</li><br/>
+ * <li>critere = Le fichier doit pouvoir être transcodé en UTF-8.</li><br/>
+ * <li>gravite = '1 - Bloquant'.</li><br/>
+ * <li>niveauAnomalie = "1".</li><br/>
+ * <li>estBloquant = true.</li><br/>
+ * </ul>
+ * <br/>
+ * - Identifiant Enterprise Architect : TRAITEMENT_SURFACE_02_ENCODAGE_UTF8.<br/>
  * <br/>
  *
  * - Exemple d'utilisation :<br/>
  *<br/>
  * 
  * - Mots-clé :<br/>
+ * Lire ligne par ligne, Entry<Integer, String>,<br/>
+ * rapport, FileInputStream, rafraîchir le rapport, rafraichir le rapport<br/>
+ * InputStreamReader, lecture ligne par ligne,<br/>
+ * BufferedReader, Ecriture sur disque, écriture ligne par ligne,<br/>
+ * boucle while (true),<br/> 
+ * FileOutputStream, OutputStreamWriter, BufferedWriter,<br/>
+ * new FileOutputStream(this.fileEnUtf8, true),
+ * Ecrire à la fin d'un fichier,<br/>
+ * BufferedWriter.write(), BufferedWriter.flush(), <br/>
  * <br/>
  *
  * - Dépendances :<br/>
+ * levy.daniel.application.ILecteurDecodeurFile.<br/>
+ * levy.daniel.application.IListeurDeCaracteresUnicode.<br/>
+ * levy.daniel.application.IExportateurCsv.<br/>
+ * levy.daniel.application.IExportateurJTable.<br/>
+ * levy.daniel.application.IResetable.<br/>
+ * levy.daniel.application.metier.controles.rapportscontroles.LigneRapport.<br/>
+ * levy.daniel.application.metier.controles.IRapporteurControle.<br/>
+ * levy.daniel.application.metier.controles.IControle.<br/>
+ * levy.daniel.application.metier.controles.CaractereDan.<br/>
+ * levy.daniel.application.metier.service.enregistreursfichiers.impl.EnregistreurFichiers.<br/>
+ * levy.daniel.application.metier.service.enregistreursfichiers.rapportsenregistrements.LigneRapportEnregistrement.<br/>
+ * levy.daniel.application.metier.controles.IEnregistreurRapport.<br/>
+ * levy.daniel.application.metier.controles.AbstractControle.<br/>
  * <br/>
  *
  *
@@ -87,14 +146,14 @@ public class Transcodeur extends AbstractControle {
 
 	/**
 	 * fileEnUtf8 : File :<br/>
-	 * fichier réencodé en UTF-8.<br/>
+	 * fichier transcodé en UTF-8.<br/>
 	 */
 	private transient File fileEnUtf8;
 	
 	
 	/**
 	 * fileEnAnsi : File :<br/>
-	 * fichier réencodé en ANSI.<br/>
+	 * fichier transcodé en ANSI.<br/>
 	 */
 	private transient File fileEnAnsi;
 	
@@ -276,7 +335,51 @@ public class Transcodeur extends AbstractControle {
 	
 	
 	/**
-	 * {@inheritDoc}
+	 * Transcode le fichier pFile en UTF-8
+	 * et retourne true si le transcodage s'est bien déroulé.<br/>
+	 * <ul>
+	 * <li>Utilise pour celà le critère 'Le fichier doit 
+	 * pouvoir être transcodé en UTF-8'.</li><br/>
+	 * <li>Lit le fichier ligne par ligne en en utilisant 
+	 * un BufferedReader(InputStreamReader(fileInputStream, CHARSET...)) 
+	 * et détecte les caractères indésirables.</li><br/>
+	 * <ul>
+	 * <li>Lit d'abord une ligne en ANSI et utilise la méthode 
+	 * determinerSiEncodagePossible(...) de AbstractControle 
+	 * pour vérifier que la ligne a pu être encodée en ANSI.</li><br/>
+	 * <li>Lit ensuite la ligne en IBM-850 si ANSI n'a pas marché.</li><br/>
+	 * <li>Lit finalement la ligne en UTF-8.</li><br/>
+	 * </ul>
+	 * <li>n'Enregistre pas le rapport de contrôle sur disque.</li><br/>
+	 * </ul> 
+	 * <br/>
+	 * - retourne false et rapporte si le fichier 
+	 * n'a pu être transcodé en UTF-8.<br/>
+	 * - retourne true et remplit un rapport favorable si pFile 
+	 * a pu être transcodé en UTF-8.<br/>
+	 * <br/>
+	 * <ul>
+	 * <li>passe pFile à this.fichier et 
+	 * rafraîchit automatiquement this.nomFichier.</li><br/>
+	 * <li>rafraîchit le rapport (en instancie un nouveau 
+	 * à chaque appel de la méthode controler(File pFile)).</li><br/>
+	 * </ul>
+	 * <br/>
+	 * - retourne false, LOG de niveau INFO et rapport si pFile == null.<br/>
+	 * - retourne false, LOG de niveau INFO et rapport si pFile 
+	 * est inexistant.<br/>
+	 * - retourne false, LOG de niveau INFO et rapport si pFile 
+	 * est un répertoire.<br/>
+	 * - retourne false, LOG de niveau INFO et rapport si pFile 
+	 * est vide.<br/>
+	 * <br/>
+	 * RG-01-02 : Transcoder en UTF-8.<br/>
+	 * <br/>
+	 *
+	 * @param pFile : File : fichier dont on veut savoir 
+	 * si il est un fichier texte.<br/>
+	 * 
+	 * @return : boolean : true si pFile est a été transcodé en UTF-8.<br/>
 	 */
 	@Override
 	public final boolean controler(
@@ -290,7 +393,59 @@ public class Transcodeur extends AbstractControle {
 	
 	
 	/**
-	 * {@inheritDoc}
+	 * method controler(
+	 * File pFile
+	 * , boolean pEnregistrerRapport) :<br/>
+	 * Transcode le fichier pFile en UTF-8 et ANSI
+	 * et retourne true si le transcodage s'est bien déroulé.<br/>
+	 * <ul>
+	 * <li>Utilise pour celà le critère 'Le fichier doit 
+	 * pouvoir être transcodé en UTF-8'.</li><br/>
+	 * <li>Lit le fichier ligne par ligne en en utilisant 
+	 * un BufferedReader(InputStreamReader(fileInputStream, CHARSET...)) 
+	 * et détecte les caractères indésirables.</li><br/>
+	 * <ul>
+	 * <li>Lit d'abord une ligne en ANSI et utilise la méthode 
+	 * determinerSiEncodagePossible(...) de AbstractControle 
+	 * pour vérifier que la ligne a pu être encodée en ANSI.</li><br/>
+	 * <li>Lit ensuite la ligne en IBM-850 si ANSI n'a pas marché.</li><br/>
+	 * <li>Lit finalement la ligne en UTF-8.</li><br/>
+	 * <li>Retire un éventuel BOM_UTF-8 en début d'une ligne 
+	 * en UTF-8 pour un encodage en ANSI et rapporte.</li><br/>
+	 * </ul>
+	 * <li>Enregistre le rapport de contrôle sur disque 
+	 * si pEnregistrerRapport == true.</li><br/>
+	 * </ul> 
+	 * <br/>
+	 * - retourne false et rapporte si le fichier 
+	 * n'a pu être transcodé en UTF-8.<br/>
+	 * - retourne true et remplit un rapport favorable si pFile 
+	 * a pu être transcodé en UTF-8.<br/>
+	 * <br/>
+	 * <ul>
+	 * <li>passe pFile à this.fichier et 
+	 * rafraîchit automatiquement this.nomFichier.</li><br/>
+	 * <li>rafraîchit le rapport (en instancie un nouveau 
+	 * à chaque appel de la méthode controler(File pFile)).</li><br/>
+	 * </ul>
+	 * <br/>
+	 * - retourne false, LOG de niveau INFO et rapport si pFile == null.<br/>
+	 * - retourne false, LOG de niveau INFO et rapport si pFile 
+	 * est inexistant.<br/>
+	 * - retourne false, LOG de niveau INFO et rapport si pFile 
+	 * est un répertoire.<br/>
+	 * - retourne false, LOG de niveau INFO et rapport si pFile 
+	 * est vide.<br/>
+	 * <br/>
+	 * RG-01-02 : Transcoder en UTF-8.<br/>
+	 * <br/>
+	 *
+	 * @param pFile : File : fichier dont on veut savoir 
+	 * si il est un fichier texte.<br/>
+	 * @param pEnregistrerRapport : boolean : 
+	 * true si on veut enregistrer le rapport dans un fichier sur disque.<br/>
+	 * 
+	 * @return : boolean : true si pFile est a été transcodé en UTF-8.<br/>
 	 */
 	@Override
 	public final boolean controler(
@@ -398,7 +553,7 @@ public class Transcodeur extends AbstractControle {
 				/* Si la ligne n'est pas encodée en ANSI. */
 				if (!resultat) {
 					
-					/* Transcode la ligne en IBM850. */
+					/* Transcode la ligne lue en ANSI en IBM850. */
 					final String ligneLueEnIBM850 
 						= this.transcoder(
 								ligneLueEnAnsi
@@ -434,11 +589,11 @@ public class Transcodeur extends AbstractControle {
 					/* Si la ligne n'est pas encodée en IBM850. */
 					else {
 						
-						/* Transcode la ligne en UTF-8. */
+						/* Transcode la ligne lue en ANSI en UTF-8. */
 						final String ligneLueEnUTF8
 							= this.transcoder(
 									ligneLueEnAnsi
-										, CHARSET_IBM850
+										, CHARSET_ANSI
 											, CHARSET_UTF8
 												, true
 													, numeroLigne);
@@ -451,7 +606,45 @@ public class Transcodeur extends AbstractControle {
 						if (resultat) {
 							
 							// ECRITURE DANS this.fileEnAnsi.
-							bufferedWriterAnsi.write(ligneLueEnUTF8);
+							
+							String ligneAEcrire = null;
+							
+							/* Retire un éventuel BOM_UTF-8 en début 
+							 * d'une ligne en UTF-8 
+							 * pour un encodage en ANSI et rapporte. */														
+							if (ligneLueEnUTF8.charAt(0) == BOM_UTF_8) {
+								
+								ligneAEcrire = ligneLueEnUTF8.substring(1);
+								
+								// RAPPORT ********									
+								/* message du rapport. */
+								final String message 
+								= "La ligne n° " 
+								+ numeroLigne 
+								+ " : '" 
+								+ StringUtils.abbreviate(ligneLueEnUTF8, 100)
+								+ "' comportait un caractère invisible BOM_UTF-8 au début. Il a été retiré.";
+								
+								/* Création d'une ligne de rapport. */
+								final LigneRapport ligneRapport 
+								= this.creerLigneRapport(
+										numeroLigne
+										, message
+										, 0
+										, "INVISIBLE"
+										, "BOM_UTF-8"
+										, true
+										, "CARACTERE BOM_UTF-8 retiré");
+								
+								/* Ajout au rapport. */
+								this.ajouterLigneRapport(ligneRapport);									
+								
+							}
+							else {
+								ligneAEcrire = ligneLueEnUTF8;
+							}
+							
+							bufferedWriterAnsi.write(ligneAEcrire);
 							bufferedWriterAnsi.write(NEWLINE);
 							bufferedWriterAnsi.flush();
 											
@@ -470,7 +663,8 @@ public class Transcodeur extends AbstractControle {
 							
 							// RAPPORT.**********************************							
 							/* Création d'une ligne de rapport 
-							 * si le fichier était encodé en ANSI. */
+							 * si le fichier n'était encodé 
+							 * ni en ANSI, ni en IBM850, ni en UTF-8. */
 							final LigneRapport ligneRapport = 
 									this.creerLigneRapport(null
 									, "Le fichier " + pFile.getName() + " n' est encodé ni en ANSI, ni en IBM850, ni en UTF-8"
@@ -482,6 +676,8 @@ public class Transcodeur extends AbstractControle {
 							
 							/* Ajout de  la ligne de rapport. */
 							this.ajouterLigneRapport(ligneRapport);
+							
+							return false;
 							
 						}
 						
@@ -878,25 +1074,25 @@ public class Transcodeur extends AbstractControle {
 	
 
 	/**
-	 * "Traitement d'encodage du fichier en UTF-8 et ANSI".<br/>
+	 * "Traitement de transcodage du fichier en UTF-8 et ANSI".<br/>
 	 * <br/>
 	 * {@inheritDoc}
 	 */
 	@Override
 	protected String fournirNomControle() {
-		return "Traitement d'encodage du fichier en UTF-8 et ANSI";
+		return "Traitement de transcodage du fichier en UTF-8 et ANSI";
 	} // Fin de fournirNomControle().______________________________________
 	
 	
 
 	/**
-	 * "Le fichier doit être encodé en UTF-8".<br/>
+	 * "Le fichier doit pouvoir être transcodé en UTF-8".<br/>
 	 * <br/>
 	 * {@inheritDoc}
 	 */
 	@Override
 	protected String fournirNomCritere() {
-		return "Le fichier doit être encodé en UTF-8";
+		return "Le fichier doit pouvoir être transcodé en UTF-8";
 	} // Fin de fournirNomCritere()._______________________________________
 
 	
@@ -950,6 +1146,8 @@ public class Transcodeur extends AbstractControle {
 	
 
 	/**
+	 * true.<br/>
+	 * <br/>
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -961,7 +1159,7 @@ public class Transcodeur extends AbstractControle {
 	
 	/**
 	 * method getFileEnUtf8() :<br/>
-	 * Getter du fichier réencodé en UTF-8.<br/>
+	 * Getter du fichier transcodé en UTF-8.<br/>
 	 * <br/>
 	 *
 	 * @return fileEnUtf8 : File.<br/>
@@ -974,7 +1172,7 @@ public class Transcodeur extends AbstractControle {
 	
 	/**
 	 * method getFileEnAnsi() :<br/>
-	 * Getter du fichier réencodé en ANSI.<br/>
+	 * Getter du fichier transcodé en ANSI.<br/>
 	 * <br/>
 	 *
 	 * @return fileEnAnsi : File.<br/>
@@ -983,6 +1181,17 @@ public class Transcodeur extends AbstractControle {
 		return this.fileEnAnsi;
 	} // Fin de getFileEnAnsi().___________________________________________
 
+
+	
+	/**
+	 * this.fileEnUtf8.<br/>
+	 * <br/>
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final File getFichierTraite() {
+		return this.fileEnUtf8;
+	} // Fin de getFichierTraite().________________________________________
 	
 	
 } // FIN DE LA CLASSE Transcodeur.-------------------------------------------

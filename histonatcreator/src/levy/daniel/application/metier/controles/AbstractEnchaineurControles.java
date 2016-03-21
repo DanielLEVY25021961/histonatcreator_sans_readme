@@ -20,7 +20,9 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import levy.daniel.application.metier.controles.impl.controlessurface.ControleurEncodage;
 import levy.daniel.application.metier.controles.impl.controlessurface.ControleurTypeTexte;
+import levy.daniel.application.metier.controles.impl.controlessurface.Transcodeur;
 import levy.daniel.application.metier.controles.rapportscontroles.LigneRapport;
 import levy.daniel.application.metier.service.enregistreursfichiers.IEnregistreurFichiers;
 import levy.daniel.application.metier.service.enregistreursfichiers.impl.EnregistreurFichiers;
@@ -338,7 +340,7 @@ public abstract class AbstractEnchaineurControles
 		 * de la méthode controler(File pFile, boolean pEnregistrerRapport)). */
 		this.rapport = new ArrayList<LigneRapport>();
 		
-		// PARCOURS DE LA SORTEDMAP.******************************
+		// PARCOURS DE LA SORTEDMAP DES CONTROLES.***************************
 		/* récupère un Set<Entry<Integer, IControle>> 
 		 * auprès de la SortedMap. */
 		final Set<Entry<Integer, IControle>> set 
@@ -356,8 +358,14 @@ public abstract class AbstractEnchaineurControles
 			return false;
 		}
 		
+		int numeroControleEffectue = 0;
+		File fichierAControler = null;
+		
 		/* Parcours de l'Iterator. */
 		while (ite.hasNext()) {
+			
+			/* Incrémentation du numeroControleEffectue. */
+			numeroControleEffectue++;
 			
 			/* Récupération de Entry<Integer, IControle> 
 			 * auprès de l'Iterator. */
@@ -373,12 +381,16 @@ public abstract class AbstractEnchaineurControles
 					/* N'exécute un contrôle que si son aEffectuer 
 					 * vaut true (contrôles paramétrables). */
 					if (controle.isaEffectuer()) {
+												
+						if (numeroControleEffectue == 1) {
+							fichierAControler = pFile;
+						}
 						
 						/* EXECUTION DE CHAQUE CONTROLE. ************/
 						/* récupération du résultat du contrôle 
 						 * (true si le contrôle est favorable). */
 						final boolean resultatControle 
-							= controle.controler(pFile);
+							= controle.controler(fichierAControler);
 						
 						/* récupération de estBloquant 
 						 * (true si le contrôle est bloquant). */
@@ -416,22 +428,16 @@ public abstract class AbstractEnchaineurControles
 								this.estBloquant = true;
 								
 								return false;
+								
 							} // Fin de if (estBloquant)._______
 							
 						} // Fin de Si le contrôle est défavorable.__
 						
-						/* Enregistre le rapport de contrôle sur disque 
-						 * si pEnregistrerRapport vaut true 
-						 * et que le rapport est favorable. */
-						if (pEnregistrerRapport) {
-							
-							this.enregistrerRapportTextuelUTF8(
-									this.fournirFileTxtUTF8());
-							this.enregistrerRapportCsvUTF8(
-									this.fournirFileCsvUTF8());
-							
-						} // Fin de if (pEnregistrerRapport).____
 						
+						/* Passe le fichier résultat d'un contrôle 
+						 * ou d'un traitement comme fichierAControler. */
+						fichierAControler = controle.getFichierTraite();
+												
 					} // Fin de if (controle.isaEffectuer()).______
 					
 				} // Fin de if (controle != null)._______
@@ -439,6 +445,18 @@ public abstract class AbstractEnchaineurControles
 			} // Fin de if (entry != null)._________
 			
 		} // Fin du Parcours de l'Iterator._____________________
+		
+		/* Enregistre le rapport de contrôle sur disque 
+		 * si pEnregistrerRapport vaut true 
+		 * et que le rapport est favorable. */
+		if (pEnregistrerRapport) {
+			
+			this.enregistrerRapportTextuelUTF8(
+					this.fournirFileTxtUTF8());
+			this.enregistrerRapportCsvUTF8(
+					this.fournirFileCsvUTF8());
+			
+		} // Fin de if (pEnregistrerRapport).____
 		
 		/* Retourne le boolean résultat. */
 		return resultat;
@@ -461,7 +479,42 @@ public abstract class AbstractEnchaineurControles
 	// , boolean pEnregistrerRapport)._____________________________________
 	
 	
+	
+	/**
+	 * method remplirMapControles() :<br/>
+	 * <ul>
+	 * <li>Instancie chaque contrôle.</li><br/>
+	 * <li>Remplit la SortedMap des Controles.</li><br/>
+	 * </ul>
+	 * <br/>
+	 */
+	private void remplirMapControles() {
+		
+		// Instancie chaque contrôle.*********************
+		/* Instanciation d'un ControleurTypeTexte. */
+		final IControle controleTypeTexte 
+			= new ControleurTypeTexte(
+					1, this.dateControle, this.userName, this.fichier);
+		
+		/* Instanciation d'un Transcodeur. */
+		final IControle transcodeur 
+			= new Transcodeur(
+					2, this.dateControle, this.userName, this.fichier);
+		
+		final IControle controleurEncodage 
+			= new ControleurEncodage(
+					3, this.dateControle, this.userName, this.fichier
+						, CHARSET_UTF8);
+		
+		/* Remplit la SortedMap des Controles. ***************/
+		this.mapControles.put(1, controleTypeTexte);
+		this.mapControles.put(2, transcodeur);
+		this.mapControles.put(3, controleurEncodage);
+		
+	} // Fin de remplirMapControles()._____________________________________
+	
 
+		
 	/**
 	 * method initialiserBundleControles() :<br/>
 	 * Initialise bundleControles qui encapsule 
@@ -636,29 +689,6 @@ public abstract class AbstractEnchaineurControles
 		
 	} // Fin de fournirNomFichier(
 	 // File pFile)._______________________________________________________
-	
-
-	
-	/**
-	 * method remplirMapControles() :<br/>
-	 * <ul>
-	 * <li>Instancie chaque contrôle.</li><br/>
-	 * <li>Remplit la SortedMap des Controles.</li><br/>
-	 * </ul>
-	 * <br/>
-	 */
-	private void remplirMapControles() {
-		
-		// Instancie chaque contrôle.*********************
-		/* Instanciation d'un ControleurTypeTexte. */
-		final IControle controleTypeTexte 
-			= new ControleurTypeTexte(
-					1, this.dateControle, this.userName, this.fichier);
-		
-		/* Remplit la SortedMap des Controles. */
-		this.mapControles.put(1, controleTypeTexte);
-		
-	} // Fin de remplirMapControles()._____________________________________
 	
 
 	

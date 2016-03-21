@@ -56,6 +56,8 @@ import org.apache.commons.logging.LogFactory;
  * <li>estBloquant = true.</li><br/>
  * </ul>
  * <br/>
+ * - Identifiant Enterprise Architect : CONTROLE_SURFACE_01.<br/>
+ * <br/>
  * 
  *
  * - Exemple d'utilisation :<br/>
@@ -111,8 +113,7 @@ import org.apache.commons.logging.LogFactory;
  * levy.daniel.application.metier.controles.AbstractControle.<br/>
  * <br/>
  *
- * - Identifiant Enterprise Architect : CONTROLE_SURFACE_01.<br/>
- * <br/>
+ * 
  *
  * @author dan Lévy
  * @version 1.0
@@ -434,6 +435,8 @@ public class ControleurTypeTexte extends AbstractControle {
 	 * - retourne false, LOG de niveau INFO et rapport si pFile 
 	 * est un répertoire.<br/>
 	 * <br/>
+	 * RG-01-01 : Contrôle fichier texte.<br/>
+	 * <br/>
 	 *
 	 * @param pFile : File : fichier dont on veut savoir 
 	 * si il est un fichier texte.<br/>
@@ -485,6 +488,8 @@ public class ControleurTypeTexte extends AbstractControle {
 	 * est un répertoire.<br/>
 	 * - retourne false, LOG de niveau INFO et rapport si pFile 
 	 * est vide.<br/>
+	 * <br/>
+	 * RG-01-01 : Contrôle fichier texte.<br/>
 	 * <br/>
 	 *
 	 * @param pFile : File : fichier dont on veut savoir 
@@ -779,15 +784,15 @@ public class ControleurTypeTexte extends AbstractControle {
 
 
 	/**
-	 * "Le fichier ne doit pas comporter de caractères 
-	 * indésirables (impossibles à écrire au clavier)".<br/>
+	 * "Le fichier ne comporte aucun caractère 
+	 * indésirable (impossible à écrire au clavier)".<br/>
 	 * <br/>
 	 * {@inheritDoc}
 	 */
 	@Override
 	protected final String fournirNomCritere() {
-		return "Le fichier ne doit pas comporter de caractères "
-				+ "indésirables (impossibles à écrire au clavier)";
+		return "Le fichier ne comporte aucun caractère "
+				+ "indésirable (impossible à écrire au clavier)";
 	} // Fin de fournirNomCritere()._______________________________________
 
 
@@ -841,12 +846,27 @@ public class ControleurTypeTexte extends AbstractControle {
 
 
 	/**
+	 * true.<br/>
+	 * <br/>
 	 * {@inheritDoc}
 	 */
 	@Override
 	protected boolean fournirAEffectuerEnDur() {
 		return true;
 	} // Fin de fournirAEffectuerEnDur().__________________________________
+	
+
+	
+	/**
+	 * this.fichier.<br/>
+	 * <br/>
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final File getFichierTraite() {
+		return this.fichier;
+	} // Fin de getFichierTraite().________________________________________
+	
 	
 	
 	

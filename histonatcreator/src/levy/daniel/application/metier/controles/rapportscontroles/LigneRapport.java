@@ -1163,17 +1163,17 @@ public class LigneRapport implements Serializable, Comparable<Object>
 		/* 4 - nomFichier. */
 		builder.append(
 				String.format(LOCALE_FR_FR
-						, "Fichier contrôlé : %-50s", this.nomFichier));
+						, "Fichier contrôlé : %-70s", this.nomFichier));
 		
 		/* 5 - typeControle. */
 		builder.append(
 				String.format(LOCALE_FR_FR
-						, "Type de Contrôle : %-30s", this.typeControle));
+						, "Type de Contrôle : %-40s", this.typeControle));
 		
 		/* 6 - nomControle. */
 		builder.append(
 				String.format(LOCALE_FR_FR
-						, "Nom du Contrôle : %-30s", this.nomControle));
+						, "Nom du Contrôle : %-70s", this.nomControle));
 		
 		/* 7 - critere. */
 		builder.append(
@@ -1193,7 +1193,7 @@ public class LigneRapport implements Serializable, Comparable<Object>
 		/* 10 - messageControle. */
 		builder.append(
 				String.format(LOCALE_FR_FR
-						, "Message du Contrôle : %-200s"
+						, "Message du Contrôle : %-350s"
 							, this.messageControle));
 		
 		/* 11 - ordreChamp. */

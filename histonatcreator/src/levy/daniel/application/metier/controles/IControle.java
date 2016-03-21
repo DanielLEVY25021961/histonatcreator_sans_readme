@@ -402,13 +402,27 @@ public interface IControle extends IRapporteurControle
 	 * File pFile) :<br/>
 	 * SERVICE PRINCIPAL.<br/>
 	 * Contrôle d'un fichier.<br/>
-	 * Vérifie qu'un fichier passe un contrôle.<br/>
-	 * Doit retourner true si le contrôle s'effectue favorablement. 
+	 * <ul>
+	 * <li>Vérifie qu'un fichier passe un contrôle.</li><br/>
+	 * <li>Doit retourner true si le contrôle s'effectue favorablement. 
 	 * Par exemple, un contrôle vérifiant qu'un fichier est un texte 
-	 * doit retourner true si c'est le cas.<br/>
+	 * doit retourner true si c'est le cas.</li><br/>
+	 * </ul>
+	 * <br/>
+	 * - retourne false, LOG de niveau INFO et rapport 
+	 * si pFile == null.<br/>
+	 * - retourne false, LOG de niveau INFO et rapport 
+	 * si pFile est inexistant.<br/>
+	 * - retourne false, LOG de niveau INFO et rapport 
+	 * si pFile est un répertoire.<br/>
+	 * - retourne false, LOG de niveau INFO et rapport 
+	 * si pFile est vide.<br/>
 	 * <br/>
 	 * - Met automatiquement le boolean pEnregistrerRapport à false.<br/>
 	 * - N'enregistre pas de rapport sur le disque.<br/>
+	 * <br/>
+	 * RG-01 : Contrôle de validité<br/>
+	 * RG-01-Controler : true si favorable.<br/>
 	 * <br/>
 	 *
 	 * @param pFile : File : fichier dont on veut savoir 
@@ -443,6 +457,9 @@ public interface IControle extends IRapporteurControle
 	 * si pFile est un répertoire.<br/>
 	 * - retourne false, LOG de niveau INFO et rapport 
 	 * si pFile est vide.<br/>
+	 * <br/>
+	 * RG-01 : Contrôle de validité<br/>
+	 * RG-01-Controler : true si favorable.<br/>
 	 * <br/>
 	 *
 	 * @param pFile : File : fichier dont on veut savoir 
@@ -692,12 +709,24 @@ public interface IControle extends IRapporteurControle
 	 * Cette valeur doit figurer dans le messagescontroles_fr_FR.properties 
 	 * ou être fournie en dur par les classes concrètes.<br/>
 	 * true si le contrôle doit être effectué.<br/>
+	 * Contrôle paramétrable.<br/>
 	 * <br/>
 	 *
 	 * @return aEffectuer : boolean.<br/>
 	 */
 	boolean isaEffectuer();
+
 	
+	
+	/**
+	 * method getFichierTraite() :<br/>
+	 * Retourne le fichier résultant du contrôle ou du traitement.<br/>
+	 * Utile pour l'enchaînement des contrôles.<br/>
+	 * <br/>
+	 *
+	 * @return : File : fichier résultant du contrôle ou du traitement.<br/>
+	 */
+	File getFichierTraite();
 	
 
 } // FIN DE L'INTERFACE IControle.-------------------------------------------

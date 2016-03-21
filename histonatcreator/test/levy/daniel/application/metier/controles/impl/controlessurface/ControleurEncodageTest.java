@@ -232,13 +232,98 @@ public class ControleurEncodageTest {
 	public static final String CHEMIN_CHARETTE_OEM 
 		= "encodages\\chaàâreéèêëtte_OEM.txt";
 
+
 	/**
 	 * CHEMIN_HIT_DIRA_2012 : String :<br/>
 	 * "texte\\trafics\\trafics_2012\\2014-08-07_HITDIRA2012".<br/>
 	 */
 	public static final String CHEMIN_HIT_DIRA_2012 
 		= "texte\\trafics\\trafics_2012\\2014-08-07_HITDIRA2012";
+
 	
+	/**
+	 * CHEMIN_DARWIN_2012 : String :<br/>
+	 * "texte\\trafics\\trafics_2012\\2014-08-19_darwin2012_UTF-8.csv".<br/>
+	 */
+	public static final String CHEMIN_DARWIN_2012 
+		= "texte\\trafics\\trafics_2012\\2014-08-19_darwin2012_UTF-8.csv";
+	
+	
+	/**
+	 * CHEMIN_HIT_DIRO_2012 : String :<br/>
+	 * "texte\\trafics\\trafics_2012\\2014-08-07_HITDIRO2012".<br/>
+	 */
+	public static final String CHEMIN_HIT_DIRO_2012 
+		= "texte\\trafics\\trafics_2012\\2014-08-07_HITDIRO2012";
+	
+	
+	/**
+	 * CHEMIN_HIT_DIRA_2014 : String :<br/>
+	 * "texte\\trafics\\trafics_2014\\HITDIRA2014.txt".<br/>
+	 */
+	public static final String CHEMIN_HIT_DIRA_2014 
+	= "texte\\trafics\\trafics_2014\\HITDIRA2014.txt";
+	
+	
+	/**
+	 * CHEMIN_HIT_DIRCE_2014 : String :<br/>
+	 * "texte\\trafics\\trafics_2014\\HITDIRCE2014.txt".<br/>
+	 */
+	public static final String CHEMIN_HIT_DIRCE_2014 
+	= "texte\\trafics\\trafics_2014\\HITDIRCE2014.txt";
+
+	
+	/**
+	 * CHEMIN_HIT_DIRCO_2014 : String :<br/>
+	 * "texte\\trafics\\trafics_2014\\HITDIRCO2014.txt".<br/>
+	 */
+	public static final String CHEMIN_HIT_DIRCO_2014 
+	= "texte\\trafics\\trafics_2014\\HITDIRCO2014.txt";
+	
+	/**
+	 * CHEMIN_HIT_DIRE_2014 : String :<br/>
+	 * "texte\\trafics\\trafics_2014\\HITDIRE2014.txt".<br/>
+	 */
+	public static final String CHEMIN_HIT_DIRE_2014 
+	= "texte\\trafics\\trafics_2014\\HITDIRE2014.txt";
+
+	
+	/**
+	 * CHEMIN_HIT_DIRIF_2014 : String :<br/>
+	 * "texte\\trafics\\trafics_2014\\HITDIRIF2014.txt".<br/>
+	 */
+	public static final String CHEMIN_HIT_DIRIF_2014 
+	= "texte\\trafics\\trafics_2014\\HITDIRIF2014.txt";
+
+	
+	/**
+	 * CHEMIN_HIT_DIRMC_2014 : String :<br/>
+	 * "texte\\trafics\\trafics_2014\\HITDIRMC2014.txt".<br/>
+	 */
+	public static final String CHEMIN_HIT_DIRMC_2014 
+	= "texte\\trafics\\trafics_2014\\HITDIRMC2014.txt";
+
+	
+	/**
+	 * CHEMIN_HIT_DIRMED_2014 : String :<br/>
+	 * "texte\\trafics\\trafics_2014\\HITDIRMED2014.txt".<br/>
+	 */
+	public static final String CHEMIN_HIT_DIRMED_2014 
+	= "texte\\trafics\\trafics_2014\\HITDIRMED2014.txt";
+
+	/**
+	 * CHEMIN_HIT_DIRN_2014 : String :<br/>
+	 * "texte\\trafics\\trafics_2014\\HITDIRN2014.txt".<br/>
+	 */
+	public static final String CHEMIN_HIT_DIRN_2014 
+	= "texte\\trafics\\trafics_2014\\HITDIRN2014.txt";
+	
+	/**
+	 * CHEMIN_HIT_DIRNO_2014 : String :<br/>
+	 * "texte\\trafics\\trafics_2014\\HITDIRNO2014.txt".<br/>
+	 */
+	public static final String CHEMIN_HIT_DIRNO_2014 
+	= "texte\\trafics\\trafics_2014\\HITDIRNO2014.txt";
 	
 	/**
 	 * CHEMIN_HIT_DIRO_2014 : String :<br/>
@@ -246,6 +331,24 @@ public class ControleurEncodageTest {
 	 */
 	public static final String CHEMIN_HIT_DIRO_2014 
 		= "texte\\trafics\\trafics_2014\\HITDIRO2014.txt";
+	
+	/**
+	 * CHEMIN_HIT_DIRSO_2014 : String :<br/>
+	 * "texte\\trafics\\trafics_2014\\HITDIRSO2014.txt".<br/>
+	 */
+	public static final String CHEMIN_HIT_DIRSO_2014 
+	= "texte\\trafics\\trafics_2014\\HITDIRSO2014.txt";
+	
+	/**
+	 * CHEMIN_DARWIN_2014 : String :<br/>
+	 * "texte\\trafics\\trafics_2014\\darwin2014.csv".<br/>
+	 */
+	public static final String CHEMIN_DARWIN_2014 
+		= "texte\\trafics\\trafics_2014\\darwin2014.csv";
+	
+
+
+	
 	
 	
 	//*****************************************************************/
@@ -389,6 +492,7 @@ public class ControleurEncodageTest {
 	= new File(CHEMIN_FICHIERS_TEST + CHEMIN_DIACRITIQUES_UTF8);
 	
 	
+	
 	/**
 	 * FILE_HITDIRA2012 : File :<br/>
 	 * "2014-08-07_HITDIRA2012".<br/>
@@ -396,6 +500,88 @@ public class ControleurEncodageTest {
 	public static final File FILE_HITDIRA2012 
 		= new File(CHEMIN_FICHIERS_TEST + CHEMIN_HIT_DIRA_2012);
 	
+	/**
+	 * FILE_HITDIRO2012 : File :<br/>
+	 * "2014-08-07_HITDIRO2012".<br/>
+	 */
+	public static final File FILE_HITDIRO2012 
+		= new File(CHEMIN_FICHIERS_TEST + CHEMIN_HIT_DIRO_2012);
+
+	
+	/**
+	 * FILE_DARWIN2012 : File :<br/>
+	 * "2014-08-19_darwin2012_UTF-8.csv".<br/>
+	 */
+	public static final File FILE_DARWIN2012 
+	= new File(CHEMIN_FICHIERS_TEST + CHEMIN_DARWIN_2012);
+
+	
+	/**
+	 * FILE_HITDIRA2014 : File :<br/>
+	 * HITDIRA2014.txt.<br/>
+	 */
+	public static final File FILE_HITDIRA2014 
+	= new File(CHEMIN_FICHIERS_TEST + CHEMIN_HIT_DIRA_2014);
+	
+	/**
+	 * FILE_HITDIRCE2014 : File :<br/>
+	 * HITDIRCE2014.txt.<br/>
+	 */
+	public static final File FILE_HITDIRCE2014 
+	= new File(CHEMIN_FICHIERS_TEST + CHEMIN_HIT_DIRCE_2014);
+	
+	/**
+	 * FILE_HITDIRCO2014 : File :<br/>
+	 * HITDIRCO2014.txt.<br/>
+	 */
+	public static final File FILE_HITDIRCO2014 
+	= new File(CHEMIN_FICHIERS_TEST + CHEMIN_HIT_DIRCO_2014);
+
+	/**
+	 * FILE_HITDIRE2014 : File :<br/>
+	 * HITDIRE2014.txt.<br/>
+	 */
+	public static final File FILE_HITDIRE2014 
+	= new File(CHEMIN_FICHIERS_TEST + CHEMIN_HIT_DIRE_2014);
+	
+	/**
+	 * FILE_HITDIRIF2014 : File :<br/>
+	 * HITDIRIF2014.txt.<br/>
+	 */
+	public static final File FILE_HITDIRIF2014 
+	= new File(CHEMIN_FICHIERS_TEST + CHEMIN_HIT_DIRIF_2014);
+	
+	
+	/**
+	 * FILE_HITDIRMC2014 : File :<br/>
+	 * HITDIRMC2014.txt.<br/>
+	 */
+	public static final File FILE_HITDIRMC2014 
+	= new File(CHEMIN_FICHIERS_TEST + CHEMIN_HIT_DIRMC_2014);
+	
+	/**
+	 * FILE_HITDIRMED2014 : File :<br/>
+	 * HITDIRMED2014.txt.<br/>	 
+	 * */
+	public static final File FILE_HITDIRMED2014 
+	= new File(CHEMIN_FICHIERS_TEST + CHEMIN_HIT_DIRMED_2014);
+
+	
+	/**
+	 * FILE_HITDIRN2014 : File :<br/>
+	 * HITDIRN2014.txt.<br/>	 
+	 */
+	public static final File FILE_HITDIRN2014 
+	= new File(CHEMIN_FICHIERS_TEST + CHEMIN_HIT_DIRN_2014);
+
+	
+	/**
+	 * FILE_HITDIRNO2014 : File :<br/>
+	 * HITDIRNO2014.txt.<br/>
+	 */
+	public static final File FILE_HITDIRNO2014 
+	= new File(CHEMIN_FICHIERS_TEST + CHEMIN_HIT_DIRNO_2014);
+
 	
 	/**
 	 * FILE_HITDIRO2014 : File :<br/>
@@ -403,6 +589,22 @@ public class ControleurEncodageTest {
 	 */
 	public static final File FILE_HITDIRO2014 
 		= new File(CHEMIN_FICHIERS_TEST + CHEMIN_HIT_DIRO_2014);
+	
+	/**
+	 * FILE_HITDIRSO2014 : File :<br/>
+	 * HITDIRSO2014.txt.<br/>
+	 */
+	public static final File FILE_HITDIRSO2014 
+	= new File(CHEMIN_FICHIERS_TEST + CHEMIN_HIT_DIRSO_2014);
+	
+	/**
+	 * FILE_DARWIN2014 : File :<br/>
+	 * "darwin2014.csv".<br/>
+	 */
+	public static final File FILE_DARWIN2014 
+	= new File(CHEMIN_FICHIERS_TEST + CHEMIN_DARWIN_2014);
+	
+
 	
 	/**
 	 * LISTEFILES_TXT : List<File> :<br/>
@@ -727,7 +929,7 @@ public class ControleurEncodageTest {
 		final ControleurEncodage controle = new ControleurEncodage();
 		
 		/* ******************************************************************/
-		/* Détermination du fichier, du charset et de la ligna à lire. ******/
+		/* Détermination du fichier, du charset et de la ligne à lire. ******/
 		final File fichier = FILE_CHARETTE_ANSI;
 		final Charset charset = CHARSET_IBM850;
 		final int numeroLigne = 1;
@@ -791,6 +993,85 @@ public class ControleurEncodageTest {
 	} // Fin de testControlerHitDirA2012().________________________________
 	
 
+	
+	
+	/**
+	 * method testControlerDarwin2012() :<br/>
+	 * .<br/>
+	 * <br/>
+	 */
+	@Test
+	public void testControlerDarwin2012() {
+		
+		/* Instanciation d'un ControleurEncodage 
+		 * avec le constructeur d'arité nulle. */
+		final ControleurEncodage controle = new ControleurEncodage();
+		
+		/* ******************************************************************/
+		/* Détermination du fichier, du charset et de la ligne à lire. ******/
+		final File fichier = FILE_DARWIN2012;
+		final Charset charset = CHARSET_UTF8;
+		final int numeroLigne = 1;
+		/* ******************************************************************/
+		
+		/* Passe charset au controle. */
+		controle.setCharset(charset);
+		
+		/* résultat du contrôle d'encodage. */
+		final boolean resultat 
+			= controle.controler(fichier, false);
+		
+		/* Lit le fichier ligne par ligne dans le fichier avec charset. */
+		/* Remplit la SortedMap qui encapsule le fichier 
+		 * sous forme de lignes. */
+		final String lectureLigneParLigne 
+			= controle.lireFichierLigneParLigne(fichier, charset);
+		
+		/* Lit une ligne donnée dans le fichier avec charset. */
+		final String lectureLigne 
+			= controle.lireLigneFichier(numeroLigne, fichier, charset);
+		
+		/* Liste la ligne donnée caractère par caractère 
+		 * en éditant les valeurs unicode. */
+		final String caracteres 
+			= controle.listerChaineCarParCar(lectureLigne);
+		
+		/* résultat du contrôle de bonnes longueurs des lignes. */
+		final boolean bonneLongueurs 
+			= this.controlerLongueursLignes(controle.getFichierEnMap(), 520);
+		
+
+		
+		// AFFICHAGES. ********************
+		/* Résultat de la lecture par le Charset*/
+		System.out.println();
+		System.out.println("Fichier écrit dans l'encodage " 
+				+ charset.name() + " : " + resultat);
+		
+		/* Affichage de l'enregistrement sur disque du rapport de contrôle. */
+		System.out.println();
+		System.out.println("Un rapport de contrôle a été enregistré : \n" 
+				+ controle.afficherRapportEnregistrementTextuel());
+		
+		/* Affichage de la ligne désignée par son numéro. */
+		System.out.println();
+		System.out.println(lectureLigne);
+		
+		/* Affichage du fichier ligne par ligne lu par charset. */
+		System.out.println();
+		System.out.println(lectureLigneParLigne);
+		
+		System.out.println();
+		System.out.println(caracteres);
+		
+		
+		System.out.println();
+		System.out.println("Fichier a de bonnes longueurs de ligne : " 
+				+ bonneLongueurs);
+		
+	} // Fin de testControlerDarwin2012()._________________________________
+	
+	
 	
 	/**
 	 * method testControler() :<br/>
