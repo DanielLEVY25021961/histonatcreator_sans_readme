@@ -11,11 +11,19 @@ package levy.daniel.application;
  * mais d'utiliser à la place sa méthode reset() 
  * et une méthode remplir(...) pour éviter l'instanciation.<br/>
  * <br/>
+ * <ul>
+ * comporte : <br/>
+ * <li>une méthode reset() chargée de remettre l'objet à zéro.</li><br/>
+ * <li>ATTENTION : la méthode remplir(...) avec des paramètres dépendant 
+ * de l'objet doit être implémentée dans les objets concrets.</li><br/>
+ * </ul>
+ * <br/>
  *
  * - Exemple d'utilisation :<br/>
  *<br/>
  * 
  * - Mots-clé :<br/>
+ * reset, utilisation d'une seule instance d'un objet dans une boucle,<br/>
  * <br/>
  *
  * - Dépendances :<br/>

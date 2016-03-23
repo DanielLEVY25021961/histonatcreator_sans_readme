@@ -6,15 +6,41 @@ import java.util.SortedMap;
 
 
 /**
- * class ILecteurDecodeurFile :<br/>
- * Interface centralisant toutes les méthodes des objets 
- * capables de lire un fidhier selon un certain encodage (Charset).<br/>
+ * Interface ILecteurDecodeurFile :<br/>
+ * Interface centralisant toutes les constantes et les méthodes des objets 
+ * capables de lire un fichier selon un certain encodage (Charset).<br/>
+ * <br/>
+ * <ul>
+ * comporte essentiellement : <br/>
+ * <li>une méthode lireFichier(File pFile, Charset pCharset) qui fournit 
+ * le contenu de pFile lu caractère par caractère 
+ * décodé avec pCharset sous forme de String. 
+ * Cette méthode ne modifie pas les éventuels sauts de ligne</li><br/>
+ * <li>une méthode lireFichierLigneParLigne(File pFile, Charset pCharset) 
+ * qui fournit le contenu de pFile lu ligne par ligne 
+ * décodé avec pCharset sous forme de String. 
+ * Cette méthode substitue aux sauts de ligne rencontrés 
+ * les sauts de ligne de la plateforme</li><br/>
+ * <li>une méthode lireLigneFichier(
+ * int pNumeroLigne, File pFile, Charset pCharset) 
+ * qui fournit la ligne pNumeroLigne de pFile
+ * décodé avec pCharset sous forme de String.</li><br/>
+ * <li>une méthode determinerSiEncodagePossible(
+ * String pString, Charset pCharset, int pNumeroLigne) 
+ * qui retourne true si la ligne pString décodée 
+ * avec pCharset ne contient pas de caractères indésirables 
+ * (impossibles à écrire au clavier).</li><br/>
+ * </ul>
  * <br/>
  *
  * - Exemple d'utilisation :<br/>
  *<br/>
  * 
  * - Mots-clé :<br/>
+ * lire un fchier, lire un fichier ligne par ligne,<br/>
+ * lire une ligne caractère par caractère, <br/>
+ * InputStreamReader, BufferedReader, Charset,<br/>
+ * read(), readLine(),<br/>
  * <br/>
  *
  * - Dépendances :<br/>
@@ -811,7 +837,8 @@ public interface ILecteurDecodeurFile {
 	 *
 	 * @param pString : String.<br/>
 	 * @param pCharset : Charset.<br/>
-	 * @param pNumeroLigne : int : numéro de la ligne.<br/>
+	 * @param pNumeroLigne : int : numéro de la ligne dans le fichier 
+	 * (ne sert que pour les rapports).<br/>
 	 * 
 	 * @return : boolean : true si la ligne pString a pu être encodée 
 	 * avec le Charset pCharset.<br/>

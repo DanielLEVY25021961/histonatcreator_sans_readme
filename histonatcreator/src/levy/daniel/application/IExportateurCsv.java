@@ -3,18 +3,34 @@ package levy.daniel.application;
 import javax.persistence.Transient;
 
 /**
- * class IExportateurCsv :<br/>
+ * Interface IExportateurCsv :<br/>
  * Interface qui garantit que tous les objets qui 
- * l'implémentent pourront être exportés au format csv.<br/>
+ * l'implémentent pourront être exportés au format csv 
+ * afin d'être affichés dans n'importe quel tableur (Excel, Calc, ...).<br/>
  * <br/>
- *
+ * <ul>
+ * comporte : <br/>
+ * <li>une méthode getEnTeteCsv() qui fournit 
+ * la ligne d'en-tête csv de l'objet.</li><br/>
+ * <li>une méthode toCsv() qui fournit la ligne des valeurs  
+ * de l'objet au format csv.</li><br/>
+ * </ul>
+ * <br/>
+ * 
  * - Exemple d'utilisation :<br/>
  *<br/>
  * 
  * - Mots-clé :<br/>
+ * csv,<br/>
  * <br/>
  *
  * - Dépendances :<br/>
+ * .\lib\javax.persistence.Transient pour l'annotation Transient 
+ * provenant de hibernate-jpa-2.0-api-1.0.0.Final.jar.<br/>
+ * .\lib_doc\hibernate-jpa-2.0-api-1.0.1.Final-sources.jar 
+ * pour la documentation de javax.persistence.Transient pour 
+ * l'annotation Transient provenant 
+ * de hibernate-jpa-2.0-api-1.0.0.Final.jar.<br/>
  * <br/>
  *
  *
@@ -35,7 +51,7 @@ public interface IExportateurCsv {
 	 * L'idée est de pouvoir demander à n'importe quel objet métier 
 	 * de fournir son en-tête de fichier csv.<br/>
 	 *
-	 * @return : String.<br/>
+	 * @return : String : en-tête de l'objet en csv.<br/>
 	 */
 	@Transient
 	String getEnTeteCsv();
@@ -49,6 +65,7 @@ public interface IExportateurCsv {
 	 *
 	 * @return : String.<br/>
 	 */
+	@Transient
 	String toCsv();
 
 

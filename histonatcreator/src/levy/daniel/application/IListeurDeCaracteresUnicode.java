@@ -2,17 +2,27 @@ package levy.daniel.application;
 
 
 /**
- * class IListeurDeCaracteresUnicode :<br/>
- * Cette interface centralise toutes les méthodes des objets capables 
+ * Interface IListeurDeCaracteresUnicode :<br/>
+ * Interface centralisant toutes les méthodes des objets capables 
  * de lister une String caractère par caractère en fournissant 
  * toutes les données Unicode 
  * (codePoint, code HexaDecimal Unicode, nom du caractère, ...).<br/>
+ * <br/>
+ * comporte essentiellement : <br/>
+ * <li>une méthode listerChaineCarParCar(
+ * String pString, Integer pNombreMaxiCaracteres) qui liste 
+ * caractère par caractère les pNombreMaxiCaracteres premiers 
+ * caractères de pString en détaillant les caractéristiques unicode 
+ * de chaque caractère.</li><br/>
+ * </ul>
  * <br/>
  *
  * - Exemple d'utilisation :<br/>
  *<br/>
  * 
  * - Mots-clé :<br/>
+ * unicode, Unicode, codepoint, nom unicode,<br/>
+ * point de code décimal, point de code hexa,<br/>
  * <br/>
  *
  * - Dépendances :<br/>
@@ -30,7 +40,6 @@ public interface IListeurDeCaracteresUnicode {
 	/**
 	 * method listerChaineCarParCar(
 	 * String pString) :<br/>
-	 * SERVICE ANNEXE.<br/>
 	 * - Retourne une String permettant l'affichage 
 	 * de min(longueurChaine, 1000) premiers caractères
 	 * (caractère par caractère sur des lignes distinctes) 
@@ -63,7 +72,6 @@ public interface IListeurDeCaracteresUnicode {
 	 * method listerChaineCarParCar(
 	 * String pString
 	 * , Integer pNombreMaxiCaracteres) :<br/>
-	 * SERVICE ANNEXE.<br/>
 	 * - Retourne une String permettant l'affichage 
 	 * des pNombreMaxiCaracteres premiers caractères
 	 * (caractère par caractère sur des lignes distinctes) 
