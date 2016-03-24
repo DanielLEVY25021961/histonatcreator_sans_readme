@@ -9,22 +9,41 @@ import java.util.Locale;
 
 
 /**
- * class IEnregistreurFichiers :<br/>
- * Abstraction qui centralise les méthodes de toutes les classes 
- * qui fournissent des services d'enregistrement de fichiers sur disque.<br/>
+ * Interface IEnregistreurFichiers :<br/>
+ * Interface centralisant les méthodes de toutes les classes 
+ * qui fournissent des services d'enregistrement de fichiers sur disque 
+ * et qui produisent un rapport d'enregistrement.<br/>
  * SERVICE CHARGE D'ENREGISTRER UNE STRING SUR DISQUE.<br/>
+ * <br/>
+ * <ul>
+ * comporte essentiellement : <br/>
+ * <li>une méthode ecrireStringDansFile(
+ * File pFile, String pString, Charset pCharset, String pSautLigne) 
+ * qui permet d'enregistrer pString encodée en pCharset 
+ * dans pFile sur disque.<br/>
+ * Cette méthode peut substituer pSautLigne aux sauts 
+ * de ligne rencontrés dans pString.<br/>
+ * Cette méthode doit générer un rapport d'enregistrement 
+ * du fichier sous forme de List&lt;LigneRapportEnregistrement&gt;.</li><br/>
+ * </ul>
  * <br/>
  *
  * - Exemple d'utilisation :<br/>
  *<br/>
  * 
  * - Mots-clé :<br/>
+ * Enregistrement de fichier sur disque, écriture sur disque<br/>
+ * ecriture sur disque, saut de ligne<br/>
+ * sauts de ligne de la plateforme (NEWLINE),<br/>
  * <br/>
  *
  * - Dépendances :<br/>
- * levy.daniel.application.IExportateurCsv.<br/>
- * levy.daniel.application.IExportateurJTable.<br/>
- * levy.daniel.application.IResetable.<br/>
+ * levy.daniel.application.IExportateurCsv 
+ * (sous-entendu, pas d'implémentation directe).<br/>
+ * levy.daniel.application.IExportateurJTable 
+ * (sous-entendu, pas d'implémentation directe).<br/>
+ * levy.daniel.application.IResetable 
+ * (sous-entendu, pas d'implémentation directe).<br/>
  * levy.daniel.application.metier.service.enregistreursfichiers.rapportsenregistrements.LigneRapportEnregistrement.<br/>
  * levy.daniel.application.metier.service.enregistreursfichiers.IRapporteurEnregistrement.<br/>
  * <br/>

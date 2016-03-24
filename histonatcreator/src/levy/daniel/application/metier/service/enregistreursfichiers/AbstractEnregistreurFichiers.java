@@ -44,9 +44,12 @@ import org.apache.commons.logging.LogFactory;
  * <br/>
  *
  * - Dépendances :<br/>
- * levy.daniel.application.IExportateurCsv.<br/>
- * levy.daniel.application.IExportateurJTable.<br/>
- * levy.daniel.application.IResetable.<br/>
+ * levy.daniel.application.IExportateurCsv 
+ * (sous-entendu, pas d'implémentation directe).<br/>
+ * levy.daniel.application.IExportateurJTable 
+ * (sous-entendu, pas d'implémentation directe).<br/>
+ * levy.daniel.application.IResetable 
+ * (sous-entendu, pas d'implémentation directe).<br/>
  * levy.daniel.application.metier.service.enregistreursfichiers.rapportsenregistrements.LigneRapportEnregistrement.<br/>
  * levy.daniel.application.metier.service.enregistreursfichiers.IRapporteurEnregistrement.<br/>
  * levy.daniel.application.metier.service.enregistreursfichiers.IEnregistreurFichiers.<br/>
@@ -618,7 +621,7 @@ public abstract class AbstractEnregistreurFichiers implements
 			/* rapport. */
 			final LigneRapportEnregistrement ligne 
 				= this.creerLigneRapport(
-						"Le fichier " + pFile.getName() + " a bien été créé"
+						"Le fichier '" + pFile.getName() + "' a bien été créé"
 							, pFile.getAbsolutePath()
 								, "OK");
 			

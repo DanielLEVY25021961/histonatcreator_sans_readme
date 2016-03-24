@@ -887,9 +887,9 @@ public class ControleurTypeTexteTest {
 				, "Contrôle fichier texte"
 					, control.getNomControle());
 		
-		/* Vérifie que nomCritere == "Le fichier ne doit pas comporter de caractères indésirables (impossibles à écrire au clavier)". */
-		assertEquals("nomCritere doit valoir 'Le fichier ne doit pas comporter de caractères indésirables (impossibles à écrire au clavier)' : "
-				, "Le fichier ne doit pas comporter de caractères indésirables (impossibles à écrire au clavier)"
+		/* Vérifie que nomCritere == "Le fichier ne comporte aucun caractère indésirable (impossible à écrire au clavier)". */
+		assertEquals("nomCritere doit valoir 'Le fichier ne comporte aucun caractère indésirable (impossible à écrire au clavier)' : "
+				, "Le fichier ne comporte aucun caractère indésirable (impossible à écrire au clavier)"
 					, control.getNomCritere());
 				
 		/* Vérifie que niveauAnomalie == 1. */
