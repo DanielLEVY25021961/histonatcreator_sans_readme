@@ -10,16 +10,50 @@ import levy.daniel.application.metier.service.enregistreursfichiers.rapportsenre
 
 
 /**
- * class IEnregistreurRapport :<br/>
+ * Interface IEnregistreurRapport :<br/>
  * Interface centralisant les méthodes 
  * de tous les contrôles susceptibles d'enregistrer 
  * sur disque un rapport de contrôle.<br/>
+ * SERVICE CHARGE D'ENREGISTRER UNE RAPPORT DE CONTROLE SUR DISQUE.<br/>
+ * Un rapport de Contrôle de fichier
+ * est une List&lt;LigneRapport&gt;.<br/>
+ * En outre, IEnregistreurRapport fournit un compte-rendu 
+ * de l'enregistrement sur disque du rapport de contrôle sous forme de 
+ * List&lt;LigneRapportEnregistrement&gt;.<br/>
+ * <br/>
+ * <ul>
+ * comporte essentiellement : <br/>
+ * <li>une méthode enregistrerRapportTextuel(
+ * List&lt;LigneRapport&gt; pRapportList
+ * , Date pDateEnregistrement
+ * , String pUserName, String pObjet, File pFichier
+ * , Charset pCharset, String pSautLigne) 
+ * qui permet d'enregistrer un rapport de contrôle 
+ * encodé en pCharset dans pFile au format textuel.<br/>
+ * Cette méthode génère 
+ * également un compte rendu d'enregistrement 
+ * sous forme de List&lt;LigneRapportEnregistrement&gt;.</li><br/>
+ * <li>une méthode enregistrerRapportCsv(
+ * List&lt;LigneRapport&gt; pRapportList
+ * , Date pDateEnregistrement, String pUserName
+ * , String pObjet, File pFichier
+ * , Charset pCharset, String pSautLigne) 
+ * qui permet d'enregistrer un rapport de contrôle 
+ * encodé en pCharset dans pFile au format csv.<br/>
+ * Cette méthode génère 
+ * également un compte rendu d'enregistrement 
+ * sous forme de List&lt;LigneRapportEnregistrement&gt;.</li><br/>
+ * <li>une méthode getRapportEnregistrement() qui fournit 
+ * un compte-rendu de l'enregistrement des rapports de contrôle 
+ * sur disque sous forme de List&lt;LigneRapportEnregistrement&gt;.</li><br/>
+ * </ul>
  * <br/>
  *
  * - Exemple d'utilisation :<br/>
  *<br/>
  * 
  * - Mots-clé :<br/>
+ * enregistrement sur disque, enregistrement de rapport de contrôle,<br/>
  * <br/>
  *
  * - Dépendances :<br/>

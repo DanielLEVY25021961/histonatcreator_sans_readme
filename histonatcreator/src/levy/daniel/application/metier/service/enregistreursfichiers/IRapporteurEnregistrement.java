@@ -33,7 +33,7 @@ import levy.daniel.application.metier.service.enregistreursfichiers.rapportsenre
  * <li>une méthode getValeurRapportJTable(int pLigne, int pColonne) 
  * qui fournit la valeur d'un rapport d'enregistrement sous forme d'Object 
  * pour affichage dans une JTable.</li><br/>
- * <li>une méthode getRapport qui fournit 
+ * <li>une méthode getRapport() qui fournit 
  * un rapport d'enregistrement sous forme de 
  * List&lt;LigneRapportEnregistrement&gt;.</li><br/>
  * </ul>

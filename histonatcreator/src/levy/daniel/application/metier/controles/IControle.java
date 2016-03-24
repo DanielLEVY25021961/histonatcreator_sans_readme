@@ -48,6 +48,17 @@ import levy.daniel.application.IListeurDeCaracteresUnicode;
  * fichier;nomFichier;typeControle;nomControle;nomCritere;gravite;
  * niveauAnomalie;estBloquant;rapport].<br/>
  * <br/>
+ * <ul>
+ * comporte essentiellement : <br/>
+ * <li>une méthode controler(File pFile, boolean pEnregistrerRapport) 
+ * qui permet de contrôler un fichier pFile 
+ * et de retourner true si le fichier passe favorablement le contrôle.<br/>
+ * Cette méthode peut écrire le rapport de contrôle 
+ * sous forme de List&lt;LigneRapport&gt; sur disque 
+ * et génère 
+ * également un compte rendu d'enregistrement 
+ * sous forme de List&lt;LigneRapportEnregistrement&gt;.</li><br/>
+ * <br/>
  *
  * - Exemple d'utilisation :<br/>
  *<code>

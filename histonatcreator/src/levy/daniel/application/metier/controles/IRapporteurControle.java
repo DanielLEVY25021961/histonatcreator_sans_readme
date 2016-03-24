@@ -7,20 +7,53 @@ import levy.daniel.application.metier.controles.rapportscontroles.LigneRapport;
 
 /**
  * Interface IRapporteurControle :<br/>
- * Abstraction servant à isoler les méthodes 
- * liées aux rapports émis par les Controles.<br/>
+ * Interface servant à isoler les méthodes 
+ * liées aux rapports émis par les Contrôles.<br/>
+ * Un rapport de Contrôle de fichier
+ * est une List&lt;LigneRapport&gt;.<br/>
+ * Un rapport de contrôle doit pouvoir 
+ * être affiché sous forme csv ou dans une JTable.<br/>
+ * <br/>
+ * <ul>
+ * comporte essentiellement : <br/>
+ * <li>une méthode afficherRapportTextuel(
+ * List&lt;LigneRapport&gt; pList) 
+ * qui permet d'afficher un rapport de contrôle 
+ * sous forme de String.</li><br/>
+ * <li>une méthode getEnTeteCsv() qui fournit l'en-tête  
+ * d'un rapport de contrôle au format csv.</li><br/>
+ * <li>une méthode afficherRapportCsv(
+ * List&lt;LigneRapport&gt; pList
+ * , boolean pAjouterEntete) qui fournit 
+ * un rapport de contrôle au format csv.</li><br/>
+ * <li>une méthode getEnTeteRapportJTable(int pI) 
+ * qui fournit l'en-tête de la pI-ème colonne (0 - based) 
+ * du rapport de contrôle sous forme de String 
+ * pour affichage dans une JTable.</li><br/>
+ * <li>une méthode getValeurRapportJTable(int pLigne, int pColonne) 
+ * qui fournit la valeur d'un rapport de contrôle sous forme d'Object 
+ * pour affichage dans une JTable.</li><br/>
+ * <li>une méthode getRapport() qui fournit 
+ * un rapport de contrôle sous forme de 
+ * List&lt;LigneRapport&gt;.</li><br/>
+ * </ul>
  * <br/>
  *
  * - Exemple d'utilisation :<br/>
  *<br/>
  * 
  * - Mots-clé :<br/>
+ * csv, JTable,<br/> 
+ * rapport sur l'exécution d'un contrôle de fichier,<br/>
  * <br/>
  *
  * - Dépendances :<br/>
- * levy.daniel.application.IExportateurCsv.<br/>
- * levy.daniel.application.IExportateurJTable.<br/>
- * levy.daniel.application.IResetable.<br/>
+ * levy.daniel.application.IExportateurCsv 
+ * (sous-entendu, pas d'implémentation directe).<br/>
+ * levy.daniel.application.IExportateurJTable 
+ * (sous-entendu, pas d'implémentation directe).<br/>
+ * levy.daniel.application.IResetable 
+ * (sous-entendu, pas d'implémentation directe).<br/>
  * levy.daniel.application.metier.controles.rapportscontroles.LigneRapport.<br/>
  * <br/>
  *
