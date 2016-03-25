@@ -22,26 +22,28 @@ import levy.daniel.application.metier.controles.rapportscontroles.LigneRapport;
 
 /**
  * class ControleurEncodage :<br/>
- * Classe chargée de détecter si un fichier texte est encodé 
- * avec this.charset.<br/>
+ * Classe chargée de DETECTER SI UN FICHIER EST ENTIEREMENT ENCODE AVEC 
+ * this.charset.<br/>
  * Contrôle dans sa méthode controler(File pFile) 
  * si le fichier pFile est encodé avec this.charset 
  * et retourne true si c'est le cas.<br/>
- * Utilise pour celà le critère ' ' ( ).<br/> 
+ * Utilise pour celà le critère 'Un fichier doit être 
+ * uniformément encodé avec un même charset' 
+ * (Le décodage avec this.charset ne doit pas 
+ * générer de caractère indésirable).<br/> 
  * <br/>
- * - retourne false et rapporte si .<br/>
+ * - retourne false et rapporte si le décodage avec this.charset 
+ * génère un caractère indésirable appartenant 
+ * à AbstractControle.CARACTERES_INDESIRABLES_SET.<br/>
  * - retourne true et génère un rapport favorable si pFile 
  * a été encodé avec this.charset.<br/>
  * - Peut écrire le rapport de contrôle sous forme textuelle 
- * et csv sur disque.<br/> 
- * <br/>
- * - typeControle = Contrôle de surface.<br/>
- * - nomControle = Contrôle d'encodage du fichier.<br/>
- * - critere =  .<br/>
- * - gravite = '1 - Bloquant'.<br/>
- * - niveauAnomalie = "1".<br/>
- * - estBloquant = true.<br/>
- * <br/>
+ * et csv sur disque.<br/>
+ * - Génère éventuellement un rapport d'exécution de l'écriture 
+ * du rapport de contrôle sur disque.<br/>
+ *  - Fournit le fichier résultant du contrôle 
+ * (qui peut être différent du fichier en entrée si il y a traitement) 
+ * grâce à la méthode getFichierTraite().<br/>  
  * <br/>
  * Attributs hérités de AbstractControle : <br/>
  * [nomClasseConcrete;ordreControle;dateControle
@@ -50,16 +52,69 @@ import levy.daniel.application.metier.controles.rapportscontroles.LigneRapport;
  * niveauAnomalie;estBloquant;aEffectuer;rapport;rapportEnregistrement;].<br/>
  * <br/>
  * Attributs de la classe :<br/>
- * charset<br/>
+ * - this.charset<br/>
+ * <br/>
+ * <ul>
+ * <li>nomClasseConcrete = "Classe ControleurEncodage".</li><br/>
+ * <li>ordreControle = 3.</li><br/>
+ * <li>dateControle = this.date.</li><br/>
+ * <li>dateControleStringFormatee = this.dateControleStringFormattee.</li><br/>
+ * <li>typeControle = Contrôle de surface.</li><br/>
+ * <li>nomControle = Contrôle d'encodage du fichier.</li><br/>
+ * <li>critere = Un fichier doit être uniformément 
+ * encodé avec un même charset.</li><br/>
+ * <li>gravite = '1 - Bloquant'.</li><br/>
+ * <li>niveauAnomalie = "1".</li><br/>
+ * <li>estBloquant = true.</li><br/>
+ * <li>aEffectuer = true.</li><br/>
+ * </ul>
+ * <br/>
+ * - Identifiant Enterprise Architect : CONTROLE_SURFACE_03_UTF8.<br/>
  * <br/>
  *
  * - Exemple d'utilisation :<br/>
  *<br/>
  * 
  * - Mots-clé :<br/>
+ * rapport, FileInputStream, rafraîchir le rapport, rafraichir le rapport<br/>
+ * InputStreamReader, lecture ligne par ligne,<br/>
+ * lecture caractère par caractère,<br/>
+ * BufferedReader, <br/>
+ * Conversion entier en caractère, cast entier en caractère, <br/>
+ * boucle while (true),<br/> 
  * <br/>
  *
  * - Dépendances :<br/>
+ * .\lib\commons-lang-2.5.jar pour utiliser StringUtils 
+ * de la fondation Apache.<br/>
+ * .\lib_doc\commons-lang-2.5-src.zip pour la documentation de StringUtils 
+ * de la fondation Apache.<br/>
+ * .\lib\commons-logging-1.1.3.jar pour utiliser le logging 
+ * de la fondation Apache.<br/>
+ * .\lib_doc\commons-logging-1.1.1-src.zip pour la documentation du logging 
+ * de la fondation Apache.<br/>
+ * .\lib\javax.persistence.Transient pour l'annotation Transient 
+ * provenant de hibernate-jpa-2.0-api-1.0.0.Final.jar.<br/>
+ * .\lib_doc\hibernate-jpa-2.0-api-1.0.1.Final-sources.jar 
+ * pour la documentation de javax.persistence.Transient pour 
+ * l'annotation Transient provenant 
+ * de hibernate-jpa-2.0-api-1.0.0.Final.jar.<br/>
+ * levy.daniel.application.ILecteurDecodeurFile.<br/>
+ * levy.daniel.application.IListeurDeCaracteresUnicode.<br/>
+ * levy.daniel.application.IExportateurCsv.<br/>
+ * levy.daniel.application.IExportateurJTable.<br/>
+ * levy.daniel.application.IResetable.<br/>
+ * levy.daniel.application.metier.controles.rapportscontroles.LigneRapport.<br/>
+ * levy.daniel.application.metier.controles.IEnregistreurRapport.<br/>
+ * levy.daniel.application.metier.controles.IRapporteurControle.<br/>
+ * levy.daniel.application.metier.controles.IControle.<br/>
+ * levy.daniel.application.metier.controles.CaractereDan.<br/>
+ * levy.daniel.application.metier.service.enregistreursfichiers.IRapporteurEnregistrement.<br/>
+ * levy.daniel.application.metier.service.enregistreursfichiers.IEnregistreurFichiers.<br/>
+ * levy.daniel.application.metier.service.enregistreursfichiers.AbstractEnregistreurFichiers.<br/>
+ * levy.daniel.application.metier.service.enregistreursfichiers.impl.EnregistreurFichiers.<br/>
+ * levy.daniel.application.metier.service.enregistreursfichiers.rapportsenregistrements.LigneRapportEnregistrement.<br/>
+ * levy.daniel.application.metier.controles.AbstractControle.<br/>
  * <br/>
  *
  *

@@ -27,20 +27,29 @@ import org.apache.commons.logging.LogFactory;
  * et retourne true si c'est le cas.<br/>
  * Utilise pour cela le critère : 'le fichier ne doit pas comporter de 
  * caractères indésirables' (aucun caractère du fichier ne 
- * doit être contenu dans CARACTERES_INDESIRABLES_SET).<br/> 
+ * doit être contenu dans this.CARACTERES_INDESIRABLES_SET).<br/> 
  * <br/>
- * - retourne false et rapporte défavorablement si CARACTERES_INDESIRABLES_SET 
+ * - retourne false et rapporte défavorablement si 
+ * this.CARACTERES_INDESIRABLES_SET 
  * contient un des caractères de pFile.<br/>
  * - retourne true et génère un rapport favorable si pFile 
  * ne contient pas de caractères indésirables.<br/>
  * - Peut écrire le rapport de contrôle sous forme textuelle 
- * et csv sur disque.<br/> 
+ * et csv sur disque.<br/>
+ * - Génère éventuellement un rapport d'exécution de l'écriture 
+ * du rapport de contrôle sur disque.<br/> 
+ * - Fournit le fichier résultant du contrôle 
+ * (qui peut être différent du fichier en entrée si il y a traitement) 
+ * grâce à la méthode getFichierTraite().<br/>
  * <br/>
  * Attributs hérités de AbstractControle : <br/>
  * [nomClasseConcrete;ordreControle;dateControle
  * ;dateControleStringFormatee;userName;
  * fichier;nomFichier;typeControle;nomControle;nomCritere;gravite;
  * niveauAnomalie;estBloquant;aEffectuer;rapport;rapportEnregistrement;].<br/>
+ * <br/>
+ * Attributs de la classe :<br/>
+ * néant<br/>
  * <br/>
  * <ul>
  * <li>nomClasseConcrete = "Classe ControleurTypeTexte".</li><br/>
@@ -54,16 +63,17 @@ import org.apache.commons.logging.LogFactory;
  * <li>gravite = '1 - Bloquant'.</li><br/>
  * <li>niveauAnomalie = "1".</li><br/>
  * <li>estBloquant = true.</li><br/>
+ * <li>aEffectuer = true.</li><br/>
  * </ul>
  * <br/>
- * - Identifiant Enterprise Architect : CONTROLE_SURFACE_01.<br/>
+ * - Identifiant Enterprise Architect : CONTROLE_SURFACE_01_TEXTE.<br/>
  * <br/>
  * 
  *
  * - Exemple d'utilisation :<br/>
  * <code>
  *  // Instanciation d'un ControleurTypeTexte.<br/>
- *  final ControleurTypeTexte control = new ControleurTypeTexte();<br/>
+ *  final IControle control = new ControleurTypeTexte();<br/>
  *  // Invocation de la méthode controler(...) en demandant 
  *  l'écriture des rapports textuels et csv sur disque.<br/>
  *  final boolean resultat = control.controler(FILE_CHARETTE_ANSI, true);<br/>
@@ -99,17 +109,35 @@ import org.apache.commons.logging.LogFactory;
  * <br/>
  *
  * - Dépendances :<br/>
+ * .\lib\commons-lang-2.5.jar pour utiliser StringUtils 
+ * de la fondation Apache.<br/>
+ * .\lib_doc\commons-lang-2.5-src.zip pour la documentation de StringUtils 
+ * de la fondation Apache.<br/>
+ * .\lib\commons-logging-1.1.3.jar pour utiliser le logging 
+ * de la fondation Apache.<br/>
+ * .\lib_doc\commons-logging-1.1.1-src.zip pour la documentation du logging 
+ * de la fondation Apache.<br/>
+ * .\lib\javax.persistence.Transient pour l'annotation Transient 
+ * provenant de hibernate-jpa-2.0-api-1.0.0.Final.jar.<br/>
+ * .\lib_doc\hibernate-jpa-2.0-api-1.0.1.Final-sources.jar 
+ * pour la documentation de javax.persistence.Transient pour 
+ * l'annotation Transient provenant 
+ * de hibernate-jpa-2.0-api-1.0.0.Final.jar.<br/>
  * levy.daniel.application.ILecteurDecodeurFile.<br/>
  * levy.daniel.application.IListeurDeCaracteresUnicode.<br/>
  * levy.daniel.application.IExportateurCsv.<br/>
  * levy.daniel.application.IExportateurJTable.<br/>
  * levy.daniel.application.IResetable.<br/>
  * levy.daniel.application.metier.controles.rapportscontroles.LigneRapport.<br/>
- * levy.daniel.application.metier.service.enregistreursfichiers.rapportsenregistrements.LigneRapportEnregistrement.<br/>
  * levy.daniel.application.metier.controles.IEnregistreurRapport.<br/>
  * levy.daniel.application.metier.controles.IRapporteurControle.<br/>
  * levy.daniel.application.metier.controles.IControle.<br/>
  * levy.daniel.application.metier.controles.CaractereDan.<br/>
+ * levy.daniel.application.metier.service.enregistreursfichiers.IRapporteurEnregistrement.<br/>
+ * levy.daniel.application.metier.service.enregistreursfichiers.IEnregistreurFichiers.<br/>
+ * levy.daniel.application.metier.service.enregistreursfichiers.AbstractEnregistreurFichiers.<br/>
+ * levy.daniel.application.metier.service.enregistreursfichiers.impl.EnregistreurFichiers.<br/>
+ * levy.daniel.application.metier.service.enregistreursfichiers.rapportsenregistrements.LigneRapportEnregistrement.<br/>
  * levy.daniel.application.metier.controles.AbstractControle.<br/>
  * <br/>
  *
