@@ -359,65 +359,7 @@ public class Transcodeur extends AbstractControle {
 		
 	} // Fin de CONSTRUCTEUR COMPLET.______________________________________
 	
-	
-	
-	/**
-	 * Transcode le fichier pFile en UTF-8
-	 * et retourne true si le transcodage s'est bien déroulé.<br/>
-	 * <ul>
-	 * <li>Utilise pour celà le critère 'Le fichier doit 
-	 * pouvoir être transcodé en UTF-8'.</li><br/>
-	 * <li>Lit le fichier ligne par ligne en en utilisant 
-	 * un BufferedReader(InputStreamReader(fileInputStream, CHARSET...)) 
-	 * et détecte les caractères indésirables.</li><br/>
-	 * <ul>
-	 * <li>Lit d'abord une ligne en ANSI et utilise la méthode 
-	 * determinerSiEncodagePossible(...) de AbstractControle 
-	 * pour vérifier que la ligne a pu être encodée en ANSI.</li><br/>
-	 * <li>Lit ensuite la ligne en IBM-850 si ANSI n'a pas marché.</li><br/>
-	 * <li>Lit finalement la ligne en UTF-8.</li><br/>
-	 * </ul>
-	 * <li>n'Enregistre pas le rapport de contrôle sur disque.</li><br/>
-	 * </ul> 
-	 * <br/>
-	 * - retourne false et rapporte si le fichier 
-	 * n'a pu être transcodé en UTF-8.<br/>
-	 * - retourne true et remplit un rapport favorable si pFile 
-	 * a pu être transcodé en UTF-8.<br/>
-	 * <br/>
-	 * <ul>
-	 * <li>passe pFile à this.fichier et 
-	 * rafraîchit automatiquement this.nomFichier.</li><br/>
-	 * <li>rafraîchit le rapport (en instancie un nouveau 
-	 * à chaque appel de la méthode controler(File pFile)).</li><br/>
-	 * </ul>
-	 * <br/>
-	 * - retourne false, LOG de niveau INFO et rapport si pFile == null.<br/>
-	 * - retourne false, LOG de niveau INFO et rapport si pFile 
-	 * est inexistant.<br/>
-	 * - retourne false, LOG de niveau INFO et rapport si pFile 
-	 * est un répertoire.<br/>
-	 * - retourne false, LOG de niveau INFO et rapport si pFile 
-	 * est vide.<br/>
-	 * <br/>
-	 * RG-01-02 : Transcoder en UTF-8.<br/>
-	 * <br/>
-	 *
-	 * @param pFile : File : fichier dont on veut savoir 
-	 * si il est un fichier texte.<br/>
-	 * 
-	 * @return : boolean : true si pFile est a été transcodé en UTF-8.<br/>
-	 */
-	@Override
-	public final boolean controler(
-			final File pFile) {
 		
-		return this.controler(pFile, false);
-		
-	} // Fin de controler(
-	 // File pFile)._______________________________________________________
-
-	
 	
 	/**
 	 * method controler(
@@ -475,7 +417,7 @@ public class Transcodeur extends AbstractControle {
 	 * @return : boolean : true si pFile est a été transcodé en UTF-8.<br/>
 	 */
 	@Override
-	public final boolean controler(
+	public final boolean controlerHook(
 			final File pFile
 				, final boolean pEnregistrerRapport) {
 
@@ -881,20 +823,6 @@ public class Transcodeur extends AbstractControle {
 		
 	} // Fin de controler(
 	// File pFile
-	// , boolean pEnregistrerRapport)._____________________________________
-
-	
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public final boolean controler(
-			final String pString
-				, final boolean pEnregistrerRapport) {
-		return false;
-	} // Fin de controler(
-	 // String pString
 	// , boolean pEnregistrerRapport)._____________________________________
 
 

@@ -6,7 +6,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -433,55 +432,7 @@ public class ControleurTypeTexte extends AbstractControle {
 
 	
 	/**
-	 * method controler(
-	 * File pFile) :<br/>
-	 * Contrôle si le fichier pFile est de type texte 
-	 * et retourne true si c'est le cas.<br/>
-	 * Utilise pour celà le critère 'le fichier ne doit pas comporter de 
-	 * caractères indésirables' (aucun caractère du fichier ne 
-	 * doit être contenu dans CARACTERES_INDESIRABLES_SET).<br/>
-	 * Lit le fichier caractère par caractère en UTF-8 en utilisant 
-	 * un BufferedReader(InputStreamReader(fileInputStream, CHARSET_UTF8)) 
-	 * et détecte les caractères indésirables.<br/> 
-	 * <br/>
-	 * - N'enregistre pas de rapport sur le disque.<br/>
-	 * <br/>
-	 * - retourne false et rapporte si CARACTERES_INDESIRABLES_SET 
-	 * contient un des caractères de pFile.<br/>
-	 * - retourne true et ne remplit pas de rapport si pFile 
-	 * ne contient pas de caractères indésirables. 
-	 * Le rapport est alors vide (pas null).<br/>
-	 * <br/>
-	 * - passe pFile à this.fichier et 
-	 * rafraîchit automatiquement this.nomFichier.<br/>
-	 * - rafraîchit le rapport (en instancie un nouveau 
-	 * à chaque appel de la méthode controler(File pFile)).<br/>
-	 * <br/>
-	 * - retourne false, LOG de niveau INFO et rapport si pFile == null.<br/>
-	 * - retourne false, LOG de niveau INFO et rapport si pFile 
-	 * est inexistant.<br/>
-	 * - retourne false, LOG de niveau INFO et rapport si pFile 
-	 * est un répertoire.<br/>
-	 * <br/>
-	 * RG-01-01 : Contrôle fichier texte.<br/>
-	 * <br/>
-	 *
-	 * @param pFile : File : fichier dont on veut savoir 
-	 * si il est un fichier texte.<br/>
-	 */
-	@Override
-	public final boolean controler(
-			final File pFile) {
-		
-		return this.controler(pFile, false);
-		
-	} // Fin de controler(
-	 // File pFile)._______________________________________________________
-	
-	
-	
-	/**
-	 * method controler(
+	 * method controlerHook(
 	 * File pFile
 	 * , boolean pEnregistrerRapport) :<br/>
 	 * Contrôle si le fichier pFile est de type texte 
@@ -528,32 +479,11 @@ public class ControleurTypeTexte extends AbstractControle {
 	 * @return : boolean : true si pFile est un fichier texte.<br/>
 	 */
 	@Override
-	public final boolean controler(
+	public final boolean controlerHook(
 			final File pFile
 				, final boolean pEnregistrerRapport) {
-		
-		// Traitement des mauvais fichiers.
-		final boolean resultatTraitementMauvaisFichier 
-			= this.traiterMauvaisFile(
-					pFile, pEnregistrerRapport, METHODE_CONTROLER);
-		
-		/* Sort de la méthode et retourne false si le fichier est mauvais. */
-		if (!resultatTraitementMauvaisFichier) {
-			return false;
-		}
-		
-
-
-		/* passe pFile à this.fichier et 
-		 * rafraîchit automatiquement this.nomFichier. */
-		this.setFichier(pFile);
-		
-		/* rafraîchit le rapport (en instancie un nouveau à chaque appel 
-		 * de la méthode controler(File pFile)). */
-		this.rapport = new ArrayList<LigneRapport>();
-		
-		
-		// LECTURE ***************
+				
+		// LECTURE ******************************************************
 		FileInputStream fileInputStream = null;
 		InputStreamReader inputStreamReader = null;
 		BufferedReader bufferedReader = null;
@@ -561,10 +491,11 @@ public class ControleurTypeTexte extends AbstractControle {
 		int characterEntier = 0;
 		Character character = null;
 		int position = 0;
-
+		boolean resultat = true;
+		
 		try {
 
-			// LECTURE DU FICHIER CARACTERE PAR CARACTERE **************.
+			// LECTURE DU FICHIER CARACTERE PAR CARACTERE ***************
 			/*
 			 * Instancie un flux en lecture fileInputStream en lui passant
 			 * pFile.
@@ -572,7 +503,8 @@ public class ControleurTypeTexte extends AbstractControle {
 			fileInputStream = new FileInputStream(pFile);
 
 			/*
-			 * Instancie un InputStreamReader en lui passant le FileReader et le
+			 * Instancie un InputStreamReader 
+			 * en lui passant le FileReader et le
 			 * Charset UTF-8.
 			 */
 			inputStreamReader = new InputStreamReader(fileInputStream,
@@ -584,7 +516,7 @@ public class ControleurTypeTexte extends AbstractControle {
 			 */
 			bufferedReader = new BufferedReader(inputStreamReader);
 
-			/* Parcours du bufferedReader. */
+			/* Parcours du bufferedReader. ******************/
 			while (true) {
 				
 				position++;
@@ -600,16 +532,17 @@ public class ControleurTypeTexte extends AbstractControle {
 				/* Conversion de l'entier en caractère. */
 				character = (char) characterEntier;
 
-				// TEST DU CRITERE ****************************************
+				// TEST DU CRITERE **************************************
 				/* Teste si le fichier contient un caractère indésirable 
 				 * et retourne false si c'est le cas. */
 				if (CARACTERES_INDESIRABLES_SET.contains(character)) {
 					
-					/* Constitution du message pour le rapport. */
+					/* Constitution du message pour le rapport 
+					 * de niveau caractère. */
 					final String message 
 						= new CaractereDan(position, character).toString();
 					
-					/* rapport. */
+					/* rapport si caractère indésirable. */
 					final LigneRapport ligneRapport 
 						= creerLigneRapport(
 								null
@@ -619,7 +552,9 @@ public class ControleurTypeTexte extends AbstractControle {
 								, String.valueOf(character)
 								, false
 								, ACTION_FICHIER_REFUSE);
-								
+					
+					/* ajout de la LigneRapport 
+					 * au rapport de contrôle this.rapport. */
 					this.ajouterLigneRapport(ligneRapport);
 					
 					/* Enregistrement du rapport sur disque. */
@@ -630,52 +565,26 @@ public class ControleurTypeTexte extends AbstractControle {
 						this.enregistrerRapportCsvUTF8(
 								this.fournirFileCsvUTF8());
 						
-					}
+					} // Fin de if (pEnregistrerRapport).____________
 					
-					/* retourne false et rapporte si 
+					/* passe la valeur du boolean resultat à false. */
+					resultat = false;
+					
+					/* Sort de la boucle, 
+					 * retourne false et rapporte si 
 					 * CARACTERES_INDESIRABLES_SET contient 
 					 * un des caractères de pFile. */
-					return false;
+					break;
 					
 				} // Fin de if (CARACTERES_INDESIRABLES_SET
 				// .contains(character)).______________________
 
 			} // Fin du parcours du bufferedReader._________
 			
-			
-			/* rapport. */
-			
-			final String message 
-				= "Le fichier '" 
-						+ pFile.getName() 
-						+ "' est bien un fichier texte";
-			
-			final LigneRapport ligneRapport 
-				= creerLigneRapport(
-						null
-						, message
-						, null
-						, SANS_OBJET
-						, SANS_OBJET
-						, true
-						, ACTION_FICHIER_ACCEPTE);
-						
-			this.ajouterLigneRapport(ligneRapport);
-			
-			/* Enregistrement du rapport sur disque. */
-			if (pEnregistrerRapport) {
-				
-				this.enregistrerRapportTextuelUTF8(
-						this.fournirFileTxtUTF8());
-				this.enregistrerRapportCsvUTF8(
-						this.fournirFileCsvUTF8());
-				
-			}
-
 		} catch (FileNotFoundException fnfe) {
 
 			/* LOG de niveau ERROR. */
-			loggerError(CLASSE_CONTROLEURTYPETEXTE, METHODE_LIREFICHIER, fnfe);
+			loggerError(CLASSE_CONTROLEURTYPETEXTE, METHODE_CONTROLER, fnfe);
 
 			/* retourne false si exception. */
 			return false;
@@ -683,7 +592,7 @@ public class ControleurTypeTexte extends AbstractControle {
 		} catch (IOException ioe) {
 
 			/* LOG de niveau ERROR. */
-			loggerError(CLASSE_CONTROLEURTYPETEXTE, METHODE_LIREFICHIER, ioe);
+			loggerError(CLASSE_CONTROLEURTYPETEXTE, METHODE_CONTROLER, ioe);
 
 			/* retourne false si exception. */
 			return false;
@@ -702,8 +611,7 @@ public class ControleurTypeTexte extends AbstractControle {
 
 					/* LOG de niveau ERROR. */
 					loggerError(CLASSE_CONTROLEURTYPETEXTE,
-							METHODE_LIREFICHIER, ioe2);
-
+							METHODE_CONTROLER, ioe2);
 				}
 
 			} // Fin de if (bufferedReader != null).____
@@ -719,7 +627,7 @@ public class ControleurTypeTexte extends AbstractControle {
 
 					/* LOG de niveau ERROR. */
 					loggerError(CLASSE_CONTROLEURTYPETEXTE,
-							METHODE_LIREFICHIER, ioe4);
+							METHODE_CONTROLER, ioe4);
 				}
 
 			} // Fin de if (inputStreamReader != null).______
@@ -735,46 +643,56 @@ public class ControleurTypeTexte extends AbstractControle {
 
 					/* LOG de niveau ERROR. */
 					loggerError(CLASSE_CONTROLEURTYPETEXTE,
-							METHODE_LIREFICHIER, ioe3);
-
+							METHODE_CONTROLER, ioe3);
 				}
 
 			} // Fin de if (fileInputStream != null).________
 
 		} // Fin du finally._____________________________
 
-		return true;
 		
-	} // Fin de controler(
+		// AJOUT DES RAPPORTS DE NIVEAU FICHIER.*************
+		/* rapport de niveau fichier si le contrôle est favorable. */	
+		if (resultat) {
+			
+			/* Constitution du message favorable. */
+			final String message 
+			= "Le fichier '" 
+					+ pFile.getName() 
+					+ "' est bien un fichier texte";
+			
+			/* Ajout d'une ligne de rapport favorable
+			 * au rapport de contrôle. */
+			this.ajouterLigneRapportFavorableNiveauFichier(
+					message, pEnregistrerRapport);
+			
+		} // Fin de if (resultat)._____________
+		
+		/* rapport de niveau fichier si le contrôle est défavorable. */
+		else {
+			
+			/* Constitution du message défavorable. */
+			final String message 
+			= "Le fichier '" 
+					+ pFile.getName() 
+					+ "' n'est pas un fichier texte";
+			
+			/* Ajout d'une ligne de rapport défavorable
+			 * au rapport de contrôle. */
+			this.ajouterLigneRapportDefavorableNiveauFichier(
+					message, pEnregistrerRapport);
+			
+		} // Fin de (!if (resultat))._____________
+		
+				
+		// RETOUR DU RESULTAT.*****************************************
+		return resultat;
+		
+	} // Fin de controlerHook(
 	// File pFile
 	// , boolean pEnregistrerRapport)._____________________________________
 
-
 	
-	/**
-	 * method controler(
-	 * String pString
-	 * , boolean pEnregistrerRapport) :<br/>
-	 * .<br/>
-	 * <br/>
-	 *
-	 * @param pString : String :
-	 * @param pEnregistrerRapport : boolean : 
-	 * true si on veut enregistrer le rapport dans un fichier sur disque.<br/>
-	 * 
-	 * @return : boolean :  .<br/>
-	 */
-	@Override
-	public final boolean controler(
-			final String pString
-				, final boolean pEnregistrerRapport) {
-		return false;
-	} // Fin de controler(
-	 // String pString
-	// , boolean pEnregistrerRapport)._____________________________________
-	
-
-
 
 	/**
 	 * "Classe ControleurTypeTexte".<br/>

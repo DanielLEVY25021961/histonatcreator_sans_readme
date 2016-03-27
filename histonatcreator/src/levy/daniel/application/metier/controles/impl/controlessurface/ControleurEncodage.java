@@ -501,26 +501,12 @@ public class ControleurEncodage extends AbstractControle {
 	 // Charset pCharset)._________________________________________________
 	
 	
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public final boolean controler(
-			final File pFile) {
-		
-		return this.controler(pFile, false);
-		
-	} // Fin de controler(
-	 // File pFile)._______________________________________________________
-	
-	
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final boolean controler(
+	public final boolean controlerHook(
 			final File pFile
 				, final boolean pEnregistrerRapport) {
 		
@@ -785,30 +771,6 @@ public class ControleurEncodage extends AbstractControle {
 
 	} // Fin de controler(
 	// File pFile
-	// , boolean pEnregistrerRapport)._____________________________________
-
-
-	
-	/**
-	 * method controler(
-	 * String pString
-	 * , boolean pEnregistrerRapport) :<br/>
-	 * .<br/>
-	 * <br/>
-	 *
-	 * @param pString : String :
-	 * @param pEnregistrerRapport : boolean : 
-	 * true si on veut enregistrer le rapport dans un fichier sur disque.<br/>
-	 * 
-	 * @return : boolean :  .<br/>
-	 */
-	@Override
-	public final boolean controler(
-			final String pString
-				, final boolean pEnregistrerRapport) {
-		return false;
-	} // Fin de controler(
-	 // String pString
 	// , boolean pEnregistrerRapport)._____________________________________
 
 		

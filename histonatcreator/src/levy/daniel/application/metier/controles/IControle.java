@@ -411,7 +411,7 @@ public interface IControle extends IRapporteurControle
 	/**
 	 * method controler(
 	 * File pFile) :<br/>
-	 * SERVICE PRINCIPAL.<br/>
+	 * SERVICE PRINCIPAL - N'ENREGISTRE PAS DE RAPPORT SUR DISQUE.<br/>
 	 * Contrôle d'un fichier.<br/>
 	 * <ul>
 	 * <li>Vérifie qu'un fichier passe un contrôle.</li><br/>
@@ -484,30 +484,6 @@ public interface IControle extends IRapporteurControle
 			final File pFile, final boolean pEnregistrerRapport);
 	
 	
-	
-	/**
-	 * method controler(
-	 * String pString
-	 * , boolean pEnregistrerRapport) :<br/>
-	 * SERVICE PRINCIPAL.<br/>
-	 * Contrôle d'une String.<br/>
-	 * Vérifie qu'une String passe un contrôle.<br/>
-	 * Doit retourner true si le contrôle s'effectue favorablement. 
-	 * Par exemple, un contrôle vérifiant qu'un fichier est un texte 
-	 * doit retourner true si c'est le cas.<br/>
-	 * <br/>
-	 *
-	 * @param pString : String : chaîne de caractères dont on veut savoir 
-	 * si elle passe le contrôle.<br/>
-	 * @param pEnregistrerRapport : boolean : 
-	 * true si on veut enregistrer le rapport dans un fichier sur disque.<br/>
-	 * 
-	 * @return : boolean : true si pString passe le contrôle.<br/>
-	 */
-	boolean controler(
-			final String pString, final boolean pEnregistrerRapport);
-	
-
 	
 	/**
 	 * method getOrdreControle() :<br/>

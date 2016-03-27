@@ -7,12 +7,15 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 import levy.daniel.application.ILecteurDecodeurFile;
 import levy.daniel.application.metier.controles.AbstractControle;
+import levy.daniel.application.metier.controles.IControle;
 import levy.daniel.application.metier.controles.rapportscontroles.LigneRapport;
 
 import org.apache.commons.logging.Log;
@@ -44,6 +47,11 @@ public class ControleurTypeTexteTest {
 
 	// ************************ATTRIBUTS************************************/
 
+	/**
+	 * LOCALE_FR_FR : Locale :<br/>
+	 * new Locale("fr", "FR").<br/>
+	 */
+	public static final Locale LOCALE_FR_FR = new Locale("fr", "FR");
 
 	
 	//*************************************************************/
@@ -85,6 +93,15 @@ public class ControleurTypeTexteTest {
 	 */
 	public static final String CHEMIN_REPERTOIRE 
 		= "dessin";
+		
+	/**
+	 * CHEMIN_VIDE : String :<br/>
+	 * Chemin d'un fichier vide.<br/>
+	 * "vide.txt".<br/>
+	 */
+	public static final String CHEMIN_VIDE 
+		= "texte\\vide.txt";
+	
 	
 	/**
 	 * CHEMIN_DWG : String :<br/>
@@ -370,6 +387,112 @@ public class ControleurTypeTexteTest {
 	public static final String CHEMIN_CHARETTE_OEM 
 		= "encodages\\chaàâreéèêëtte_OEM.txt";
 	
+
+	/**
+	 * CHEMIN_HIT_DIRA_2012 : String :<br/>
+	 * "texte\\trafics\\trafics_2012\\2014-08-07_HITDIRA2012".<br/>
+	 */
+	public static final String CHEMIN_HIT_DIRA_2012 
+		= "texte\\trafics\\trafics_2012\\2014-08-07_HITDIRA2012";
+
+	
+	/**
+	 * CHEMIN_HIT_DIRO_2012 : String :<br/>
+	 * "texte\\trafics\\trafics_2012\\2014-08-07_HITDIRO2012".<br/>
+	 */
+	public static final String CHEMIN_HIT_DIRO_2012 
+		= "texte\\trafics\\trafics_2012\\2014-08-07_HITDIRO2012";
+	
+	
+	/**
+	 * CHEMIN_HIT_DIRA_2014 : String :<br/>
+	 * "texte\\trafics\\trafics_2014\\HITDIRA2014.txt".<br/>
+	 */
+	public static final String CHEMIN_HIT_DIRA_2014 
+	= "texte\\trafics\\trafics_2014\\HITDIRA2014.txt";
+	
+	
+	/**
+	 * CHEMIN_HIT_DIRCE_2014 : String :<br/>
+	 * "texte\\trafics\\trafics_2014\\HITDIRCE2014.txt".<br/>
+	 */
+	public static final String CHEMIN_HIT_DIRCE_2014 
+	= "texte\\trafics\\trafics_2014\\HITDIRCE2014.txt";
+
+	
+	/**
+	 * CHEMIN_HIT_DIRCO_2014 : String :<br/>
+	 * "texte\\trafics\\trafics_2014\\HITDIRCO2014.txt".<br/>
+	 */
+	public static final String CHEMIN_HIT_DIRCO_2014 
+	= "texte\\trafics\\trafics_2014\\HITDIRCO2014.txt";
+	
+	/**
+	 * CHEMIN_HIT_DIRE_2014 : String :<br/>
+	 * "texte\\trafics\\trafics_2014\\HITDIRE2014.txt".<br/>
+	 */
+	public static final String CHEMIN_HIT_DIRE_2014 
+	= "texte\\trafics\\trafics_2014\\HITDIRE2014.txt";
+
+	
+	/**
+	 * CHEMIN_HIT_DIRIF_2014 : String :<br/>
+	 * "texte\\trafics\\trafics_2014\\HITDIRIF2014.txt".<br/>
+	 */
+	public static final String CHEMIN_HIT_DIRIF_2014 
+	= "texte\\trafics\\trafics_2014\\HITDIRIF2014.txt";
+
+	
+	/**
+	 * CHEMIN_HIT_DIRMC_2014 : String :<br/>
+	 * "texte\\trafics\\trafics_2014\\HITDIRMC2014.txt".<br/>
+	 */
+	public static final String CHEMIN_HIT_DIRMC_2014 
+	= "texte\\trafics\\trafics_2014\\HITDIRMC2014.txt";
+
+	
+	/**
+	 * CHEMIN_HIT_DIRMED_2014 : String :<br/>
+	 * "texte\\trafics\\trafics_2014\\HITDIRMED2014.txt".<br/>
+	 */
+	public static final String CHEMIN_HIT_DIRMED_2014 
+	= "texte\\trafics\\trafics_2014\\HITDIRMED2014.txt";
+
+	/**
+	 * CHEMIN_HIT_DIRN_2014 : String :<br/>
+	 * "texte\\trafics\\trafics_2014\\HITDIRN2014.txt".<br/>
+	 */
+	public static final String CHEMIN_HIT_DIRN_2014 
+	= "texte\\trafics\\trafics_2014\\HITDIRN2014.txt";
+	
+	/**
+	 * CHEMIN_HIT_DIRNO_2014 : String :<br/>
+	 * "texte\\trafics\\trafics_2014\\HITDIRNO2014.txt".<br/>
+	 */
+	public static final String CHEMIN_HIT_DIRNO_2014 
+	= "texte\\trafics\\trafics_2014\\HITDIRNO2014.txt";
+	
+	/**
+	 * CHEMIN_HIT_DIRO_2014 : String :<br/>
+	 * "texte\\trafics\\trafics2014\\HITDIRO2014.txt".<br/>
+	 */
+	public static final String CHEMIN_HIT_DIRO_2014 
+		= "texte\\trafics\\trafics_2014\\HITDIRO2014.txt";
+	
+	/**
+	 * CHEMIN_HIT_DIRSO_2014 : String :<br/>
+	 * "texte\\trafics\\trafics_2014\\HITDIRSO2014.txt".<br/>
+	 */
+	public static final String CHEMIN_HIT_DIRSO_2014 
+	= "texte\\trafics\\trafics_2014\\HITDIRSO2014.txt";
+	
+	/**
+	 * CHEMIN_DARWIN_2014 : String :<br/>
+	 * "texte\\trafics\\trafics_2014\\darwin2014.csv".<br/>
+	 */
+	public static final String CHEMIN_DARWIN_2014 
+		= "texte\\trafics\\trafics_2014\\darwin2014.csv";
+	
 	
 	//*****************************************************************/
 	//**************************FICHIERS ******************************/
@@ -394,6 +517,13 @@ public class ControleurTypeTexteTest {
 	 */
 	public static final File FILE_REPERTOIRE 
 		= new File(CHEMIN_FICHIERS_TEST + CHEMIN_REPERTOIRE);
+
+	/**
+	 * FILE_VIDE : File :<br/>
+	 * Fichier vide.<br/>
+	 */
+	public static final File FILE_VIDE 
+		= new File(CHEMIN_FICHIERS_TEST + CHEMIN_VIDE);
 	
 	/**
 	 * FILE_DWG : File :<br/>
@@ -634,6 +764,110 @@ public class ControleurTypeTexteTest {
 	public static final File FILE_DIACRITIQUES_UTF8 
 	= new File(CHEMIN_FICHIERS_TEST + CHEMIN_DIACRITIQUES_UTF8);
 	
+	
+	/**
+	 * FILE_HITDIRA2012 : File :<br/>
+	 * "2014-08-07_HITDIRA2012".<br/>
+	 */
+	public static final File FILE_HITDIRA2012 
+		= new File(CHEMIN_FICHIERS_TEST + CHEMIN_HIT_DIRA_2012);
+	
+	/**
+	 * FILE_HITDIRO2012 : File :<br/>
+	 * "2014-08-07_HITDIRO2012".<br/>
+	 */
+	public static final File FILE_HITDIRO2012 
+		= new File(CHEMIN_FICHIERS_TEST + CHEMIN_HIT_DIRO_2012);
+
+	
+	/**
+	 * FILE_HITDIRA2014 : File :<br/>
+	 * HITDIRA2014.txt.<br/>
+	 */
+	public static final File FILE_HITDIRA2014 
+	= new File(CHEMIN_FICHIERS_TEST + CHEMIN_HIT_DIRA_2014);
+	
+	/**
+	 * FILE_HITDIRCE2014 : File :<br/>
+	 * HITDIRCE2014.txt.<br/>
+	 */
+	public static final File FILE_HITDIRCE2014 
+	= new File(CHEMIN_FICHIERS_TEST + CHEMIN_HIT_DIRCE_2014);
+	
+	/**
+	 * FILE_HITDIRCO2014 : File :<br/>
+	 * HITDIRCO2014.txt.<br/>
+	 */
+	public static final File FILE_HITDIRCO2014 
+	= new File(CHEMIN_FICHIERS_TEST + CHEMIN_HIT_DIRCO_2014);
+
+	/**
+	 * FILE_HITDIRE2014 : File :<br/>
+	 * HITDIRE2014.txt.<br/>
+	 */
+	public static final File FILE_HITDIRE2014 
+	= new File(CHEMIN_FICHIERS_TEST + CHEMIN_HIT_DIRE_2014);
+	
+	/**
+	 * FILE_HITDIRIF2014 : File :<br/>
+	 * HITDIRIF2014.txt.<br/>
+	 */
+	public static final File FILE_HITDIRIF2014 
+	= new File(CHEMIN_FICHIERS_TEST + CHEMIN_HIT_DIRIF_2014);
+	
+	
+	/**
+	 * FILE_HITDIRMC2014 : File :<br/>
+	 * HITDIRMC2014.txt.<br/>
+	 */
+	public static final File FILE_HITDIRMC2014 
+	= new File(CHEMIN_FICHIERS_TEST + CHEMIN_HIT_DIRMC_2014);
+	
+	/**
+	 * FILE_HITDIRMED2014 : File :<br/>
+	 * HITDIRMED2014.txt.<br/>	 
+	 * */
+	public static final File FILE_HITDIRMED2014 
+	= new File(CHEMIN_FICHIERS_TEST + CHEMIN_HIT_DIRMED_2014);
+
+	
+	/**
+	 * FILE_HITDIRN2014 : File :<br/>
+	 * HITDIRN2014.txt.<br/>	 
+	 */
+	public static final File FILE_HITDIRN2014 
+	= new File(CHEMIN_FICHIERS_TEST + CHEMIN_HIT_DIRN_2014);
+
+	
+	/**
+	 * FILE_HITDIRNO2014 : File :<br/>
+	 * HITDIRNO2014.txt.<br/>
+	 */
+	public static final File FILE_HITDIRNO2014 
+	= new File(CHEMIN_FICHIERS_TEST + CHEMIN_HIT_DIRNO_2014);
+
+	
+	/**
+	 * FILE_HITDIRO2014 : File :<br/>
+	 * HITDIRO2014.txt.<br/>
+	 */
+	public static final File FILE_HITDIRO2014 
+		= new File(CHEMIN_FICHIERS_TEST + CHEMIN_HIT_DIRO_2014);
+	
+	/**
+	 * FILE_HITDIRSO2014 : File :<br/>
+	 * HITDIRSO2014.txt.<br/>
+	 */
+	public static final File FILE_HITDIRSO2014 
+	= new File(CHEMIN_FICHIERS_TEST + CHEMIN_HIT_DIRSO_2014);
+	
+	/**
+	 * FILE_DARWIN2014 : File :<br/>
+	 * "darwin2014.csv".<br/>
+	 */
+	public static final File FILE_DARWIN2014 
+	= new File(CHEMIN_FICHIERS_TEST + CHEMIN_DARWIN_2014);
+	
 
 	/**
 	 * LISTEFILES : List<File> :<br/>
@@ -745,6 +979,186 @@ public class ControleurTypeTexteTest {
 		LISTEFILES_TXT.add(FILE_DIACRITIQUES_UTF8);
 		
 	}
+
+
+	//*****************************************************************/
+	//**************************CHARSETS ******************************/
+	//*****************************************************************/
+
+	/**
+	 * CHARSET_UTF8 : Charset :<br/>
+	 * Charset.forName("UTF-8").<br/>
+	 * Eight-bit Unicode (or UCS) Transformation Format.<br/> 
+	 */
+	public static final Charset CHARSET_UTF8 
+		= Charset.forName("UTF-8");
+
+	
+	/**
+	 * CHARSET_US_ASCII : Charset :<br/>
+	 * Charset.forName("US-ASCII").<br/>
+	 * Seven-bit ASCII, a.k.a. ISO646-US, 
+	 * a.k.a. the Basic Latin block of the Unicode character set.<br/>
+	 * standard américain.<br/>
+	 * American Standard Code for Information Interchange.<br/> 
+	 * 128 caractères imprimables.<br/> 
+	 * Sert à écrire l’anglo-américain.<br/> 
+	 * Ne permet pas d’écrire les langues européennes 
+	 * qui utilisent des lettres avec diacritiques (accents, cédille, ...).<br/> 
+	 * On ne peut pas écrire en français avec de l’ASCII.<br/>
+	 */
+	public static final Charset CHARSET_US_ASCII 
+		= Charset.forName("US-ASCII");
+	
+	/**
+	 * CHARSET_ISO_8859_1 : Charset :<br/>
+	 * Charset.forName("ISO-8859-1").<br/>
+	 * Latin1.<br/>
+	 * 191 caractères imprimables.<br/> 
+	 * Permet d’écrire la plupart des langues d’Europe de l’Ouest.<br/> 
+	 * Presque tous les caractères du français y sont (manquent le œ et €).<br/>
+	 */
+	public static final Charset CHARSET_ISO_8859_1 
+		= Charset.forName("ISO-8859-1");
+
+	
+	/**
+	 * CHARSET_LATIN1 : Charset :<br/>
+	 * Charset.forName("ISO-8859-1").<br/>
+	 * Latin1.<br/>
+	 * 191 caractères imprimables.<br/> 
+	 * Permet d’écrire la plupart des langues d’Europe de l’Ouest.<br/> 
+	 * Presque tous les caractères du français y sont (manquent le œ et €).<br/>
+	 */
+	public static final Charset CHARSET_LATIN1 
+		= Charset.forName("ISO-8859-1");
+
+	
+	/**
+	 * CHARSET_ISO_8859_2 : Charset :<br/>
+	 * Charset.forName("ISO-8859-2").<br/>
+	 * <br/>
+	 */
+	public static final Charset CHARSET_ISO_8859_2 
+		= Charset.forName("ISO-8859-2");
+	
+	
+	/**
+	 * CHARSET_ISO_8859_9 : Charset :<br/>
+	 * Charset.forName("ISO-8859-9").<br/>
+	 * Latin Alphabet No. 5<br/>
+	 */
+	public static final Charset CHARSET_ISO_8859_9 
+		= Charset.forName("ISO-8859-9");
+
+	
+	/**
+	 * CHARSET_ISO_8859_15 : Charset :<br/>
+	 * Charset.forName("ISO-8859-15").<br/>
+	 * Latin9, Latin Alphabet No. 9.<br/>
+	 * modifie légèrement ISO-8859-1.<br/> 
+	 * Ajout du caractère œ et du symbole monétaire € (Euro) entre autres.<br/>
+	 */
+	public static final Charset CHARSET_ISO_8859_15 
+		= Charset.forName("ISO-8859-15");
+	
+	
+	/**
+	 * CHARSET_LATIN9 : Charset :<br/>
+	 * Charset.forName("ISO-8859-15").<br/>
+	 * Latin9, Latin Alphabet No. 9.<br/>
+	 * modifie légèrement ISO-8859-1.<br/> 
+	 * Ajout du caractère œ et du symbole monétaire € (Euro) entre autres.<br/>
+	 */
+	public static final Charset CHARSET_LATIN9 
+		= Charset.forName("ISO-8859-15");
+	
+	
+	/**
+	 * CHARSET_WINDOWS_1252 : Charset :<br/>
+	 * Charset.forName("windows-1252").<br/>
+	 * ANSI, CP1252.<br/>
+	 * 218 caractères imprimables.<br/>
+	 * extension d’ISO-8859-1, qui rajoute quelques caractères: œ, € (euro), 
+	 * guillemets anglais (« »), points de suspension (...)
+	 * , signe «pour mille» (‰), 
+	 * tirets cadratin (— = \u2014 en unicode ) et demi-cadratin (–), ...<br/>
+	 */
+	public static final Charset CHARSET_WINDOWS_1252 
+		= Charset.forName("windows-1252");
+
+	
+	/**
+	 * CHARSET_ANSI : Charset :<br/>
+	 * Charset.forName("windows-1252").<br/>
+	 * ANSI, CP1252.<br/>
+	 * 218 caractères imprimables.<br/>
+	 * extension d’ISO-8859-1, qui rajoute quelques caractères: œ, € (euro), 
+	 * guillemets anglais (« »), points de suspension (...)
+	 * , signe «pour mille» (‰), 
+	 * tirets cadratin (— = \u2014 en unicode ) et demi-cadratin (–), ...<br/>
+	 */
+	public static final Charset CHARSET_ANSI
+		= Charset.forName("windows-1252");
+
+	
+	/**
+	 * CHARSET_CP1252 : Charset :<br/>
+	 * Charset.forName("windows-1252").<br/>
+	 * ANSI, CP1252.<br/>
+	 * 218 caractères imprimables.<br/>
+	 * extension d’ISO-8859-1, qui rajoute quelques caractères: œ, € (euro), 
+	 * guillemets anglais (« »), points de suspension (...)
+	 * , signe «pour mille» (‰), 
+	 * tirets cadratin (— = \u2014 en unicode ) et demi-cadratin (–), ...<br/>
+	 */
+	public static final Charset CHARSET_CP1252
+		= Charset.forName("windows-1252");
+
+	
+	/**
+	 * CHARSET_IBM850 : Charset :<br/>
+	 * Charset IBM-850.<br/>
+	 * Cp850, MS-DOS Latin-1.<br/>
+	 */
+	public static final Charset CHARSET_IBM850
+		= Charset.forName("IBM-850");
+	
+
+	//*****************************************************************/
+	//**************************** SAUTS ******************************/
+	//*****************************************************************/
+
+	/**
+	 * SAUTDELIGNE_UNIX : String :<br/>
+	 * Saut de ligne généré par les éditeurs Unix.<br/>
+	 * "\n" (Retour Ligne = LINE FEED (LF)).
+	 */
+	public static final String SAUTDELIGNE_UNIX = "\n";
+
+	
+	/**
+	 * SAUTDELIGNE_MAC : String :<br/>
+	 * Saut de ligne généré par les éditeurs Mac.<br/>
+	 * "\r" (Retour Chariot RC = CARRIAGE RETURN (CR))
+	 */
+	public static final String SAUTDELIGNE_MAC = "\r";
+
+	
+	/**
+	 * SAUTDELIGNE_DOS_WINDOWS : String :<br/>
+	 * Saut de ligne généré par les éditeurs DOS/Windows.<br/>
+	 * "\r\n" (Retour Chariot RC + Retour Ligne Line Feed LF).
+	 */
+	public static final String SAUTDELIGNE_DOS_WINDOWS = "\r\n";
+
+	
+	/**
+	 * NEWLINE : String :<br/>
+	 * Saut de ligne spécifique de la plateforme.<br/>
+	 * System.getProperty("line.separator").<br/>
+	 */
+	public static final String NEWLINE = System.getProperty("line.separator");
 
 
 	/**
@@ -924,7 +1338,7 @@ public class ControleurTypeTexteTest {
 	 * teste la méthode lireFichier(File pFile, Charset pCharset).<br/>
 	 * <br/>
 	 * - vérifie que lireFichier(FILE_NULL, ...) retourne 
-	 * ControleurTypeTexte.MESSAGE_FICHIER_NULL.<br/>
+	 * ILecteurDecodeurFile.MESSAGE_FICHIER_NULL.<br/>
 	 * - vérifie que le rapport n'est pas null.<br/>
 	 * - vérifie que le rapport n'est pas vide.<br/>
 	 * <br/>
@@ -932,8 +1346,10 @@ public class ControleurTypeTexteTest {
 	@Test
 	public void testLireFichierNull() {
 		
-		final ControleurTypeTexte control = new ControleurTypeTexte();
+		/* Instanciation d'un contrôle. */
+		final IControle control = new ControleurTypeTexte();
 		
+		// LECTURE PAR LE CONTROLE.************
 		final String resultat = control.lireFichier(FILE_NULL, null);
 				
 		/* vérifie que lireFichier(FILE_NULL, ...) retourne 
@@ -952,8 +1368,133 @@ public class ControleurTypeTexteTest {
 		assertFalse("Le rapport ne doit pas être vide : "
 				, rapport.isEmpty());
 		
+//		System.out.println(control.afficherRapportTextuel());
+		
 	} // Fin de testLireFichierNull()._____________________________________
 	
+
+	
+	/**
+	 * method testLireFichierInexistant() :<br/>
+	 * teste la méthode lireFichier(File pFile, Charset pCharset).<br/>
+	 * <br/>
+	 * - vérifie que lireFichier(FILE_INEXISTANT, ...) retourne 
+	 * ILecteurDecodeurFile.MESSAGE_FICHIER_INEXISTANT.<br/>
+	 * - vérifie que le rapport n'est pas null.<br/>
+	 * - vérifie que le rapport n'est pas vide.<br/>
+	 * <br/>
+	 */
+	@Test
+	public void testLireFichierInexistant() {
+				
+		/* Instanciation d'un contrôle. */
+		final IControle control = new ControleurTypeTexte();
+		
+		// LECTURE PAR LE CONTROLE.************
+		final String resultat = control.lireFichier(FILE_INEXISTANT, null);
+				
+		/* vérifie que lireFichier(FILE_INEXISTANT, ...) retourne 
+		 * ControleurTypeTexte.MESSAGE_FICHIER_INEXISTANT. */
+		assertEquals("doit retourner MESSAGE_FICHIER_INEXISTANT : "
+				, ILecteurDecodeurFile.MESSAGE_FICHIER_INEXISTANT
+					, resultat);
+		
+		/* récupération du rapport. */
+		final List<LigneRapport> rapport = control.getRapport();
+		
+		/* vérifie que le rapport n'est pas null. */
+		assertNotNull("Le rapport ne doit pas être null : ", rapport);
+		
+		/* vérifie que le rapport n'est pas vide. */
+		assertFalse("Le rapport ne doit pas être vide : "
+				, rapport.isEmpty());
+		
+//		System.out.println(control.afficherRapportTextuel());
+			
+	} // Fin de testLireFichierInexistant()._______________________________
+	
+
+	
+	/**
+	 * method testLireFichierRepertoire() :<br/>
+	 * teste la méthode lireFichier(File pFile, Charset pCharset).<br/>
+	 * <br/>
+	 * - vérifie que lireFichier(FILE_REPERTOIRE, ...) retourne 
+	 * ILecteurDecodeurFile.MESSAGE_FICHIER_REPERTOIRE.<br/>
+	 * - vérifie que le rapport n'est pas null.<br/>
+	 * - vérifie que le rapport n'est pas vide.<br/>
+	 * <br/>
+	 */
+	@Test
+	public void testLireFichierRepertoire() {
+		
+		/* Instanciation d'un contrôle. */
+		final IControle control = new ControleurTypeTexte();
+		
+		// LECTURE PAR LE CONTROLE.************
+		final String resultat = control.lireFichier(FILE_REPERTOIRE, null);
+				
+		/* vérifie que lireFichier(FILE_REPERTOIRE, ...) retourne 
+		 * ControleurTypeTexte.MESSAGE_FICHIER_REPERTOIRE. */
+		assertEquals("doit retourner MESSAGE_FICHIER_REPERTOIRE : "
+				, ILecteurDecodeurFile.MESSAGE_FICHIER_REPERTOIRE
+					, resultat);
+		
+		/* récupération du rapport. */
+		final List<LigneRapport> rapport = control.getRapport();
+		
+		/* vérifie que le rapport n'est pas null. */
+		assertNotNull("Le rapport ne doit pas être null : ", rapport);
+		
+		/* vérifie que le rapport n'est pas vide. */
+		assertFalse("Le rapport ne doit pas être vide : "
+				, rapport.isEmpty());
+		
+//		System.out.println(control.afficherRapportTextuel());
+		
+	} // Fin de testLireFichierRepertoire()._______________________________
+	
+
+	
+	/**
+	 * method testLireFichierVide() :<br/>
+	 * teste la méthode lireFichier(File pFile, Charset pCharset).<br/>
+	 * <br/>
+	 * - vérifie que lireFichier(FILE_VIDE, ...) retourne 
+	 * ILecteurDecodeurFile.MESSAGE_FICHIER_REPERTOIRE.<br/>
+	 * - vérifie que le rapport n'est pas null.<br/>
+	 * - vérifie que le rapport n'est pas vide.<br/>
+	 * <br/>
+	 */
+	@Test
+	public void testLireFichierVide() {
+		
+		/* Instanciation d'un contrôle. */
+		final IControle control = new ControleurTypeTexte();
+		
+		// LECTURE PAR LE CONTROLE.************
+		final String resultat = control.lireFichier(FILE_VIDE, null);
+				
+		/* vérifie que lireFichier(FILE_VIDE, ...) retourne 
+		 * ControleurTypeTexte.MESSAGE_FICHIER_VIDE. */
+		assertEquals("doit retourner MESSAGE_FICHIER_VIDE : "
+				, ILecteurDecodeurFile.MESSAGE_FICHIER_VIDE
+					, resultat);
+		
+		/* récupération du rapport. */
+		final List<LigneRapport> rapport = control.getRapport();
+		
+		/* vérifie que le rapport n'est pas null. */
+		assertNotNull("Le rapport ne doit pas être null : ", rapport);
+		
+		/* vérifie que le rapport n'est pas vide. */
+		assertFalse("Le rapport ne doit pas être vide : "
+				, rapport.isEmpty());
+		
+//		System.out.println(control.afficherRapportTextuel());
+
+	} // Fin de testLireFichierVide()._____________________________________
+
 	
 	
 	/**
@@ -997,6 +1538,8 @@ public class ControleurTypeTexteTest {
 		
 		/* Avec enregistrement sur disque du rapport de contrôle. */
 //		final boolean resultat = control.controler(FILE_NULL, true);
+		
+//		System.out.println(control.afficherRapportTextuel());
 		
 		/* Affichage du rapport d'enregistrement des rapports. */
 //		System.out.println();
@@ -1055,6 +1598,8 @@ public class ControleurTypeTexteTest {
 		/* Avec enregistrement sur disque du rapport de contrôle. */
 //		final boolean resultat = control.controler(FILE_INEXISTANT, true);
 		
+//		System.out.println(control.afficherRapportTextuel());
+		
 		/* Affichage du rapport d'enregistrement des rapports. */
 //		System.out.println();
 //		System.out.println(control.afficherRapportEnregistrementTextuel());
@@ -1112,6 +1657,8 @@ public class ControleurTypeTexteTest {
 		/* Avec enregistrement sur disque du rapport de contrôle. */
 //		final boolean resultat = control.controler(FILE_REPERTOIRE, true);
 		
+//		System.out.println(control.afficherRapportTextuel());
+		
 		/* Affichage du rapport d'enregistrement des rapports. */
 //		System.out.println();
 //		System.out.println(control.afficherRapportEnregistrementTextuel());
@@ -1143,6 +1690,124 @@ public class ControleurTypeTexteTest {
 		
 	} // Fin de testControlerFileRepertoire()._____________________________
 
+
+	
+	/**
+	 * method testControlerFileVide() :<br/>
+	 * Teste la méthode controler(File vide).<br/>
+	 * <br/>
+	 * - Vérifie que la méthode retourne false.<br/>
+	 * - Vérifie que fichier == null.<br/>
+	 * - Vérifie que nomFichier == null.<br/>
+	 * - vérifie que le rapport n'est pas null.<br/>
+	 * - vérifie que le rapport n'est pas vide.<br/>
+	 * <br/>
+	 */
+	@Test
+	public void testControlerFileVide() {
+		
+		/* Instanciation d'un ControleurTypeTexte 
+		 * avec le constructeur d'arité nulle. */
+		final ControleurTypeTexte control = new ControleurTypeTexte();
+		
+		/* invocation de la méthode controler(File pFile). */
+		final boolean resultat = control.controler(FILE_VIDE);
+		
+		/* Avec enregistrement sur disque du rapport de contrôle. */
+//		final boolean resultat = control.controler(FILE_REPERTOIRE, true);
+		
+//		System.out.println(control.afficherRapportTextuel());
+		
+		/* Affichage du rapport d'enregistrement des rapports. */
+//		System.out.println();
+//		System.out.println(control.afficherRapportEnregistrementTextuel());
+//		System.out.println();
+//		System.out.println(control.afficherRapportEnregistrementCsv());
+		
+		/* Vérifie que la méthode retourne false. */
+		assertFalse("controler(vide) doit retourner false : "
+				, resultat);
+		
+		/* Vérifie que fichier == null. */
+		assertNull("fichier doit être null : "
+				, control.getFichier());
+		
+		/* Vérifie que nomFichier == null. */
+		assertNull("nomFichier doit être null : "
+				, control.getNomFichier());
+		
+	
+		/* récupération du rapport. */
+		final List<LigneRapport> rapport = control.getRapport();
+		
+		/* vérifie que le rapport n'est pas null. */
+		assertNotNull("Le rapport ne doit pas être null : ", rapport);
+		
+		/* vérifie que le rapport n'est pas vide. */
+		assertFalse("Le rapport ne doit pas être vide : "
+				, rapport.isEmpty());
+		
+	} // Fin de testControlerFileVide().___________________________________
+
+
+	
+	/**
+	 * method testControlerFileNonTextuel() :<br/>
+	 * Teste la méthode controler(File non textuel).<br/>
+	 * <br/>
+	 * - Vérifie que la méthode retourne false.<br/>
+	 * - Vérifie que fichier n'est pas null.<br/>
+	 * - Vérifie que nomFichier n'est pas null.<br/>
+	 * - vérifie que le rapport n'est pas null.<br/>
+	 * - vérifie que le rapport n'est pas vide.<br/>
+	 * <br/>
+	 */
+	@Test
+	public void testControlerFileNonTextuel() {
+		
+		/* Instanciation d'un ControleurTypeTexte 
+		 * avec le constructeur d'arité nulle. */
+		final ControleurTypeTexte control = new ControleurTypeTexte();
+		
+		/* invocation de la méthode controler(File non textuel). */
+		final boolean resultat = control.controler(FILE_GIF);
+		
+		/* Avec enregistrement sur disque du rapport de contrôle. */
+//		final boolean resultat = control.controler(FILE_REPERTOIRE, true);
+		
+//		System.out.println(control.afficherRapportTextuel());
+		
+		/* Affichage du rapport d'enregistrement des rapports. */
+//		System.out.println();
+//		System.out.println(control.afficherRapportEnregistrementTextuel());
+//		System.out.println();
+//		System.out.println(control.afficherRapportEnregistrementCsv());
+		
+		/* Vérifie que la méthode retourne false. */
+		assertFalse("controler(non textuel) doit retourner false : "
+				, resultat);
+		
+		/* Vérifie que fichier != null. */
+		assertNotNull("fichier ne doit pas être null : "
+				, control.getFichier());
+		
+		/* Vérifie que nomFichier != null. */
+		assertNotNull("nomFichier ne doit pas être null : "
+				, control.getNomFichier());
+		
+	
+		/* récupération du rapport. */
+		final List<LigneRapport> rapport = control.getRapport();
+		
+		/* vérifie que le rapport n'est pas null. */
+		assertNotNull("Le rapport ne doit pas être null : ", rapport);
+		
+		/* vérifie que le rapport n'est pas vide. */
+		assertFalse("Le rapport ne doit pas être vide : "
+				, rapport.isEmpty());
+		
+	} // Fin de testControlerFileNonTextuel()._____________________________
+
 	
 	
 	/**
@@ -1160,6 +1825,7 @@ public class ControleurTypeTexteTest {
 		 * avec le constructeur d'arité nulle. */
 		final ControleurTypeTexte control = new ControleurTypeTexte();
 		
+		/* invocation de la méthode controler(File pFile). */
 		final boolean resultat = control.controler(FILE_CHARETTE_ANSI);
 		
 		
@@ -1202,6 +1868,7 @@ public class ControleurTypeTexteTest {
 		 * avec le constructeur d'arité nulle. */
 		final ControleurTypeTexte control = new ControleurTypeTexte();
 		
+		/* invocation de la méthode controler(File pFile). */
 		final boolean resultat = control.controler(FILE_CHARETTE_OEM);
 		
 		/* Avec enregistrement sur disque du rapport de contrôle. */
@@ -1243,6 +1910,7 @@ public class ControleurTypeTexteTest {
 		 * avec le constructeur d'arité nulle. */
 		final ControleurTypeTexte control = new ControleurTypeTexte();
 		
+		/* invocation de la méthode controler(File pFile). */
 		final boolean resultat = control.controler(FILE_DIACRITIQUES_ISO_8859_2);
 		
 		/* Avec enregistrement sur disque du rapport de contrôle. */
@@ -1284,6 +1952,7 @@ public class ControleurTypeTexteTest {
 		 * avec le constructeur d'arité nulle. */
 		final ControleurTypeTexte control = new ControleurTypeTexte();
 		
+		/* invocation de la méthode controler(File pFile). */
 		final boolean resultat = control.controler(FILE_DIACRITIQUES_UTF8);
 		
 		/* Avec enregistrement sur disque du rapport de contrôle. */
@@ -1327,6 +1996,8 @@ public class ControleurTypeTexteTest {
 		final ControleurTypeTexte control = new ControleurTypeTexte();
 		
 		for (final File fichier : LISTEFILES_TXT) {
+			
+			/* invocation de la méthode controler(File pFile). */
 			assertTrue(
 					"fichier texte doit retourner true : "
 						, control.controler(fichier));

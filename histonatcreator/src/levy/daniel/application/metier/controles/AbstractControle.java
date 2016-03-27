@@ -129,7 +129,8 @@ import levy.daniel.application.metier.service.enregistreursfichiers.rapportsenre
  * 
  * - Mots-clé :<br/>
  * Nettoyer chaine de caractères, nettoyer String, <br/>
- * StringUtils.trim(resultat), trim(), nettoyer valeurs dans properties<br/>
+ * StringUtils.trim(resultat), trim(), nettoyer valeurs dans properties,<br/>
+ * Hook,<br/>
  * <br/>
  *
  * - Dépendances :<br/>
@@ -730,32 +731,228 @@ public abstract class AbstractControle implements IControle {
 
 	
 	/**
+	 * - Centralise le traitement des mauvais fichiers 
+	 * (null, inexistant, répertoire, vide).<br/>
+	 * - Rafraîchit automatiquement this.fichier et this.rapport.<br/>
+	 * - Appelle automatiquement this.controlerHook(pFile, pEnregistrerRapport) 
+	 * qui permet l'exécution du contrôle spécifique 
+	 * de chaque classe concrète.<br/>
+	 * <br/>
 	 * {@inheritDoc}
 	 */
 	@Override
-	public abstract boolean controler(
-			final File pFile);
+	public final boolean controler(
+			final File pFile) {
+		
+		return this.controler(pFile, false);
+		
+	} // Fin de controler(
+	 // File pFile)._______________________________________________________
 	
 
 	
 	/**
+	 * - Centralise le traitement des mauvais fichiers 
+	 * (null, inexistant, répertoire, vide).<br/>
+	 * - Rafraîchit automatiquement this.fichier et this.rapport.<br/>
+	 * - Appelle automatiquement this.controlerHook(pFile, pEnregistrerRapport) 
+	 * qui permet l'exécution du contrôle spécifique 
+	 * de chaque classe concrète.<br/>
+	 * <br/>
 	 * {@inheritDoc}
+	 * <br/>
+	 * 
 	 */
 	@Override
-	public abstract boolean controler(
+	public final boolean controler(
+			final File pFile
+				, final boolean pEnregistrerRapport) {
+		
+		// TRAITEMENT DES MAUVAIS FICHIERS 
+		// (null, inexistant, répertoire, vide).*************************
+		final boolean resultatTraitementMauvaisFichier 
+			= this.traiterMauvaisFile(
+					pFile, pEnregistrerRapport, METHODE_CONTROLER);
+		
+		/* Sort de la méthode et retourne false si le fichier est mauvais. */
+		if (!resultatTraitementMauvaisFichier) {
+			return false;
+		}
+		
+		// RAFRAICHISSEMENT DE this.fichier et de this.rapport.**********
+		/* passe pFile à this.fichier et 
+		 * rafraîchit automatiquement this.nomFichier. */
+		this.setFichier(pFile);
+		
+		/* rafraîchit le rapport de contrôle 
+		 * (en instancie un nouveau à chaque appel 
+		 * de la méthode controler(File pFile)). */
+		this.rapport = new ArrayList<LigneRapport>();
+		
+		// APPLICATION DU CONTROLE SPECIFIQUE A LA CLASSE CONCRETE
+		// (HOOK).*******************************************************
+		final boolean resultat 
+			= this.controlerHook(pFile, pEnregistrerRapport);
+		
+		// RAPPORTS DE NIVEAU FICHIER.***********************************
+		// A appeler à la fin de la méthode 
+		// controlerHook(File pFile, boolean pEnregistrerRapport) 
+		// de chaque classe concrète pour passer un message spécifique 
+		// dans le rapport de contrôle.
+		
+		// RETOUR DU BOOLEAN RESULTAT.***********************************
+		return resultat;
+		
+	} // Fin de controlerHook(
+	// File pFile
+	// , boolean pEnregistrerRapport)._____________________________________
+
+
+	
+	/**
+	 * method controlerHook(
+	 * File pFile
+	 * , boolean pEnregistrerRapport) :<br/>
+	 * SERVICE PRINCIPAL - HOOK de controler(...).<br/>
+	 * Contrôle d'un fichier.<br/>
+	 * - Enregistre le rapport de contrôle sur disque 
+	 * si pEnregistrerRapport == true.<br/>
+	 * <ul>
+	 * <li>Vérifie qu'un fichier passe un contrôle.</li><br/>
+	 * <li>Doit retourner true si le contrôle s'effectue favorablement. 
+	 * Par exemple, un contrôle vérifiant qu'un fichier est un texte 
+	 * doit retourner true si c'est le cas.</li><br/>
+	 * </ul>
+	 * <br/>
+	 * - retourne false, LOG de niveau INFO et rapport 
+	 * si pFile == null.<br/>
+	 * - retourne false, LOG de niveau INFO et rapport 
+	 * si pFile est inexistant.<br/>
+	 * - retourne false, LOG de niveau INFO et rapport 
+	 * si pFile est un répertoire.<br/>
+	 * - retourne false, LOG de niveau INFO et rapport 
+	 * si pFile est vide.<br/>
+	 * <br/>
+	 * RG-01 : Contrôle de validité<br/>
+	 * RG-01-Controler : true si favorable.<br/>
+	 * <br/>
+	 *
+	 * @param pFile : File : fichier dont on veut savoir 
+	 * si il passe le contrôle.<br/>
+	 * @param pEnregistrerRapport : boolean : 
+	 * true si on veut enregistrer le rapport dans un fichier sur disque.<br/>
+	 * 
+	 * @return : boolean : true si pFile passe le contrôle.<br/>
+	 */
+	protected abstract boolean controlerHook(
 			final File pFile, final boolean pEnregistrerRapport);
-
 	
+
 	
 	/**
-	 * {@inheritDoc}
+	 * method ajouterLigneRapportFavorableNiveauFichier(
+	 * String pMessage
+	 * , boolean pEnregistrerRapport) :<br/>
+	 * <ul>
+	 * <li>Crée une ligne de rapport de contrôle 
+	 * avec un message spécifique à chaque Contrôle concret pMessage  
+	 * en cas de succès du contrôle pour l'ensemble du fichier et l'ajoute 
+	 * au rapport de contrôle.</li><br/>
+	 * <li>Ajoute cette ligne de rapport au 
+	 * rapport de contrôle 'this.rapport'.</li><br/>
+	 * <li>Enregistre éventuellement 
+	 * cette ligne de rapport sur disque.</li><br/>
+	 * </ul>
+	 * <br/>
+	 *
+	 * @param pMessage : String : message spécifique à chaque Contrôle concret 
+	 * en cas de succès du contrôle.<br/>
+	 * @param pEnregistrerRapport : boolean : 
+	 * true si on veut enregistrer le rapport dans un fichier sur disque.<br/>
 	 */
-	@Override
-	public abstract boolean controler(
-			final String pString, final boolean pEnregistrerRapport);
-	
+	protected final void ajouterLigneRapportFavorableNiveauFichier(
+			final String pMessage,
+				final boolean pEnregistrerRapport) {
+
+		/* Création d'une ligne de rapport. */
+		final LigneRapport ligneRapport 
+			= creerLigneRapport(null
+						, pMessage
+						, null
+						, SANS_OBJET
+						, SANS_OBJET
+						, true
+						, ACTION_FICHIER_ACCEPTE);
+
+		/* Ajoute la ligne de rapport à this.rapport. */
+		this.ajouterLigneRapport(ligneRapport);
+
+		/* Enregistrement du rapport sur disque. */
+		if (pEnregistrerRapport) {
+
+			this.enregistrerRapportTextuelUTF8(this.fournirFileTxtUTF8());
+			this.enregistrerRapportCsvUTF8(this.fournirFileCsvUTF8());
+
+		} // Fin de if (pEnregistrerRapport).________________________
+		
+	} // Fin de ajouterLigneRapportFavorableNiveauFichier(
+	 // String pMessage
+	 // , boolean pEnregistrerRapport).____________________________________
 	
 
+	
+	/**
+	 * method ajouterLigneRapportDefavorableNiveauFichier(
+	 * String pMessage
+	 * , boolean pEnregistrerRapport) :<br/>
+	 * <ul>
+	 * <li>Crée une ligne de rapport de contrôle 
+	 * avec un message spécifique à chaque Contrôle concret pMessage  
+	 * en cas d'insuccès du contrôle pour l'ensemble du fichier et l'ajoute 
+	 * au rapport de contrôle.</li><br/>
+	 * <li>Ajoute cette ligne de rapport au 
+	 * rapport de contrôle 'this.rapport'.</li><br/>
+	 * <li>Enregistre éventuellement 
+	 * cette ligne de rapport sur disque.</li><br/>
+	 * </ul>
+	 * <br/>
+	 *
+	 * @param pMessage : String : message spécifique à chaque Contrôle concret 
+	 * en cas d'insuccès du contrôle.<br/>
+	 * @param pEnregistrerRapport : boolean : 
+	 * true si on veut enregistrer le rapport dans un fichier sur disque.<br/>
+	 */
+	 protected final void ajouterLigneRapportDefavorableNiveauFichier(
+			final String pMessage,
+				final boolean pEnregistrerRapport) {
+
+		/* Création d'une ligne de rapport. */
+		final LigneRapport ligneRapport 
+			= creerLigneRapport(null
+						, pMessage
+						, null
+						, SANS_OBJET
+						, SANS_OBJET
+						, false
+						, ACTION_FICHIER_REFUSE);
+
+		/* Ajoute la ligne de rapport à this.rapport. */
+		this.ajouterLigneRapport(ligneRapport);
+
+		/* Enregistrement du rapport sur disque. */
+		if (pEnregistrerRapport) {
+
+			this.enregistrerRapportTextuelUTF8(this.fournirFileTxtUTF8());
+			this.enregistrerRapportCsvUTF8(this.fournirFileCsvUTF8());
+
+		} // Fin de if (pEnregistrerRapport).________________________
+		
+	} // Fin de ajouterLigneRapportDefavorableNiveauFichier(
+	 // String pMessage
+	 // , boolean pEnregistrerRapport).____________________________________
+	 
+	 
+	 
 	/**
 	 * method initialiserBundleControles() :<br/>
 	 * Initialise bundleControles qui encapsule 
@@ -820,11 +1017,17 @@ public abstract class AbstractControle implements IControle {
 	 * File pFile
 	 * , boolean pEnregistrerRapport
 	 * , String pMethode) :<br/>
-	 * Centralise le traitement des fichiers incorrects.<br/>
-	 * Traite le cas des fichiers null, inexistants, répertoires ou vide.<br/>
+	 * <ul>
+	 * <li>Centralise le traitement des fichiers incorrects.</li><br/>
+	 * <li>Utilise le nom de la classe concrète appelante.</li><br/>
+	 * <li>Utilise le nom de la méthode appelante.</li><br/>
+	 * <li>Traite le cas des fichiers null, inexistants
+	 * , répertoires ou vide.</li><br/>
+	 * </ul>
 	 * - retourne false si c'est le cas.<br/>
 	 * - Génère un rapport en cas de mauvais fichier.<br/>
-	 * - Ecrit le rapport sur disque si pEnregistrerRapport vaut true.<br/>
+	 * - Ecrit le rapport (comme un rapport de contrôle ) 
+	 * sur disque si pEnregistrerRapport vaut true.<br/>
 	 * <br/>
 	 * <ul>
 	 * <li>retourne false, LOG de niveau INFO et rapport 
@@ -1316,6 +1519,7 @@ public abstract class AbstractControle implements IControle {
 	/**
 	 * method fournirNomClasseConcrete() :<br/>
 	 * Retourne le nom de la classe concrète de contrôle.<br/>
+	 * Utile pour les messages dans les Logs et rapports.<br/>
 	 * <br/>
 	 *
 	 * @return : String : nom de la classe concrète de contrôle.<br/>
@@ -2133,7 +2337,8 @@ public abstract class AbstractControle implements IControle {
 			final File pFile
 				, final Charset pCharset) {
 		
-		// Traitement des mauvais fichiers.*********
+		// TRAITEMENT DES MAUVAIS FICHIERS 
+		// (null, inexistant, répertoire, vide).*************************
 		final String resultatTraitementFichier 
 			= this.traiterMauvaisFile(pFile, METHODE_LIREFICHIER);
 		
@@ -2141,6 +2346,7 @@ public abstract class AbstractControle implements IControle {
 			return resultatTraitementFichier;
 		}
 		
+		// RAFRAICHISSEMENT DE this.fichier.*****************************
 		/* passe pFile à this.fichier et 
 		 * rafraîchit automatiquement this.nomFichier. */
 		this.setFichier(pFile);
@@ -2171,19 +2377,23 @@ public abstract class AbstractControle implements IControle {
 			 * Instancie un flux en lecture fileInputStream en lui passant
 			 * pFile.
 			 */
-			fileInputStream = new FileInputStream(pFile);
+			fileInputStream 
+				= new FileInputStream(pFile);
 
 			/*
-			 * Instancie un InputStreamReader en lui passant le FileReader et le
+			 * Instancie un InputStreamReader 
+			 * en lui passant le FileReader et le
 			 * Charset.
 			 */
-			inputStreamReader = new InputStreamReader(fileInputStream, charset);
+			inputStreamReader 
+				= new InputStreamReader(fileInputStream, charset);
 
 			/*
 			 * Instancie un tampon de flux de caractères en lecture en lui
 			 * passant le flux inputStreamReader.
 			 */
-			bufferedReader = new BufferedReader(inputStreamReader);
+			bufferedReader 
+				= new BufferedReader(inputStreamReader);
 			
 			/* Parcours du bufferedReader. */
 			while (true) {
@@ -2321,7 +2531,8 @@ public abstract class AbstractControle implements IControle {
 			final File pFile
 				, final Charset pCharset) {
 		
-		// Traitement des mauvais fichiers.*********
+		// TRAITEMENT DES MAUVAIS FICHIERS 
+		// (null, inexistant, répertoire, vide).*************************
 		final String resultatTraitementFichier 
 			= this.traiterMauvaisFile(
 					pFile, METHODE_LIREFICHIERLIGNE_PAR_LIGNE);
@@ -2329,13 +2540,14 @@ public abstract class AbstractControle implements IControle {
 		if (resultatTraitementFichier != null) {
 			return resultatTraitementFichier;
 		}
+				
+		// RAFRAICHISSEMENT DE this.fichier.*****************************
+		/* passe pFile à this.fichier et 
+		* rafraîchit automatiquement this.nomFichier. */
+		this.setFichier(pFile);
 		
 		/* rafraîchit this.fichierEnMap. */
 		this.fichierEnMap.clear();
-		
-		/* passe pFile à this.fichier et 
-		 * rafraîchit automatiquement this.nomFichier. */
-		this.setFichier(pFile);
 	
 		
 		// LECTURE LIGNE PAR LIGNE ***************
@@ -2511,7 +2723,8 @@ public abstract class AbstractControle implements IControle {
 					, final Charset pCharset) {
 		
 		
-		// Traitement des mauvais fichiers.*********
+		// TRAITEMENT DES MAUVAIS FICHIERS 
+		// (null, inexistant, répertoire, vide).*************************
 		final String resultatTraitementFichier 
 			= this.traiterMauvaisFile(pFile, METHODE_LIRELIGNEFICHIER);
 		
@@ -2519,8 +2732,9 @@ public abstract class AbstractControle implements IControle {
 			return resultatTraitementFichier;
 		}
 		
+		// RAFRAICHISSEMENT DE this.fichier.*****************************
 		/* passe pFile à this.fichier et 
-		 * rafraîchit automatiquement this.nomFichier. */
+		* rafraîchit automatiquement this.nomFichier. */
 		this.setFichier(pFile);
 	
 		
@@ -2547,21 +2761,24 @@ public abstract class AbstractControle implements IControle {
 			 * Instancie un flux en lecture fileInputStream en lui passant
 			 * pFile.
 			 */
-			fileInputStream = new FileInputStream(pFile);
+			fileInputStream 
+				= new FileInputStream(pFile);
 
 			/*
-			 * Instancie un InputStreamReader en lui passant le FileReader et le
-			 * Charset.
+			 * Instancie un InputStreamReader en lui passant 
+			 * le FileReader et le Charset.
 			 */
-			inputStreamReader = new InputStreamReader(fileInputStream, charset);
+			inputStreamReader 
+				= new InputStreamReader(fileInputStream, charset);
 
 			/*
 			 * Instancie un tampon de flux de caractères en lecture en lui
 			 * passant le flux inputStreamReader.
 			 */
-			bufferedReader = new BufferedReader(inputStreamReader);
+			bufferedReader 
+				= new BufferedReader(inputStreamReader);
 			
-			/* Parcours du bufferedReader. */
+			/* Parcours du bufferedReader. **************/
 			while (true) {
 				
 				/* Incrémentation du numéro de la ligne lue. */
@@ -3472,7 +3689,7 @@ public abstract class AbstractControle implements IControle {
 	/**
 	 * method ajouterLigneRapport(
 	 * LigneRapport pLigneRapport) :<br/>
-	 * Ajoute une LigneRapport au rapport du contrôle.<br/>
+	 * Ajoute une LigneRapport au rapport du contrôle 'this.rapport'.<br/>
 	 * <br/>
 	 * - retourne false si pLigneRapport == null.<br/>
 	 * - retourne false si rapport == null.<br/>
@@ -3546,6 +3763,7 @@ public abstract class AbstractControle implements IControle {
 	 * , Integer pOrdreChamp
 	 * , String pPositionChamp
 	 * , String pValeurChamp
+	 * , Boolean pStatut
 	 * , String pAction) :<br/>
 	 * Crée et retourne une ligne de rapport LigneRapport 
 	 * avec des attributs pré-remplis et les valeurs passées en paramètre.<br/>
@@ -3622,6 +3840,7 @@ public abstract class AbstractControle implements IControle {
 	 // , Integer pOrdreChamp
 	 // , String pPositionChamp
 	 // , String pValeurChamp
+	 // , Boolean pStatut
 	 // , String pAction)._________________________________________________
 
 
