@@ -1815,7 +1815,10 @@ public class ControleurTypeTexteTest {
 	 * Teste la méthode controler(File pFile ANSI).<br/>
 	 * <br/>
 	 * - Vérifie que controler(ANSI) retourne true.<br/>
-	 * - vérifie que le rapport est non vide.<br/>
+	 * - Vérifie que fichier n'est pas null.<br/>
+	 * - Vérifie que nomFichier n'est pas null.<br/>
+	 * - vérifie que le rapport n'est pas null.<br/>
+	 * - vérifie que le rapport n'est pas vide.<br/>
 	 * <br/>
 	 */
 	@Test
@@ -1832,6 +1835,8 @@ public class ControleurTypeTexteTest {
 		/* Avec enregistrement sur disque du rapport de contrôle. */
 //		final boolean resultat = control.controler(FILE_CHARETTE_ANSI, true);
 		
+//		System.out.println(control.afficherRapportTextuel());
+		
 		/* Affichage du rapport d'enregistrement des rapports. */
 //		System.out.println();
 //		System.out.println(control.afficherRapportEnregistrementTextuel());
@@ -1842,8 +1847,19 @@ public class ControleurTypeTexteTest {
 		assertTrue("La méthode controler(ANSI) doit retourner true : "
 					, resultat);
 		
+		/* Vérifie que fichier != null. */
+		assertNotNull("fichier ne doit pas être null : "
+				, control.getFichier());
+		
+		/* Vérifie que nomFichier != null. */
+		assertNotNull("nomFichier ne doit pas être null : "
+				, control.getNomFichier());
+		
 		/* récupération du rapport. */
 		final List<LigneRapport> rapport = control.getRapport();
+		
+		/* vérifie que le rapport n'est pas null. */
+		assertNotNull("Le rapport ne doit pas être null : ", rapport);
 		
 		/* vérifie que le rapport est non vide. */
 		assertFalse("Le rapport doit être non vide : "
@@ -1858,7 +1874,10 @@ public class ControleurTypeTexteTest {
 	 * Teste la méthode controler(File pFile OEM).<br/>
 	 * <br/>
 	 * - Vérifie que controler(OEM) retourne true.<br/>
-	 * - vérifie que le rapport est non vide.<br/>
+	 * - Vérifie que fichier n'est pas null.<br/>
+	 * - Vérifie que nomFichier n'est pas null.<br/>
+	 * - vérifie que le rapport n'est pas null.<br/>
+	 * - vérifie que le rapport n'est pas vide.<br/>
 	 * <br/>
 	 */
 	@Test
@@ -1874,6 +1893,8 @@ public class ControleurTypeTexteTest {
 		/* Avec enregistrement sur disque du rapport de contrôle. */
 //		final boolean resultat = control.controler(FILE_CHARETTE_OEM, true);
 		
+//		System.out.println(control.afficherRapportTextuel());
+		
 		/* Affichage du rapport d'enregistrement des rapports. */
 //		System.out.println();
 //		System.out.println(control.afficherRapportEnregistrementTextuel());
@@ -1884,8 +1905,19 @@ public class ControleurTypeTexteTest {
 		assertTrue("La méthode controler(OEM) doit retourner true : "
 					, resultat);
 		
+		/* Vérifie que fichier != null. */
+		assertNotNull("fichier ne doit pas être null : "
+				, control.getFichier());
+		
+		/* Vérifie que nomFichier != null. */
+		assertNotNull("nomFichier ne doit pas être null : "
+				, control.getNomFichier());
+		
 		/* récupération du rapport. */
 		final List<LigneRapport> rapport = control.getRapport();
+		
+		/* vérifie que le rapport n'est pas null. */
+		assertNotNull("Le rapport ne doit pas être null : ", rapport);
 		
 		/* vérifie que le rapport est non vide. */
 		assertFalse("Le rapport doit être non vide : "
@@ -1900,7 +1932,10 @@ public class ControleurTypeTexteTest {
 	 * Teste la méthode controler(File pFile LATIN2).<br/>
 	 * <br/>
 	 * - Vérifie que controler(LATIN2) retourne true.<br/>
-	 * - vérifie que le rapport est non vide.<br/>
+	 * - Vérifie que fichier n'est pas null.<br/>
+	 * - Vérifie que nomFichier n'est pas null.<br/>
+	 * - vérifie que le rapport n'est pas null.<br/>
+	 * - vérifie que le rapport n'est pas vide.<br/>
 	 * <br/>
 	 */
 	@Test
@@ -1916,6 +1951,8 @@ public class ControleurTypeTexteTest {
 		/* Avec enregistrement sur disque du rapport de contrôle. */
 //		final boolean resultat = control.controler(FILE_DIACRITIQUES_ISO_8859_2, true);
 		
+//		System.out.println(control.afficherRapportTextuel());
+		
 		/* Affichage du rapport d'enregistrement des rapports. */
 //		System.out.println();
 //		System.out.println(control.afficherRapportEnregistrementTextuel());
@@ -1926,8 +1963,19 @@ public class ControleurTypeTexteTest {
 		assertTrue("La méthode controler(LATIN2) doit retourner true : "
 					, resultat);
 		
+		/* Vérifie que fichier != null. */
+		assertNotNull("fichier ne doit pas être null : "
+				, control.getFichier());
+		
+		/* Vérifie que nomFichier != null. */
+		assertNotNull("nomFichier ne doit pas être null : "
+				, control.getNomFichier());
+		
 		/* récupération du rapport. */
 		final List<LigneRapport> rapport = control.getRapport();
+		
+		/* vérifie que le rapport n'est pas null. */
+		assertNotNull("Le rapport ne doit pas être null : ", rapport);
 		
 		/* vérifie que le rapport est non vide. */
 		assertFalse("Le rapport doit être non vide : "
@@ -1942,7 +1990,10 @@ public class ControleurTypeTexteTest {
 	 * Teste la méthode controler(File pFile UTF-8).<br/>
 	 * <br/>
 	 * - Vérifie que controler(UTF-8) retourne true.<br/>
-	 * - vérifie que le rapport est non vide.<br/>
+	 * - Vérifie que fichier n'est pas null.<br/>
+	 * - Vérifie que nomFichier n'est pas null.<br/>
+	 * - vérifie que le rapport n'est pas null.<br/>
+	 * - vérifie que le rapport n'est pas vide.<br/>
 	 * <br/>
 	 */
 	@Test
@@ -1958,6 +2009,8 @@ public class ControleurTypeTexteTest {
 		/* Avec enregistrement sur disque du rapport de contrôle. */
 //		final boolean resultat = control.controler(FILE_DIACRITIQUES_UTF8, true);
 		
+//		System.out.println(control.afficherRapportTextuel());
+		
 //		System.out.println();
 //		System.out.println(control.afficherRapportEnregistrementTextuel());
 //		System.out.println();
@@ -1967,8 +2020,19 @@ public class ControleurTypeTexteTest {
 		assertTrue("La méthode controler(UTF-8) doit retourner true : "
 					, resultat);
 		
+		/* Vérifie que fichier != null. */
+		assertNotNull("fichier ne doit pas être null : "
+				, control.getFichier());
+		
+		/* Vérifie que nomFichier != null. */
+		assertNotNull("nomFichier ne doit pas être null : "
+				, control.getNomFichier());
+		
 		/* récupération du rapport. */
 		final List<LigneRapport> rapport = control.getRapport();
+		
+		/* vérifie que le rapport n'est pas null. */
+		assertNotNull("Le rapport ne doit pas être null : ", rapport);
 		
 		/* vérifie que le rapport est non vide. */
 		assertFalse("Le rapport doit être non vide : "

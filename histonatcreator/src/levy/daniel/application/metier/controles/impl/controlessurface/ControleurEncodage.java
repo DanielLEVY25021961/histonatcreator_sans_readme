@@ -7,17 +7,16 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import levy.daniel.application.metier.controles.AbstractControle;
 import levy.daniel.application.metier.controles.CaractereDan;
 import levy.daniel.application.metier.controles.rapportscontroles.LigneRapport;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 
 /**
@@ -34,7 +33,7 @@ import levy.daniel.application.metier.controles.rapportscontroles.LigneRapport;
  * <br/>
  * - retourne false et rapporte si le décodage avec this.charset 
  * génère un caractère indésirable appartenant 
- * à AbstractControle.CARACTERES_INDESIRABLES_SET.<br/>
+ * à this.CARACTERES_INDESIRABLES_SET.<br/>
  * - retourne true et génère un rapport favorable si pFile 
  * a été encodé avec this.charset.<br/>
  * - Peut écrire le rapport de contrôle sous forme textuelle 
@@ -503,32 +502,59 @@ public class ControleurEncodage extends AbstractControle {
 	
 
 	/**
-	 * {@inheritDoc}
+	 * method controlerHook(
+	 * File pFile
+	 * , boolean pEnregistrerRapport) :<br/>
+	 * Contrôle si le fichier pFile est intégralement 
+	 * encodé en this.charset (UTF-8)
+	 * et retourne true si c'est le cas.<br/>
+	 * <ul>
+	 * <li>Utilise pour celà le critère 
+	 * 'Un fichier doit être uniformément encodé 
+	 * avec un même charset'.</li><br/>
+	 * <li>Lit le fichier caractère par caractère en UTF-8 en utilisant 
+	 * un BufferedReader(InputStreamReader(fileInputStream, this.charset)) 
+	 * et détecte les caractères indésirables.</li><br/>
+	 * <li>Enregistre le rapport de contrôle sur disque 
+	 * si pEnregistrerRapport == true.</li><br/>
+	 * </ul> 
+	 * <br/>
+	 * <ul>
+	 * <li>retourne false et rapporte si CARACTERES_INDESIRABLES_SET 
+	 * contient un des caractères de pFile.</li><br/>
+	 * <li>retourne true et remplit un rapport favorable si pFile 
+	 * ne contient pas de caractères indésirables.</li><br/>
+	 * <br/>
+	 * <li>passe pFile à this.fichier et 
+	 * rafraîchit automatiquement this.nomFichier.</li><br/>
+	 * <li>rafraîchit le rapport (en instancie un nouveau 
+	 * à chaque appel de la méthode controler(File pFile)).</li><br/>
+	 * </ul>
+	 * <br/>
+	 * - retourne false, LOG de niveau INFO et rapport si pFile == null.<br/>
+	 * - retourne false, LOG de niveau INFO et rapport si pFile 
+	 * est inexistant.<br/>
+	 * - retourne false, LOG de niveau INFO et rapport si pFile 
+	 * est un répertoire.<br/>
+	 * - retourne false, LOG de niveau INFO et rapport si pFile 
+	 * est vide.<br/>
+	 * <br/>
+	 * RG-01-03 : Encodage intégral en UTF-8.<br/>
+	 * <br/>
+	 * 
+	 * 
+	 * @param pFile : File : fichier dont on veut savoir 
+	 * si il est un fichier encodé en this.charset (UTF-8).<br/>
+	 * @param pEnregistrerRapport : boolean : 
+	 * true si on veut enregistrer le rapport dans un fichier sur disque.<br/>
+	 * 
+	 * @return : boolean : true si pFile est un fichier texte.<br/>
 	 */
 	@Override
-	public final boolean controlerHook(
+	protected final boolean controlerHook(
 			final File pFile
 				, final boolean pEnregistrerRapport) {
-		
-		// Traitement des mauvais fichiers.************
-		final boolean resultatTraitementMauvaisFichier 
-			= this.traiterMauvaisFile(
-					pFile, pEnregistrerRapport, METHODE_CONTROLER);
-		
-		/* Sort de la méthode et retourne false si le fichier est mauvais. */
-		if (!resultatTraitementMauvaisFichier) {
-			return false;
-		}
-
-		/* passe pFile à this.fichier et 
-		 * rafraîchit automatiquement this.nomFichier. */
-		this.setFichier(pFile);
-		
-		/* rafraîchit le rapport (en instancie un nouveau à chaque appel 
-		 * de la méthode controler(File pFile)). */
-		this.rapport = new ArrayList<LigneRapport>();
-		
-		
+				
 		// LECTURE ***************
 		FileInputStream fileInputStream = null;
 		InputStreamReader inputStreamReader = null;
@@ -627,73 +653,6 @@ public class ControleurEncodage extends AbstractControle {
 								
 			} // Fin du parcours du bufferedReader.__________________________
 			
-			if (resultat) {	
-				
-				/* rapport. ********/
-				/* Création du message du rapport de contrôle. */
-				final String message 
-					= "Le fichier '" 
-							+ pFile.getName() 
-							+ "' est bien un fichier texte encodé en " 
-							+ this.charset.name();
-				
-				/* Création d'une ligne de rapport. */
-				final LigneRapport ligneRapport 
-					= creerLigneRapport(
-							null
-							, message
-							, null
-							, SANS_OBJET
-							, SANS_OBJET
-							, true
-							, ACTION_FICHIER_ACCEPTE);
-				
-				/* Ajout de la ligne de rapport au rapport de contrôle. */
-				this.ajouterLigneRapport(ligneRapport);
-			}
-			else {
-				
-				/* rapport. ********/
-				/* Création du message du rapport de contrôle. */
-				final String message 
-					= "Le fichier '" 
-							+ pFile.getName() 
-							+ "' n'est pas un fichier texte encodé en " 
-							+ this.charset.name();
-				
-				/* Création d'une ligne de rapport. */
-				final LigneRapport ligneRapport 
-					= creerLigneRapport(
-							null
-							, message
-							, null
-							, SANS_OBJET
-							, SANS_OBJET
-							, false
-							, ACTION_FICHIER_REFUSE);
-				
-				/* Ajout de la ligne de rapport au rapport de contrôle. */
-				this.ajouterLigneRapport(ligneRapport);
-				
-			}
-			
-			
-			/* Enregistrement du rapport sur disque. */
-			if (pEnregistrerRapport) {
-				
-				this.enregistrerRapportTextuelUTF8(
-						this.fournirFileTxtUTF8());
-				this.enregistrerRapportCsvUTF8(
-						this.fournirFileCsvUTF8());
-				
-			} // Fin de if (pEnregistrerRapport).________________
-						
-			/* retourne false et rapporte si 
-			 * CARACTERES_INDESIRABLES_SET contient 
-			 * un des caractères de pFile. */
-			/* retourne true et rapporte si 
-			 * le fichier a bien été encodé avec this.charset. */
-			return resultat;
 
 		} catch (FileNotFoundException fnfe) {
 
@@ -769,6 +728,54 @@ public class ControleurEncodage extends AbstractControle {
 
 		} // Fin du finally._____________________________
 
+		
+		// AJOUT DES RAPPORTS DE NIVEAU FICHIER 
+		// et ENREGISTREMENT SUR DISQUE.*****************************
+		/* rapport de niveau fichier si le contrôle est favorable. */	
+		if (resultat) {	
+			
+			/* Constitution du message favorable. */
+			final String message 
+				= "Le fichier '" 
+						+ pFile.getName() 
+						+ "' est bien un fichier texte encodé en " 
+						+ this.charset.name();
+			
+			/* Ajout d'une ligne de rapport favorable
+			 * au rapport de contrôle et enrgistrement 
+			 * sur disque si pEnregistrerRapport. */
+			this.ajouterLigneRapportFavorableNiveauFichier(
+					message, pEnregistrerRapport);
+			
+		} // Fin de if (resultat)._____________
+		
+		/* rapport de niveau fichier si le contrôle est défavorable. */
+		else {
+			
+			/* Constitution du message défavorable. */
+			final String message 
+				= "Le fichier '" 
+						+ pFile.getName() 
+						+ "' n'est pas un fichier texte encodé en " 
+						+ this.charset.name();
+			
+			/* Ajout d'une ligne de rapport défavorable
+			 * au rapport de contrôle et enregistrement sur disque 
+			 * si pEnregistrerRapport. */
+			this.ajouterLigneRapportDefavorableNiveauFichier(
+					message, pEnregistrerRapport);
+			
+		} // Fin de (!if (resultat))._____________
+		
+		
+		// RETOUR DU RESULTAT.*****************************************
+		/* retourne false et rapporte si 
+		 * CARACTERES_INDESIRABLES_SET contient 
+		 * un des caractères de pFile. */
+		/* retourne true et rapporte si 
+		 * le fichier a bien été encodé avec this.charset. */
+		return resultat;
+
 	} // Fin de controler(
 	// File pFile
 	// , boolean pEnregistrerRapport)._____________________________________
@@ -781,7 +788,7 @@ public class ControleurEncodage extends AbstractControle {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected String fournirNomClasseConcrete() {
+	protected final String fournirNomClasseConcrete() {
 		return CLASSE_CONTROLEURENCODAGE;
 	} // Fin de fournirNomClasseConcrete().________________________________
 	
@@ -793,7 +800,7 @@ public class ControleurEncodage extends AbstractControle {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected String fournirTypeControle() {
+	protected final String fournirTypeControle() {
 		return "Contrôle de surface";
 	} // Fin de fournirTypeControle()._____________________________________
 	
@@ -805,7 +812,7 @@ public class ControleurEncodage extends AbstractControle {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected String fournirNomControle() {
+	protected final String fournirNomControle() {
 		return "Contrôle d'encodage du fichier";
 	} // Fin de fournirNomControle().______________________________________
 
@@ -817,7 +824,7 @@ public class ControleurEncodage extends AbstractControle {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected String fournirNomCritere() {
+	protected final String fournirNomCritere() {
 		return "Un fichier doit être uniformément encodé avec un même charset";
 	} // Fin de fournirNomCritere()._______________________________________
 
@@ -829,7 +836,7 @@ public class ControleurEncodage extends AbstractControle {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected String fournirCleNiveauAnomalie() {
+	protected final String fournirCleNiveauAnomalie() {
 		return "ControleurEncodage.niveau.anomalie";
 	} // Fin de fournirCleNiveauAnomalie().________________________________
 
@@ -841,7 +848,7 @@ public class ControleurEncodage extends AbstractControle {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected String fournirNiveauAnomalieEnDur() {
+	protected final String fournirNiveauAnomalieEnDur() {
 		return "1";
 	} // Fin de fournirNiveauAnomalieEnDur().______________________________
 	
@@ -853,7 +860,7 @@ public class ControleurEncodage extends AbstractControle {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected String fournirBaseNomRapport() {
+	protected final String fournirBaseNomRapport() {
 		return "RAPPORT-CONTROLE-ENCODAGE-EN-" + this.charset.name();
 	} // Fin de fournirBaseNomRapport().___________________________________
 
@@ -865,17 +872,19 @@ public class ControleurEncodage extends AbstractControle {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected String fournirCleAEffectuer() {
+	protected final String fournirCleAEffectuer() {
 		return "ControleurEncodage.aEffectuer";
 	} // Fin de fournirCleAEffectuer().____________________________________
 
 	
 	
 	/**
+	 * true.<br/>
+	 * <br/>
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected boolean fournirAEffectuerEnDur() {
+	protected final boolean fournirAEffectuerEnDur() {
 		return true;
 	} // Fin de fournirAEffectuerEnDur().__________________________________
 

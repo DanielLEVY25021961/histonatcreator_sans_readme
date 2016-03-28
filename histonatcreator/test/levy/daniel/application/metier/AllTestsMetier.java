@@ -40,6 +40,7 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses({
 	levy.daniel.application.metier.service.enregistreursfichiers.impl.EnregistreurFichiersTest.class
 	, levy.daniel.application.metier.controles.impl.controlessurface.ControleurTypeTexteTest.class
+	, levy.daniel.application.metier.controles.impl.controlessurface.ControleurEncodageTest.class
 })
 public final class AllTestsMetier {
 

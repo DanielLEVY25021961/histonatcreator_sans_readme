@@ -48,7 +48,7 @@ import org.apache.commons.logging.LogFactory;
  * niveauAnomalie;estBloquant;aEffectuer;rapport;rapportEnregistrement;].<br/>
  * <br/>
  * Attributs de la classe :<br/>
- * néant<br/>
+ * - néant<br/>
  * <br/>
  * <ul>
  * <li>nomClasseConcrete = "Classe ControleurTypeTexte".</li><br/>
@@ -479,7 +479,7 @@ public class ControleurTypeTexte extends AbstractControle {
 	 * @return : boolean : true si pFile est un fichier texte.<br/>
 	 */
 	@Override
-	public final boolean controlerHook(
+	protected final boolean controlerHook(
 			final File pFile
 				, final boolean pEnregistrerRapport) {
 				
@@ -556,17 +556,7 @@ public class ControleurTypeTexte extends AbstractControle {
 					/* ajout de la LigneRapport 
 					 * au rapport de contrôle this.rapport. */
 					this.ajouterLigneRapport(ligneRapport);
-					
-					/* Enregistrement du rapport sur disque. */
-					if (pEnregistrerRapport) {
-						
-						this.enregistrerRapportTextuelUTF8(
-								this.fournirFileTxtUTF8());
-						this.enregistrerRapportCsvUTF8(
-								this.fournirFileCsvUTF8());
-						
-					} // Fin de if (pEnregistrerRapport).____________
-					
+										
 					/* passe la valeur du boolean resultat à false. */
 					resultat = false;
 					
@@ -662,7 +652,8 @@ public class ControleurTypeTexte extends AbstractControle {
 					+ "' est bien un fichier texte";
 			
 			/* Ajout d'une ligne de rapport favorable
-			 * au rapport de contrôle. */
+			 * au rapport de contrôle et enrgistrement 
+			 * sur disque si pEnregistrerRapport. */
 			this.ajouterLigneRapportFavorableNiveauFichier(
 					message, pEnregistrerRapport);
 			
@@ -678,13 +669,14 @@ public class ControleurTypeTexte extends AbstractControle {
 					+ "' n'est pas un fichier texte";
 			
 			/* Ajout d'une ligne de rapport défavorable
-			 * au rapport de contrôle. */
+			 * au rapport de contrôle et enregistrement sur disque 
+			 * si pEnregistrerRapport. */
 			this.ajouterLigneRapportDefavorableNiveauFichier(
 					message, pEnregistrerRapport);
 			
 		} // Fin de (!if (resultat))._____________
 		
-				
+					
 		// RETOUR DU RESULTAT.*****************************************
 		return resultat;
 		
@@ -785,7 +777,7 @@ public class ControleurTypeTexte extends AbstractControle {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected String fournirCleAEffectuer() {
+	protected final String fournirCleAEffectuer() {
 		return "ControleurTypeTexte.aEffectuer";
 	} // Fin de fournirCleAEffectuer().____________________________________
 
@@ -797,7 +789,7 @@ public class ControleurTypeTexte extends AbstractControle {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected boolean fournirAEffectuerEnDur() {
+	protected final boolean fournirAEffectuerEnDur() {
 		return true;
 	} // Fin de fournirAEffectuerEnDur().__________________________________
 	

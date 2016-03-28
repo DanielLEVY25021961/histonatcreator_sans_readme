@@ -861,7 +861,7 @@ public abstract class AbstractControle implements IControle {
 	 * <li>Ajoute cette ligne de rapport au 
 	 * rapport de contrôle 'this.rapport'.</li><br/>
 	 * <li>Enregistre éventuellement 
-	 * cette ligne de rapport sur disque.</li><br/>
+	 * le rapport sur disque.</li><br/>
 	 * </ul>
 	 * <br/>
 	 *
@@ -913,7 +913,7 @@ public abstract class AbstractControle implements IControle {
 	 * <li>Ajoute cette ligne de rapport au 
 	 * rapport de contrôle 'this.rapport'.</li><br/>
 	 * <li>Enregistre éventuellement 
-	 * cette ligne de rapport sur disque.</li><br/>
+	 * le rapport sur disque.</li><br/>
 	 * </ul>
 	 * <br/>
 	 *

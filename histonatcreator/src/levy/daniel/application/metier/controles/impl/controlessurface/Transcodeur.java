@@ -7,21 +7,17 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import levy.daniel.application.metier.controles.AbstractControle;
+import levy.daniel.application.metier.controles.rapportscontroles.LigneRapport;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-
-
-
-import levy.daniel.application.metier.controles.AbstractControle;
-import levy.daniel.application.metier.controles.rapportscontroles.LigneRapport;
 
 
 
@@ -362,7 +358,7 @@ public class Transcodeur extends AbstractControle {
 		
 	
 	/**
-	 * method controler(
+	 * method controlerHook(
 	 * File pFile
 	 * , boolean pEnregistrerRapport) :<br/>
 	 * Transcode le fichier pFile en UTF-8 et ANSI
@@ -409,41 +405,16 @@ public class Transcodeur extends AbstractControle {
 	 * RG-01-02 : Transcoder en UTF-8.<br/>
 	 * <br/>
 	 *
-	 * @param pFile : File : fichier dont on veut savoir 
-	 * si il est un fichier texte.<br/>
+	 * @param pFile : File : fichier que l'on veut transcoder en UTF-8.<br/>
 	 * @param pEnregistrerRapport : boolean : 
 	 * true si on veut enregistrer le rapport dans un fichier sur disque.<br/>
 	 * 
 	 * @return : boolean : true si pFile est a été transcodé en UTF-8.<br/>
 	 */
 	@Override
-	public final boolean controlerHook(
+	protected final boolean controlerHook(
 			final File pFile
 				, final boolean pEnregistrerRapport) {
-
-		// Traitement des mauvais fichiers.************
-		final boolean resultatTraitementMauvaisFichier = this
-				.traiterMauvaisFile(pFile, pEnregistrerRapport,
-						METHODE_CONTROLER);
-
-		/*
-		 * Sort de la méthode et retourne false si le fichier est mauvais.
-		 */
-		if (!resultatTraitementMauvaisFichier) {
-			return false;
-		}
-
-		/*
-		 * passe pFile à this.fichier et rafraîchit automatiquement
-		 * this.nomFichier.
-		 */
-		this.setFichier(pFile);
-
-		/*
-		 * rafraîchit le rapport (en instancie un nouveau à chaque appel de la
-		 * méthode controler(File pFile)).
-		 */
-		this.rapport = new ArrayList<LigneRapport>();
 
 		// TRAITEMENT **********************************************
 		// CREATION DES FICHIERS EN UTF-8 et ANSI.
@@ -674,7 +645,7 @@ public class Transcodeur extends AbstractControle {
 					
 				} // Fin de Si la ligne est encodée en ANSI.____
 				
-			} // Fin de Parcours de l'iterator.___________
+			} // Fin de Parcours de l'iterator.___________********
 			
 			if (this.rapport.isEmpty()) {
 				
@@ -1010,7 +981,7 @@ public class Transcodeur extends AbstractControle {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected String fournirNomClasseConcrete() {
+	protected final String fournirNomClasseConcrete() {
 		return CLASSE_TRANSCODEUR;
 	} // Fin de fournirNomClasseConcrete().________________________________
 
@@ -1022,7 +993,7 @@ public class Transcodeur extends AbstractControle {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected String fournirTypeControle() {
+	protected final String fournirTypeControle() {
 		return "Traitement de surface";
 	} // Fin de fournirTypeControle()._____________________________________
 	
@@ -1034,7 +1005,7 @@ public class Transcodeur extends AbstractControle {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected String fournirNomControle() {
+	protected final String fournirNomControle() {
 		return "Traitement de transcodage du fichier en UTF-8 et ANSI";
 	} // Fin de fournirNomControle().______________________________________
 	
@@ -1046,7 +1017,7 @@ public class Transcodeur extends AbstractControle {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected String fournirNomCritere() {
+	protected final String fournirNomCritere() {
 		return "Le fichier doit pouvoir être transcodé en UTF-8";
 	} // Fin de fournirNomCritere()._______________________________________
 
@@ -1058,7 +1029,7 @@ public class Transcodeur extends AbstractControle {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected String fournirCleNiveauAnomalie() {
+	protected final String fournirCleNiveauAnomalie() {
 		return "Transcodeur.niveau.anomalie";
 	} // Fin de fournirCleNiveauAnomalie().________________________________
 
@@ -1070,7 +1041,7 @@ public class Transcodeur extends AbstractControle {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected String fournirNiveauAnomalieEnDur() {
+	protected final String fournirNiveauAnomalieEnDur() {
 		return "1";
 	} // Fin de fournirNiveauAnomalieEnDur().______________________________
 	
@@ -1082,7 +1053,7 @@ public class Transcodeur extends AbstractControle {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected String fournirBaseNomRapport() {
+	protected final String fournirBaseNomRapport() {
 		return "RAPPORT-TRANSCODAGE";
 	} // Fin de fournirBaseNomRapport().___________________________________
 	
@@ -1094,7 +1065,7 @@ public class Transcodeur extends AbstractControle {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected String fournirCleAEffectuer() {
+	protected final String fournirCleAEffectuer() {
 		return "Transcodeur.aEffectuer";
 	} // Fin de fournirCleAEffectuer().____________________________________
 	
@@ -1106,7 +1077,7 @@ public class Transcodeur extends AbstractControle {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected boolean fournirAEffectuerEnDur() {
+	protected final boolean fournirAEffectuerEnDur() {
 		return true;
 	} // Fin de fournirAEffectuerEnDur().__________________________________
 	

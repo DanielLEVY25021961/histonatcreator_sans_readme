@@ -1,5 +1,9 @@
 package levy.daniel.application.metier.controles.impl.controlessurface;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
@@ -12,6 +16,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+
+import levy.daniel.application.metier.controles.rapportscontroles.LigneRapport;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -885,7 +891,7 @@ public class ControleurEncodageTest {
 	 * .<br/>
 	 * <br/>
 	 */
-	@Test
+//	@Test
 	public void testControlerTousEncodages() {
 		
 		/* Instanciation d'un ControleurTypeTexte 
@@ -917,11 +923,165 @@ public class ControleurEncodageTest {
 
 	
 	/**
+	 * method testControlerFichierUtf8() :<br/>
+	 * Teste la méthode controler(File UTF-8).<br/>
+	 * <br/>
+	 * - Vérifie que la méthode retourne true.<br/>
+	 * - Vérifie que fichier n'est pas null.<br/>
+	 * - Vérifie que nomFichier n'est pas null.<br/>
+	 * - vérifie que le rapport n'est pas null.<br/>
+	 * - vérifie que le rapport n'est pas vide.<br/>
+	 * <br/>
+	 */
+	@Test
+	public void testControlerFichierUtf8() {
+				
+		/* Instanciation d'un ControleurEncodage 
+		 * avec le constructeur d'arité nulle. */
+		final ControleurEncodage controle = new ControleurEncodage();
+		
+		/* ******************************************************************/
+		/* Détermination du fichier, du charset et de la ligne à lire. ******/
+		final File fichier 
+		= new File(CHEMIN_FICHIERS_TRAFIC + "trafics_2012\\Fichiers_encodés_en_UTF8\\darwin2012_UTF8.csv");
+		
+		final Charset charset = CHARSET_UTF8;
+		/* ******************************************************************/
+		
+		/* Passe charset au controle. */
+		controle.setCharset(charset);
+		
+		/* résultat du contrôle d'encodage. */
+		final boolean resultat 
+			= controle.controler(fichier, false);
+		
+		// AFFICHAGES. ********************
+		/* Résultat de la lecture par le Charset*/
+//		System.out.println();
+//		System.out.println("Fichier écrit dans l'encodage " 
+//				+ charset.name() + " : " + resultat);
+		
+		/* Affichage du rapport de contrôle. */
+//		System.out.println();
+//		System.out.println("RAPPORT DE CONTROLE : \n" 
+//				+ controle.afficherRapportTextuel());
+		
+		/* Affichage de l'enregistrement sur disque du rapport de contrôle. */
+//		System.out.println();
+//		System.out.println("COMPTE-RENDU DE L'ENREGISTREMENT du rapport de contrôle : \n" 
+//				+ controle.afficherRapportEnregistrementTextuel());
+		
+		// ASSERTIONS. ********************
+		/* Vérifie que la méthode retourne false. */
+		assertTrue("controler(non textuel) doit retourner false : "
+				, resultat);
+		
+		/* Vérifie que fichier != null. */
+		assertNotNull("fichier ne doit pas être null : "
+				, controle.getFichier());
+		
+		/* Vérifie que nomFichier != null. */
+		assertNotNull("nomFichier ne doit pas être null : "
+				, controle.getNomFichier());
+		
+	
+		/* récupération du rapport. */
+		final List<LigneRapport> rapport = controle.getRapport();
+		
+		/* vérifie que le rapport n'est pas null. */
+		assertNotNull("Le rapport ne doit pas être null : ", rapport);
+		
+		/* vérifie que le rapport n'est pas vide. */
+		assertFalse("Le rapport ne doit pas être vide : "
+				, rapport.isEmpty());
+			
+	} // Fin de testControlerFichierUtf8()._________________________________
+	
+
+	
+	/**
+	 * method testControlerFichierAnsi() :<br/>
+	 * Teste la méthode controler(File ANSI).<br/>
+	 * <br/>
+	 * - Vérifie que la méthode retourne true.<br/>
+	 * - Vérifie que fichier n'est pas null.<br/>
+	 * - Vérifie que nomFichier n'est pas null.<br/>
+	 * - vérifie que le rapport n'est pas null.<br/>
+	 * - vérifie que le rapport n'est pas vide.<br/>
+	 * <br/>
+	 */
+	@Test
+	public void testControlerFichierAnsi() {
+				
+		/* Instanciation d'un ControleurEncodage 
+		 * avec le constructeur d'arité nulle. */
+		final ControleurEncodage controle = new ControleurEncodage();
+		
+		/* ******************************************************************/
+		/* Détermination du fichier, du charset et de la ligne à lire. ******/
+		final File fichier 
+		= new File(CHEMIN_FICHIERS_TRAFIC + "trafics_2012\\Fichiers_encodés_en_ANSI\\HITDIRO2012_ANSI.txt");
+		
+		final Charset charset = CHARSET_ANSI;
+		/* ******************************************************************/
+		
+		/* Passe charset au controle. */
+		controle.setCharset(charset);
+		
+		/* résultat du contrôle d'encodage. */
+		final boolean resultat 
+			= controle.controler(fichier, false);
+		
+		// AFFICHAGES. ********************
+		/* Résultat de la lecture par le Charset*/
+//		System.out.println();
+//		System.out.println("Fichier écrit dans l'encodage " 
+//				+ charset.name() + " : " + resultat);
+		
+		/* Affichage du rapport de contrôle. */
+//		System.out.println();
+//		System.out.println("RAPPORT DE CONTROLE : \n" 
+//				+ controle.afficherRapportTextuel());
+		
+		/* Affichage de l'enregistrement sur disque du rapport de contrôle. */
+//		System.out.println();
+//		System.out.println("COMPTE-RENDU DE L'ENREGISTREMENT du rapport de contrôle : \n" 
+//				+ controle.afficherRapportEnregistrementTextuel());
+		
+		// ASSERTIONS. ********************
+		/* Vérifie que la méthode retourne false. */
+		assertTrue("controler(non textuel) doit retourner false : "
+				, resultat);
+		
+		/* Vérifie que fichier != null. */
+		assertNotNull("fichier ne doit pas être null : "
+				, controle.getFichier());
+		
+		/* Vérifie que nomFichier != null. */
+		assertNotNull("nomFichier ne doit pas être null : "
+				, controle.getNomFichier());
+		
+	
+		/* récupération du rapport. */
+		final List<LigneRapport> rapport = controle.getRapport();
+		
+		/* vérifie que le rapport n'est pas null. */
+		assertNotNull("Le rapport ne doit pas être null : ", rapport);
+		
+		/* vérifie que le rapport n'est pas vide. */
+		assertFalse("Le rapport ne doit pas être vide : "
+				, rapport.isEmpty());
+			
+	} // Fin de testControlerFichierAnsi().________________________________
+	
+	
+	
+	/**
 	 * method testControlerHitDirA2012() :<br/>
 	 * .<br/>
 	 * <br/>
 	 */
-	@Test
+//	@Test
 	public void testControlerHitDirA2012() {
 		
 		/* Instanciation d'un ControleurEncodage 
@@ -1000,7 +1160,7 @@ public class ControleurEncodageTest {
 	 * .<br/>
 	 * <br/>
 	 */
-	@Test
+//	@Test
 	public void testControlerDarwin2012() {
 		
 		/* Instanciation d'un ControleurEncodage 
@@ -1078,7 +1238,7 @@ public class ControleurEncodageTest {
 	 * .<br/>
 	 * <br/>
 	 */
-	@Test
+//	@Test
 	public void testControler() {
 		
 		/* Instanciation d'un ControleurEncodage 
