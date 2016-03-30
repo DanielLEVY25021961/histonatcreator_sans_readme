@@ -172,7 +172,7 @@ public class ControleurTypeTexte extends AbstractControle {
 		
 		/* ACUTE ACCENT '´' */
 		CARACTERES_INDESIRABLES_SET.add('\u00b4');
-		/* ACUTE ACCENT '`' */
+		/* GRAVE ACCENT '`' */
 		CARACTERES_INDESIRABLES_SET.add('\u0060');
 		/* CIRCUMFLEX ACCENT '^' */
 		CARACTERES_INDESIRABLES_SET.add('\u005e');
@@ -255,6 +255,7 @@ public class ControleurTypeTexte extends AbstractControle {
 	}
 	
 
+	
 	/**
 	 * LOG : Log : 
 	 * Logger pour Log4j (utilisant commons-logging).

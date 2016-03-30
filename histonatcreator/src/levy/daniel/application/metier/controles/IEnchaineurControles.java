@@ -8,7 +8,7 @@ import java.util.SortedMap;
 
 
 /**
- * class IEnchaineurControles :<br/>
+ * Interface IEnchaineurControles :<br/>
  * Abstraction qui garantit que :<br/>
  * - Tout enchaînement de contrôles est effectué à une 'dateContrôle'. 
  * La classe calcule automatiquement 'dateControleStringFormatee' 

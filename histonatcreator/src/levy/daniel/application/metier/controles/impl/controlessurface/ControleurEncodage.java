@@ -155,7 +155,7 @@ public class ControleurEncodage extends AbstractControle {
 		
 		/* ACUTE ACCENT '´' */
 		CARACTERES_INDESIRABLES_SET.add('\u00b4');
-		/* ACUTE ACCENT '`' */
+		/* GRAVE ACCENT '`' */
 		CARACTERES_INDESIRABLES_SET.add('\u0060');
 		/* CIRCUMFLEX ACCENT '^' */
 		CARACTERES_INDESIRABLES_SET.add('\u005e');
@@ -548,7 +548,8 @@ public class ControleurEncodage extends AbstractControle {
 	 * @param pEnregistrerRapport : boolean : 
 	 * true si on veut enregistrer le rapport dans un fichier sur disque.<br/>
 	 * 
-	 * @return : boolean : true si pFile est un fichier texte.<br/>
+	 * @return : boolean : true si pFile est un fichier texte 
+	 * intégralement encodé en this.charset (UTF-8).<br/>
 	 */
 	@Override
 	protected final boolean controlerHook(
@@ -730,7 +731,7 @@ public class ControleurEncodage extends AbstractControle {
 
 		
 		// AJOUT DES RAPPORTS DE NIVEAU FICHIER 
-		// et ENREGISTREMENT SUR DISQUE.*****************************
+		// et ENREGISTREMENT éventuel SUR DISQUE.************************
 		/* rapport de niveau fichier si le contrôle est favorable. */	
 		if (resultat) {	
 			

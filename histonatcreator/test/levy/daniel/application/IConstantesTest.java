@@ -1,4 +1,5 @@
 package levy.daniel.application;
+
 import java.io.File;
 import java.nio.charset.Charset;
 import java.text.DateFormat;
@@ -510,6 +511,34 @@ public interface IConstantesTest {
 		= "texte\\trafics\\trafics_2014\\darwin2014.csv";
 	
 	
+	/**
+	 * CHEMIN_NON_HIT_UTF8 : String :<br/>
+	 * "File_Non_HIT_UTF8.txt".<br/>
+	 */
+	String CHEMIN_NON_HIT_UTF8 = "texte\\File_Non_HIT_UTF8.txt";
+
+	
+	/**
+	 * CHEMIN_HIT_UTF8 : Sring :<br/>
+	 * "FILE_HIT_UTF8.txt".<br/>
+	 */
+	String CHEMIN_HIT_UTF8 = "texte\\FILE_HIT_UTF8.txt";
+
+	
+	/**
+	 * CHEMIN_NON_DARWIN_UTF8 : String :<br/>
+	 * "FILE_Non_DARWIN_UTF8.csv".<br/>
+	 */
+	String CHEMIN_NON_DARWIN_UTF8 = "texte\\FILE_Non_DARWIN_UTF8.csv";
+	
+	
+	/**
+	 * CHEMIN_DARWIN_UTF8 : String :<br/>
+	 * "texte\\FILE_DARWIN_UTF8.csv".<br/>
+	 */
+	String CHEMIN_DARWIN_UTF8 = "texte\\FILE_DARWIN_UTF8.csv";
+	
+	
 	//*****************************************************************/
 	//**************************FICHIERS ******************************/
 	//*****************************************************************/
@@ -885,6 +914,38 @@ public interface IConstantesTest {
 	= new File(CHEMIN_FICHIERS_TEST + CHEMIN_DARWIN_2014);
 	
 
+	/**
+	 * FILE_NON_HIT_UTF8 : File :<br/>
+	 * "File_Non_HIT_UTF8.txt".<br/>
+	 */
+	File FILE_NON_HIT_UTF8 
+		= new File(CHEMIN_FICHIERS_TEST + CHEMIN_NON_HIT_UTF8);
+
+	
+	/**
+	 * FILE_HIT_UTF8 : File :<br/>
+	 * "FILE_HIT_UTF8.txt".<br/>
+	 */
+	File FILE_HIT_UTF8 
+		= new File(CHEMIN_FICHIERS_TEST + CHEMIN_HIT_UTF8);
+	
+	
+	/**
+	 * FILE_NON_DARWIN_UTF8 : File :<br/>
+	 * "FILE_Non_DARWIN_UTF8.csv".<br/>
+	 */
+	File FILE_NON_DARWIN_UTF8 
+		= new File(CHEMIN_FICHIERS_TEST + CHEMIN_NON_DARWIN_UTF8);
+
+	
+	/**
+	 * FILE_DARWIN_UTF8 : File :<br/>
+	 * "FILE_DARWIN_UTF8.csv".<br/>
+	 */
+	File FILE_DARWIN_UTF8 
+	= new File(CHEMIN_FICHIERS_TEST + CHEMIN_DARWIN_UTF8);
+	
+	
 	/**
 	 * LISTEFILES : List<File> :<br/>
 	 * Liste contenant tous les File utilisés pour les tests.<br/>

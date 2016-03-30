@@ -407,6 +407,21 @@ public interface IControle extends IRapporteurControle
 	String ACTION_FICHIER_ACCEPTE = "OK - Fichier accepté";
 	
 
+	/**
+	 * ACTION_LIGNE_NON_HIT : String :<br/>
+	 * "Ligne ne comportant pas 520 caractères".<br/>
+	 */
+	String ACTION_LIGNE_NON_HIT 
+		= "Ligne ne comportant pas 520 caractères";
+
+	
+	/**
+	 * ACTION_LIGNE_NON_DARWIN : String :<br/>
+	 * "Ligne ne comportant pas 57 champs".<br/>
+	 */
+	String ACTION_LIGNE_NON_DARWIN 
+	= "Ligne ne comportant pas 57 champs";
+
 	
 	/**
 	 * method controler(

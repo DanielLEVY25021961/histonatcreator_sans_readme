@@ -1218,13 +1218,13 @@ public class LigneRapport implements Serializable, Comparable<Object>
 		if (this.statut) {
 			builder.append(
 					String.format(LOCALE_FR_FR
-							, "Staut du contrôle : %-5s"
+							, "Statut du contrôle : %-5s"
 								, "OK"));			
 		}
 		else {
 			builder.append(
 					String.format(LOCALE_FR_FR
-							, "Staut du contrôle : %-5s"
+							, "Statut du contrôle : %-5s"
 								, "KO"));
 		}
 		
