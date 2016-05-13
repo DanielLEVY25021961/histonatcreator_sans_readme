@@ -578,6 +578,9 @@ public interface IConstantes {
 	String NOM_NOMENCLATURE_DARWIN_SENS = BUNDLE_APPLICATION.getString(
 			"application.repertoire.ressources.nomenclatures.sens.darwin");
 	
+	// ******************************************************************
+	// CHARSETS
+	// ******************************************************************
 
 	/**
 	 * DEFAULT_CHARSET : Charset :<br/>

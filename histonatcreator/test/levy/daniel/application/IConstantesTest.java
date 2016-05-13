@@ -420,7 +420,15 @@ public interface IConstantesTest {
 	String CHEMIN_HIT_DIRO_2012 
 		= "texte\\trafics\\trafics_2012\\2014-08-07_HITDIRO2012";
 	
+
+	/**
+	 * CHEMIN_HIT_DIRMED_2013 : String :<br/>
+	 * "texte\\trafics\\trafics_2013\\HITDIRMED2013".<br/>
+	 */
+	String CHEMIN_HIT_DIRMED_2013 
+		= "texte\\trafics\\trafics_2013\\HITDIRMED2013";
 	
+
 	/**
 	 * CHEMIN_HIT_DIRA_2014 : String :<br/>
 	 * "texte\\trafics\\trafics_2014\\HITDIRA2014.txt".<br/>
@@ -824,6 +832,14 @@ public interface IConstantesTest {
 	File FILE_HITDIRO2012 
 		= new File(CHEMIN_FICHIERS_TEST + CHEMIN_HIT_DIRO_2012);
 
+	
+	/**
+	 * FILE_HITDIRMED2013 : File :<br/>
+	 * "HITDIRMED2013".<br/>
+	 */
+	File FILE_HITDIRMED2013 
+	= new File(CHEMIN_FICHIERS_TEST + CHEMIN_HIT_DIRMED_2013);
+	
 	
 	/**
 	 * FILE_HITDIRA2014 : File :<br/>
