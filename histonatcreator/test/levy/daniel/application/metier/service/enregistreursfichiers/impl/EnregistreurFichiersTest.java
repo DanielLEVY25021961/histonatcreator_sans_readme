@@ -5,7 +5,8 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Date;
 
-import levy.daniel.application.metier.service.enregistreursfichiers.IEnregistreurFichiers;
+import levy.daniel.application.metier.services.enregistreursfichiers.IEnregistreurFichiers;
+import levy.daniel.application.metier.services.enregistreursfichiers.impl.EnregistreurFichiers;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

@@ -100,7 +100,7 @@ import levy.daniel.application.IListeurDeCaracteresUnicode;
  * levy.daniel.application.IExportateurJTable.<br/>
  * levy.daniel.application.IResetable.<br/>
  * levy.daniel.application.metier.controles.rapportscontroles.LigneRapport.<br/>
- * levy.daniel.application.metier.service.enregistreursfichiers.rapportsenregistrements.LigneRapportEnregistrement.<br/>
+ * levy.daniel.application.metier.services.enregistreursfichiers.rapportsenregistrements.LigneRapportEnregistrement.<br/>
  * levy.daniel.application.metier.controles.IEnregistreurRapport.<br/>
  * levy.daniel.application.metier.controles.IRapporteurControle.<br/>
  * <br/>

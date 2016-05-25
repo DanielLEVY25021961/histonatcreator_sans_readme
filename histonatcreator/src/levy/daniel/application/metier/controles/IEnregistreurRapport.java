@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import levy.daniel.application.metier.controles.rapportscontroles.LigneRapport;
-import levy.daniel.application.metier.service.enregistreursfichiers.rapportsenregistrements.LigneRapportEnregistrement;
+import levy.daniel.application.metier.services.enregistreursfichiers.rapportsenregistrements.LigneRapportEnregistrement;
 
 
 /**
@@ -58,7 +58,7 @@ import levy.daniel.application.metier.service.enregistreursfichiers.rapportsenre
  *
  * - Dépendances :<br/>
  * levy.daniel.application.metier.controles.rapportscontroles.LigneRapport.<br/>
- * levy.daniel.application.metier.service.enregistreursfichiers.rapportsenregistrements.LigneRapportEnregistrement.<br/>
+ * levy.daniel.application.metier.services.enregistreursfichiers.rapportsenregistrements.LigneRapportEnregistrement.<br/>
  * <br/>
  *
  *
