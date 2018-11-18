@@ -12,35 +12,43 @@ import levy.daniel.application.IListeurDeCaracteresUnicode;
 
 /**
  * Interface IControle :<br/>
- * Abstraction qui garantit que :<br/>
- * - Tout contrôle est effectué à une 'dateContrôle'. 
+ * INTERFACE (Abstraction) qui factorise le concept de Contrôle de Fichier, 
+ * publie ses méthodes et garantit que :<br/>
+ * <ul>
+ * <li>Tout contrôle peut connaitre son ordre 
+ * d'exécution dans un enchaînement de contrôles.</li><br/>
+ * <li>Tout contrôle est effectué à une 'dateControle'.<br/> 
+ * En principe, dateControle vaut la date système 
+ * au moment de l'exécution du contrôle.<br/> 
  * La classe calcule automatiquement 'dateControleStringFormatee' 
- * connaissant dateControle.<br/>
- * - Tout contrôle est effectué par un utilisateur (user) 
+ * (c'est à dire l'objet Java Date exprimé sous forme de String formatée)
+ * connaissant dateControle.</li><br/>
+ * <li>Tout contrôle est effectué par un utilisateur (user) 
  * dont on connait le nom 'userName'. La classe remplit automatiquement 
- * userName avec 'Administrateur' si on ne lui fournit pas de userName.<br/>
- * - Tout contrôle s'applique sur un File 'fichier'. 
- * La classe calcule automatiquement 'nomFichier' connaissant fichier.<br/>
- * - Tout contrôle appartient à un type de contrôle 'typeControle' 
+ * userName avec 'Administrateur' si on ne lui fournit pas de userName.</li><br/>
+ * <li>Tout contrôle s'applique sur un File 'fichier'. 
+ * La classe calcule automatiquement 'nomFichier' connaissant fichier.</li><br/>
+ * <li>Tout contrôle appartient à un type de contrôle 'typeControle' 
  * comme "contrôle de surface". 
- * 'typeControle' est fourni par chaque classe concrète.<br/>
- * - Tout contrôle a un nom 'nomControle' comme 'contrôle fichier texte'. 
- * 'nomControle' est fourni par chaque classe concrète.<br/>
- * - Tout contrôle vérifie un critère 'nomCritere' comme 
+ * 'typeControle' est fourni par chaque classe concrète.</li><br/>
+ * <li>Tout contrôle a un nom 'nomControle' comme 'contrôle fichier texte'. 
+ * 'nomControle' est fourni par chaque classe concrète.</li><br/>
+ * <li>Tout contrôle vérifie un critère 'nomCritere' comme 
  * 'le fichier ne doit pas comporter de caractères indésirables'. 
- * 'nomCritere' est fourni par chaque classe concrète.<br/>
- * - Tout contrôle a une gravité 'gravite' comme '1 - bloquant'. 
+ * 'nomCritere' est fourni par chaque classe concrète.</li><br/>
+ * <li>Tout contrôle a une gravité 'gravite' comme '1 - bloquant'. 
  * Cette gravité est directement liée au niveau d'anomalie du contrôle 
  * 'niveauAnomalie' comme "1" pour bloquant. 
  * Chaque classe concrète fournit le 'niveauAnomalie' du contrôle 
  * via sa méthode fournirCleNiveauAnomalie() qui permet d'aller 
  * chercher la valeur dans messagescontroles_fr_FR.properties 
- * ou via fournirNiveauAnomalieEnDur().<br/>
- * - Tout contrôle sait si il est bloquant via 'estBloquant'. 
+ * ou via fournirNiveauAnomalieEnDur().</li><br/>
+ * <li>Tout contrôle sait si il est bloquant via 'estBloquant'. 
  * La classe remplit automatiquement 'estBloquant' 
- * connaissant niveauAnomalie.<br/>
- * - Tout contrôle fournit un rapport de contrôle 
- * sous forme de List&lt;LigneRapport&gt; 'rapport'.<br/>
+ * connaissant niveauAnomalie.</li><br/>
+ * <li>Tout contrôle fournit un rapport de contrôle 
+ * sous forme de List&lt;LigneRapport&gt; 'rapport'.</li><br/>
+ *</ul>
  * <br/>
  * <br/>
  * Attributs : <br/>

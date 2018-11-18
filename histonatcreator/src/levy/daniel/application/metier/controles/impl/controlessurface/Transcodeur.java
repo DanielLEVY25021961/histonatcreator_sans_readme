@@ -844,8 +844,8 @@ public class Transcodeur extends AbstractControle {
 		+ "Fichiers_encodés_en_UTF8";
 		
 		/* Détermination de l'extension du fichier. */
-		final String nomFichier = pFile.getName();
-		final String[] tokens = StringUtils.split(nomFichier, '.');
+		final String nomFichierVar = pFile.getName();
+		final String[] tokens = StringUtils.split(nomFichierVar, '.');
 		int longueurTableau = 0;
 		String nomBase = null;
 		String extension = null;
@@ -859,7 +859,7 @@ public class Transcodeur extends AbstractControle {
 				extension = tokens[longueurTableau -1];
 			}
 			else {
-				nomBase = nomFichier;
+				nomBase = nomFichierVar;
 				extension = "txt";
 			}			
 		}
@@ -932,8 +932,8 @@ public class Transcodeur extends AbstractControle {
 		+ "Fichiers_encodés_en_ANSI";
 		
 		/* Détermination de l'extension du fichier. */
-		final String nomFichier = pFile.getName();
-		final String[] tokens = StringUtils.split(nomFichier, '.');
+		final String nomFichierVar = pFile.getName();
+		final String[] tokens = StringUtils.split(nomFichierVar, '.');
 		int longueurTableau = 0;
 		String nomBase = null;
 		String extension = null;
@@ -947,7 +947,7 @@ public class Transcodeur extends AbstractControle {
 				extension = tokens[longueurTableau -1];				
 			}
 			else {
-				nomBase = nomFichier;
+				nomBase = nomFichierVar;
 				extension = "txt";
 			}			
 		}

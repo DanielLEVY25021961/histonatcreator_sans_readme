@@ -694,7 +694,7 @@ public abstract class AbstractControle implements IControle {
 		
 		/* calcule automatiquement dateControleStringFormattee. */
 		this.dateControleStringFormatee 
-			= this.fournirDateFormattee(this.dateControle);
+			= this.fournirDateFormatee(this.dateControle);
 		
 		/* remplit userName avec pUserName si pUserName != null 
 		 * ou 'Administrateur' sinon. */
@@ -1384,7 +1384,7 @@ public abstract class AbstractControle implements IControle {
 	
 	
 	/**
-	 * method fournirDateSystemeFormattee() :<br/>
+	 * method fournirDateSystemeFormatee() :<br/>
 	 * SERVICE ANNEXE.<br/>
 	 * Retourne la date système au format DF_DATETIMEMILLI_FRANCAISE
 	 * des dates-heures françaises avec millisecondes comme
@@ -1395,16 +1395,16 @@ public abstract class AbstractControle implements IControle {
 	 * @return : String : la date système au format 
 	 * "dd/MM/yyyy-HH:mm:ss.SSS".<br/>
 	 */
-	public static final String fournirDateSystemeFormattee() {
+	public static final String fournirDateSystemeFormatee() {
 		
-		return fournirDateStringFormattee(new Date());
+		return fournirDateStringFormatee(new Date());
 		
-	} // Fin de fournirDateSystemeFormattee()._____________________________
+	} // Fin de fournirDateSystemeFormatee().______________________________
 
 
 	
 	/**
-	 * method fournirDateStringFormattee(
+	 * method fournirDateStringFormatee(
 	 * Date pDate) :<br/>
 	 * SERVICE ANNEXE.<br/>
 	 * Retourne la date pDate au format DF_DATETIMEMILLI_FRANCAISE 
@@ -1420,7 +1420,7 @@ public abstract class AbstractControle implements IControle {
 	 * @return : String : la date pDate au format 
 	 * "dd/MM/yyyy-HH:mm:ss.SSS".<br/>
 	 */
-	public static final String fournirDateStringFormattee(
+	public static final String fournirDateStringFormatee(
 			final Date pDate) {
 				
 		/* Bloc static synchronized. */
@@ -1435,13 +1435,13 @@ public abstract class AbstractControle implements IControle {
 			
 		} // Fin du bloc static synchronized.___________
 		
-	} // Fin de fournirDateStringFormattee(
+	} // Fin de fournirDateStringFormatee(
 	 // Date pDate)._______________________________________________________
 	
 
 	
 	/**
-	 * method fournirDateAPartirDeStringFormattee(
+	 * method fournirDateAPartirDeStringFormatee(
 	 * String pDateFormattee) :<br/>
 	 * SERVICE ANNEXE.<br/>
 	 * Retourne une Java.util.Date à partir d'une String formattée 
@@ -1450,27 +1450,27 @@ public abstract class AbstractControle implements IControle {
 	 * '25/02/1961-12:27:07.251'.<br/>
 	 * "dd/MM/yyyy-HH:mm:ss.SSS".<br/>
 	 * <br/>
-	 * - retourne null si pDateFormattee est blank.<br/>
+	 * - retourne null si pDateFormatee est blank.<br/>
 	 * - retourne null et LOG de niveau INFO si
 	 * la date passée en paramètre ne respecte pas le format 
 	 * 'dd/MM/yyyy-HH:mm:ss.SSS'.<br/>
 	 * <br/>
 	 *
-	 * @param pDateFormattee : String : String formattée 
+	 * @param pDateFormatee : String : String formattée 
 	 * selon le format DF_DATETIMEMILLI_FRANCAISE
 	 * des dates-heures françaises avec millisecondes comme
 	 * '25/02/1961-12:27:07.251'.<br/>
 	 * 
 	 * @return : Date : java.util.Date.<br/>
 	 */
-	public static final Date fournirDateAPartirDeStringFormattee(
-			final String pDateFormattee) {
+	public static final Date fournirDateAPartirDeStringFormatee(
+			final String pDateFormatee) {
 		
 		/* Bloc static synchronized. */
 		synchronized (AbstractControle.class) {
 			
 			/* retourne null si pDateFormattee est blank. */
-			if (StringUtils.isBlank(pDateFormattee)) {
+			if (StringUtils.isBlank(pDateFormatee)) {
 				return null;
 			}
 			
@@ -1478,14 +1478,14 @@ public abstract class AbstractControle implements IControle {
 			
 			try {
 				
-				resultat = DF_DATETIMEMILLI_FRANCAISE.parse(pDateFormattee);
+				resultat = DF_DATETIMEMILLI_FRANCAISE.parse(pDateFormatee);
 				
 			} catch (ParseException parseExc) {
 
 				final String message 
 				= "la date passée en paramètre ne respecte pas "
 						+ "le format 'dd/MM/yyyy-HH:mm:ss.SSS' "
-						+ pDateFormattee
+						+ pDateFormatee
 						+ " - Exception : "
 						+ parseExc.getMessage();
 
@@ -1511,8 +1511,8 @@ public abstract class AbstractControle implements IControle {
 			
 		} // Fin du bloc static synchronized.___________
 		
-	} // Fin de fournirDateAPartirDeStringFormattee(
-	 // String pDateFormattee).____________________________________________
+	} // Fin de fournirDateAPartirDeStringFormatee(
+	 // String pDateFormatee)._____________________________________________
 	
 	
 	
@@ -1556,7 +1556,7 @@ public abstract class AbstractControle implements IControle {
 
 	
 	/**
-	 * method fournirDateFormattee(
+	 * method fournirDateFormatee(
 	 * Date pDate) :<br/>
 	 * Fournit une date sous forme de String formattée 
 	 * au format dfDatetimemilliFrancaiseLexico.<br/>
@@ -1572,7 +1572,7 @@ public abstract class AbstractControle implements IControle {
 	 * 
 	 * @return : String : "yyyy-MM-dd_HH-mm-ss-SSS".<br/>
 	 */
-	private String fournirDateFormattee(
+	private String fournirDateFormatee(
 			final Date pDate) {
 		
 		/* retourne null si pDate == null. */
@@ -1580,12 +1580,12 @@ public abstract class AbstractControle implements IControle {
 			return null;
 		}
 		
-		final String dateFormattee 
+		final String dateFormatee 
 			= this.dfDatetimemilliFrancaiseLexico.format(pDate);
 		
-		return dateFormattee;
+		return dateFormatee;
 		
-	} // Fin de fournirDateFormattee(
+	} // Fin de fournirDateFormatee(
 	 // Date pDate)._______________________________________________________
 	
 	
@@ -4738,7 +4738,7 @@ public abstract class AbstractControle implements IControle {
 		/* Récupère la date  
 		 * formattée sous la forme 2012-01-16_18-09-55-759. */
 		final String dateFormatteeString 
-			= fournirDateFormattee(date, this.dfDatetimemilliFrancaiseLexico);
+			= fournirDateFormatee(date, this.dfDatetimemilliFrancaiseLexico);
 		
 		final StringBuilder stb = new StringBuilder();
 		
@@ -4763,7 +4763,7 @@ public abstract class AbstractControle implements IControle {
 	
 	
 	/**
-	 * method fournirDateFormattee(
+	 * method fournirDateFormatee(
 	 * Date pDate
 	 * , DateFormat pDateFormat) :<br/>
 	 * Retourne une String représentant la java.util.Date pDate 
@@ -4784,7 +4784,7 @@ public abstract class AbstractControle implements IControle {
 	 * @return : String : String pour affichage 
 	 * formatté de pDate selon pDateFormat.<br/>
 	 */
-	private String fournirDateFormattee(
+	private String fournirDateFormatee(
 			final Date pDate
 				, final DateFormat pDateFormat) {
 					
@@ -4802,7 +4802,7 @@ public abstract class AbstractControle implements IControle {
 		
 		return pDateFormat.format(pDate);
 			
-	} // Fin de fournirDateFormattee(
+	} // Fin de fournirDateFormatee(
 	 // Date pDate
 	 // DateFormat pDateFormat).___________________________________________
 	
@@ -5198,7 +5198,7 @@ public abstract class AbstractControle implements IControle {
 		
 		/* calcule automatiquement dateControleStringFormattee. */
 		this.dateControleStringFormatee 
-			= this.fournirDateFormattee(this.dateControle);
+			= this.fournirDateFormatee(this.dateControle);
 		
 	} // Fin de setDateControle(
 	 // Date pDateControle)._______________________________________________
