@@ -76,6 +76,7 @@ import org.apache.commons.logging.LogFactory;
  * System.getProperty("line.separator").<br/>
  * rapport textuel, rapport csv, ecrire dans fichier,<br/>
  * écrire dans fichier, ecrire String dans File, écrire String dans File,<br/>
+ * Ecrire String dans File,<br/>
  * ecriture sur disque avec encodage, Charset, ecrireStringDansFile()<br/>
  * FileOutputStream, outputStreamWriter, <br/>
  * mkdir(), création répertoire,<br/> vider arborescence,<br/>
@@ -1944,7 +1945,7 @@ public final class DifferentiateurString {
 	 * par les sauts de ligne pSautLigne.<br/>
 	 * <br/>
 	 * - retourne null si pString est blank (null ou vide).<br/>
-	 * - retourne null si pSautLigne est blank (null ou vide).
+	 * - retourne null si pSautLigne est null.<br/>
 	 * <br/>
 	 *
 	 * @param pString : String : String à corriger.<br/>
@@ -1965,7 +1966,10 @@ public final class DifferentiateurString {
 				return null;
 			}
 			
-			/* retourne null si pSautLigne est blank (null ou vide). */
+			/* retourne null si pSautLigne est null. */
+			if (pSautLigne == null) {
+				return null;
+			}
 			
 			/* Recherche des sauts de ligne DOS/Windows. */
 			if (StringUtils.contains(pString, SAUTDELIGNE_DOS_WINDOWS)) {
